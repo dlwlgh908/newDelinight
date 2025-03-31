@@ -8,7 +8,6 @@
 package com.onetouch.delinight.Entity;
 
 import com.onetouch.delinight.Constant.Role;
-import com.onetouch.delinight.Constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,12 +18,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "members")
-public class MembersEntity {
+@Table(name = "users")
+public class UsersEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "members_id")
+    @Column(name = "users_id")
     private Long id;
 
     @Column(nullable = false, length = 50)
@@ -32,13 +31,12 @@ public class MembersEntity {
 
     @Column(unique = true, nullable = false, length = 50)
     private String email;
-
+    
     @Column(nullable = false, length = 20)
     private String phone;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column(nullable = false, length = 50)
+    private String address;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
 }

@@ -7,8 +7,6 @@
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
-import com.onetouch.delinight.Constant.Role;
-import com.onetouch.delinight.Constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,26 +17,26 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "members")
-public class MembersEntity {
+@Table(name = "hotel")
+public class HotelEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "members_id")
+    @Column(name = "hotel_id")
     private Long id;
 
     @Column(nullable = false, length = 50)
     private String name;
 
     @Column(unique = true, nullable = false, length = 50)
-    private String email;
+    private String content;
 
-    @Column(nullable = false, length = 20)
-    private String phone;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "branch_id")
+    private BranchEntity branchEntity;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
+
+
 }
