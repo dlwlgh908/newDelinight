@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+import jakarta.persistence.Column;
 import lombok.*;
 
 @Getter
@@ -18,5 +19,19 @@ import lombok.*;
 public class UsersDTO {
 
     private Long id;
+
+    private String name;
+
+    private String email;
+
+    private String password;
+
+    private String passwordOne;
+
+    private String passwordTwo;
+
+    private String phone;
+
+    private String address;
 
 }
