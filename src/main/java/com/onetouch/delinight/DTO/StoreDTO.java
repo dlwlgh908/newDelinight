@@ -18,5 +18,9 @@ import lombok.*;
 public class StoreDTO {
 
     private Long id;
+    private String name;
+    private String content;
+    private HotelDTO hotelDTO;
+
 
 }

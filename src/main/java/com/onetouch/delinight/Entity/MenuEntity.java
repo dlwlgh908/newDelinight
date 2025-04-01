@@ -1,12 +1,13 @@
 /*********************************************************************
  * 클래스명 : MembersEntity
- * 기능 :
- * 작성자 :
+ * 기능 : MenuEntity 항목 수정(price,stockNumber, MenuStatus 추가)
+ * 작성자 : 이효찬.
  * 작성일 : 2025-03-30
  * 수정 : 2025-03-30
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
+import com.onetouch.delinight.Config.MenuStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,13 +29,22 @@ public class MenuEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(unique = true, nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String content;
 
+    @Column(nullable = false)
+    private String price;
+
+    @Column(name = "stock_number",nullable = false)
+    private String stockNumber;
+
+    @Enumerated(EnumType.STRING)
+    private MenuStatus menuStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private StoreEntity storeEntity;
+
 
 
 
