@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
+import com.onetouch.delinight.Entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,24 +19,22 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "image")
-public class ImageEntity {
+public class ImageEntity extends BaseTimeEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
-    private Long id;
+    private Long imgNum;
 
-    @Column(name = "img_name")
-    private String imgName;
-
-    @Column(name = "ori_img_name")
-    private String originImgName;
-
-
-    @Column(name = "img_url")
-    private String imgUrl;
+    private String fullUrl;
+    private String fileName;
+    private String originName;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id")
     private HotelEntity hotelEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "menu_id")
+    private MenuEntity menuEntity;
 }
