@@ -16,7 +16,7 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-!**/config/AWSConfig
+**/config/AWSConfig
 
 ### IntelliJ IDEA ###
 .idea
