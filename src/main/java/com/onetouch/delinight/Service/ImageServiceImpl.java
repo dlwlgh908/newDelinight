@@ -1,8 +1,5 @@
 package com.onetouch.delinight.Service;
 
-import com.example.imghouse.dto.ImgDTO;
-import com.example.imghouse.entity.Img;
-import com.example.imghouse.repository.ImgRepository;
 import com.onetouch.delinight.DTO.ImageDTO;
 import com.onetouch.delinight.Entity.ImageEntity;
 import com.onetouch.delinight.Repository.ImageRepository;

@@ -37,7 +37,7 @@ public class OrdersEntity {
     @JoinColumn(name = "checkin_id")
     private CheckInEntity checkInEntity;
 
-    @OneToMany(mappedBy = "orders",fetch = FetchType.LAZY)
+    @OneToMany
     private List<MenuEntity> menuEntityList;
 
 
