@@ -1,13 +1,15 @@
 /*********************************************************************
- * 클래스명 : MembersDTO
+ * 클래스명 : CartDTO
  * 기능 :
- * 작성자 : 이동건
- * 작성일 : 2025-03-30
- * 수정 : 2025-03-30     이동건
+ * 작성자 : 이지호
+ * 작성일 : 2025-04-01
+ * 수정 : 2025-04-01     이지호
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,5 +20,8 @@ import lombok.*;
 public class CartDTO {
 
     private Long id;
+    private List<MenuDTO> menuDTOList;
+    private Long totalPrice;
+
 
 }

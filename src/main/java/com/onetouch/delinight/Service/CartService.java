@@ -9,6 +9,8 @@ package com.onetouch.delinight.Service;
 
 public interface CartService {
 
+    public String add(Long cartNum, Long menuNum);
+    public String clear(Long cartNum);
 
 
 }
