@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+import com.onetouch.delinight.Entity.StoreEntity;
 import lombok.*;
 
 @Getter
@@ -18,5 +19,8 @@ import lombok.*;
 public class MenuDTO {
 
     private Long id;
+    private String name;
+    private String content;
+    private StoreDTO storeDTO;
 
 }
