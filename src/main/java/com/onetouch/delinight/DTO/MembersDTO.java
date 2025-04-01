@@ -7,6 +7,9 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+import com.onetouch.delinight.Constant.Role;
+import com.onetouch.delinight.Constant.Status;
+import jakarta.persistence.Column;
 import lombok.*;
 
 @Getter
@@ -18,5 +21,14 @@ import lombok.*;
 public class MembersDTO {
 
     private Long id;
+
+    private String name;
+
+    private String email;
+
+    private String phone;
+
+    private Role role;
+    private Status status;
 
 }
