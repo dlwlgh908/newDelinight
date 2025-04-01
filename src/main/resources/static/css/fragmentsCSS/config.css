@@ -1,0 +1,11 @@
+/* 일괄 적용 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Pretendard", serif;
+}
+/* a 링크 밑줄 제거, 폰트 색상 변경 */
+a {text-decoration: none; color: #555555;}
+/* li 글머리 아이콘 제거 */
+li {list-style: none;}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
+<head>
+  <link rel="stylesheet" href="/css/fragmentsCSS/config.css">
+  <title>기본 레이아웃</title>
+</head>
+
+<body>
+  <!--헤더-->
+  <th:block layout:fragment="adminheader"></th:block>
+
+  <!--page 패키지에서 생성한 content-->
+  <th:block layout:fragment="admincontent">
+
+  </th:block>
+
+  <!--푸터-->
+  <th:block layout:fragment="adminfooter"></th:block>
+</body>
+</html>
