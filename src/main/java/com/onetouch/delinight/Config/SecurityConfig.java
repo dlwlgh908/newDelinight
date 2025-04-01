@@ -34,14 +34,14 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(
                 authorize -> authorize
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/users/home" , "/users/login" , "/**").permitAll()
                         .anyRequest().permitAll()
         ).csrf((csrf) -> csrf.disable())
 
         .formLogin(formLogin -> formLogin
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/")
+                .loginPage("/users/login")
+                .loginProcessingUrl("/users/login")
+                .defaultSuccessUrl("/users/home")
                 .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
                 .usernameParameter("email")
         )
