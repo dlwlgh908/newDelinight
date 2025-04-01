@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body>
+<table class="table">
+
+    <thead>
+    <th scope="col">#</th>
+    <th scope="col">이름</th>
+    <th scope="col">이메일</th>
+    <th scope="col">핸드폰번호</th>
+    <th scope="col">권한</th>
+    <th scope="col">승인여부</th>
+    </thead>
+
+    <tbody>
+    <th:block  th:each="list:${memberlist}">
+        <tr>
+            <th scope="row offset-4" th:text="${list.id}"></th>
+            <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                [[${list.name}]]
+            </a>
+            </td>
+            <td th:text="${list.email}"></td>
+            <td th:text="${list.phone}"></td>
+
+
+            <td th:text="${list.role}"></td>
+
+            <td th:if="${list.status.name() == 'VALID'}" th:text="승인완료"></td>
+
+            <td th:if="${list.status.name() == 'WAIT'}">
+                <div th:text="승인대기중"></div>
+                <button class="btn btn-primary" th:href="/changestatus(id=${})">승인</button>
+                <button class="btn btn-primary">반려</button>
+
+            </td>
+
+
+
+        </tr>
+
+    </th:block>
+
+
+
+    </tbody>
+
+</table>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+</body>
+</html>
