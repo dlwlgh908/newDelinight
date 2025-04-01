@@ -31,7 +31,7 @@ public class CartEntity {
     @JoinColumn(name = "user_id")
     private UsersEntity usersEntity;
 
-    @OneToMany(mappedBy = "cart",fetch = FetchType.LAZY)
+    @OneToMany
     private List<MenuEntity> menuEntityList;
 
 

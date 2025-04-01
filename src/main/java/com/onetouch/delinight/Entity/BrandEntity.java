@@ -22,7 +22,7 @@ public class BrandEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hotel_id")
+    @Column(name = "brand_id")
     private Long id;
 
     @Column(nullable = false, length = 50)

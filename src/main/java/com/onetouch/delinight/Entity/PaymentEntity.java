@@ -27,7 +27,7 @@ public class PaymentEntity {
     @Column(name = "payment_id")
     private Long id;
 
-    @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
+    @OneToMany
     private List<OrdersEntity> ordersEntityList;
 
 
