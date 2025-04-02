@@ -1,7 +1,7 @@
 /*********************************************************************
- * 클래스명 : MembersEntity
+ * 클래스명 : CartItemEntity
  * 기능 :
- * 작성자 :
+ * 작성자 : 이효찬
  * 작성일 : 2025-03-30
  * 수정 : 2025-03-30
  *********************************************************************/
@@ -19,22 +19,19 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "cart")
-public class CartEntity {
+@Table(name = "cartitem")
+public class CartItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_id")
+    @Column(name = "cart_item_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UsersEntity usersEntity;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    private CartItemEntity cartItemEntity;
 
-    @OneToMany
-    private List<MenuEntity> menuEntityList;
-
-    private Long totalPrice;
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id")
+    private MenuEntity menuEntity;
 }

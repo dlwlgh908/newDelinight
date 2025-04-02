@@ -1,15 +1,13 @@
 /*********************************************************************
- * 클래스명 : CartDTO
+ * 클래스명 : CartItemDTO
  * 기능 :
- * 작성자 : 이지호
- * 작성일 : 2025-04-01
- * 수정 : 2025-04-01     이지호
+ * 작성자 : 이효찬
+ * 작성일 : 2025-03-30
+ * 수정 : 2025-03-30     이효찬
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -17,11 +15,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartDTO {
+public class CartItemDTO {
 
     private Long id;
-    private List<MenuDTO> menuDTOList;
-    private Long totalPrice;
-
 
 }

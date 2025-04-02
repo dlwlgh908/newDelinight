@@ -1,13 +1,13 @@
 /*********************************************************************
- * 클래스명 : MembersEntity
- * 기능 :
- * 작성자 :
- * 작성일 : 2025-03-30
- * 수정 : 2025-03-30
+ * 클래스명 : UsersEntity
+ * 기능 : 회원 시스템 구축
+ * 작성자 : 이동건
+ * 작성일 : 2025-04-01
+ * 수정 : 2025-04-01      Entity 설계           이동건
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
-import com.onetouch.delinight.Constant.Role;
+import com.onetouch.delinight.Entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +19,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class UsersEntity {
+public class UsersEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +31,9 @@ public class UsersEntity {
 
     @Column(unique = true, nullable = false, length = 50)
     private String email;
+
+    @Column
+    private String password;
     
     @Column(nullable = false, length = 20)
     private String phone;
