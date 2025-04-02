@@ -45,15 +45,18 @@ public class UserController {
         }
 
         @PostMapping("/singUp")
-        public String singUpPost(@Valid UsersDTO usersDTO , BindingResult bindingResult) {
+        public String singUpPost(@Valid UsersDTO usersDTO , BindingResult bindingResult , Model model) {
 
                 if(bindingResult.hasErrors()) {
+                        // 오류 메시지를 모델에 담기
+                        model.addAttribute("error" , bindingResult.getAllErrors());
                         return "redirect:/users/singUp";
                 }
 
                 try {
                         usersService.singUpUser(usersDTO);
                 }catch (Exception e) {
+                        model.addAttribute("errorMessage" , "회원가입 처리 중 오류가 발생했습니다.");
                         return "redirect:/users/singUp";
                 }
 

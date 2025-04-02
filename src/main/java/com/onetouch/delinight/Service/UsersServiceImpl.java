@@ -158,4 +158,22 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
 
         return "임시 비밀번호가 이메일로 발송되었습니다.";
     }
+
+    // 회원 & 비회원 구분
+    @Override
+    public Integer urlCheck(String email) {
+        // 1. Email 기반으로 회원 정보 조회
+        UsersEntity usersEntity = usersRepository.selectEmail(email);
+        log.info("조회된 회원 정보 : " + usersEntity);
+
+        // 2. 회원 정보가 없으면 비회원
+        if (usersEntity == null) {
+            return 0; // 비회원
+        }
+        // 3. 회원 정보가 존재하면 1 반환 (불필요한 추가 조회 제거)
+        return 1;
+    }
+
+
+
 }

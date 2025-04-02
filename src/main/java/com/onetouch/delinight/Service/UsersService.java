@@ -17,6 +17,8 @@ public interface UsersService {
 
     public String sendTemporaryPassword(UsersDTO usersDTO);
 
+    public Integer urlCheck(String email);
+
 
 
 
