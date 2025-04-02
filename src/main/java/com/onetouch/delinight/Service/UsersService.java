@@ -15,7 +15,7 @@ public interface UsersService {
 
     public boolean passwordChange(UsersDTO usersDTO);
 
-
+    public String sendTemporaryPassword(UsersDTO usersDTO);
 
 
 

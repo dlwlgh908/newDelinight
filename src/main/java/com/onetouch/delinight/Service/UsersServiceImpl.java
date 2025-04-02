@@ -11,8 +11,9 @@ import com.onetouch.delinight.DTO.UsersDTO;
 import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.UsersRepository;
 import com.onetouch.delinight.Util.EmailService;
+import com.onetouch.delinight.Util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,9 +23,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
+import java.util.Map;
 
-@Slf4j
+@Log4j2
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -53,7 +54,6 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         log.info("이메일 받고 인코딩한번더 받고 했뉘???????????????????????????????????");
         log.info(usersEntity.getEmail());
         log.info(usersEntity.getPassword());
-        log.info(".");
 
         usersRepository.save(usersEntity);
     }
@@ -76,33 +76,86 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
     }
 
 
-    // 비밀번호 찾기
+    // 비밀번호 변경
     @Override
     public boolean passwordChange(UsersDTO usersDTO) {
-        log.info("서비스로 들어온 비밀번호 찾기실행");
+        log.info("서비스로 들어온 비밀번호 변경실행");
 
         if(!usersDTO.getPasswordOne().equals(usersDTO.getPasswordTwo())) {
             log.info("비번 틀림");
             return false;
         }
 
+
         UsersEntity usersEntity = usersRepository.selectEmail(usersDTO.getEmail());
 
         if (usersEntity == null) {
             log.info("서비스에서 유저를 찾아왔????" + usersEntity);
-        }
-
-        boolean matches = passwordEncoder.matches(usersDTO.getPasswordOne(), usersEntity.getPassword());
-        log.info("DTO , Entity 비교 : " + matches);
-
-        if (matches) {
-            usersEntity.setPassword(passwordEncoder.encode(usersDTO.getPasswordOne()));
-            return true;
-        }else{
-            log.info("기존 비밀번호와 다릅니다.");
             return false;
         }
+
+        // 기존 비밀번호 비교
+        log.info("기존 비밀번호 (암호화된 상태): " + usersEntity.getPassword());
+        log.info("입력한 비밀번호 (평문): " + usersDTO.getPasswordOne());
+
+        boolean matches = passwordEncoder.matches(usersDTO.getPassword() , usersEntity.getPassword());
+        log.info("DTO , Entity 비교 : " + matches);
+
+        if (matches){
+            // 기존 비밀번호와 일치하면 새 비밀번호로 업데이트
+            String encodedPassword = PasswordUtil.encodePassword(usersDTO.getPasswordOne());
+            usersEntity.setPassword(encodedPassword);
+            // 변경된 비밀번호 Entity DB 저장
+            usersRepository.save(usersEntity);
+            log.info("술먹고 취해서 그런가 정말 왜 안되는지 모르겠어 ㅠㅠ");
+            return true; // 성곡적으로 비밀번호 변경
+        }else{
+            return false;
+        }
+
     }
 
+    // 임시비밀번호 발급
+    @Override
+    @Transactional
+    public String sendTemporaryPassword(UsersDTO usersDTO) {
+        // 1. 회원 정보 검증
+        UsersEntity usersEntity = usersRepository.selectEmail(usersDTO.getEmail());
+        log.info(usersDTO);
+        log.info(usersEntity);
 
+
+        if (usersEntity == null) {
+            throw new IllegalStateException("회원 정보를 찾을 수 없습니다.");
+        }
+
+        if ( !usersDTO.getName().equals(usersEntity.getName())) {
+            throw new IllegalStateException("회원 정보를 찾을 수 없습니다.");
+        }
+
+        // 2. 임시 비번 생성
+        String tempPassword = PasswordUtil.generateTempPassword();
+        System.out.println("임시비번 : " + tempPassword);
+
+        // 3. 비밀번호 암호화 후 저장
+        usersEntity.setPassword(PasswordUtil.encodePassword(tempPassword));
+        usersRepository.save(usersEntity);
+
+        // 4. 이메일 발송을 위한 데이터 준비
+        Map<String , Object> variables = Map.of(
+                "name", usersEntity.getName(),
+                "tempPassword", tempPassword
+        );
+
+        // 5. 이메일 전송(타임리프 텔플릿 사용)
+        emailService.sendHtmlEmail(
+                usersEntity.getEmail(),
+                "임시 비밀번호 발급",
+                "users/sendPasswordEmail", // 템플릿 이름(파일명: temp-password.html)
+                tempPassword,
+                variables
+        );
+
+        return "임시 비밀번호가 이메일로 발송되었습니다.";
+    }
 }
