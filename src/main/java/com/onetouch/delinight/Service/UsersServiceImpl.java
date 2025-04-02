@@ -10,6 +10,7 @@ package com.onetouch.delinight.Service;
 import com.onetouch.delinight.DTO.UsersDTO;
 import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.UsersRepository;
+import com.onetouch.delinight.Util.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @Transactional
@@ -28,8 +31,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsersServiceImpl implements UsersService , UserDetailsService {
 
     private final UsersRepository usersRepository;
-    private final ModelMapper modelMapper;
+
+
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     @Override // 회원가입
     public void singUpUser(UsersDTO usersDTO) {
@@ -70,6 +76,33 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
     }
 
 
+    // 비밀번호 찾기
+    @Override
+    public boolean passwordChange(UsersDTO usersDTO) {
+        log.info("서비스로 들어온 비밀번호 찾기실행");
+
+        if(!usersDTO.getPasswordOne().equals(usersDTO.getPasswordTwo())) {
+            log.info("비번 틀림");
+            return false;
+        }
+
+        UsersEntity usersEntity = usersRepository.selectEmail(usersDTO.getEmail());
+
+        if (usersEntity == null) {
+            log.info("서비스에서 유저를 찾아왔????" + usersEntity);
+        }
+
+        boolean matches = passwordEncoder.matches(usersDTO.getPasswordOne(), usersEntity.getPassword());
+        log.info("DTO , Entity 비교 : " + matches);
+
+        if (matches) {
+            usersEntity.setPassword(passwordEncoder.encode(usersDTO.getPasswordOne()));
+            return true;
+        }else{
+            log.info("기존 비밀번호와 다릅니다.");
+            return false;
+        }
+    }
 
 
 }

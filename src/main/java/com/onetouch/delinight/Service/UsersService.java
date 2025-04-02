@@ -13,6 +13,8 @@ public interface UsersService {
 
     public void singUpUser(UsersDTO usersDTO);
 
+    public boolean passwordChange(UsersDTO usersDTO);
+
 
 
 
