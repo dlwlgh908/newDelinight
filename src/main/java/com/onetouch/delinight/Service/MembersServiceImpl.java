@@ -12,6 +12,7 @@ import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.MembersRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -67,5 +68,17 @@ public class MembersServiceImpl implements MembersService{
 
         Page<MembersDTO> membersDTOPage = membersEntitie.map(data -> modelMapper.map(data, MembersDTO.class));
         return membersDTOPage;
+    }
+
+    @Override
+    public MembersDTO changeStatus(Long id) {
+
+        MembersEntity membersEntity =
+        membersRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        membersEntity.setStatus(Status.VALID);
+
+        MembersDTO membersDTO =
+            modelMapper.map(membersEntity, MembersDTO.class);
+        return membersDTO;
     }
 }

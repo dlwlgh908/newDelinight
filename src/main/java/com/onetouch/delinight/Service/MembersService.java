@@ -21,4 +21,6 @@ public interface MembersService {
 
     public List<MembersDTO> findAll();
 
+    public MembersDTO changeStatus(Long id);
+
 }
