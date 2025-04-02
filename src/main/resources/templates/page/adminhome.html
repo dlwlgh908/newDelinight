@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layoutone}"
+      >
+<head>
+    <meta charset="UTF-8">
+    <title>관리자메인화면</title>
+    <!--css-->
+    <link rel="stylesheet" href="/css/pageCSS/adminhome.css">
+</head>
+<body>
+    <th:block layout:fragment="admincontent">
+        <!--반드시 아래처럼 div를 하나 까주고 시작-->
+        <div>
+            <div>
+                관리자 메인페이지 content!!
+            </div>
+            <img src="/img/test.png" alt="#">
+        </div>
+    </th:block>
+</body>
+</html>
