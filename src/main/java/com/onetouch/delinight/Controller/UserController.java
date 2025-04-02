@@ -85,7 +85,7 @@ public class UserController {
                         return "redirect:/users/login";
                 }else{
                         redirectAttributes.addFlashAttribute("msg" , "비밀번호를 변경할 수 없습니다.");
-                        return "redirect:/passwordChange";
+                        return "redirect:/users/passwordChange";
                 }
 
         }
@@ -94,21 +94,24 @@ public class UserController {
         // 임시 비번발급
         @GetMapping("/sendPassword")
         public String sendPasswordGET() {
+                log.info("sendPassword진입완료!!!!!!!!!!!!!!");
                 return "/users/sendPassword";
         }
 
         @PostMapping("/sendPassword")
-        public String sendPasswordPost(UsersDTO usersDTO , RedirectAttributes redirectAttributes) {
-
+        public String sendPasswordPost(UsersDTO usersDTO , Model model) {
+                log.info("으아아아아아아아악 포스트진입함?????????");
                 try {
-                        usersService.sendPassword(usersDTO);
-                        redirectAttributes.addFlashAttribute("msg" , "이메일을 확인해주세요.");
-                        return "redirect:/users/login";
-                }catch (IllegalStateException e) {
-                        redirectAttributes.addFlashAttribute("msg" , e.getMessage());
-                        return "redirect:/users/login";
+                        // 임시 비밀번호 발급 서비스 호출
+                        String resultMessage = usersService.sendTemporaryPassword(usersDTO);
+                        model.addAttribute("message" , resultMessage); // 성공 메시지
+                        log.info("으아아아아아아아악 성공함?????????");
+                        return "/users/login";                                     // 성공 시 이동할 URL
+                }catch (IllegalStateException e){
+                        model.addAttribute("error" , e.getMessage());  // 오류 메시지
+                        log.info("으아아아아아아아악 실패함?????????");
+                        return "/users/login";                                     // 실패 시 이동할 URL
                 }
-
         }
 
 
