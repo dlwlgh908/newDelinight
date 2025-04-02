@@ -8,6 +8,6 @@ public class ViewController {
 
     @GetMapping("/")
     public String adminHome(){
-        return "/page/adminhome";
+        return "/index";
     }
 }

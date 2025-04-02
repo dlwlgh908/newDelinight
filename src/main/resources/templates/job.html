@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+
+      layout:decorate="~{layouts/adminlayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--뷰포트-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--css-->
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <!--폰트어썸-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"></script>
+</head>
+<body>
+    <!--작업 시 아래 div 바깥에 내용을 작성하지 않도록 유의-->
+    <div layout:fragment="content">
+        <div class="container">
+            <div class="row mt-3">
+                <div class="col-1"></div><!--오른쪽여백-->
+                <div class="col-10">
+                    <h1 class="text-center">job.html</h1>
+                </div><!--작업영역-->
+                <div class="col-1"></div><!--왼쪽여백-->
+            </div><!--row끝-->
+        </div><!--container끝-->
+    </div>
+
+<th:block layout:fragment="script">
+    <script>
+        /*여기에 작성하면 인식 됨. Jquery.. ajax...등 작성*/
+    </script>
+</th:block>
+</body>
+</html>
