@@ -174,6 +174,35 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         return 1;
     }
 
+    @Override
+    public void userDelete(String email) {
+        try {
+            usersRepository.deleteByEmail(email);
+        }catch (Exception e){
+            log.info("회원탈퇴 실패");
+        }
 
+    }
+
+    @Override
+    public void userUpdate(String email, UsersDTO usersDTO) {
+        try {
+            UsersEntity usersEntity = usersRepository.selectEmail(email);
+            if (usersEntity == null) {
+                log.info("해당 이메일을 가진 회원을 찾을 수 없음: " + email);
+                throw new RuntimeException("해당 이메일을 가진 회원을 찾을 수 없습니다.");
+            }
+            log.info("기존 회원 정보: " + usersEntity);
+            usersEntity.setPhone(usersDTO.getPhone());
+            usersEntity.setAddress(usersDTO.getAddress());
+            usersRepository.save(usersEntity);
+            log.info("변경된 회원 정보 : " + usersEntity);
+            log.info("회원정보 수정 성공: " + usersEntity);
+        } catch (Exception e) {
+            log.info("회원정보 수정 실패");
+            throw new RuntimeException("회원정보 수정 중 오류 발생");
+        }
+    }
 
 }
+

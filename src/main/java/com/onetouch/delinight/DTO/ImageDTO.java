@@ -14,5 +14,11 @@ public class ImageDTO {
     private String fullUrl;
     private String fileName;
     private String originName;
+    private MenuDTO menuDTO;
+    private HotelDTO hotelDTO;
+    public ImageDTO setMenuDTO(MenuDTO menuDTO){
+        this.menuDTO = menuDTO;
+        return this;
+    }
 
 }

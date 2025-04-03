@@ -18,4 +18,5 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Long> {
     public List<MenuEntity> findByStoreEntity_HotelEntity_Id(Long hotelId);
 
 
+
 }

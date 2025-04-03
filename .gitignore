@@ -16,6 +16,7 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+**/config/AWSConfig
 
 
 ### IntelliJ IDEA ###
@@ -37,3 +38,5 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
