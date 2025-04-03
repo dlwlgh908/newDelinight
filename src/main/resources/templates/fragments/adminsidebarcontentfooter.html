@@ -3,19 +3,18 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layoutone}"
+      layout:decorate="~{layouts/layout}"
       >
 <head>
     <title>사이드바&컨텐츠</title>
 </head>
 <body>
-    <div th:fragment="adminsidebarcontentfooter" id="adminsidebarcontentfooter">
+    <div th:fragment="adminSidebarContentFooter" id="adminSidebarContentFooter">
         <div id="layoutSidenav">
-            <div th:replace="~{fragments/adminsidebar::adminsidebar}"></div>
-            <div th:replace="~{fragments/admincontentfooter::admincotentfooter}">
-                <div></div>
-            </div>
+            <div id="layoutSidenav_nav" th:replace="~{fragments/adminsidebar::adminSidebar}"></div>
         </div>
+
+        <div th:replace="~{fragments/admincontentfooter::adminCotentFooter}"></div>
     </div>
 </body>
 </html>
