@@ -8,6 +8,8 @@
 package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.Entity.MembersEntity;
+import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.MembersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.List;
 
@@ -27,6 +30,7 @@ import java.util.List;
 public class MembersController {
 
     private final MembersService membersService;
+    private final MembersRepository membersRepository;
 
     @GetMapping("/adminhome")
     public String adminhome() {
@@ -109,7 +113,26 @@ public class MembersController {
         return "members/list";
     }
 
+    @GetMapping("/adminlogin")
+    public String adminloginGet(){
+        return "members/adminlogin";
+    }
 
+    @PostMapping("/adminlogin")
+    public String adminlogin(String email){
+
+        MembersEntity membersEntity =
+        membersRepository.selectEmail(email);
+
+        log.info(membersEntity);
+        log.info(membersEntity);
+        log.info(membersEntity);
+        log.info(membersEntity);
+
+
+
+        return null;
+    }
 
 
 }
