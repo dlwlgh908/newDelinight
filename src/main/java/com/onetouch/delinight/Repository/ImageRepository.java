@@ -5,11 +5,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Transactional
 public interface ImageRepository extends JpaRepository<ImageEntity, Long> {
 
     public void deleteByRegTimeIsLessThanEqualAndMenuEntityIsNullAndHotelEntityIsNull(LocalDateTime time);
+    public Optional<ImageEntity> findByMenuEntity_Id(Long menuEntityId);
 
+    public void deleteByMenuEntity_Id(Long menuEntityId);
 
 }

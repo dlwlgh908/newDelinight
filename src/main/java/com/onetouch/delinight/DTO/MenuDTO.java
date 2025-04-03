@@ -8,6 +8,8 @@
 package com.onetouch.delinight.DTO;
 
 
+
+import com.onetouch.delinight.Constant.MenuStatus;
 import com.onetouch.delinight.Config.MenuStatus;
 import lombok.*;
 
@@ -34,6 +36,10 @@ public class MenuDTO {
 
 
     private StoreDTO storeDTO;
+
+    private Long imgNum;
+
+    private String imgUrl;
 
 
     public MenuDTO setStoreDTO(StoreDTO storeDTO){

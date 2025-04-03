@@ -8,6 +8,7 @@
 package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.DTO.MenuDTO;
+import com.onetouch.delinight.Service.ImageService;
 import com.onetouch.delinight.Service.MenuService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Id;
@@ -37,6 +38,7 @@ import java.util.List;
 @RequestMapping("/menu")
 public class MenuController {
     private final MenuService menuService;
+    private final ImageService imageService;
 
     //등록get
     @GetMapping("/register")
@@ -67,22 +69,33 @@ public class MenuController {
     }
     @GetMapping("/read")
     public String readView(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
-        log.info("메뉴정보 페이지");
-            log.info("id 값 : " + id);
-            MenuDTO menuDTO =
+        MenuDTO menuDTO =
                 menuService.read(id);
         model.addAttribute("menuDTO", menuDTO);
 
             return "menu/read";
 
     }
+    @GetMapping("/update/{id}")
+    public String updateView(@PathVariable(name = "id") Long id,Model model){
+        log.info("수정" + id);
+        MenuDTO menuDTO = menuService.read(id);
+        model.addAttribute("menuDTO", menuDTO);
+        log.info(menuDTO.getId());
+        String imgUrl = imageService.read(id);
+        model.addAttribute("imgUrl",imgUrl);
+        return "menu/update";
 
-    @GetMapping("/aa")
-    public String aa(){
-
-
-        return "menu/aa";
     }
+    @PostMapping("/update")
+    public String updateprco(MenuDTO menuDTO){
+        log.info(menuDTO);
+
+        menuService.update(menuDTO);
+
+        return "redirect:/menu/read?id="+menuDTO.getId();
+    }
+
 
 
 

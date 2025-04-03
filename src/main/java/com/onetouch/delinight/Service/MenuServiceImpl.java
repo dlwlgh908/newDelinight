@@ -10,11 +10,11 @@ package com.onetouch.delinight.Service;
 import com.onetouch.delinight.DTO.MenuDTO;
 
 
+import com.onetouch.delinight.Entity.ImageEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
-
 import com.onetouch.delinight.DTO.StoreDTO;
-
 import com.onetouch.delinight.Entity.MenuEntity;
+import com.onetouch.delinight.Repository.ImageRepository;
 import com.onetouch.delinight.Repository.MenuRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +36,15 @@ public class MenuServiceImpl implements MenuService{
 
     private final MenuRepository menuRepository;
     private final ModelMapper modelMapper;
-
+    private final ImageRepository imageRepository;
 
     @Override
     public void register(MenuDTO menuDTO) {
         MenuEntity menuEntity = modelMapper.map(menuDTO, MenuEntity.class);
         menuEntity = menuRepository.save(menuEntity);
+        ImageEntity imageEntity = imageRepository.findById(menuDTO.getImgNum()).get();
+        imageEntity.setMenuEntity(menuEntity);
+        imageRepository.save(imageEntity);
         menuDTO = modelMapper.map(menuEntity, MenuDTO.class);
     }
 
@@ -51,6 +54,11 @@ public class MenuServiceImpl implements MenuService{
                 menuRepository.findById(id);
         MenuEntity menuEntity = optionalMenuEntity.get();
         MenuDTO menuDTO = modelMapper.map(menuEntity, MenuDTO.class);
+        Optional<ImageEntity> imageEntity = imageRepository.findByMenuEntity_Id(id);
+        if(imageEntity.isPresent()){
+            String imgUrl = imageEntity.get().getFullUrl();
+            menuDTO.setImgUrl(imgUrl);
+        }
         return menuDTO;
     }
 
@@ -63,17 +71,21 @@ public class MenuServiceImpl implements MenuService{
 
     @Override
     public MenuDTO update(MenuDTO menuDTO) {
-        MenuEntity menuEntity =
-                menuRepository.findById(menuDTO.getId()).orElseThrow(EntityNotFoundException::new);
-
-        //메뉴명 수정
+        Optional<MenuEntity> optionalMenuEntity = menuRepository.findById(menuDTO.getId());
+        MenuEntity menuEntity = optionalMenuEntity.get();
         menuEntity.setName(menuDTO.getName());
-        //메뉴내용 수정
         menuEntity.setContent(menuDTO.getContent());
-        //가격 수정
         menuEntity.setPrice(menuDTO.getPrice());
-        //판매여부 수정
         menuEntity.setMenuStatus(menuDTO.getMenuStatus());
+        ImageEntity imageEntity = imageRepository.findById(menuDTO.getImgNum()).get();
+
+        if(imageRepository.findByMenuEntity_Id(menuDTO.getId()).isPresent()) {
+            imageRepository.deleteByMenuEntity_Id(menuDTO.getId());
+        }
+        imageEntity.setMenuEntity(menuEntity);
+        imageRepository.save(imageEntity);
+        menuDTO = modelMapper.map(menuEntity, MenuDTO.class);
+
 
         return menuDTO;
     }
