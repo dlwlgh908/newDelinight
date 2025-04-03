@@ -39,28 +39,31 @@ public class UserController {
                 return "/users/home";
         }
 
-        @GetMapping("/singUp")
+        @GetMapping("/signUp")
         public String singUp() {
-                return "/users/singUp";
+                return "/users/signUp";
         }
 
-        @PostMapping("/singUp")
+        @PostMapping("/signUp")
         public String singUpPost(@Valid UsersDTO usersDTO , BindingResult bindingResult , Model model) {
-
+                log.info("전달받은 값 : " + usersDTO);
                 if(bindingResult.hasErrors()) {
                         // 오류 메시지를 모델에 담기
                         model.addAttribute("error" , bindingResult.getAllErrors());
-                        return "redirect:/users/singUp";
+                        log.info("여기 실행함??????????????????????????????????????????????");
+                        return "redirect:/users/signUp";
                 }
 
                 try {
                         usersService.singUpUser(usersDTO);
+                        log.info("회원가입 성공");
                 }catch (Exception e) {
                         model.addAttribute("errorMessage" , "회원가입 처리 중 오류가 발생했습니다.");
-                        return "redirect:/users/singUp";
+                        log.info("회원가입 중 예외 발생");
+                        return "/users/signUp";
                 }
 
-                return "/users/login";
+                return "redirect:/users/login";
         }
 
         @GetMapping("/login")

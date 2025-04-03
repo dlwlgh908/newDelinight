@@ -19,6 +19,7 @@ public interface UsersRepository extends JpaRepository<UsersEntity, Long> {
 
     public boolean existsByEmail(String email); // 회원가입 여부확인
 
+    
 
 
 
