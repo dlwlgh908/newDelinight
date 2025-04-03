@@ -7,28 +7,58 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.BranchDTO;
+import com.onetouch.delinight.DTO.CenterDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.Entity.BranchEntity;
+import com.onetouch.delinight.Entity.CenterEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
+import com.onetouch.delinight.Repository.BranchRepository;
+import com.onetouch.delinight.Repository.CenterRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class BranchServiceImpl implements BranchService{
-    private final MembersRepository membersRepository;
+    private final BranchRepository branchRepository;
+    private final CenterRepository centerRepository;
     private final ModelMapper modelMapper;
 
 
     @Override
-    public void create(MembersDTO membersDTO) {
-        MembersEntity membersEntity =
-            modelMapper.map(membersDTO, MembersEntity.class);
+    public void create(BranchDTO branchDTO) {
+        BranchEntity branchEntity =
+            modelMapper.map(branchDTO, BranchEntity.class);
 
-            membersRepository.save(membersEntity);
+        CenterEntity centerEntity =
+                centerRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+        branchEntity.setCenterEntity(centerEntity);
+
+
+        branchRepository.save(branchEntity);
     }
 
+
+
+    @Override
+    public List<BranchDTO> list() {
+        List<BranchEntity> branchEntityList =
+            branchRepository.findAll();
+        List<BranchDTO> branchDTOList =
+                branchEntityList.stream().toList().stream().map(
+                        branchEntity -> modelMapper.map(branchEntity, BranchDTO.class)
+                ).collect(Collectors.toList());
+
+        return branchDTOList;
+    }
 }

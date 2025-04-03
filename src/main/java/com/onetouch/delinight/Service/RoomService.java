@@ -7,7 +7,15 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.RoomDTO;
+
+import java.util.List;
+
 public interface RoomService {
+
+    public RoomDTO create(RoomDTO roomDTO);
+
+    public List<RoomDTO> list();
 
 
 
