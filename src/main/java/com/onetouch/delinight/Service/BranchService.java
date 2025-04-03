@@ -7,12 +7,17 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.BranchDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
 
+import java.util.List;
+
 public interface BranchService {
 
-    public void create(MembersDTO membersDTO);
+    public void create(BranchDTO branchDTO);
+
+    public List<BranchDTO> list();
 
 
 

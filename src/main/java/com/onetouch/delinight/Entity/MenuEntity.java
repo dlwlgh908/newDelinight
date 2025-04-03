@@ -7,7 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
-import com.onetouch.delinight.Config.MenuStatus;
+import com.onetouch.delinight.Constant.MenuStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

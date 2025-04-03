@@ -19,13 +19,7 @@ public class MembersRestController {
     @GetMapping("/approveBtn/{id}")
     public void approveBtn(@PathVariable("id") Long id) {
 
-        log.info("changestatus 페이지 진입!!");
-        log.info("changestatus 페이지 진입!!");
-        log.info("changestatus 페이지 진입!!");
-        log.info(id);
-        log.info(id);
-        log.info(id);
-        log.info(id);
+
         MembersDTO membersDTO =
             membersService.approve(id);
         log.info(membersDTO);
