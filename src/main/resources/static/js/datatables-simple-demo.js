@@ -7,3 +7,5 @@ window.addEventListener('DOMContentLoaded', event => {
         new simpleDatatables.DataTable(datatablesSimple);
     }
 });
+
+// <!--dddddd--><!--dddddd--><!--dddddd--><!--dddddd-->
