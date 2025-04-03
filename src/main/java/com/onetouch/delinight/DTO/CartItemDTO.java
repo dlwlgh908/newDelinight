@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+import com.onetouch.delinight.Entity.CartEntity;
 import lombok.*;
 
 @Getter
@@ -18,5 +19,17 @@ import lombok.*;
 public class CartItemDTO {
 
     private Long id;
+    private CartDTO cartDTO;
+    private MenuDTO menuDTO;
+    private Long quantity;
+    public CartItemDTO setCartDTO(CartDTO cartDTO){
+        this.cartDTO = cartDTO;
+        return this;
+    }
+    public CartItemDTO setMenuDTO(MenuDTO menuDTO){
+        this.menuDTO = menuDTO;
+        return this;
+    }
+
 
 }

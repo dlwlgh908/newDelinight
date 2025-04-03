@@ -9,8 +9,10 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.MenuDTO;
 
+
 import com.onetouch.delinight.Entity.ImageEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
+import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.MenuEntity;
 import com.onetouch.delinight.Repository.ImageRepository;
 import com.onetouch.delinight.Repository.MenuRepository;
@@ -98,7 +100,7 @@ public class MenuServiceImpl implements MenuService{
     @Override
     public List<MenuDTO> menuListByHotel(Long hotelNum) {
         List<MenuEntity> menuEntityList = menuRepository.findByStoreEntity_HotelEntity_Id(hotelNum);
-        List<MenuDTO> menuDTOList = menuEntityList.stream().map(data -> modelMapper.map(data,MenuDTO.class)).toList();
+        List<MenuDTO> menuDTOList = menuEntityList.stream().map(data -> modelMapper.map(data,MenuDTO.class).setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))).toList();
         return menuDTOList;
     }
 }
