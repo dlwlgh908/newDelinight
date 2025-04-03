@@ -44,7 +44,6 @@
                         <div th:text="승인대기중"></div>
                         <button class="btn btn-primary" th:value="${list.id}" id="approveBtn">승인</button>
                         <button class="btn btn-primary" th:value="${list.id}" id="DisapproveBtn">반려</button>
-
                     </td>
 
 
@@ -71,7 +70,7 @@
             let id = this.getAttribute("value");
             alert(id)
             $.ajax({
-                url : "/rest/approveBtn/"+id,
+                url : "/rest/changestatus/"+id,
                 type : "get",
                 success: function (data) {
                     alert("성공")

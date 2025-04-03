@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>멤버 가입화면</title>
+</head>
+<body>
+<h1>Hotel Admin 회원가입</h1>
+
+<form action="/members/hoteladmincreate" method="post">
+    이름 : <input name="name"><br>
+    이메일 : <input type="email" name="email"><br>
+    핸드폰번호 : <input name="phone"><br>
+    <button>전송</button>
+
+</form>
+
+</body>
+</html>

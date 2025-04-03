@@ -46,20 +46,70 @@ public class MembersController {
         return "redirect:members/adminhome";
     }
 
+    @GetMapping("/hoteladmincreate")
+    public String hoteladmincreateView() {
+        return "members/hoteladmincreate";
+    }
+    @PostMapping("/hoteladmincreate")
+    public String hoteladmincreate(MembersDTO membersDTO) {
+        membersService.hoteladcreate(membersDTO);
+
+        return "redirect:/members/adminhome";
+    }
+
+    @GetMapping("/storeadmincreate")
+    public String storeadmincreateView() {
+        return "members/storeadmincreate";
+    }
+    @PostMapping("/storeadmincreate")
+    public String storeadmincreate(MembersDTO membersDTO) {
+        membersService.storeadcreate(membersDTO);
+
+        return "redirect:/members/adminhome";
+    }
+
+
+
     @GetMapping("/list")
     public String list(Model model) {
         log.info("list페이지 진입");
 
         List<MembersDTO> membersDTOList =
-            membersService.findAll();
+            membersService.findSuper();
 
         log.info(membersDTOList);
         model.addAttribute("memberlist", membersDTOList);
 
+        return "members/list";
+    }
 
+    @GetMapping("/hoteladlist")
+    public String hoteladlist(Model model) {
+        log.info("list페이지 진입");
+
+        List<MembersDTO> membersDTOList =
+                membersService.findHotelAd();
+
+        log.info(membersDTOList);
+        model.addAttribute("memberlist", membersDTOList);
 
         return "members/list";
     }
+
+    @GetMapping("/storeadlist")
+    public String storeadlist(Model model) {
+        log.info("list페이지 진입");
+
+        List<MembersDTO> membersDTOList =
+                membersService.findStoreAd();
+
+        log.info(membersDTOList);
+        model.addAttribute("memberlist", membersDTOList);
+
+        return "members/list";
+    }
+
+
 
 
 }

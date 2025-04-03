@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class MembersRestController {
     private final MembersService membersService;
 
-    @GetMapping("/changestatus/{id}")
-    public void changestatus(@PathVariable("id") Long id) {
+    @GetMapping("/approveBtn/{id}")
+    public void approveBtn(@PathVariable("id") Long id) {
 
         log.info("changestatus 페이지 진입!!");
         log.info("changestatus 페이지 진입!!");
@@ -27,7 +27,7 @@ public class MembersRestController {
         log.info(id);
         log.info(id);
         MembersDTO membersDTO =
-            membersService.changeStatus(id);
+            membersService.approve(id);
         log.info(membersDTO);
         log.info(membersDTO);
         log.info(membersDTO);
@@ -35,6 +35,27 @@ public class MembersRestController {
 
 
     }
+    @GetMapping("/DisapproveBtn/{id}")
+    public void DisapproveBtn(@PathVariable("id") Long id) {
+
+        log.info("changestatus 페이지 진입!!");
+        log.info("changestatus 페이지 진입!!");
+        log.info("changestatus 페이지 진입!!");
+        log.info(id);
+        log.info(id);
+        log.info(id);
+        log.info(id);
+        MembersDTO membersDTO =
+                membersService.Disapprove(id);
+        log.info(membersDTO);
+        log.info(membersDTO);
+        log.info(membersDTO);
+        log.info(membersDTO);
+
+
+    }
+
+
 
 //        try {
 //            MembersDTO membersDTO = membersService.

@@ -46,6 +46,26 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
+    public void hoteladcreate(MembersDTO membersDTO) {
+        MembersEntity membersEntity =
+                modelMapper.map(membersDTO, MembersEntity.class);
+        membersEntity.setRole(Role.ADMIN);
+        membersEntity.setStatus(Status.WAIT);
+
+        membersRepository.save(membersEntity);
+    }
+
+    @Override
+    public void storeadcreate(MembersDTO membersDTO) {
+        MembersEntity membersEntity =
+                modelMapper.map(membersDTO, MembersEntity.class);
+        membersEntity.setRole(Role.STOREADMIN);
+        membersEntity.setStatus(Status.WAIT);
+
+        membersRepository.save(membersEntity);
+    }
+
+    @Override
     public List<MembersDTO> findAll() {
         List<MembersEntity> membersEntityList = membersRepository.findAll();
 
@@ -53,6 +73,47 @@ public class MembersServiceImpl implements MembersService{
                 membersEntityList.stream().toList().stream().map(
                         membersEntity -> modelMapper.map(membersEntity, MembersDTO.class)
                 ).collect(Collectors.toList());
+
+        return membersDTOList;
+    }
+
+    @Override
+    public List<MembersDTO> findSuper() {
+        List<MembersEntity> membersEntityList = membersRepository.selectSuperAd();
+
+        List<MembersDTO> membersDTOList =
+        membersEntityList.stream().toList().stream().map(
+                membersEntity -> modelMapper.map(membersEntity, MembersDTO.class)
+        ).collect(Collectors.toList());
+
+        return membersDTOList;
+    }
+
+    @Override
+    public List<MembersDTO> findHotelAd() {
+
+        List<MembersEntity> membersEntityList = membersRepository.selectHotelAd();
+
+        List<MembersDTO> membersDTOList =
+                membersEntityList.stream().toList().stream().map(
+                        membersEntity -> modelMapper.map(membersEntity, MembersDTO.class)
+                ).collect(Collectors.toList());
+
+
+        return membersDTOList;
+    }
+
+    @Override
+    public List<MembersDTO> findStoreAd() {
+
+
+        List<MembersEntity> membersEntityList = membersRepository.selectStoreA();
+
+        List<MembersDTO> membersDTOList =
+                membersEntityList.stream().toList().stream().map(
+                        membersEntity -> modelMapper.map(membersEntity, MembersDTO.class)
+                ).collect(Collectors.toList());
+
 
         return membersDTOList;
     }
@@ -71,7 +132,7 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
-    public MembersDTO changeStatus(Long id) {
+    public MembersDTO approve(Long id) {
 
         MembersEntity membersEntity =
         membersRepository.findById(id).orElseThrow(EntityNotFoundException::new);
@@ -79,6 +140,18 @@ public class MembersServiceImpl implements MembersService{
 
         MembersDTO membersDTO =
             modelMapper.map(membersEntity, MembersDTO.class);
+        return membersDTO;
+    }
+
+    @Override
+    public MembersDTO Disapprove(Long id) {
+
+        MembersEntity membersEntity =
+                membersRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        membersEntity.setStatus(Status.NOTVALID);
+
+        MembersDTO membersDTO =
+                modelMapper.map(membersEntity, MembersDTO.class);
         return membersDTO;
     }
 }
