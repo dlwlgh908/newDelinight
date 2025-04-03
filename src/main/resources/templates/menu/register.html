@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+
+>
+<head>
+    <meta charset="UTF-8">
+    <title>메뉴 등록</title>
+
+</head>
+<body>
+
+    <h1>메뉴 등록</h1>
+
+    <form action="/menu/register" method="post">
+        메 뉴 : <input name="name" class="name"><br>
+        상세설명 : <input name="content" class="content"><br>
+        가격 : <input name="price" class="price"><br>
+        판매상태 : <input name="menuStatus" class="menuStatus"><br>
+        <button type="submit">저장</button>
+
+    </form>
+
+
+</body>
+</html>
