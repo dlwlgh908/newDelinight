@@ -39,6 +39,12 @@ public class MenuDTO {
 
 
     private StoreDTO storeDTO;
+    private String price;
 
+
+    public MenuDTO setStoreDTO(StoreDTO storeDTO){
+        this.storeDTO = storeDTO;
+        return this;
+    }
 
 }

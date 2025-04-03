@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class RoomServiceImpl implements PaymentService{
+public class RoomServiceImpl implements RoomService{
 
 
 }

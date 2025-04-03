@@ -31,10 +31,8 @@ public class CartEntity {
     @JoinColumn(name = "user_id")
     private UsersEntity usersEntity;
 
-    @OneToMany
-    private List<MenuEntity> menuEntityList;
-
     private Long totalPrice;
+
 
 
 }
