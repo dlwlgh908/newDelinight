@@ -9,12 +9,7 @@ package com.onetouch.delinight.DTO;
 
 
 import com.onetouch.delinight.Config.MenuStatus;
-import jakarta.persistence.Column;
-
-
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -39,7 +34,6 @@ public class MenuDTO {
 
 
     private StoreDTO storeDTO;
-    private String price;
 
 
     public MenuDTO setStoreDTO(StoreDTO storeDTO){
