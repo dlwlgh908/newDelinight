@@ -11,37 +11,27 @@
   <th:block th:replace="~{fragments/config :: configScripts}"></th:block>
 </head>
 
-<body>
-  <div class="sb-nav-fixed">
-    <!-- 헤더 -->
-    <div th:replace="~{fragments/adminHeader::adminHeader}"></div>
+<body class="sb-nav-fixed">
 
+      <!-- 헤더 -->
+      <div th:replace="~{fragments/adminHeader::adminHeader}"></div>
 
-    <div th:fragment="adminSidebarContentFooter" id="adminSidebarContentFooter">
+      <!--사이드바&콘텐츠&푸터-->
       <div id="layoutSidenav">
+
+        <!--사이드바-->
         <div th:replace="~{fragments/adminsidebar::adminSidebar}" id="layoutSidenav_nav"></div>
-      </div>
 
-      <div id="adminContentFooter">
+          <!--콘텐츠-->
         <div layout:fragment="index"></div>
-        <div th:replace="~{fragments/adminfooter::adminFooter}"></div>
+
       </div>
-    </div>
-
-<!--    &lt;!&ndash; 사이드바&컨텐츠&푸터 &ndash;&gt;-->
-<!--    <div th:replace="~{fragments/adminSidebarContentFooter::adminSidebarContentFooter}"></div>-->
 
 
-  </div>
   <!-- 위로가기 a태그 -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!--config script-->
   <th:block th:replace="~{fragments/config::script}"></th:block>
-
-  <!--새로 사용할 스크립트 넣는 곳-->
-  <th:block layout:fragment="newScript">
-
-  </th:block>
 </body>
 </html>
