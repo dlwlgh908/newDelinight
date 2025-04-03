@@ -7,6 +7,11 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+import com.onetouch.delinight.Entity.CenterEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 @Getter
@@ -18,5 +23,12 @@ import lombok.*;
 public class BranchDTO {
 
     private Long id;
+
+    private String name;
+
+    private String content;
+
+
+    private CenterDTO centerDTO;
 
 }

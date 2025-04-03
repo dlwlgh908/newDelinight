@@ -8,9 +8,27 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.MembersDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface MembersService {
 
-    public void createMembers(MembersDTO membersDTO);
+    public void create(MembersDTO membersDTO);
+
+    public void hoteladcreate(MembersDTO membersDTO);
+    public void storeadcreate(MembersDTO membersDTO);
+
+    public Page<MembersDTO> list(Pageable pageable);
+
+    public List<MembersDTO> findAll();
+
+    public List<MembersDTO> findSuper();
+    public List<MembersDTO> findHotelAd();
+    public List<MembersDTO> findStoreAd();
+
+    public MembersDTO approve(Long id);
+    public MembersDTO Disapprove(Long id);
 
 }

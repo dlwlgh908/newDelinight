@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <title>공통 레이아웃</title>
+  <!--뷰포트-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--css-->
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+  <link href="/css/styles.css" rel="stylesheet" />
+  <!--폰트어썸-->
+  <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"></script>
+</head>
+
+<body class="sb-nav-fixed">
+  <!-- 헤더 -->
+  <div th:replace="~{fragments/adminheader::adminheader}"></div>
+
+  <!-- 사이드바&컨텐츠&푸터 -->
+  <div th:replace="~{fragments/adminsidebarcontentfooter::adminsidebarcontentfooter}"></div>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- JS Files -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"
+          integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+<!--  그래프&차트 스크립트-->
+<!--  <script src="/assets/demo/chart-area-demo.js"></script>-->
+<!--  <script src="/assets/demo/chart-bar-demo.js"></script>-->
+<!--  <script src="/assets/demo/chart-pie-demo.js"></script>-->
+<!--  <script src="/assets/demo/datatables-demo.js"></script>-->
+  <!-- Main JS Files -->
+<!--  <script src="/js/datatables-simple-demo.js"></script>-->
+  <script src="/js/scripts.js"></script>
+
+  <th:block layout:fragment="script">
+
+  </th:block>
+</body>
+</html>

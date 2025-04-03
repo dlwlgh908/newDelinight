@@ -7,8 +7,11 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+
 import com.onetouch.delinight.Config.MenuStatus;
 import jakarta.persistence.Column;
+
+
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -21,6 +24,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MenuDTO {
 
+
     private Long id; //메뉴 코드번호
 
     private String name; //메뉴명
@@ -32,6 +36,9 @@ public class MenuDTO {
     MenuStatus menuStatus; //판매상태
 
     private String createBy;
+
+
+    private StoreDTO storeDTO;
 
 
 }
