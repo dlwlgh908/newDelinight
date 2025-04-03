@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          rel="stylesheet">
+
+
+</head>
+<body>
+<div id="new">
+    <table class="table">
+
+        <thead>
+        <th scope="col">#</th>
+        <th scope="col">이름</th>
+        <th scope="col">이메일</th>
+        <th scope="col">핸드폰번호</th>
+        <th scope="col">권한</th>
+        <th scope="col">승인여부</th>
+        </thead>
+
+        <tbody>
+        <th:block  th:each="list:${memberlist}">
+            <tr>
+                <th scope="row offset-4" th:text="${list.id}"></th>
+                <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                    [[${list.name}]]
+                </a>
+                </td>
+                <td th:text="${list.email}"></td>
+                <td th:text="${list.phone}"></td>
+
+
+                <td th:text="${list.role}"></td>
+
+                <td th:if="${list.status.name() == 'VALID'}" class="aa" th:text="승인완료"></td>
+                <td th:if="${list.status.name() == 'NOTVALID'}" class="aa" th:text="반려"></td>
+                    <td th:if="${list.status.name() == 'WAIT'}">
+                        <div th:text="승인대기중"></div>
+                        <button class="btn btn-primary" th:value="${list.id}" id="approveBtn">승인</button>
+                        <button class="btn btn-primary" th:value="${list.id}" id="DisapproveBtn">반려</button>
+                    </td>
+
+
+
+            </tr>
+
+        </th:block>
+
+
+
+        </tbody>
+
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+<script th:inline="javascript">
+    let aa = $(".aa");
+
+
+    $(function () {
+        $(document).on("click","#approveBtn",function () {
+            let id = this.getAttribute("value");
+            alert(id)
+            $.ajax({
+                url : "/rest/changestatus/"+id,
+                type : "get",
+                success: function (data) {
+                    alert("성공")
+                    console.log(data)
+                    location.reload();
+
+                }
+
+            })
+        })
+    })
+
+    $(function () {
+        $(document).on("click","#DisapproveBtn",function () {
+            let id = this.getAttribute("value");
+            alert(id)
+            $.ajax({
+                url : "/rest/DisapproveBtn/"+id,
+                type : "get",
+                success: function (data) {
+                    alert("성공")
+                    console.log(data)
+                    location.reload();
+
+                }
+
+            })
+        })
+    })
+    // document.getElementById("approveBtn").addEventListener("click", function () {
+    //     let buttonValue = this.getAttribute("value");
+    //     alert(buttonValue)
+    //     $.ajax({
+    //         url : "/members/changestatus",
+    //         method : "post",
+    //         data : buttonValue,
+    //         success: function (data) {
+    //             alert("성공")
+    //             console.log(data)
+    //         }
+    //     })
+    // });
+</script>
+</body>
+</html>

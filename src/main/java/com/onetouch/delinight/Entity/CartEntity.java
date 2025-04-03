@@ -34,8 +34,7 @@ public class CartEntity {
     @OneToMany
     private List<MenuEntity> menuEntityList;
 
-
-
+    private Long totalPrice;
 
 
 }

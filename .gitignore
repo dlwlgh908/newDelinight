@@ -16,6 +16,8 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+!**/config/AWSConfig
+
 
 ### IntelliJ IDEA ###
 .idea
@@ -32,6 +34,9 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
+/src/main/java/com/onetouch/delinight/Config/AWSConfig.java
 
 ### VS Code ###
 .vscode/
+
+

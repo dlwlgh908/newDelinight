@@ -9,10 +9,17 @@ package com.onetouch.delinight.Controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequiredArgsConstructor
 public class RoomServiceController {
+
+    @GetMapping("/order/list")
+    public String orderList(){
+
+        return  "roomservice/order/list";
+    }
 
 
 
