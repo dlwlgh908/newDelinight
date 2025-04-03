@@ -1,14 +1,20 @@
 /*********************************************************************
- * 클래스명 : MembersDTO
- * 기능 :
+ * 클래스명 : MenuDTO
+ * 기능 : 메뉴 시스템 구현
  * 작성자 : 이동건
  * 작성일 : 2025-03-30
  * 수정 : 2025-03-30     이동건
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
-import com.onetouch.delinight.Entity.StoreEntity;
+
+import com.onetouch.delinight.Config.MenuStatus;
+import jakarta.persistence.Column;
+
+
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,9 +24,21 @@ import lombok.*;
 @AllArgsConstructor
 public class MenuDTO {
 
-    private Long id;
-    private String name;
-    private String content;
+
+    private Long id; //메뉴 코드번호
+
+    private String name; //메뉴명
+
+    private String content; //내용
+
+    private int price; //가격
+
+    MenuStatus menuStatus; //판매상태
+
+    private String createBy;
+
+
     private StoreDTO storeDTO;
+
 
 }
