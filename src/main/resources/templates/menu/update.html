@@ -1,15 +1,31 @@
 <!DOCTYPE html>
-<html lang="ko"
+<html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layoutOne}"
+
 >
 <head>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
     <meta charset="UTF-8">
     <title>메뉴 정보 수정</title>
 </head>
 <body>
-<h1>메뉴 정보 수정</h1>
+    <h1>메뉴 정보 수정</h1>
+    <form action="/menu/update" method="post">
+        메뉴 : <input name="name" class="name" th:value="${menuDTO.name}"><br>
+        메뉴정보 : <input name="content" class="content" th:value="${menuDTO.content}"><br>
+        가격 : <input name="price" class="price" th:value="${menuDTO.price}"><br>
+        판매상태 : <input name="menuStatus" class="menuStatus" th:value="${menuDTO.menuStatus.name()}"><br>
+        <button type="submit">수정</button>
+        <button type="submit">삭제</button>
+        <input hidden readonly name="id" th:value="${menuDTO.id}">
+        <img class="menuImg" th:src="${imgUrl}">
+        <input type="file" class="imgInput">
+        <div class="hiddenImgNum"></div>
+
+    </form>
+    <script type="text/javascript" src="/js/imgscript.js"></script>
 
 </body>
 </html>
