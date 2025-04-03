@@ -17,10 +17,18 @@ public interface MembersService {
 
     public void create(MembersDTO membersDTO);
 
+    public void hoteladcreate(MembersDTO membersDTO);
+    public void storeadcreate(MembersDTO membersDTO);
+
     public Page<MembersDTO> list(Pageable pageable);
 
     public List<MembersDTO> findAll();
 
-    public MembersDTO changeStatus(Long id);
+    public List<MembersDTO> findSuper();
+    public List<MembersDTO> findHotelAd();
+    public List<MembersDTO> findStoreAd();
+
+    public MembersDTO approve(Long id);
+    public MembersDTO Disapprove(Long id);
 
 }

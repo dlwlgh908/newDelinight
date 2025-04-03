@@ -71,7 +71,7 @@
             let id = this.getAttribute("value");
             alert(id)
             $.ajax({
-                url : "/rest/approveBtn/"+id,
+                url : "/rest/changestatus/"+id,
                 type : "get",
                 success: function (data) {
                     alert("성공")
@@ -83,7 +83,6 @@
             })
         })
     })
-
     $(function () {
         $(document).on("click","#DisapproveBtn",function () {
             let id = this.getAttribute("value");
