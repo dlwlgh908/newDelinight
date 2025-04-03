@@ -78,7 +78,7 @@ public class UserController {
         }
 
 
-        // 비번 찾기
+        // 비번 변경
         @GetMapping("/passwordChange")
         public String passwordChangeGET() {
                 log.info("passwordChange");
