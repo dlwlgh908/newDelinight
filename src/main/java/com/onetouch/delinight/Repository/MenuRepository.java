@@ -11,7 +11,10 @@ import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.MenuEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface MenuRepository extends JpaRepository<MenuEntity, Long> {
+
 
 
 
