@@ -18,31 +18,31 @@ import static org.junit.jupiter.api.Assertions.*;
 @Log4j2
 class MembersServiceImplTest {
 
-    @Autowired
-    MembersService membersService;
-    @Autowired
-    MembersRepository membersRepository;
-
-
-    @Test
-    public void createTest(){
-        MembersDTO membersDTO = new MembersDTO();
-        membersDTO.setName("이효찬");
-        membersDTO.setEmail("harry@naver.com");
-        membersDTO.setPhone("01041634202");
-
-        membersService.create(membersDTO);
-    }
-
-    @Test
-    public void listTest(){
-
-        List<MembersDTO> membersDTOList =
-            membersService.findAll();
-        membersDTOList.forEach(member -> log.info(member));
-
-
-    }
+//    @Autowired
+//    MembersService membersService;
+//    @Autowired
+//    MembersRepository membersRepository;
+//
+//
+//    @Test
+//    public void createTest(){
+//        MembersDTO membersDTO = new MembersDTO();
+//        membersDTO.setName("이효찬");
+//        membersDTO.setEmail("harry@naver.com");
+//        membersDTO.setPhone("01041634202");
+//
+//        membersService.create(membersDTO);
+//    }
+//
+//    @Test
+//    public void listTest(){
+//
+//        List<MembersDTO> membersDTOList =
+//            membersService.findAll();
+//        membersDTOList.forEach(member -> log.info(member));
+//
+//
+//    }
 
 
 

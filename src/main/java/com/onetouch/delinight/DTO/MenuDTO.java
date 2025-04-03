@@ -22,5 +22,10 @@ public class MenuDTO {
     private String name;
     private String content;
     private StoreDTO storeDTO;
+    private String price;
 
+    public MenuDTO setStoreDTO(StoreDTO storeDTO){
+        this.storeDTO = storeDTO;
+        return this;
+    }
 }
