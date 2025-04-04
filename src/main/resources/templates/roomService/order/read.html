@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <script src="https://code.jquery.com/jquery-3.7.1.js"
+          integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <title>룸서비스 오더 내역</title>
+</head>
+<body>
+<div>
+  <div class="orderDetailWrap">
+    <div th:each="orders:${ordersDTOList}">
+      <p th:text="${orders.getStoreDTO().name}"></p>
+      <div th:each="ordersItem:${orders.getOrdersItemDTOList()}">
+        메뉴 이름 :
+        <span th:text="${ordersItem.getMenuDTO().name}"></span>
+        메뉴 설명 :
+        <span th:text="${ordersItem.getMenuDTO().content}"></span>
+        수량 :
+        <span th:text="${ordersItem.getQuantity()}"></span>
+        가격 :
+        <span th:text="${ordersItem.getMenuDTO().price*ordersItem.getQuantity()}"></span>
+      </div>
+      총 가격 : <p th:text="${orders.getTotalPrice()}"></p>
+    </div>
+
+
+  </div>
+
+
+</div>
+<script type="text/javascript" th:src="@{/js/usersOrder.js}"></script>
+</body>
+</html>

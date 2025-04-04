@@ -1,4 +1,4 @@
-package com.onetouch.delinight.Config;
+package com.onetouch.delinight.Constant;
 //.
 public enum MenuStatus {
 

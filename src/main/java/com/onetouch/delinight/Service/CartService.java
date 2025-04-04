@@ -19,7 +19,7 @@ public interface CartService {
 
     public void remove(Long cartItemNum);
 
-    public String cartToOrder(Long cartNum);
+    public Long cartToOrder(Long cartNum);
     public String plusQuantity(Long cartItemNum);
     public String minusQuantity(Long cartItemNum);
 
