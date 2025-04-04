@@ -30,6 +30,9 @@ public class MembersEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
+    @Column(nullable = false)
+    private String password;
+
     @Column(unique = true, nullable = false, length = 50)
     private String email;
 

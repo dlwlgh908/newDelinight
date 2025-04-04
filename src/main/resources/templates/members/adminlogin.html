@@ -1,18 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>관리자 로그인</title>
+    <style>
+        .error{color: indianred;}
+    </style>
 </head>
 <body>
     <form action="/members/adminlogin" method="post">
         email :
-        <input name="email" type="email"><br>
+        <input name="email" type="text"><br>
 
         password :
         <input name="password" type="password">
 
-        <button>확인</button>
+        <button type="submit">확인</button>
     </form>
+    <p class="error" th:text="${error}"></p>
 </body>
 </html>
