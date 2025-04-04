@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body>
+<h1>체크인 </h1>
+<a href=""></a>
+
+<table class="table table-hover">
+
+    <thead>
+    <th scope="col">#</th>
+    <th scope="col">이름</th>
+    <th scope="col">상세</th>
+    <th scope="col">체크인 날짜</th>
+    <th scope="col">체크아웃 날짜</th>
+    <th scope="col">회원조회</th>
+    <th scope="col">비회원</th>
+    <th scope="col">상세</th>
+    </thead>
+
+    <tbody>
+    <th:block  th:each="list:${checkInDTOList}">
+        <tr>
+            <th scope="row offset-4" th:text="${list.id}"></th>
+
+            <td th:text="${list.roomDTO.name}"></td>
+            <td th:text="${list.roomDTO.content}"></td>
+            <td th:text="${list.checkinDate}"></td>
+            <td th:text="${list.checkoutDate}"></td>
+            <td>
+                <a href="#" class="btn btn-primary mb-2">회원조회</a><br>
+                <a href="#" class="btn btn-primary">비회원등록                                              </a>
+            </td>
+            <td th:text="${list.price}"></td>
+            <td th:text="${list.getCheckInStatus()}"></td>
+
+
+
+
+
+
+            </td>
+
+
+
+        </tr>
+
+    </th:block>
+
+
+
+    </tbody>
+
+</table>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+</body>
+</html>

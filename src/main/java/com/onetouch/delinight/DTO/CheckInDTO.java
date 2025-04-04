@@ -7,7 +7,15 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+import com.onetouch.delinight.Constant.CheckInStatus;
+import com.onetouch.delinight.Entity.CheckInEntity;
+import com.onetouch.delinight.Entity.GuestEntity;
+import com.onetouch.delinight.Entity.RoomEntity;
+import com.onetouch.delinight.Entity.UsersEntity;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,5 +26,29 @@ import lombok.*;
 public class CheckInDTO {
 
     private Long id;
+
+
+    private LocalDateTime checkinDate;
+
+    private LocalDateTime checkoutDate;
+
+    private int price;
+
+
+    private UsersDTO usersDTO;
+
+    private GuestDTO guestDTO;
+
+    private RoomDTO roomDTO;
+
+    private CheckInStatus checkInStatus;
+
+    public CheckInDTO setRoomDTO(RoomDTO roomDTO) {
+        this.roomDTO = roomDTO;
+        return this;
+    }
+
+
+
 
 }

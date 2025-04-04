@@ -1,9 +1,21 @@
 $(function () {
 
-    showList();
+    let path = window.location.pathname;
+    if(path.includes("/roomservice/order/main")){
+        showMenuList();
+    }
 
 
-    function showList() {
+    function showOrderedList(){
+        $.ajax({
+
+
+
+        })
+
+    }
+
+    function showMenuList() {
         $.ajax({
 
             url: "/roomService/order/showMainList",
