@@ -7,7 +7,10 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.CheckInDTO;
+
 public interface CenterService {
+
 
 
 

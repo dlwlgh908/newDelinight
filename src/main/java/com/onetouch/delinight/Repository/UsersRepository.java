@@ -8,6 +8,7 @@
 package com.onetouch.delinight.Repository;
 
 
+import com.onetouch.delinight.DTO.UsersDTO;
 import com.onetouch.delinight.Entity.UsersEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,9 @@ public interface UsersRepository extends JpaRepository<UsersEntity, Long> {
     public UsersEntity selectEmail(String email); // Email 찾기
 
     public boolean existsByEmail(String email); // 회원가입 여부확인
+
+
+
 
 
 

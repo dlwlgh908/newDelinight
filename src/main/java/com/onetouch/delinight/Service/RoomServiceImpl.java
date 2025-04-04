@@ -50,7 +50,7 @@ public class RoomServiceImpl implements RoomService{
         roomEntity.setHotelEntity(hotelEntity);
         roomEntity.setUsersEntity(usersEntity);
 
-//        roomRepository.save(roomEntity);
+        roomRepository.save(roomEntity);
         return roomDTO;
     }
 
