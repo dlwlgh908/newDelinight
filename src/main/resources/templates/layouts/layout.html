@@ -23,10 +23,9 @@
         <div th:replace="~{fragments/adminsidebar::adminSidebar}" id="layoutSidenav_nav"></div>
 
           <!--콘텐츠-->
-        <div layout:fragment="index"></div>
-
+        <div layout:fragment="adminContent"></div>
+        <div layout:fragment="pagescript"></div>
       </div>
-
 
   <!-- 위로가기 a태그 -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

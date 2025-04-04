@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.List;
@@ -117,22 +118,4 @@ public class MembersController {
     public String adminloginGet(){
         return "members/adminlogin";
     }
-
-    @PostMapping("/adminlogin")
-    public String adminlogin(String email){
-
-        MembersEntity membersEntity =
-        membersRepository.selectEmail(email);
-
-        log.info(membersEntity);
-        log.info(membersEntity);
-        log.info(membersEntity);
-        log.info(membersEntity);
-
-
-
-        return null;
-    }
-
-
 }
