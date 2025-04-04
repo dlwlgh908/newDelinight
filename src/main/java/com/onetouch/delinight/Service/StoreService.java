@@ -7,8 +7,16 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.HotelDTO;
+import com.onetouch.delinight.DTO.StoreDTO;
+
+import java.util.List;
+
 public interface StoreService {
 
+    public void create(StoreDTO storeDTO);
+
+    public List<StoreDTO> list();
 
 
 }

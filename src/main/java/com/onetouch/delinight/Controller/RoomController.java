@@ -7,13 +7,42 @@
  *********************************************************************/
 package com.onetouch.delinight.Controller;
 
+import com.onetouch.delinight.DTO.RoomDTO;
+import com.onetouch.delinight.Service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/room")
 public class RoomController {
 
+    private final RoomService roomService;
 
+    @GetMapping("/create")
+    public String createView() {
 
+        return "room/create";
+    }
+
+    @PostMapping("/create")
+    public String createProc(RoomDTO roomDTO) {
+
+        roomService.create(roomDTO);
+        return "room/create";
+    }
+
+    @GetMapping("/list")
+    public String listView(Model model) {
+        List<RoomDTO> roomDTOList =
+            roomService.list();
+        model.addAttribute("roomDTOList", roomDTOList);
+        return "room/list";
+    }
 }

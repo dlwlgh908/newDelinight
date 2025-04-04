@@ -7,7 +7,15 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+import com.onetouch.delinight.Entity.HotelEntity;
+import com.onetouch.delinight.Entity.UsersEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,4 +27,19 @@ public class RoomDTO {
 
     private Long id;
 
+
+    private String name;
+
+    private String content;
+
+
+    private HotelDTO hotelDTO;
+
+    private UsersDTO usersDTO;
+
+
+    public RoomDTO setHotelDTO(HotelDTO hotelDTO) {
+        this.hotelDTO = hotelDTO;
+        return this;
+    }
 }
