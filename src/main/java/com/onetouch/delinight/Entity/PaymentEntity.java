@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
+import com.onetouch.delinight.Constant.OrderType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +31,11 @@ public class PaymentEntity {
     @OneToMany
     private List<OrdersEntity> ordersEntityList;
 
+    @Enumerated(EnumType.STRING)
+    OrderType orderType; // 선결제(PAYNOW) or 후결제(PAYLATER)
+
+    @Column(name="orders_key")
+    private String key; //대외용 오더 키 timeStamp+orderid
 
 
 
