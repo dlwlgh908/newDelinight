@@ -192,4 +192,35 @@ $(function () {
 
     })
 
+    $(".updateBtn").on("click" , function () {
+
+        let updateCheck = true
+        let phonePattern = /^010-\d{4}-\d{4}$/; // 010-1234-5678 형식
+        let addressPattern = /^[가-힣0-9a-zA-Z\s,\-\.]+$/;
+
+        let phoneUpdate = $(".phoneUpdate").val();
+        if (phonePattern.test(phoneUpdate)){
+            $("#phoneUpdateError").text("✅").addClass("success").removeClass("error");
+        }else{
+            $("#phoneUpdateError").text("휴대폰번호 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
+            updateCheck = false
+        }
+
+        let addressUpdate = $(".addressUpdate").val();
+        if (addressPattern.test(addressUpdate)){
+            $("#addressUpdateError").text("✅").addClass("success").removeClass("error");
+        }else{
+            $("#addressUpdateError").text("주소형식이 올바르지 않습니다.").removeClass("success").addClass("error");
+            updateCheck = false
+        }
+
+
+        if (updateCheck) {
+            alert("회원정보 변경 완료!");
+            $(".updateForm").submit(); // 실제 폼 제출
+        }
+
+    })
+
+
 })

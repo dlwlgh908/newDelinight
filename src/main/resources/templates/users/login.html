@@ -13,17 +13,19 @@
 <body>
 
   <form action="/users/login" method="post">
-      <div>
-        아이디 : <input name="email">
-        비밀번호 : <input name="password">
-      </div>
-      <div>
-        <button type="button" th:onclick="|location.href='@{/users/signUp}'|">회원가입</button>
-        <button type="button" th:onclick="|location.href='@{/users/sendPassword}'|">비밀번호 찾기</button>
-      </div>
-      <div>
-        <button>로그인</button>
-      </div>
+      <div><!-- 작업영역-시작 -->
+          <div>
+              아이디 : <input name="email">
+              비밀번호 : <input name="password">
+          </div>
+          <div>
+              <button type="button" th:onclick="|location.href='@{/users/signUp}'|">회원가입</button>
+              <button type="button" th:onclick="|location.href='@{/users/sendPassword}'|">비밀번호 찾기</button>
+          </div>
+          <div>
+              <button>로그인</button>
+          </div>
+      </div><!-- 작업영역-끝 -->
   </form>
 
 </body>
