@@ -19,6 +19,9 @@ public interface UsersService {
 
     public Integer urlCheck(String email);
 
+    public void userUpdate(String email , UsersDTO usersDTO);
+
+    public void userDelete(String email);
 
 
 

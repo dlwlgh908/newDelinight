@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/img")
@@ -27,11 +29,11 @@ public class ImageRestController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<Long> imgRegister(@RequestPart(name = "image") MultipartFile multipartFile){
+    public ResponseEntity<Map<Long , String>> imgRegister(@RequestPart(name = "image") MultipartFile multipartFile){
         log.info("===================");
         log.info("들어온 이미지 파일");
-        Long imgNum = imageService.register(multipartFile);
-        return ResponseEntity.ok(imgNum);
+        Map<Long, String> result = imageService.register(multipartFile);
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/delete/{imgNum}")

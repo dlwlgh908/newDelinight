@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService{
 
+
     private final RoomRepository roomRepository;
     private final ModelMapper modelMapper;
     private final HotelRepository hotelRepository;
@@ -61,10 +62,7 @@ public class RoomServiceImpl implements RoomService{
         List<RoomDTO> roomDTOList =
                 roomEntityList.stream().map(
                         roomEntity -> modelMapper.map(roomEntity, RoomDTO.class)
-                                .setHotelDTO(modelMapper.map(roomEntity.getHotelEntity(), HotelDTO.class))
-
-                ).collect(Collectors.toList());
-
+                                .setHotelDTO(modelMapper.map(roomEntity.getHotelEntity(), HotelDTO.class))).collect(Collectors.toList());
         return roomDTOList;
     }
 }

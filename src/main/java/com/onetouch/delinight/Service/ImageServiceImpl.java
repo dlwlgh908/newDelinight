@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,8 +25,20 @@ public class ImageServiceImpl implements ImageService {
     private final S3Service s3Service;
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
+
     @Override
-    public Long register(MultipartFile multipartFile) {
+    public String read(Long id) {
+        Optional<ImageEntity> imageEntity = imageRepository.findByMenuEntity_Id(id);//받은 이미지 넘버로 url 던지기
+        if(imageEntity.isPresent()){
+            return imageEntity.get().getFullUrl();
+        }else {
+            return "/img/defaultImg.png";
+        }
+
+    }
+
+    @Override
+    public Map<Long,String> register(MultipartFile multipartFile) {
 
         UUID uuid = UUID.randomUUID();
         String originName = multipartFile.getOriginalFilename();
@@ -38,7 +52,11 @@ public class ImageServiceImpl implements ImageService {
         ImageEntity imageEntity = modelMapper.map(imageDTO, ImageEntity.class);
         ImageEntity afterImage = imageRepository.save(imageEntity);
         log.info(afterImage);
-        return afterImage.getImgNum();
+        Map<Long, String> result = new HashMap<>();
+        log.info(afterImage.getFullUrl()+afterImage.getImgNum());
+        result.put(afterImage.getImgNum(), afterImage.getFullUrl());
+        log.info(result);
+        return result;
     }
 
     @Override

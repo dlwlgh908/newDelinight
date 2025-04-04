@@ -1,7 +1,7 @@
 /*********************************************************************
- * 클래스명 : MembersEntity
+ * 클래스명 : MenuEntity
  * 기능 : MenuEntity 항목 수정(price,stockNumber, MenuStatus 추가)
- * 작성자 : 이효찬.
+ * 작성자 : 이효찬
  * 작성일 : 2025-03-30
  * 수정 : 2025-03-30
  *********************************************************************/
@@ -24,22 +24,21 @@ public class MenuEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "menu_id")
-    private Long id;
+    private Long id; //메뉴 코드번호
 
     @Column(nullable = false, length = 50)
-    private String name;
+    private String name; //메뉴명
 
     @Column(nullable = false, length = 50)
-    private String content;
+    private String content; //내용
 
     @Column(nullable = false)
-    private String price;
+    private int price; //가격
 
-    @Column(name = "stock_number",nullable = false)
-    private String stockNumber;
 
     @Enumerated(EnumType.STRING)
-    private MenuStatus menuStatus;
+    MenuStatus menuStatus; // 상품판매상태
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")

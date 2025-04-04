@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+
+>
+<head>
+    <meta charset="UTF-8">
+    <title>상세보기</title>
+</head>
+<body>
+    <h1>상세보기</h1>
+    주문번호 : <span th:text="${menuDTO.id}"></span><br>
+    메뉴 : <span th:text="${menuDTO.name}"></span><br>
+    메뉴정보 : <span th:text="${menuDTO.content}"></span><br>
+    가격 : <span th:text="${menuDTO.price}"></span><br>
+    주문상태 : <span th:text="${menuDTO.menuStatus}"></span><br>
+    <div th:if="${menuDTO.imgUrl}"><img th:src="${menuDTO.imgUrl}"></div>
+    <a th:href="@{|/menu/update/${menuDTO.id}|}">수정</a>
+
+
+
+
+
+
+</body>
+</html>
