@@ -7,7 +7,11 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+import com.onetouch.delinight.Constant.OrderType;
+import com.onetouch.delinight.Entity.StoreEntity;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,5 +22,26 @@ import lombok.*;
 public class OrdersDTO {
 
     private Long id;
+    OrderType orderType;
+    private  String key;
+    private String memo;
+    private StoreDTO storeDTO;
+    private CheckInDTO checkInDTO;
+    private Long totalPrice;
+    private List<OrdersItemDTO> ordersItemDTOList;
+
+    public OrdersDTO setStoreDTO(StoreDTO storeDTO){
+        this.storeDTO = storeDTO;
+        return this;
+    }
+    public OrdersDTO setCheckInDTO(CheckInDTO checkInDTO){
+        this.checkInDTO = checkInDTO;
+        return this;
+    }
+
+    public OrdersDTO setOrdersItemDTOList(List<OrdersItemDTO> ordersItemDTOList){
+        this.ordersItemDTOList = ordersItemDTOList;
+        return this;
+    }
 
 }

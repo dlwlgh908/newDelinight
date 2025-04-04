@@ -7,12 +7,12 @@
  *********************************************************************/
 package com.onetouch.delinight.Repository;
 
-import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.OrdersEntity;
-import com.onetouch.delinight.Entity.PaymentEntity;
+import com.onetouch.delinight.Entity.OrdersItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
+public interface OrdersItemRepository extends JpaRepository<OrdersItemEntity, Long> {
+
 
 
 

@@ -7,8 +7,12 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.OrdersDTO;
+
+import java.util.List;
+
 public interface PaymentService {
 
-
+    public List<OrdersDTO> readOrders(Long paymentId);
 
 }
