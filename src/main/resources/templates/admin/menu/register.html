@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko"
+       xmlns:th="http://www.thymeleaf.org"
+       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+       xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>메뉴 등록</title>
+    <!--뷰포트-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--css-->
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <!--폰트어썸-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-2"></div>
+        <div class="col-6">
+            <!--카드형식으로 틀-->
+            <form action="/menu/register" th:object="${menuDTO}" method="post" class="formWrap" enctype="multipart/form-data">
+                메 뉴 : <input name="name" class="name"><br>
+                상세설명 : <input name="content" class="content"><br>
+                가격 : <input name="price" class="price"><br>
+                <select class="form-select" name="status">
+                    <option value="SELL" selected>판매중</option>
+                    <option value="SOLD_OUT">품절</option>
+                </select>
+                이미지 등록하기 : <input type="file" class="imgInput">
+                <img class="menuImg" src="/img/defaultImg.png">
+                <button type="submit">저장</button>
+                <div class="hiddenImgNum"></div>
+            </form>
+            <script type="text/javascript" src="/js/imgscript.js"></script>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>

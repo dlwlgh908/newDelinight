@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/html">
 
->
 <head>
     <meta charset="UTF-8">
     <title>상세보기</title>
@@ -15,7 +16,7 @@
     가격 : <span th:text="${menuDTO.price}"></span><br>
     주문상태 : <span th:text="${menuDTO.menuStatus}"></span><br>
     <div th:if="${menuDTO.imgUrl}"><img th:src="${menuDTO.imgUrl}"></div>
-    <a th:href="@{|/menu/update/${menuDTO.id}|}">수정</a>
+    <a th:href="@{|/templates/admin/menu/update/${menuDTO.id}|}">수정</a>
 
 
 

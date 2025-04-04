@@ -37,6 +37,7 @@ public class MenuDTO {
     MenuStatus menuStatus; //판매상태
 
     private String createBy;
+    private String status;
 
 
     private StoreDTO storeDTO;
@@ -45,6 +46,11 @@ public class MenuDTO {
     private Long imgNum;
 
     private String imgUrl;
+
+    public MenuDTO setStoreDTO(StoreDTO storeDTO){
+        this.storeDTO = storeDTO;
+        return this;
+    }
 
 
 
