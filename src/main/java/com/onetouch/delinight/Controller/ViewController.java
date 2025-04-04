@@ -10,4 +10,10 @@ public class ViewController {
     public String index() {
         return "pages/index";
     }
+
+    @GetMapping("/usertest")
+    public String userContent() {
+        return "/pages/usertest";
+    }
+
 }
