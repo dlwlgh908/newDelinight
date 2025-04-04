@@ -7,13 +7,16 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.Constant.MenuStatus;
 import com.onetouch.delinight.DTO.MenuDTO;
 
 import com.onetouch.delinight.Entity.ImageEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.MenuEntity;
+import com.onetouch.delinight.Entity.StoreEntity;
 import com.onetouch.delinight.Repository.ImageRepository;
 import com.onetouch.delinight.Repository.MenuRepository;
+import com.onetouch.delinight.Repository.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -30,20 +33,40 @@ import java.util.*;
 @Transactional
 @RequiredArgsConstructor
 @Log4j2
-public class MenuServiceImpl implements MenuService{
+public class MenuServiceImpl implements MenuService {
 
     private final MenuRepository menuRepository;
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
+    private final StoreRepository storeRepository;
 
     @Override
-    public void register(MenuDTO menuDTO) {
+    public void register(MenuDTO menuDTO, String email) {
+
+        log.info(menuDTO.getStatus());
+        if(menuDTO.getStatus().equals("SELL")){
+            menuDTO.setMenuStatus(MenuStatus.SELL);
+        }
+        else {
+            menuDTO.setMenuStatus(MenuStatus.SOLD_OUT);
+        }
+
+        StoreEntity storeEntity = storeRepository.findByMembersEntity_Email(email);
+
+
         MenuEntity menuEntity = modelMapper.map(menuDTO, MenuEntity.class);
+        menuEntity.setStoreEntity(storeEntity);
         menuEntity = menuRepository.save(menuEntity);
-        ImageEntity imageEntity = imageRepository.findById(menuDTO.getImgNum()).get();
-        imageEntity.setMenuEntity(menuEntity);
-        imageRepository.save(imageEntity);
-        menuDTO = modelMapper.map(menuEntity, MenuDTO.class);
+
+        if (menuDTO.getImgNum() != null) {
+            Optional<ImageEntity> optionalImageEntity = imageRepository.findById(menuDTO.getImgNum());
+            if (optionalImageEntity.isPresent()) {
+                ImageEntity imageEntity = optionalImageEntity.get();
+                imageEntity.setMenuEntity(menuEntity);
+                imageRepository.save(imageEntity);
+            }
+        }
+
     }
 
     @Override
@@ -53,7 +76,7 @@ public class MenuServiceImpl implements MenuService{
         MenuEntity menuEntity = optionalMenuEntity.get();
         MenuDTO menuDTO = modelMapper.map(menuEntity, MenuDTO.class);
         Optional<ImageEntity> imageEntity = imageRepository.findByMenuEntity_Id(id);
-        if(imageEntity.isPresent()){
+        if (imageEntity.isPresent()) {
             String imgUrl = imageEntity.get().getFullUrl();
             menuDTO.setImgUrl(imgUrl);
         }
@@ -63,7 +86,7 @@ public class MenuServiceImpl implements MenuService{
     @Override
     public Page<MenuDTO> menuList(Pageable pageable) {
         Page<MenuEntity> pageList = menuRepository.findAll(pageable);
-        return pageList.map(data->modelMapper.map(data, MenuDTO.class));
+        return pageList.map(data -> modelMapper.map(data, MenuDTO.class));
     }
 
 
@@ -77,7 +100,7 @@ public class MenuServiceImpl implements MenuService{
         menuEntity.setMenuStatus(menuDTO.getMenuStatus());
         ImageEntity imageEntity = imageRepository.findById(menuDTO.getImgNum()).get();
 
-        if(imageRepository.findByMenuEntity_Id(menuDTO.getId()).isPresent()) {
+        if (imageRepository.findByMenuEntity_Id(menuDTO.getId()).isPresent()) {
             imageRepository.deleteByMenuEntity_Id(menuDTO.getId());
         }
         imageEntity.setMenuEntity(menuEntity);
@@ -94,11 +117,10 @@ public class MenuServiceImpl implements MenuService{
     }
 
 
-
     @Override
     public List<MenuDTO> menuListByHotel(Long hotelNum) {
         List<MenuEntity> menuEntityList = menuRepository.findByStoreEntity_HotelEntity_Id(hotelNum);
-        List<MenuDTO> menuDTOList = menuEntityList.stream().map(data -> modelMapper.map(data,MenuDTO.class)).toList();
+        List<MenuDTO> menuDTOList = menuEntityList.stream().map(data -> modelMapper.map(data, MenuDTO.class)).toList();
         return menuDTOList;
     }
 }
