@@ -60,7 +60,7 @@ $(function () {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // 이메일 형식
     const phonePattern = /^010-\d{4}-\d{4}$/; // 010-1234-5678 형식
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/; // 최소 8자, 숫자+문자 포함
-
+    let addressPattern = /^[가-힣0-9a-zA-Z\s,\-\.]+$/;
     // 유효성 검사
     $(".singUpBtn").on("click" , function () {
 
@@ -97,6 +97,14 @@ $(function () {
             $("#singUpPhoneError").text("✅").addClass("success").removeClass("error");
         }else{
             $("#singUpPhoneError").text("사용자 휴대폰번호가 올바르지 않습니다.").removeClass("success").addClass("error");
+            check = false
+        }
+
+        let singUpAddress = $(".singUpAddress").val();
+        if (addressPattern.test(singUpAddress)){
+            $("#singUpAddressError").text("✅").addClass("success").removeClass("error");
+        }else{
+            $("#singUpAddressError").text("주소형식이 올바르지 않습니다.").removeClass("success").addClass("error");
             check = false
         }
 

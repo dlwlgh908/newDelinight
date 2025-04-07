@@ -38,7 +38,7 @@ public class UserController {
         public String usershome(Principal principal , Model model) {
                 log.info("사용자 메인 페이지 진입함??????????");
                 if (principal == null) {
-                        return "redirect:/login";
+                        return "redirect:/users/login";
                 }
 
                 model.addAttribute("data" , principal.getName());
@@ -69,7 +69,7 @@ public class UserController {
                         return "/users/signUp";
                 }
 
-                return "redirect:/users/login";
+                return "/users/login";
         }
 
         @GetMapping("/login")
@@ -134,7 +134,7 @@ public class UserController {
                         model.addAttribute("email", email); // 뷰에서 사용하기 위해 추가
                 } else {
                         log.info("updateGET 진입 - 로그인되지 않은 사용자");
-                        return "redirect:/login"; // 비로그인 사용자는 로그인 페이지로 리다이렉트
+                        return "redirect:/users/login"; // 비로그인 사용자는 로그인 페이지로 리다이렉트
                 }
                 return "users/update";
         }
@@ -145,7 +145,7 @@ public class UserController {
                 if (principal == null) {
                         log.warn("회원정보 수정 요청 - 로그인되지 않은 사용자");
                         redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
-                        return "redirect:/login"; // 로그인 페이지로 리다이렉트
+                        return "redirect:/users/login"; // 로그인 페이지로 리다이렉트
                 }
 
                 String email = principal.getName(); // 현재 로그인한 사용자의 이메일 가져오기
