@@ -33,7 +33,7 @@ public class CheckInController {
     public String listView(Model model) {
 
         List<RoomDTO> roomDTOList =
-            roomService.list();
+                roomService.list();
 
         List<CheckInDTO> checkInDTOList =
                 checkInService.list();
@@ -46,9 +46,30 @@ public class CheckInController {
         model.addAttribute("checkInDTOList", checkInDTOList);
 
 
-
-
         return "checkin/list";
+
+    }
+
+    @GetMapping("/listA")
+    public String listA(Model model) {
+
+        List<RoomDTO> roomDTOList =
+                roomService.list();
+
+        List<CheckInDTO> checkInDTOList =
+                checkInService.list();
+
+        log.info(checkInDTOList);
+        log.info(checkInDTOList);
+
+        
+
+
+        model.addAttribute("roomDTOList", roomDTOList);
+        model.addAttribute("checkInDTOList", checkInDTOList);
+
+
+        return "checkin/listA";
 
     }
 }

@@ -28,6 +28,10 @@ public class GuestEntity {
     private String email;
 
 
+    @Column(name = "reservation_num", nullable = false)
+    private String reservationNum;
+
+
 
 
 

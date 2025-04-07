@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<h1>체크인</h1>
+
+    예약번호 조회 : <input>
+    회원 조회 : <input>
+
+
+<table class="table table-hover">
+
+    <thead>
+    <th scope="col">#</th>
+    <th scope="col">이름</th>
+    <th scope="col">상세</th>
+    <th scope="col">체크인</th>
+    <th scope="col">체크아웃</th>
+    <th scope="col">핸드폰번호</th>
+    <th scope="col">인증번호(ID)</th>
+    <th scope="col">비밀번호(PW)</th>
+    <th scope="col">체크인상태</th>
+    </thead>
+
+    <tbody>
+    <th:block  th:each="list:${checkInDTOList}">
+        <tr>
+            <th scope="row offset-4" th:text="${list.roomDTO.id}"></th>
+
+            <td th:text="${list.roomDTO.name}"></td>
+            <td th:text="${list.roomDTO.content}"></td>
+            <td>
+                <th:block th:if="${list.checkinDate != null}">
+                    <span th:text="${list.checkinDate}"></span>
+                </th:block>
+                <th:block th:if="${list.checkinDate == null}">
+                    <input type="date" name="checkinDate" class="checkinDate">
+                </th:block>
+            </td>
+
+            <td>
+                <th:block th:if="${list.checkoutDate != null}">
+                    <span th:text="${list.checkoutDate}"></span>
+                </th:block>
+                <th:block th:if="${list.checkoutDate == null}">
+                    <input type="date" name="checkoutDate" class="checkoutDate">
+                </th:block>
+            </td>
+
+            <td>
+                <th:block th:if="${list.guestDTO== null}">
+                        <input placeholder="핸드폰번호" class="phone">
+                </th:block>
+                <th:block th:if="${list.guestDTO != null}">
+                    <span th:text="${list.guestDTO.phone}"></span>
+                </th:block>
+            </td>
+            <td><input id="randomfour" placeholder="네자리 랜덤"></td>
+            <td><input id="phonefour" placeholder="핸드폰번호 뒤 4자리"></td>
+            <td>
+                <th:block th:if="${list.checkInStatus.name() == 'CHECKIN'}">
+                    <button class="btn btn-danger">체크아웃</button>
+                </th:block>
+                <th:block th:if="${list.checkInStatus.name() == 'VACANCY'}">
+                    <button class="btn btn-primary" id="checkinBtn" th:value="${list.id}">체크인 등록</button>
+                </th:block>
+            </td>
+
+        </tr>
+
+
+    </th:block>
+
+
+
+
+    </tbody>
+
+</table>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+<script th:inline="javascript">
+    $(function () {
+        $(document).on("click", "#checkinBtn", function () {
+            let id = this.getAttribute("value");
+            let checkinDate = $(this).closest("tr").find(".checkinDate").val();
+            let checkoutDate = $(this).closest("tr").find(".checkoutDate").val();
+            let phone = $(this).closest("tr").find(".phone").val();
+
+
+            alert(id);
+            alert(checkinDate)
+            alert(checkoutDate)
+            alert(phone)
+            $.ajax({
+                url : "/checkin/rest/register",
+                type: "post",
+                contentType : "application/json",
+                data : JSON.stringify({
+                    id : id,
+                    checkinDate : checkinDate,
+                    checkoutDate: checkoutDate,
+                    phone : phone
+                }),
+                success: function (data) {
+                    alert("성공");
+                    console.log(data)
+                },
+            })
+        });
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

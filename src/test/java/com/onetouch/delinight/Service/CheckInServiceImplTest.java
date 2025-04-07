@@ -4,8 +4,10 @@ import com.onetouch.delinight.Constant.CheckInStatus;
 import com.onetouch.delinight.DTO.CheckInDTO;
 import com.onetouch.delinight.DTO.RoomDTO;
 import com.onetouch.delinight.DTO.UsersDTO;
+import com.onetouch.delinight.Entity.GuestEntity;
 import com.onetouch.delinight.Entity.RoomEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
+import com.onetouch.delinight.Repository.GuestRepository;
 import com.onetouch.delinight.Repository.RoomRepository;
 import com.onetouch.delinight.Repository.UsersRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,6 +34,8 @@ class CheckInServiceImplTest {
     RoomRepository roomRepository;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    GuestRepository guestRepository;
 
     @Test
     public void createTest(){
@@ -51,12 +55,22 @@ class CheckInServiceImplTest {
         checkInService.create(checkInDTO);
 
 
+    }
+    @Test
+    public void test(){
+        GuestEntity guestEntity =
+            guestRepository.findById(1L).orElseThrow();
 
+        log.info(guestEntity);
+        log.info(guestEntity);
+        log.info(guestEntity.getPhone());
+        log.info(guestEntity.getPhone());
 
-
-
-
-
+        String num = guestEntity.getPhone();
+        String lastfour =
+            num.substring(num.length() - 4);
+        log.info(lastfour);
+        log.info(lastfour);
 
     }
 
