@@ -129,7 +129,7 @@ $(function () {
         if (usernamePattern.test(sendPasswordName)){
             $("#sendPasswordNameError").text("✅").addClass("success").removeClass("error");
         }else{
-            $("#sendPasswordNameError").text("아이디 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
+            $("#sendPasswordNameError").text("이름 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
             checked = false
         }
 
