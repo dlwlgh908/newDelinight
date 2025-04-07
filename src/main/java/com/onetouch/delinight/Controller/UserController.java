@@ -186,6 +186,12 @@ public class UserController {
                 return "/users/userServiceCheck";
         }
 
+        // 사용자 주문 View Mapping →→→→→→→→ RestFullController
+        @GetMapping("welcomeuser")
+        public String WelcomeUserGET() {
+                return "/users/welcomeuser";
+        }
+
 
 
 }
