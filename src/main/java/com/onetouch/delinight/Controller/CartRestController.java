@@ -59,10 +59,10 @@ public class CartRestController {
 
 
     @PostMapping("/cartToOrder")
-    public ResponseEntity<String> cartToOrder(Principal principal) {
+    public String  cartToOrder(Principal principal) {
         Long cartId = 1L;
-        cartService.cartToOrder(cartId);
-        return ResponseEntity.ok("주문 성공");
+        Long paymentId = cartService.cartToOrder(cartId);
+        return "redirect:/roomService/order/read?paymentId="+paymentId;
     }
 
     @PostMapping("/plusQuantity")
@@ -75,5 +75,6 @@ public class CartRestController {
         String result = cartService.minusQuantity(cartItemNum);
         return ResponseEntity.ok(result);
     }
+
 
 }

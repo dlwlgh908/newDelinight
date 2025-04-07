@@ -12,20 +12,21 @@ import com.onetouch.delinight.DTO.CartDTO;
 import com.onetouch.delinight.DTO.CartItemDTO;
 import com.onetouch.delinight.DTO.MenuDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
-import com.onetouch.delinight.Entity.CartEntity;
-import com.onetouch.delinight.Entity.CartItemEntity;
-import com.onetouch.delinight.Entity.MenuEntity;
-import com.onetouch.delinight.Repository.CartItemRepository;
-import com.onetouch.delinight.Repository.CartRepository;
-import com.onetouch.delinight.Repository.MenuRepository;
+import com.onetouch.delinight.Entity.*;
+import com.onetouch.delinight.Repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -36,10 +37,56 @@ public class CartServiceImpl implements CartService{
     private final CartItemRepository cartItemRepository;
     private final MenuRepository menuRepository;
     private final ModelMapper modelMapper;
+    private final OrdersRepository ordersRepository;
+    private final OrdersItemRepository ordersItemRepository;
+    private final PaymentRepository paymentRepository;
 
     @Override
-    public String cartToOrder(Long cartNum) {
-        return null;
+    public Long cartToOrder(Long cartNum) {
+
+
+        PaymentEntity paymentEntity = new PaymentEntity();
+        List<OrdersEntity> ordersEntityList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+        PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
+
+        List<CartItemEntity> cartItemEntities = cartItemRepository.findByCartEntity_Id(cartNum);
+        Map<StoreEntity, List<CartItemEntity>> groupedByStore = cartItemEntities.stream()
+                .collect(Collectors.groupingBy(cartItem -> cartItem.getMenuEntity().getStoreEntity()));
+        for(Map.Entry<StoreEntity, List<CartItemEntity>> data : groupedByStore.entrySet()){
+            long totalPrice = 0L;
+            StoreEntity store = data.getKey();
+            List<CartItemEntity> cartItemEntities1 = data.getValue();
+
+            OrdersEntity newOrder = new OrdersEntity();
+            newOrder.setStoreEntity(store);
+
+            OrdersEntity savedOrder = ordersRepository.save(newOrder);
+
+
+            for (CartItemEntity cartItem : cartItemEntities1){
+                totalPrice += cartItem.getMenuEntity().getPrice()*cartItem.getQuantity();
+                OrdersItemEntity ordersItemEntity = OrdersItemEntity.builder()
+                        .ordersEntity(savedOrder)
+                        .menuEntity(cartItem.getMenuEntity())
+                        .quantity(cartItem.getQuantity())
+                        .build();
+                ordersItemRepository.save(ordersItemEntity);
+            }
+            String formatted = LocalDateTime.now().format(formatter);
+            savedOrder.setTotalPrice(totalPrice);
+            savedOrder = ordersRepository.save(savedOrder);
+            log.info(savedOrder);
+            ordersEntityList.add(savedOrder);
+        }
+
+        savedPaymentEntity.setOrdersEntityList(ordersEntityList);
+        savedPaymentEntity.setKey(formatter+savedPaymentEntity.getKey());
+        paymentRepository.save(savedPaymentEntity);
+
+        return savedPaymentEntity.getId();
+
     }
 
     @Override

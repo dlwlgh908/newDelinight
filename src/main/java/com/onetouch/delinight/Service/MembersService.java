@@ -24,6 +24,8 @@ public interface MembersService {
 
     public List<MembersDTO> findAll();
 
+    public MembersDTO findadmin(String email);
+
     public List<MembersDTO> findSuper();
     public List<MembersDTO> findHotelAd();
     public List<MembersDTO> findStoreAd();

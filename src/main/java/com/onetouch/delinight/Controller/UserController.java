@@ -176,6 +176,16 @@ public class UserController {
                return "redirect:/users/home";
         }
 
+        @GetMapping("/userCheck")
+        public String userCheckGET() {
+                return "/users/userCheck";
+        }
+
+        @GetMapping("/userServiceCheck")
+        public String userServiceCheckGET() {
+                return "/users/userServiceCheck";
+        }
+
 
 
 }

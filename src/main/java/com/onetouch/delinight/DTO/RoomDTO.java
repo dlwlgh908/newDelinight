@@ -42,4 +42,7 @@ public class RoomDTO {
         this.hotelDTO = hotelDTO;
         return this;
     }
+
+
+
 }

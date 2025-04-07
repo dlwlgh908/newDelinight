@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class QnaServiceImpl implements PaymentService{
+public class QnaServiceImpl implements QnaService{
 
 
 }

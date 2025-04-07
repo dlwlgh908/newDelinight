@@ -2,6 +2,7 @@ package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.Service.UsersService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@Log4j2
 public class UsersRestController {
     // 이거 내가 왜 만들었지?
     // 술이 문제야 문제 ㅅㅂ
@@ -37,6 +39,16 @@ public class UsersRestController {
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("오류 발생");
     }
 
+    @GetMapping("/restCheck")
+    public ResponseEntity<String> test() {
+        log.info("userCheck 들어온 값");
+        return ResponseEntity.ok("Check 완료!!");
+    }
+
+    @GetMapping("/restServiceCheck")
+    public ResponseEntity<String> userServiceCheck() {
+        return ResponseEntity.ok("Check 완료!!");
+    }
 
 
 

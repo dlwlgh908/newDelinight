@@ -14,6 +14,7 @@ import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.MembersRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -75,6 +77,20 @@ public class MembersServiceImpl implements MembersService{
                 ).collect(Collectors.toList());
 
         return membersDTOList;
+    }
+
+    @Override
+    public MembersDTO findadmin(String email) {
+        MembersEntity membersEntity = membersRepository.selectEmail(email);
+        log.info("조회된 정보 : "+membersEntity);
+        log.info("조회된 정보 : "+membersEntity);
+        log.info("조회된 정보 : "+membersEntity);
+        try {
+
+        }catch (Exception e){
+
+        }
+        return null;
     }
 
     @Override

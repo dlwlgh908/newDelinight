@@ -28,16 +28,14 @@ public class OrdersEntity {
     @Column(name = "orders_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    OrderType orderType; // 선결제(PAYNOW) or 후결제(PAYLATER)
 
-    @Column(name="orders_key")
-    private String key; //대외용 오더 키 timeStamp+orderid
 
     @Column(name="orders_memo")
     private String memo;
 
-
+    @ToString.Exclude
+    @OneToMany(mappedBy = "ordersEntity",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrdersItemEntity> ordersItemEntities;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
