@@ -44,8 +44,11 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void register(MenuDTO menuDTO, String email) {
         MenuEntity menuEntity = modelMapper.map(menuDTO, MenuEntity.class);
-        menuEntity = menuRepository.save(menuEntity);
         StoreEntity storeEntity = storeRepository.findByMembersEntity_Email(email);
+
+        menuEntity.setStoreEntity(storeEntity);
+        menuEntity = menuRepository.save(menuEntity);
+
 
         Long imgNum = menuDTO.getImgNum(); //imgNum이 null인지 확인하였으나 null값이라 오류
         if (imgNum == null) {

@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.QnaDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,4 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class QnaServiceImpl implements QnaService{
 
 
+    @Override
+    public QnaDTO register(QnaDTO qnaDTO) {
+        return null;
+    }
 }
