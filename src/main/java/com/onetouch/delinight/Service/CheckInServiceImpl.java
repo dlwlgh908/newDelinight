@@ -1,14 +1,9 @@
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.Constant.CheckInStatus;
 import com.onetouch.delinight.DTO.*;
-import com.onetouch.delinight.Entity.CheckInEntity;
-import com.onetouch.delinight.Entity.GuestEntity;
-import com.onetouch.delinight.Entity.RoomEntity;
-import com.onetouch.delinight.Entity.UsersEntity;
-import com.onetouch.delinight.Repository.CheckInRepository;
-import com.onetouch.delinight.Repository.GuestRepository;
-import com.onetouch.delinight.Repository.RoomRepository;
-import com.onetouch.delinight.Repository.UsersRepository;
+import com.onetouch.delinight.Entity.*;
+import com.onetouch.delinight.Repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +25,7 @@ public class CheckInServiceImpl implements CheckInService{
     private final UsersRepository usersRepository;
     private final ModelMapper modelMapper;
     private final GuestRepository guestRepository;
+    private final CheckOutLogRepository checkOutLogRepository;
 
 
     @Override
@@ -109,7 +105,10 @@ public class CheckInServiceImpl implements CheckInService{
 
                     // getGuestEntity가 null이 아니면 setGuestDTO 호출
                     if (checkInEntity.getGuestEntity() != null) {
-                        checkInDTO.setGuestDTO(modelMapper.map(checkInEntity.getGuestEntity(), GuestDTO.class));
+                        checkInDTO.setGuestDTO(modelMapper.map(checkInEntity.getGuestEntity(), GuestDTO.class))
+                                .setCertPass(checkInEntity.getGuestEntity().getPhone())
+                                .setCertNum((int) (Math.random() * 9000) + 1000);
+
                     }
 
                     // setRoomDTO는 항상 호출
@@ -122,4 +121,84 @@ public class CheckInServiceImpl implements CheckInService{
     }
 
 
+    @Override
+    public void checkin(CheckInDTO checkInDTO) {
+        CheckInEntity checkInEntity =
+            modelMapper.map(checkInDTO, CheckInEntity.class);
+
+
+
+
+
+        //4자리 난수생성(ID)
+
+
+        String phone = checkInEntity.getPhone();
+
+        log.info(phone);
+        log.info(phone);
+
+
+        phone = phone.substring(phone.length() - 4);
+
+
+        log.info(phone);
+        log.info(phone);
+
+
+        log.info("checkin service"+checkInEntity);
+        log.info("checkin service"+checkInEntity);
+        log.info("checkin service"+checkInEntity);
+        log.info("checkin service"+checkInEntity);
+        int certNum = (int) (Math.random() * 8999) + 1000;
+
+        checkInDTO.setCertNum(certNum);
+        checkInDTO.setCertPass(phone);
+
+
+        CheckInEntity check =
+                checkInRepository.findById(checkInEntity.getId()).orElseThrow(EntityNotFoundException::new);
+
+        check.setCheckinDate(checkInEntity.getCheckinDate());
+        check.setCheckoutDate(checkInEntity.getCheckoutDate());
+        check.setCheckInStatus(CheckInStatus.CHECKIN);
+
+
+        GuestEntity guestEntity = new GuestEntity();
+
+        guestEntity.setPhone(checkInDTO.getPhone());
+        check.setGuestEntity(guestEntity);
+        guestEntity.setEmail("hyo@a.a");
+        guestEntity.setReservationNum("2L");
+
+        checkInRepository.save(check);
+        guestRepository.save(guestEntity);
+
+    }
+
+    @Override
+    public void checkout(Long id) {
+        CheckInEntity checkInEntity =
+                checkInRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        CheckOutLogEntity checkOutLogEntity = new CheckOutLogEntity();
+
+        checkOutLogEntity.setRoomEntity(checkInEntity.getRoomEntity());
+        checkOutLogEntity.setCheckinDate(checkInEntity.getCheckinDate());
+        checkOutLogEntity.setCheckoutDate(checkInEntity.getCheckoutDate());
+        checkOutLogEntity.setPhone(checkInEntity.getPhone());
+        checkOutLogEntity.setPrice(checkInEntity.getPrice());
+
+        checkOutLogRepository.save(checkOutLogEntity);
+
+        checkInEntity.setCheckInStatus(CheckInStatus.VACANCY);
+        checkInEntity.setCheckinDate(null);
+        checkInEntity.setCheckoutDate(null);
+        checkInEntity.setPhone(null);
+        checkInEntity.setPrice(0);
+        checkInEntity.setGuestEntity(null);
+
+        checkInRepository.save(checkInEntity);
+
+    }
 }

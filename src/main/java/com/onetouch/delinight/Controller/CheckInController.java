@@ -35,6 +35,9 @@ public class CheckInController {
         List<RoomDTO> roomDTOList =
                 roomService.list();
 
+
+
+
         List<CheckInDTO> checkInDTOList =
                 checkInService.list();
 
