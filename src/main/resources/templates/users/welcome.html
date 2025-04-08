@@ -118,6 +118,22 @@
     footer p{
       color: #666;
     }
+
+    /* 추가: 페이지 슬라이드 아웃 효과 */
+    .slide-out-left {
+      animation: slideOutLeft 0.5s forwards;
+    }
+
+    @keyframes slideOutLeft {
+      0% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+    }
   </style> <!-- WelcomeStyle-끝 -->
 </head>
 <body>
@@ -156,6 +172,16 @@
     </p>
   </div>
 </footer>
+
+<!-- ✅ 슬라이드 네비게이션 스크립트 -->
+<script>
+  function slideNavigate(url) {
+    document.body.classList.add('slide-out-left');
+    setTimeout(() => {
+      window.location.href = url;
+    }, 500); // 애니메이션 시간과 동일
+  }
+</script>
 
 </body>
 </html>
