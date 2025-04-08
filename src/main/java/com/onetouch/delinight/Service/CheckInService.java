@@ -13,6 +13,10 @@ public interface CheckInService {
 
     public List<CheckInDTO> list();
 
+    public void checkin(CheckInDTO checkInDTO);
+
+    public void checkout(Long id);
+
 
 
 }

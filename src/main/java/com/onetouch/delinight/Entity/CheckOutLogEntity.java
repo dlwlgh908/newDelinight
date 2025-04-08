@@ -8,11 +8,11 @@
 package com.onetouch.delinight.Entity;
 
 import com.onetouch.delinight.Constant.CheckInStatus;
+import com.onetouch.delinight.Entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,12 +21,12 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "checkin")
-public class CheckInEntity {
+@Table(name = "check_out_log")
+public class CheckOutLogEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "checkin_id")
+    @Column(name = "log_id")
     private Long id;
 
 
@@ -38,27 +38,27 @@ public class CheckInEntity {
     private String phone;
 
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private UsersEntity usersEntity;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guest_id")
     private GuestEntity guestEntity;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private RoomEntity roomEntity;
 
     @Enumerated(EnumType.STRING)
     private CheckInStatus checkInStatus;
 
-    public CheckInEntity setUsersEntity(UsersEntity usersEntity){
+    public CheckOutLogEntity setUsersEntity(UsersEntity usersEntity){
         this.usersEntity = usersEntity;
         return  this;
     }
 
-    public CheckInEntity setGuestEntity(GuestEntity guestEntity){
+    public CheckOutLogEntity setGuestEntity(GuestEntity guestEntity){
         this.guestEntity = guestEntity;
         return  this;
     }
