@@ -47,10 +47,16 @@ public class MenuDTO {
     }
 
 
+    public MenuDTO setImgNum(Long imgNum){
+        this.imgNum = imgNum;
+
+
 
     public MenuDTO setStoreDTO(StoreDTO storeDTO){
         this.storeDTO = storeDTO;
         return this;
     }
+
+
 
 }

@@ -64,11 +64,20 @@ public class MenuController {
     }
 
     @PostMapping("/register")
-    public String registerProc(MenuDTO menuDTO,Principal principal){
+    public String registerProc(@ModelAttribute MenuDTO menuDTO,
+                               Principal principal){
+
+    // 혹시 @ModelAttribute로 받고 있는데 imgNum이 multipart 형식이거나 JSON으로 보내는 거라면 매핑이 안 될 수 있어.
+    //→ @RequestBody 써야 하는 상황이면 이거부터 맞춰야 해.
+
+
         log.info("등록 포스트 진입 : " + menuDTO);
         log.info("등록 포스트 진입 : " + menuDTO);
 
+        log.info("imgNum 값: " + menuDTO.getImgNum());
+
         String email = "hansin@a.a";
+
 
         menuService.register(menuDTO, email);
         log.info("저장된 데이터 : " + menuDTO);
@@ -83,7 +92,7 @@ public class MenuController {
         model.addAttribute("menuDTOList",menuDTOList);
         log.info(menuDTOList.getContent());
 
-        return "admin/menu/list";
+        return "/admin/menu/list";
     }
     @GetMapping("/read")
     public String readView(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
