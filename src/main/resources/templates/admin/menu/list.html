@@ -2,53 +2,59 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
-      xmlns="http://www.w3.org/1999/html"
+
 >
 
 <head>
     <meta charset="UTF-8">
     <title>메뉴 목록</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!--뷰포트-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--css-->
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <!--폰트어썸-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"></script>
 
 </head>
 <body>
-
+<table class="table table-striped">
     <h1>메뉴목록</h1>
-    <table>
-        <thead>
-        <td>#</td>
+    <thead>
         <th>주문번호</th>
         <th>메뉴</th>
         <th>가격</th>
         <th>판매여부</th>
-        </thead>
-        <tbody>
-        <th:block th:each="menuDTO : ${menuDTOList.content}">
-            <tr>
-                <td th:text="${menuDTO.id}"></td>
-                <td>
-                    <a th:href="@{/templates/admin/menu/read(id=${menuDTO.id})}">
-                        [[${menuDTO.id}]]
-                    </a>
-                </td>
-                <td th:text="${menuDTO.name}"></td>
-                <td th:text="${menuDTO.price}"></td>
-                <td th:text="${menuDTO.menuStatus.name() }"></td>
+    </thead>
+    <th:block th:each="menuDTO : ${menuDTOList.content}">
+        <tr>
+            <td>
+                <a th:href="@{/menu/read(id=${menuDTO.id})}">
+                    [[${menuDTO.id}]]
+                </a>
+            </td>
+            <td th:text="${menuDTO.name}"></td>
+            <td th:text="${menuDTO.price}"></td>
+            <td th:text="${menuDTO.menuStatus.name() }"></td>
+        </tr>
 
-            </tr>
-        </th:block>
-        </tbody>
-    </table>
+
+    </th:block>
+
+
+</table>
+<script type="text/javascript" src="/js/imgscript.js"></script>
+
+
     <ul class="pagination justify-content-center">
         <!-- 처음 페이지 버튼 -->
         <li class="page-menu" th:classappend="${menuDTOList.number == 0} ? 'disabled'">
-            <a class="page-link" th:href="@{/templates/admin/menu/list?page=0}">처음</a>
+            <a class="page-link" th:href="@{/menu/list?page=0}">처음</a>
         </li>
 
         <!-- 이전 페이지 버튼 -->
         <li class="page-menu" th:classappend="${!menuDTOList.hasPrevious()} ? 'disabled'">
-            <a class="page-link" th:href="@{/templates/admin/menu/list?page={prev}(prev=${menuDTOList.number - 1})}">이전</a>
+            <a class="page-link" th:href="@{/menu/list?page={prev}(prev=${menuDTOList.number - 1})}">이전</a>
         </li>
 
         <!-- 현재 페이지 기준 앞 4개, 뒤 5개 -->
@@ -58,19 +64,20 @@
             (menuDTOList.number + 5 < menuDTOList.totalPages - 1 ? menuDTOList.number + 5 : menuDTOList.totalPages - 1)
         )}"
             th:classappend="${pageNum == menuDTOList.number} ? 'active'">
-            <a class="page-link" th:href="@{/templates/admin/menu/list?page={p}(p=${pageNum})}" th:text="${pageNum + 1}"></a>
+            <a class="page-link" th:href="@{/menu/list?page={p}(p=${pageNum})}" th:text="${pageNum + 1}"></a>
         </li>
 
         <!-- 다음 페이지 버튼 -->
         <li class="page-menu" th:classappend="${!menuDTOList.hasNext()} ? 'disabled'">
-            <a class="page-link" th:href="@{/templates/admin/menu/list?page={next}(next=${menuDTOList.number + 1})}">다음</a>
+            <a class="page-link" th:href="@{/menu/list?page={next}(next=${menuDTOList.number + 1})}">다음</a>
         </li>
 
         <!-- 마지막 페이지 버튼 -->
         <li class="page-menu" th:classappend="${menuDTOList.number == menuDTOList.totalPages - 1} ? 'disabled'">
-            <a class="page-link" th:href="@{/templates/admin/menu/list?page={last}(last=${menuDTOList.totalPages - 1})}">마지막</a>
+            <a class="page-link" th:href="@{/menu/list?page={last}(last=${menuDTOList.totalPages - 1})}">마지막</a>
         </li>
     </ul>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
 
 

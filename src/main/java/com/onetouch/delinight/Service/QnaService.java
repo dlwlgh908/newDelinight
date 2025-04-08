@@ -7,7 +7,15 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.QnaDTO;
+
 public interface QnaService {
+    //문의사항 등록
+    public QnaDTO register(QnaDTO qnaDTO);
+    //목록
+    //읽기
+    //수정
+
 
 
 

@@ -2,26 +2,59 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
-      xmlns="http://www.w3.org/1999/html">
+
+>
 
 <head>
     <meta charset="UTF-8">
     <title>상세보기</title>
+    <!--뷰포트-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--css-->
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <!--폰트어썸-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"></script>
 </head>
 <body>
-    <h1>상세보기</h1>
-    주문번호 : <span th:text="${menuDTO.id}"></span><br>
-    메뉴 : <span th:text="${menuDTO.name}"></span><br>
-    메뉴정보 : <span th:text="${menuDTO.content}"></span><br>
-    가격 : <span th:text="${menuDTO.price}"></span><br>
-    주문상태 : <span th:text="${menuDTO.menuStatus}"></span><br>
-    <div th:if="${menuDTO.imgUrl}"><img th:src="${menuDTO.imgUrl}"></div>
-    <a th:href="@{|/templates/admin/menu/update/${menuDTO.id}|}">수정</a>
-
-
-
-
-
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-2"></div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">상세보기</div>
+                <div class="card-body">
+                    <a th:href="@{|/menu/update/${menuDTO.id}|}" class="btn btn-success">수정</a>
+                    <div class="row md-3">
+                        <div class="col-4">주문번호</div>
+                        <div class="col" th:text="${menuDTO.id}"></div>
+                    </div>
+                    <div class="row md-3">
+                        <div class="col-4">메뉴</div>
+                        <div class="col" th:text="${menuDTO.name}"></div>
+                    </div>
+                    <div class="row md-3">
+                        <div class="col-4">메뉴정보</div>
+                        <div class="col" th:text="${menuDTO.content}"></div>
+                    </div>
+                    <div class="row md-3">
+                        <div class="col-4">가격</div>
+                        <div class="col" th:text="${menuDTO.price}"></div>
+                    </div>
+                    <div class="row md-3">
+                        <div class="col-4">판매상태</div>
+                        <div class="col" th:text="${menuDTO.menuStatus}"></div>
+                    </div>
+                    <div class="row md-3">
+                        <div class="col col-4">이미지</div>
+                        <div th:if="${menuDTO.imgUrl}"><img width="100%" th:src="${menuDTO.imgUrl}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
 </body>
 </html>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko"
-       xmlns:th="http://www.thymeleaf.org"
-       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
-       xmlns="http://www.w3.org/1999/html">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+
+>
 
 <head>
     <meta charset="UTF-8">
@@ -15,6 +16,7 @@
     <!--폰트어썸-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"></script>
 
+
 </head>
 <body>
 <div class="container">
@@ -23,30 +25,49 @@
         <div class="col-6">
             <!--카드형식으로 틀-->
             <form action="/menu/register" th:object="${menuDTO}" method="post" class="formWrap" enctype="multipart/form-data">
-                메 뉴 : <input name="name" class="name"><br>
-                상세설명 : <input name="content" class="content"><br>
-                가격 : <input name="price" class="price"><br>
-                <select class="form-select" name="status">
-                    <option value="SELL" selected>판매중</option>
-                    <option value="SOLD_OUT">품절</option>
-                </select>
-                이미지 등록하기 : <input type="file" class="imgInput">
-                <img class="menuImg" src="/img/defaultImg.png">
-                <button type="submit">저장</button>
-                <div class="hiddenImgNum"></div>
+                <div class="card">
+                    <div class="card-header">메뉴등록</div>
+                    <div class="card-body">
+                        <input type="hidden" name="id" id="id">
+                        <div class="md-3">
+                            <label for="name" class="form-label">메뉴</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <div class="md-3">
+                            <label for="content" class="form-label">메뉴정보</label>
+                            <input type="text" class="form-control" id="content" name="content">
+                        </div>
+                        <div class="md-3">
+                            <label for="price" class="form-label">가격</label>
+                            <input type="text" class="form-control" id="price" name="price">
+                        </div>
+                        <div class="md-3 mt-3">
+                            <div class="input-group md-3">
+                                <label class="input-group-text" for="inputGroupSelect01">판매상태</label>
+                                <select class="form-select" id="inputGroupSelect01" th:field="*{status}">
+                                    <option value="SELL">판매중</option>
+                                    <option value="SOLD_OUT">품절</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="md-3 mt-3">
+                            <label for="formFileLg">이미지등록</label>
+                            <input name="image" class="form-control form-control image imgInput" id="formFileLg" type="file">
+                            <img width="50%" class="menuImg" src="/img/defaultImg.png">
+                        </div>
+                        <button type="submit" class="btn btn-primary">저장</button>
+                        <div class="hiddenImgNum"></div>
+                    </div>
+                </div>
+
             </form>
+            <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
             <script type="text/javascript" src="/js/imgscript.js"></script>
 
         </div>
 
     </div>
 </div>
-
-
-
-
-
-
 
 </body>
 </html>
