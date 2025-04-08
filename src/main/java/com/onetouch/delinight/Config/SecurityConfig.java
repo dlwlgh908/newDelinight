@@ -55,24 +55,6 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
         );
 
-                        authorize -> authorize
-                                .requestMatchers("/users/home", "/users/login", "/**").permitAll()
-                                .anyRequest().permitAll()
-                ).csrf((csrf) -> csrf.disable())
-
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/users/login")
-                        .loginProcessingUrl("/users/login")
-                        .defaultSuccessUrl("/users/home")
-                        .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
-                        .usernameParameter("email")
-                )
-                .logout((logout) -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutUrl("/logout")
-                        .invalidateHttpSession(true)
-                );
-
         return http.build();
     }
 

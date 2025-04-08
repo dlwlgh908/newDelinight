@@ -1,0 +1,281 @@
+/* 네비게이션 바 배경 색상과 스타일 */
+.header .navbar-custom {
+    background-color: #f1f1f1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 드롭다운 메뉴 스타일 */
+.header .custom-dropdown {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 드롭다운 항목 스타일 */
+.header .custom-dropdown .dropdown-item {
+    font-size: 1rem;
+    padding: 0.75rem 1.25rem;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 드롭다운 항목 hover 효과 */
+.header .custom-dropdown .dropdown-item:hover {
+    background-color: #f1f1f1;
+    color: #00b4d8;
+}
+
+/* 드롭다운 구분선 */
+.header .custom-dropdown .dropdown-divider {
+    border-color: #ddd;
+}
+
+/* 내 정보 아이콘 및 버튼 스타일 */
+.header .nav-icon {
+    transition: color 0.3s ease;
+}
+
+.header .nav-icon:hover {
+    color: #00b4d8;
+}
+
+/* 장바구니 아이콘에 배경 효과 */
+.header .position-relative .badge-notify {
+    top: -5px;
+    right: -5px;
+    font-size: 0.7rem;
+}
+
+/* 버튼에 동그란 테두리 추가 */
+.header .btn-rounded-circle {
+    border-radius: 50%;
+}
+
+/* 네비게이션 메뉴 아이콘 */
+.header .navbar .nav-item .nav-link i {
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+#login-page {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #fff;
+}
+
+#login-page .container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+}
+
+#login-page .header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    margin: 40px 0 20px;
+}
+
+#login-page .tab {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+#login-page .tab button {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 3px solid transparent;
+}
+
+#login-page .tab .active {
+    border-color: #000;
+}
+
+#login-page .input-group {
+    margin-bottom: 15px;
+}
+
+#login-page input[type="text"],
+#login-page input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 0;
+    font-size: 14px;
+}
+
+#login-page .checkbox-group {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+#login-page .checkbox-group input {
+    margin-right: 6px;
+}
+
+#login-page .login-btn {
+    width: 100%;
+    background-color: #4A90E2;
+    color: #fff;
+    font-weight: bold;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+#login-page .links {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+#login-page .links a {
+    margin: 0 10px;
+    color: #666;
+    text-decoration: none;
+}
+
+#login-page .social-login {
+    margin-top: 30px;
+}
+
+#login-page .social-btn {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#login-page .nav-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #ccc;
+    background-color: #fff;
+    padding: 10px 0;
+    font-size: 12px;
+}
+
+/* userStyle.css */
+
+/* care.html에서만 적용되는 스타일 */
+body#care-page {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header, main, footer {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+header {
+    padding: 40px 20px 20px;
+    text-align: left; /* 변경 */
+}
+
+header h1 {
+    font-size: 24px;
+    color: #222;
+    margin: 0 0 6px;
+}
+
+header .subtext {
+    font-size: 14px;
+    color: #777;
+    margin: 0;
+}
+
+.intro {
+    margin-top: 50px;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+
+main p {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 28px;
+}
+
+.button-group {
+    margin-top: auto; /* 푸터 쪽으로 버튼 내림 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.btn {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 4px;
+    font-size: 15px;
+    padding: 13px;
+    margin-bottom: 14px;
+    font-weight: 500;
+    border: none;
+}
+
+.btn.member {
+    background-color: #4A90E2;
+    color: #fff;
+}
+
+.btn.guest {
+    background-color: #4A90E2;
+    color: #fff;
+}
+
+.sns-icons span {
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+}
+
+.sns-icons i {
+    font-size: 20px;
+}
+
+footer {
+    padding-bottom: 30px;
+}
+
+footer a {
+    font-size: 13px;
+    color: #666;
+    text-decoration: underline;
+}
+
+footer p {
+    color: #666;
+}
+
+
