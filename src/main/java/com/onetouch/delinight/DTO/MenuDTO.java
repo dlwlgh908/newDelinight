@@ -42,16 +42,15 @@ public class MenuDTO {
     private String imgUrl;
 
 
+
+
     public MenuDTO setImgNum(Long imgNum) {
         this.imgNum = imgNum;
         return this;
-    }
 
 
-    public MenuDTO setStoreDTO(StoreDTO storeDTO){
-        this.storeDTO = storeDTO;
-        return this;
     }
+
 
 
 
