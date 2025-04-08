@@ -106,7 +106,7 @@
             font-size: 14px;
             font-weight: bold;
         }
-    </style>
+    </style> <!-- 유효성 검사 -->
 </head>
 <body>
 
@@ -117,34 +117,36 @@
     <form action="/users/signUp" method="post" class="signUpForm">
         <div>
             <label>이름
-                <input type="text" id="name" name="name" class="username" placeholder="이름">
+                <input type="text" id="name" name="name" class="signUpName" placeholder="이름">
                 <div id="signUpNameError" class="error"></div>
             </label>
         </div>
 
         <div>
             <label>이메일<span class="required">*</span>
-                <input type="email" id="email" name="email" class="email" placeholder="이메일" required>
+                <input type="email" id="email" name="email" class="signUpEmail" placeholder="이메일" required>
                 <div id="signUpEmailError" class="error"></div>
             </label>
         </div>
 
         <div>
             <label>비밀번호
-                <input type="password" id="password" name="password" class="password" placeholder="비밀번호">
+                <input type="password" id="password" name="password" class="signUpPasswordOne" placeholder="비밀번호">
                 <div id="signUpPasswordError" class="error"></div>
             </label>
         </div>
 
         <div>
             <label>비밀번호 확인
-                <input type="password" id="confirmPassword" name="confirmPassword" class="password" placeholder="비밀번호 확인">
+                <input type="password" id="confirmPassword" name="confirmPassword" class="signUpPasswordTwo" placeholder="비밀번호 확인">
+                <div id="signUpPasswordErrorTwo" class="error"></div>
+                <div id="signUpPasswordMatchError"></div>
             </label>
         </div>
 
         <div>
             <label>휴대폰 번호
-                <input type="tel" id="phone" name="phone" class="phone" placeholder="휴대폰번호">
+                <input type="tel" id="phone" name="phone" class="signUpPhone" placeholder="휴대폰번호">
                 <div id="signUpPhoneError" class="error"></div>
             </label>
         </div>
@@ -167,7 +169,7 @@
 
         <div>
             <label>주소
-                <input type="text" id="address" name="address" class="username" placeholder="주소">
+                <input type="text" id="address" name="address" class="signUpAddress" placeholder="주소">
                 <div id="signUpAddressError" class="error"></div>
             </label>
         </div>

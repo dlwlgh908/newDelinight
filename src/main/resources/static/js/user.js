@@ -57,67 +57,78 @@ $(document).ready(function () {
 
 $(document).ready(function () {
 
-    $('.signUpForm').on('submit', function (e) {
-        let signUpCheck = true;
+    $(".signUpBtn").on("click" , function () {
 
-        // 초기화
-        $('.error').text('');
+        let signUpCheck = true
+        let usernamePattern = /^[a-zA-Z가-힣0-9]{2,12}$/; // 한글, 영문, 숫자 허용 (2~12자)
+        let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // 이메일 형식
+        let phonePattern = /^010\d{4}\d{4}$/; // 010-1234-5678 형식
+        let passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/; // 최소 8자, 숫자+문자 포함
 
-        // 이름 검사 (2자 이상, 한글 또는 영문)
-        const name = $('#name').val().trim();
-        if (!/^[가-힣a-zA-Z]{2,}$/.test(name)) {
-            $('#signUpNameError').text('이름은 2자 이상 한글 또는 영문만 입력해주세요.');
+        let signUpName = $(".signUpName").val()
+        if (usernamePattern.test(signUpName)){
+            $("#signUpNameError").text().addClass("success").removeClass("error");
+        }else{
+            $("#signUpNameError").text("이름이 올바르지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
+        }
+
+
+        let signUpEmail = $(".signUpEmail").val()
+        if (emailPattern.test(signUpEmail)){
+            $("#signUpEmailError").text().addClass("success").removeClass("error");
+        }else{
+            $("#signUpEmailError").text("아이디 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
+        }
+
+        let signUpPasswordOne = $(".signUpPasswordOne").val()
+        if (passwordPattern.test(signUpPasswordOne)){
+            $("#signUpPasswordError").text().addClass("success").removeClass("error");
+        }else{
+            $("#signUpPasswordError").text("비밀번호가 맞지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
+        }
+
+        let signUpPasswordTwo = $(".signUpPasswordTwo").val()
+        if (passwordPattern.test(signUpPasswordTwo)){
+            $("#signUpPasswordErrorTwo").text().addClass("success").removeClass("error");
+        }else{
+            $("#signUpPasswordErrorTwo").text("비밀번호가 맞지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
+        }
+
+        // 두 비밀번호가 일치하는지 확인
+        if (signUpPasswordOne !== signUpPasswordTwo) {
+            $("#signUpPasswordMatchError").text("비밀번호가 서로 일치하지 않습니다.").removeClass("success").addClass("error");
             signUpCheck = false;
+        } else {
+            $("#signUpPasswordMatchError").text("").addClass("success").removeClass("error");
         }
 
-        // 이메일 검사
-        const email = $('#email').val().trim();
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            $('#signUpEmailError').text('올바른 이메일 형식을 입력해주세요.');
-            signUpCheck = false;
+
+        let signUpPhone = $(".signUpPhone").val()
+        if (phonePattern.test(signUpPhone)){
+            $("#signUpPhoneError").text().addClass("success").removeClass("error");
+        }else{
+            $("#signUpPhoneError").text("핸드폰번호 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
         }
 
-        // 비밀번호 검사 (영문, 숫자, 특수문자 포함 8자 이상)
-        const password = $('#password').val();
-        if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-])[A-Za-z\d!@#$%^&*()_+{}[\]:;<>,.?~\\/-]{8,}$/.test(password)) {
-            $('#signUpPasswordError').text('비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.');
-            signUpCheck = false;
+        let signUpAddress = $(".signUpAddress").val()
+        if (usernamePattern.test(signUpAddress)){
+            $("#signUpAddressError").text().addClass("success").removeClass("error");
+        }else{
+            $("#signUpAddressError").text("주소 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
         }
 
-        // 비밀번호 확인 검사
-        const confirmPassword = $('#confirmPassword').val();
-        if (password !== confirmPassword) {
-            $('#signUpPasswordError').text('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
-            signUpCheck = false;
+        if (signUpCheck) {
+            alert("임시 비밀번호 발급 완료!");
+            $(".signUpForm").submit(); // 실제 폼 제출
         }
 
-        // 휴대폰 번호 검사 (숫자 10~11자리)
-        const phone = $('#phone').val().trim();
-        if (!/^\d{10,11}$/.test(phone)) {
-            $('#signUpPhoneError').text('휴대폰 번호는 숫자만 입력하며 10~11자리여야 합니다.');
-            signUpCheck = false;
-        }
-
-        // 주소 검사 (필수 여부에 따라 선택)
-        const address = $('#address').val().trim();
-        if (!address) {
-            $('#signUpAddressError').text('주소를 입력해주세요.');
-            signUpCheck = false;
-        }
-
-        // 필수 약관 동의 확인
-        if (!$('input[name="terms14"]').is(':checked') ||
-            !$('input[name="termsBrand"]').is(':checked') ||
-            !$('input[name="termsPrivacy"]').is(':checked')) {
-            alert('필수 약관에 모두 동의해야 가입할 수 있습니다.');
-            signUpCheck = false;
-        }
-
-        if (!signUpCheck) {
-            e.preventDefault(); // 유효성 검사 실패 시 폼 제출 막기
-        }
-    });
-
+    })
 
     $(".sendBtn").on("click" , function () {
 
@@ -227,6 +238,8 @@ $(document).ready(function () {
             $(".updateForm").submit(); // 실제 폼 제출
         }
     })
+
+
 
 
 });
