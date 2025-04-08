@@ -3644,6 +3644,119 @@ textarea.form-control-lg {
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
+
+.navbar-hover {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-tooltip-wrap{
+  position: relative;
+  z-index: 900;
+}
+
+.profile-tooltip {
+  /*display: none;*/
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 280px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  z-index: 1050;
+}
+
+.profile-tooltip::before {
+  content: "";
+  position: absolute;
+  top: -20px; /* 툴팁 위에 꼬리가 붙게 */
+  right: 20px; /* 원하는 위치로 조정 가능 */
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #d50000 transparent;
+}
+
+/* Hover 트리거 */
+.navbar-hover:hover .profile-tooltip {
+  display: block;
+  z-index: 9;
+}
+
+/* 빨간 헤더 */
+.profile-header {
+  background: #d50000;
+  color: white;
+  border-radius: 6px 6px 0 0;
+  padding: 24px 16px 24px 16px;
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  background-color: #eee;
+  background-size: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.user-info {
+  font-size: 13px;
+  margin-left: 16px;
+}
+
+.user-info-title {
+  display: flex;
+  align-items: center;
+}
+
+.user-info strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 4px;
+  margin-right: 6px;
+}
+
+.user-info-title a {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.user-info small {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* 메뉴 리스트 */
+.menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 10px 15px;
+  border-top: 1px solid #eee;
+}
+
+.menu-list li {
+  padding: 8px 0;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 로그아웃 버튼 */
+.logout-btn {
+  text-align: center;
+  color: #d50000;
+  font-weight: bold;
+  padding: 10px;
+  border-top: 1px solid #eee;
+  cursor: pointer;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nav-link {
     transition: none;
