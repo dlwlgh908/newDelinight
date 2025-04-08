@@ -33,6 +33,7 @@ public class RoomDTO {
     private String content;
 
 
+
     private HotelDTO hotelDTO;
 
     private UsersDTO usersDTO;
@@ -42,6 +43,13 @@ public class RoomDTO {
         this.hotelDTO = hotelDTO;
         return this;
     }
+
+    public RoomDTO setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+
 
 
 
