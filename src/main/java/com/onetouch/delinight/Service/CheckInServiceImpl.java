@@ -1,13 +1,12 @@
 package com.onetouch.delinight.Service;
 
-import com.onetouch.delinight.DTO.CheckInDTO;
-import com.onetouch.delinight.DTO.HotelDTO;
-import com.onetouch.delinight.DTO.RoomDTO;
-import com.onetouch.delinight.DTO.UsersDTO;
+import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.CheckInEntity;
+import com.onetouch.delinight.Entity.GuestEntity;
 import com.onetouch.delinight.Entity.RoomEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.CheckInRepository;
+import com.onetouch.delinight.Repository.GuestRepository;
 import com.onetouch.delinight.Repository.RoomRepository;
 import com.onetouch.delinight.Repository.UsersRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,6 +29,7 @@ public class CheckInServiceImpl implements CheckInService{
     private final RoomRepository roomRepository;
     private final UsersRepository usersRepository;
     private final ModelMapper modelMapper;
+    private final GuestRepository guestRepository;
 
 
     @Override
@@ -44,9 +44,14 @@ public class CheckInServiceImpl implements CheckInService{
         UsersEntity usersEntity =
             usersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
 
+        GuestEntity guestEntity =
+            guestRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+
+
+
+
         usersEntity =
             usersRepository.selectEmail(email);
-
 
 
         checkInEntity.builder()
@@ -55,6 +60,7 @@ public class CheckInServiceImpl implements CheckInService{
                 .checkInStatus(checkInEntity.getCheckInStatus())
                 .price(checkInEntity.getPrice())
                 .guestEntity(checkInEntity.getGuestEntity())
+                .guestEntity(guestEntity)
                 .usersEntity(usersEntity)
                 .roomEntity(roomEntity)
                 .build();
@@ -66,20 +72,14 @@ public class CheckInServiceImpl implements CheckInService{
     @Override
     public void create(CheckInDTO checkInDTO) {
 
-
-
         CheckInEntity checkInEntity =
                 modelMapper.map(checkInDTO, CheckInEntity.class)
                         .setUsersEntity(modelMapper.map(checkInDTO.getUsersDTO(), UsersEntity.class));
-
 
         RoomEntity roomEntity =
                 roomRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
         UsersEntity usersEntity =
                 usersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-
-
-
 
         checkInEntity.builder()
                 .checkinDate(checkInEntity.getCheckinDate())
@@ -100,12 +100,26 @@ public class CheckInServiceImpl implements CheckInService{
         List<CheckInEntity> checkInEntityList =
             checkInRepository.findAll();
 
+
+
+
         List<CheckInDTO> checkInDTOList =
-                checkInEntityList.stream().map(
-                        checkInEntity -> modelMapper.map(checkInEntity, CheckInDTO.class)
-                                .setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class))
-                ).collect(Collectors.toList());
+                checkInEntityList.stream().map(checkInEntity -> {
+                    CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class);
+
+                    // getGuestEntity가 null이 아니면 setGuestDTO 호출
+                    if (checkInEntity.getGuestEntity() != null) {
+                        checkInDTO.setGuestDTO(modelMapper.map(checkInEntity.getGuestEntity(), GuestDTO.class));
+                    }
+
+                    // setRoomDTO는 항상 호출
+                    checkInDTO.setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class));
+
+                    return checkInDTO;
+                }).collect(Collectors.toList());
 
         return checkInDTOList;
     }
+
+
 }

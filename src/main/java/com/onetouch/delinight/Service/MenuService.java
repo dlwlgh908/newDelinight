@@ -24,7 +24,7 @@ import java.util.Optional;
 public interface MenuService {
 
     //등록
-    public void register(MenuDTO menuDTO);
+    public void register(MenuDTO menuDTO, String email);
     //상세보기
     public MenuDTO read(Long id);
     //목록

@@ -56,6 +56,11 @@ public class CheckInEntity {
         return  this;
     }
 
+    public CheckInEntity setGuestEntity(GuestEntity guestEntity){
+        this.guestEntity = guestEntity;
+        return  this;
+    }
+
 
 
 

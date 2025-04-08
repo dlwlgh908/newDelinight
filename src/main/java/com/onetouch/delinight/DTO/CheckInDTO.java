@@ -14,7 +14,9 @@ import com.onetouch.delinight.Entity.RoomEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -28,9 +30,11 @@ public class CheckInDTO {
     private Long id;
 
 
-    private LocalDateTime checkinDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate checkinDate;
 
-    private LocalDateTime checkoutDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate checkoutDate;
 
     private int price;
 
@@ -45,6 +49,12 @@ public class CheckInDTO {
 
     public CheckInDTO setRoomDTO(RoomDTO roomDTO) {
         this.roomDTO = roomDTO;
+        return this;
+    }
+
+
+    public CheckInDTO setGuestDTO(GuestDTO guestDTO) {
+        this.guestDTO = guestDTO;
         return this;
     }
 
