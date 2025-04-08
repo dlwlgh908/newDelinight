@@ -278,4 +278,60 @@ footer p {
     color: #666;
 }
 
+/* update.html 전용 스타일 */
+#update-page {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+#update-page .updateForm {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+#update-page .updateForm div > div {
+    margin-bottom: 20px;
+}
+
+#update-page .form-label {
+    font-weight: 600;
+}
+
+#update-page .form-control {
+    border-radius: 5px;
+    padding: 12px;
+}
+
+#update-page .updateBtn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    #update-page .updateForm {
+        width: 90%;
+        padding: 20px;
+    }
+    #update-page .form-control {
+        font-size: 16px;
+        height: 48px;
+        padding: 10px;
+    }
+    #update-page .updateBtn {
+        font-size: 18px;
+        height: 48px;
+        padding: 10px;
+    }
+}
+
+
+
 
