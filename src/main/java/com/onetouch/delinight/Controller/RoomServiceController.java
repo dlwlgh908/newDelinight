@@ -8,7 +8,10 @@
 package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.DTO.MenuDTO;
+import com.onetouch.delinight.DTO.OrdersDTO;
 import com.onetouch.delinight.Service.MenuService;
+import com.onetouch.delinight.Service.OrdersService;
+import com.onetouch.delinight.Service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -24,6 +27,8 @@ import java.util.List;
 @RequestMapping("/roomservice")
 public class RoomServiceController {
     private final MenuService menuService;
+    private final PaymentService paymentService;
+    private final OrdersService ordersService;
 
     @GetMapping("/order/main")
     public String main(Model model){
@@ -32,6 +37,14 @@ public class RoomServiceController {
         model.addAttribute("menuDTOList", menuDTOList);
         log.info(menuDTOList);
         return "roomService/order/main";
+    }
+
+    @GetMapping("/order/read")
+    public String read(Long paymentId, Model model){
+        List<OrdersDTO> ordersDTOList = ordersService.read(paymentId);
+        log.info(ordersDTOList);
+        model.addAttribute("ordersDTOList", ordersDTOList);
+        return "roomService/order/read";
     }
 
 

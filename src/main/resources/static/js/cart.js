@@ -139,7 +139,12 @@ $(function () {
 
         $.ajax({
 
-            url: "/cart"
+            url: "/cart/cartToOrder",
+            type: "post",
+            success:function (result){
+                location.reload();
+
+            }
 
         })
 

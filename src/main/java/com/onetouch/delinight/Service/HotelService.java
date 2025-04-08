@@ -7,7 +7,16 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.BranchDTO;
+import com.onetouch.delinight.DTO.HotelDTO;
+
+import java.util.List;
+
 public interface HotelService {
+
+    public void create(HotelDTO hotelDTO);
+
+    public List<HotelDTO> list();
 
 
 

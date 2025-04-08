@@ -108,5 +108,3 @@ $().ready(function () {
     });
 
 });
-
-// <!--dddddd--><!--dddddd--><!--dddddd--><!--dddddd-->

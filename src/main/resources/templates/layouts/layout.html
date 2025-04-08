@@ -23,8 +23,9 @@
         <div th:replace="~{fragments/adminsidebar::adminSidebar}" id="layoutSidenav_nav"></div>
 
           <!--콘텐츠-->
-        <div layout:fragment="index"></div>
+        <div layout:fragment="adminContent"></div>
 
+        <div layout:fragment="pagescript"></div>
       </div>
 
 
@@ -33,11 +34,5 @@
 
   <!--config script-->
   <th:block th:replace="~{fragments/config::script}"></th:block>
-<!--dddddd-->
-<!--dddddd-->
-<!--dddddd-->
-<!--dddddd-->
-<!--dddddd-->
-<!--dddddd-->
 </body>
 </html>

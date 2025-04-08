@@ -7,8 +7,11 @@
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
+import com.onetouch.delinight.Constant.CheckInStatus;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,7 +28,41 @@ public class CheckInEntity {
     @Column(name = "checkin_id")
     private Long id;
 
+
+    private LocalDateTime checkinDate;
+
+    private LocalDateTime checkoutDate;
+
+    private int price;
+
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private UsersEntity usersEntity;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "guest_id")
+    private GuestEntity guestEntity;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private RoomEntity roomEntity;
+
+    @Enumerated(EnumType.STRING)
+    private CheckInStatus checkInStatus;
+
+    public CheckInEntity setUsersEntity(UsersEntity usersEntity){
+        this.usersEntity = usersEntity;
+        return  this;
+    }
+
+    public CheckInEntity setGuestEntity(GuestEntity guestEntity){
+        this.guestEntity = guestEntity;
+        return  this;
+    }
+
+
+
+
+
 }

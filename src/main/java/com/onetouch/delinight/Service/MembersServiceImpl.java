@@ -14,31 +14,38 @@ import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.MembersRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MembersServiceImpl implements MembersService{
     private final MembersRepository membersRepository;
     private final ModelMapper modelMapper;
+   private final PasswordEncoder passwordEncoder;
 
     @Override
     public void create(MembersDTO membersDTO) {
 
         MembersEntity membersEntity =
             modelMapper.map(membersDTO, MembersEntity.class);
+        String password = passwordEncoder.encode(membersDTO.getPassword());
         membersEntity.setRole(Role.SUPERADMIN);
         membersEntity.setStatus(Status.WAIT);
+        membersEntity.setPassword(password);
 
             membersRepository.save(membersEntity);
 
@@ -75,6 +82,26 @@ public class MembersServiceImpl implements MembersService{
                 ).collect(Collectors.toList());
 
         return membersDTOList;
+    }
+
+    @Override
+    public String login(String email, String password) {
+        MembersEntity membersEntity = membersRepository.selectEmail(email);
+        log.info("이메일로 조회한 db 회원정보 : "+membersEntity);
+
+
+
+        if(membersEntity == null){
+            log.info("db에 회원정보 없음");
+            return "회원 정보가 없습니다.";
+        }
+
+        if(!membersEntity.getEmail().equals(password)){
+            log.info("db에 회원정보는 있으나 비번이 틀림");
+            return "비밀번호가 틀립니다.";
+        }
+        log.info("서비스 수행 완료");
+        return null;
     }
 
     @Override

@@ -8,7 +8,9 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.UsersDTO;
+import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
+import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Repository.UsersRepository;
 import com.onetouch.delinight.Util.EmailService;
 import com.onetouch.delinight.Util.PasswordUtil;
@@ -32,6 +34,7 @@ import java.util.Map;
 public class UsersServiceImpl implements UsersService , UserDetailsService {
 
     private final UsersRepository usersRepository;
+    private final MembersRepository membersRepository;
 
 
     private final EmailService emailService;
@@ -62,11 +65,22 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
+        log.info(email);
         UsersEntity usersEntity = usersRepository.selectEmail(email);
+        MembersEntity membersEntity = membersRepository.findByEmail(email);
+
+        log.info(membersEntity);
 
         if (usersEntity == null) {
-            log.info("findByEmail 찾을 수 없음");
-            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
+
+            if(membersEntity != null){
+                return User.builder()
+                        .username(membersEntity.getEmail())
+                        .password(membersEntity.getPassword())
+                        .build();
+            }
+            log.info("member, user 어디에서도 찾을 수 없음");
+            throw new UsernameNotFoundException("member, user 어디에서도 찾을 수 없음");
         }
 
         return User.builder()

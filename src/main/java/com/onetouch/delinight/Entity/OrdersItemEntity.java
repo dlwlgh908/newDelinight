@@ -25,7 +25,7 @@ public class OrdersItemEntity {
     @Column(name = "orders_item_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "orders_id")
     private OrdersEntity ordersEntity;
 

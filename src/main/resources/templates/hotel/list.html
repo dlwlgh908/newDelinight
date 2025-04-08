@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body>
+
+
+<table class="table">
+
+    <thead>
+    <th scope="col">#</th>
+    <th scope="col">이름</th>
+    <th scope="col">설명</th>
+    </thead>
+
+    <tbody>
+    <th:block  th:each="list:${hotelDTOList}">
+        <tr>
+            <th scope="row offset-4" th:text="${list.id}"></th>
+            <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                [[${list.name}]]
+            </a>
+            </td>
+            <td th:text="${list.content}"></td>
+
+
+
+            </td>
+
+
+
+        </tr>
+
+    </th:block>
+
+
+
+    </tbody>
+
+</table>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+</body>
+</html>

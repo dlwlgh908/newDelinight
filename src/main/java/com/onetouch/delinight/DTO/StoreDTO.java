@@ -7,6 +7,9 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+import com.onetouch.delinight.Entity.HotelEntity;
+import com.onetouch.delinight.Entity.MembersEntity;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -19,8 +22,13 @@ public class StoreDTO {
 
     private Long id;
     private String name;
+
     private String content;
+
+
     private HotelDTO hotelDTO;
+
+    private MembersDTO membersDTO;
 
 
 }
