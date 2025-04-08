@@ -10,332 +10,117 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>로그인</title>
     <style>
-        @import url('https://fonts.googleapis.com/css?family=Poppins');
-
-        /* BASIC */
-
-        html {
-            background-color: #56baed;
-        }
-
         body {
-            font-family: "Poppins", sans-serif;
-            height: 100vh;
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #fff;
         }
 
-        a {
-            color: #92badd;
-            display:inline-block;
-            text-decoration: none;
-            font-weight: 400;
-        }
-
-        h2 {
-            text-align: center;
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: uppercase;
-            display:inline-block;
-            margin: 40px 8px 10px 8px;
-            color: #cccccc;
-        }
-
-
-
-        /* STRUCTURE */
-
-        .wrapper {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            justify-content: center;
-            width: 100%;
-            min-height: 100%;
+        .container {
+            max-width: 400px;
+            margin: auto;
             padding: 20px;
         }
 
-        #formContent {
-            -webkit-border-radius: 10px 10px 10px 10px;
-            border-radius: 10px 10px 10px 10px;
-            background: #fff;
-            padding: 30px;
-            width: 90%;
-            max-width: 450px;
-            position: relative;
-            padding: 0px;
-            -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-            box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+        .header {
             text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+            margin: 40px 0 20px;
         }
 
-        #formFooter {
-            background-color: #f6f6f6;
-            border-top: 1px solid #dce8f1;
-            padding: 25px;
-            text-align: center;
-            -webkit-border-radius: 0 0 10px 10px;
-            border-radius: 0 0 10px 10px;
+        .tab {
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
         }
 
-
-
-        /* TABS */
-
-        h2.inactive {
-            color: #cccccc;
-        }
-
-        h2.active {
-            color: #0d0d0d;
-            border-bottom: 2px solid #5fbae9;
-        }
-
-
-
-        /* FORM TYPOGRAPHY*/
-
-        input[type=button], input[type=submit], input[type=reset]  {
-            background-color: #56baed;
+        .tab button {
+            background: none;
             border: none;
-            color: white;
-            padding: 15px 80px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            text-transform: uppercase;
-            font-size: 13px;
-            -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
-            box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
-            -webkit-border-radius: 5px 5px 5px 5px;
-            border-radius: 5px 5px 5px 5px;
-            margin: 5px 20px 40px 20px;
-            -webkit-transition: all 0.3s ease-in-out;
-            -moz-transition: all 0.3s ease-in-out;
-            -ms-transition: all 0.3s ease-in-out;
-            -o-transition: all 0.3s ease-in-out;
-            transition: all 0.3s ease-in-out;
-        }
-
-        input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
-            background-color: #39ace7;
-        }
-
-        input[type=button]:active, input[type=submit]:active, input[type=reset]:active  {
-            -moz-transform: scale(0.95);
-            -webkit-transform: scale(0.95);
-            -o-transform: scale(0.95);
-            -ms-transform: scale(0.95);
-            transform: scale(0.95);
-        }
-
-        input[type=text] {
-            background-color: #f6f6f6;
-            border: none;
-            color: #0d0d0d;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
+            padding: 10px 20px;
+            font-weight: bold;
             font-size: 16px;
-            margin: 5px;
-            width: 85%;
-            border: 2px solid #f6f6f6;
-            -webkit-transition: all 0.5s ease-in-out;
-            -moz-transition: all 0.5s ease-in-out;
-            -ms-transition: all 0.5s ease-in-out;
-            -o-transition: all 0.5s ease-in-out;
-            transition: all 0.5s ease-in-out;
-            -webkit-border-radius: 5px 5px 5px 5px;
-            border-radius: 5px 5px 5px 5px;
+            border-bottom: 3px solid transparent;
         }
 
-        input[type=text]:focus {
-            background-color: #fff;
-            border-bottom: 2px solid #5fbae9;
+        .tab .active {
+            border-color: #000;
         }
 
-        input[type=text]:placeholder {
-            color: #cccccc;
+        .input-group {
+            margin-bottom: 15px;
         }
 
-        input[type=text] {
-            background-color: #f6f6f6;
-            border: none;
-            color: #0d0d0d;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 5px;
-            width: 85%;
-            border: 2px solid #f6f6f6;
-            -webkit-transition: all 0.5s ease-in-out;
-            -moz-transition: all 0.5s ease-in-out;
-            -ms-transition: all 0.5s ease-in-out;
-            -o-transition: all 0.5s ease-in-out;
-            transition: all 0.5s ease-in-out;
-            -webkit-border-radius: 5px 5px 5px 5px;
-            border-radius: 5px 5px 5px 5px;
-        }
-
-        input[type=text]:focus {
-            background-color: #fff;
-            border-bottom: 2px solid #5fbae9;
-        }
-
-        input[type=text]:placeholder {
-            color: #cccccc;
-        }
-        input[type=password] {
-            background-color: #f6f6f6;
-            border: none;
-            color: #0d0d0d;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 5px;
-            width: 85%;
-            border: 2px solid #f6f6f6;
-            -webkit-transition: all 0.5s ease-in-out;
-            -moz-transition: all 0.5s ease-in-out;
-            -ms-transition: all 0.5s ease-in-out;
-            -o-transition: all 0.5s ease-in-out;
-            transition: all 0.5s ease-in-out;
-            -webkit-border-radius: 5px 5px 5px 5px;
-            border-radius: 5px 5px 5px 5px;
-        }
-
-        input[type=password]:focus {
-            background-color: #fff;
-            border-bottom: 2px solid #5fbae9;
-        }
-
-        input[type=password]:placeholder {
-            color: #cccccc;
-        }
-
-
-        /* ANIMATIONS */
-
-        /* Simple CSS3 Fade-in-down Animation */
-        .fadeInDown {
-            -webkit-animation-name: fadeInDown;
-            animation-name: fadeInDown;
-            -webkit-animation-duration: 1s;
-            animation-duration: 1s;
-            -webkit-animation-fill-mode: both;
-            animation-fill-mode: both;
-        }
-
-        @-webkit-keyframes fadeInDown {
-            0% {
-                opacity: 0;
-                -webkit-transform: translate3d(0, -100%, 0);
-                transform: translate3d(0, -100%, 0);
-            }
-            100% {
-                opacity: 1;
-                -webkit-transform: none;
-                transform: none;
-            }
-        }
-
-        @keyframes fadeInDown {
-            0% {
-                opacity: 0;
-                -webkit-transform: translate3d(0, -100%, 0);
-                transform: translate3d(0, -100%, 0);
-            }
-            100% {
-                opacity: 1;
-                -webkit-transform: none;
-                transform: none;
-            }
-        }
-
-        /* Simple CSS3 Fade-in Animation */
-        @-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-        @-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-
-        .fadeIn {
-            opacity:0;
-            -webkit-animation:fadeIn ease-in 1;
-            -moz-animation:fadeIn ease-in 1;
-            animation:fadeIn ease-in 1;
-
-            -webkit-animation-fill-mode:forwards;
-            -moz-animation-fill-mode:forwards;
-            animation-fill-mode:forwards;
-
-            -webkit-animation-duration:1s;
-            -moz-animation-duration:1s;
-            animation-duration:1s;
-        }
-
-        .fadeIn.first {
-            -webkit-animation-delay: 0.4s;
-            -moz-animation-delay: 0.4s;
-            animation-delay: 0.4s;
-        }
-
-        .fadeIn.second {
-            -webkit-animation-delay: 0.6s;
-            -moz-animation-delay: 0.6s;
-            animation-delay: 0.6s;
-        }
-
-        .fadeIn.third {
-            -webkit-animation-delay: 0.8s;
-            -moz-animation-delay: 0.8s;
-            animation-delay: 0.8s;
-        }
-
-        .fadeIn.fourth {
-            -webkit-animation-delay: 1s;
-            -moz-animation-delay: 1s;
-            animation-delay: 1s;
-        }
-
-        /* Simple CSS3 Fade-in Animation */
-        .underlineHover:after {
-            display: block;
-            left: 0;
-            bottom: -10px;
-            width: 0;
-            height: 2px;
-            background-color: #56baed;
-            content: "";
-            transition: width 0.2s;
-        }
-
-        .underlineHover:hover {
-            color: #0d0d0d;
-        }
-
-        .underlineHover:hover:after{
+        input[type="text"],
+        input[type="password"] {
             width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 0;
+            font-size: 14px;
         }
 
-
-
-        /* OTHERS */
-
-        *:focus {
-            outline: none;
+        .checkbox-group {
+            margin-bottom: 20px;
+            font-size: 14px;
         }
 
-        #icon {
-            width:60%;
+        .checkbox-group input {
+            margin-right: 6px;
         }
 
-        * {
-            box-sizing: border-box;
+        .login-btn {
+            width: 100%;
+            background-color: #4A90E2;
+            color: #fff;
+            font-weight: bold;
+            padding: 14px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
         }
-    </style><!-- 로그인 폼 디자인 -->
+
+        .links {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .links a {
+            margin: 0 10px;
+            color: #666;
+            text-decoration: none;
+        }
+
+        .social-login {
+            margin-top: 30px;
+        }
+
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #ccc;
+            background-color: #fff;
+            padding: 10px 0;
+            font-size: 12px;
+        }
+    </style>
     <style>
         .error {
             color: red;
@@ -351,46 +136,57 @@
 
 <body>
 
-<div class="wrapper fadeInDown">
-    <div id="formContent" class="mt-2">
-        <!-- 로그인 제목 -->
-        <h2 class="active" onclick="location.href='/users/login'"> 로그인 </h2>
-        <h2 class="inactive underlineHover" onclick="location.href='/users/signUp'" > 회원가입 </h2>
+<div class="container">
+    <div class="header">LOGIN</div>
 
-        <!-- 로그인폼 -->
-        <form action="/users/login" method="post" class="loginForm" onsubmit="return validateForm()">
-            <div class="mt-5">
-                <input type="text" id="login" class="fadeIn second" name="email" placeholder="아이디">
-                <div id="emailError" class="error"></div>
-            </div>
-            <div class="mt-2">
-                <input type="password" id="password" class="fadeIn third" name="password" placeholder="비밀번호">
-                <div id="passwordError" class="error"></div>
-            </div>
-            <div class="mt-4">
-                <input type="submit" class="fadeIn fourth loginBtn" value="로그인">
-            </div>
-        </form>
-
-        <!-- 비밀번호 찾기 -->
-        <div id="formFooter">
-            <a class="underlineHover" href="/users/sendPassword"> 비밀번호를 잊으셨나요? </a>
-        </div>
+    <div class="tab">
+        <button class="active">회원</button>
+        <button style="color: #ccc;" onclick="location.href='/users/home'">비회원</button>
     </div>
+
+    <form id="loginForm" action="/users/login" method="post">
+
+        <div class="input-group">
+            <input type="text" id="email" name="email" placeholder="아이디 또는 이메일" required>
+            <div id="emailError" class="error"></div>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="password" name="password" placeholder="비밀번호" required>
+            <div id="passwordError" class="error"></div>
+        </div>
+
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="remember"> 로그인 상태 유지</label>
+        </div>
+
+        <div>
+            <button type="button" class="login-btn loginBtn" onclick="handleLogin()">LOGIN</button>
+        </div>
+
+
+    </form>
+
+    <div class="links">
+        <a href="/users/signUp">회원가입</a> |
+        <a href="#">아이디찾기</a> |
+        <a href="/users/sendPassword">비밀번호찾기</a>
+    </div>
+
 </div>
 
 <script>
-    function validateForm() {
-        let email = document.getElementById('login').value;
+    function handleLogin() {
+        let email = document.getElementById('email').value;
         let password = document.getElementById('password').value;
+
         let emailError = document.getElementById('emailError');
         let passwordError = document.getElementById('passwordError');
 
         let loginCheck = true;
 
-        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            emailError.textContent = '유효하지 않은 이메일입니다.';
+        if (email.trim() === "") {
+            emailError.textContent = '아이디 또는 이메일을 입력해주세요.';
             loginCheck = false;
         } else {
             emailError.textContent = '';
@@ -404,7 +200,9 @@
             passwordError.textContent = '';
         }
 
-        return loginCheck;
+        if (loginCheck) {
+            document.getElementById("loginForm").submit();
+        }
     }
 </script>
 
