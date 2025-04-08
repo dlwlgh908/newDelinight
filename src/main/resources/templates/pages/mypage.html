@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+>
+    <head>
+        <title>스토어 리스트</title>
+
+        <!--별도 css 필요할 시 아래로 추가-->
+        <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
+        styles.css에 작성할것-->
+    </head>
+
+    <body>
+        <div layout:fragment="adminContent" id="layoutSidenav_content">
+            <main>
+                <!--내용 넣는 곳-->
+                <div class="container-fluid px-4">
+                    <!--페이지 이름-->
+                    <h1 class="mt-4">My page</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">안녕하세요, 홍길동 님</li>
+                    </ol>
+                    <!--텍스트 박스-->
+                    <div class="card mb-4">
+                       <div class="card-body">
+
+                       </div>
+                    </div>
+                </div>
+            </main>
+
+            <!--푸터 절대 수정 금지!!!!-->
+            <!--푸터-->
+            <div th:replace="~{fragments/adminfooter::adminFooter}"></div>
+        </div>
+    </body>
+</html>
