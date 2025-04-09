@@ -10,8 +10,6 @@ package com.onetouch.delinight.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -30,6 +28,7 @@ public class CartEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UsersEntity usersEntity;
+
 
     private Long totalPrice;
 

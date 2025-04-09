@@ -29,7 +29,7 @@ public class QnaEntity extends BaseTimeEntity {
     private String title;
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) //지연로딩
     @JoinColumn(name = "checkin_id")
     private CheckInEntity checkInEntity;
 

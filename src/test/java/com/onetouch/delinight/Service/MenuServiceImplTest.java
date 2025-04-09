@@ -38,32 +38,12 @@ class MenuServiceImplTest {
         menuDTO.setName("계란말이");
         menuDTO.setContent("계란은 단백질이니까");
         menuDTO.setPrice(4000);
-        menuService.register(menuDTO);
+        menuService.register(menuDTO, "dlwlgh908@naver.com");
     }
 
-    @Test
-    @Transactional
-    public void store() {
-
-        MenuDTO menuDTO = new MenuDTO();
-        menuDTO.setName("맥주");
-        menuDTO.setContent("시원함");
-
-        ModelMapper modelMapper = new ModelMapper();
-
-        MenuEntity menuEntity =
-                modelMapper.map(menuDTO, MenuEntity.class);
-        StoreEntity storeEntity =
-        storeRepository.findById(1L).get();
-        menuEntity.setStoreEntity(storeEntity);
-
-        log.info(menuEntity);
-        log.info(menuEntity);
-        log.info(menuEntity);
-        menuRepository.save(menuEntity);
 
 
-    }
+
 
     @Test
     public void read(){

@@ -8,11 +8,6 @@
 package com.onetouch.delinight.DTO;
 
 
-
-import com.onetouch.delinight.Constant.MenuStatus;
-
-
-
 import com.onetouch.delinight.Constant.MenuStatus;
 import lombok.*;
 
@@ -36,6 +31,7 @@ public class MenuDTO {
     MenuStatus menuStatus; //판매상태
 
     private String createBy;
+    private String status;
 
 
     private StoreDTO storeDTO;
@@ -47,9 +43,15 @@ public class MenuDTO {
 
 
 
-    public MenuDTO setStoreDTO(StoreDTO storeDTO){
-        this.storeDTO = storeDTO;
+
+    public MenuDTO setImgNum(Long imgNum) {
+        this.imgNum = imgNum;
         return this;
+
+
     }
+
+
+
 
 }

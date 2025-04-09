@@ -14,4 +14,5 @@ public interface ImageService {
     public void update(MultipartFile multipartFile, Long num);
     public void dummyImgDelete();
 
+
 }

@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
+
 import com.onetouch.delinight.Constant.OrdersStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,7 +29,6 @@ public class OrdersEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
     private Long id;
-
 
 
     @Column(name="orders_memo")

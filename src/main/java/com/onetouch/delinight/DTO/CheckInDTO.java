@@ -41,6 +41,8 @@ public class CheckInDTO {
     private String phone;
 
 
+    private int certNum;
+    private String certPass;
 
     private UsersDTO usersDTO;
 
@@ -75,7 +77,17 @@ public class CheckInDTO {
         return this;
     }
 
+    public CheckInDTO setCertNum(int certNum) {
 
+        this.certNum = certNum;
+        return this;
+    }
+
+    public CheckInDTO setCertPass(String phone) {
+        this.certPass = phone.substring(phone.length() - 4);
+        return this;
+
+    }
 
 
 }
