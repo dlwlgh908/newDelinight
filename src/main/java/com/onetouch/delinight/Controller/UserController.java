@@ -41,6 +41,7 @@ public class UserController {
                         return "redirect:/users/login";
                 }
 
+
                 model.addAttribute("data" , principal.getName());
                 return "users/home";
         }
