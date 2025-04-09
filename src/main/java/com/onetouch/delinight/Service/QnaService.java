@@ -8,13 +8,20 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.QnaDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface QnaService {
     //문의사항 등록
-    public QnaDTO register(QnaDTO qnaDTO);
+    public QnaDTO register(QnaDTO qnaDTO,Long id);
     //목록
-    //읽기
+    public Page<QnaDTO> qnaList(Pageable pageable);
+    //상세보기
+    public QnaDTO read(Long id);
     //수정
+    public QnaDTO update(QnaDTO qnaDTO);
+    //삭제
+    public void delete(Long id);
 
 
 

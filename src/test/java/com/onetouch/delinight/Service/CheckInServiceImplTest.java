@@ -17,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,8 +48,8 @@ class CheckInServiceImplTest {
             modelMapper.map(usersEntity, UsersDTO.class);
 
         checkInDTO.setPrice(10000);
-        checkInDTO.setCheckoutDate(LocalDateTime.now());
-        checkInDTO.setCheckinDate(LocalDateTime.now());
+        checkInDTO.setCheckoutDate(LocalDate.now());
+        checkInDTO.setCheckinDate(LocalDate.now());
         checkInDTO.setCheckInStatus(CheckInStatus.CHECKIN);
         checkInDTO.setUsersDTO(usersDTO);
 
