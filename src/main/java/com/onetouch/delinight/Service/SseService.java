@@ -19,14 +19,12 @@ public class SseService {
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
     private final StoreService storeService;
 
-    public SseEmitter connect(String email){
-//        SseEmitter emitter = new SseEmitter(60*60*1000L); // 1시간 유효하게
-//        String storeId = storeService.(email); // 이메일로 스토어어드민으로 등록되어있는 사람인지 찾아서 있으면 그 스토어의 아이디를 박음
-//        if(storeId.equals("logInByUser")){ // 스토어가 없으면 유저로 판별
-//            emitters.put(email, emitter);
-//        }
-//        emitters.put(storeId, emitter);
+    public SseEmitter connectUser(String email){
+        SseEmitter emitter = new SseEmitter(60*60*1000L); // 1시간 유효하게
+            emitters.put(email, emitter);
 
 
+
+        return null;
     }
 }
