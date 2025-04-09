@@ -27,6 +27,6 @@ public class SseService {
 //        }
 //        emitters.put(storeId, emitter);
 
-
+        return null;
     }
 }
