@@ -37,6 +37,12 @@ public class ViewController {
         return "/pages/usertest";
     }
 
+
+    @GetMapping("/members/update")
+    public String adminUpdate(){
+        return "/members/update";
+    }
+
     @GetMapping("/register")
     public String register() {
         return "/admin/menu/register";
@@ -72,7 +78,6 @@ public class ViewController {
         model.addAttribute("imgUrl",imgUrl);
         return "/admin/menu/updateIndex";
     }
-
 
 
 }

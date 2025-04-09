@@ -41,6 +41,7 @@ public class UserController {
                         return "redirect:/users/login";
                 }
 
+
                 model.addAttribute("data" , principal.getName());
                 return "users/home";
         }
@@ -194,7 +195,7 @@ public class UserController {
 
         @GetMapping("/care")
         public String CareUserGET() {
-                return "/users/care";
+                return "home";
         }
 
 

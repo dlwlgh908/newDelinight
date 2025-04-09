@@ -1,62 +1,62 @@
-/* 네비게이션 바 배경 색상과 스타일 */
-.header .navbar-custom {
-    background-color: #f1f1f1;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+/* 드롭다운 화살표 제거 */
+.navbar .dropdown-toggle::after {
+    display: none !important;
 }
 
-/* 드롭다운 메뉴 스타일 */
-.header .custom-dropdown {
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    padding: 0.5rem 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* 로고 텍스트 */
+.logo-text {
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #4dc5db;
 }
 
-/* 드롭다운 항목 스타일 */
-.header .custom-dropdown .dropdown-item {
+/* 사용자 인사말 */
+.user-welcome span {
     font-size: 1rem;
-    padding: 0.75rem 1.25rem;
     color: #333;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 드롭다운 항목 hover 효과 */
-.header .custom-dropdown .dropdown-item:hover {
-    background-color: #f1f1f1;
-    color: #00b4d8;
-}
-
-/* 드롭다운 구분선 */
-.header .custom-dropdown .dropdown-divider {
-    border-color: #ddd;
-}
-
-/* 내 정보 아이콘 및 버튼 스타일 */
-.header .nav-icon {
-    transition: color 0.3s ease;
-}
-
-.header .nav-icon:hover {
-    color: #00b4d8;
-}
-
-/* 장바구니 아이콘에 배경 효과 */
-.header .position-relative .badge-notify {
-    top: -5px;
-    right: -5px;
-    font-size: 0.7rem;
-}
-
-/* 버튼에 동그란 테두리 추가 */
-.header .btn-rounded-circle {
-    border-radius: 50%;
-}
-
-/* 네비게이션 메뉴 아이콘 */
-.header .navbar .nav-item .nav-link i {
+/* 사용자 아이콘 */
+.navbar .nav-link.icon-DeliNight {
     font-size: 1.5rem;
-    transition: color 0.3s ease;
+    color: #4dc5db;
+    padding: 0.3rem 0.6rem;
 }
+
+/* 드롭다운 메뉴 */
+.dropdown-menu {
+    background-color: #FAFAFA;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    font-size: 0.95rem;
+}
+
+/* 드롭다운 항목 */
+.dropdown-item {
+    padding: 0.5rem 1.2rem;
+    color: #333;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.dropdown-item:hover {
+    background-color: #FFF0F0;
+    color: #4dc5db;
+}
+
+/* 장바구니 아이콘 */
+.navbar .bi-cart {
+    font-size: 1.5rem;
+    color: #4dc5db;
+}
+
+/* 드롭다운과 아이콘에 통일성 있는 마진 */
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+}
+
+
+
 
 #login-page {
     font-family: sans-serif;
@@ -331,6 +331,70 @@ footer p {
         padding: 10px;
     }
 }
+
+/* userFooter 전용 스타일 */
+.footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    color: #6c757d;
+    padding: 20px 0;
+}
+
+.footer a {
+    color: #6c757d;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #00b4d8;
+}
+
+.footer .social-icons a {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.footer .social-icons a:hover {
+    color: #00b4d8;
+}
+
+.footer .text-muted {
+    font-size: 0.875rem;
+}
+
+.footer .text-muted a {
+    font-size: 0.875rem;
+}
+
+.footer .social-icons {
+    margin-top: 10px;
+}
+
+
+/* LayoutOne Style */
+/* Header (3칸) */
+.header {
+    display: flex;
+    justify-content: space-between; /* 양 끝 정렬 */
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px; /* 간격을 주고 싶을 때 */
+}
+
+.header-box {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    color: #444;
+    padding: 40px 0;         /* 세로 높이 늘리기 */
+    font-size: 18px;         /* 글자 크기 키우기 */
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    min-height: 80px;        /* 최소 높이 강제 */
+}
+
 
 
 

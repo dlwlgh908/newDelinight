@@ -8,9 +8,11 @@
 package com.onetouch.delinight.DTO;
 
 import com.onetouch.delinight.Constant.OrderType;
+import com.onetouch.delinight.Constant.OrdersStatus;
 import com.onetouch.delinight.Entity.StoreEntity;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -29,6 +31,14 @@ public class OrdersDTO {
     private CheckInDTO checkInDTO;
     private Long totalPrice;
     private List<OrdersItemDTO> ordersItemDTOList;
+    private OrdersStatus ordersStatus;
+
+    private LocalDateTime pendingTime;
+    private LocalDateTime awaitingTime;
+    private LocalDateTime preparingTime;
+    private LocalDateTime deliveringTime;
+    private LocalDateTime deliveredTime;
+
 
     public OrdersDTO setStoreDTO(StoreDTO storeDTO){
         this.storeDTO = storeDTO;

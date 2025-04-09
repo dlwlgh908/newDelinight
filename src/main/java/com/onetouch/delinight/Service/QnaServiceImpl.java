@@ -78,4 +78,10 @@ public class QnaServiceImpl implements QnaService{
         qnaRepository.deleteById(id);
 
     }
+public class QnaServiceImpl implements QnaService{
+
+    @Override
+    public QnaDTO register(QnaDTO qnaDTO){
+        return null;
+    };
 }

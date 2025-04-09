@@ -2,34 +2,142 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <script src="https://code.jquery.com/jquery-3.7.1.js"
-          integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-  <meta charset="UTF-8">
-  <title>룸서비스 오더 내역</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>룸서비스 오더 내역</title>
 </head>
 <body>
 <div>
-  <div class="orderDetailWrap">
-    <div th:each="orders:${ordersDTOList}">
-      <p th:text="${orders.getStoreDTO().name}"></p>
-      <div th:each="ordersItem:${orders.getOrdersItemDTOList()}">
-        메뉴 이름 :
-        <span th:text="${ordersItem.getMenuDTO().name}"></span>
-        메뉴 설명 :
-        <span th:text="${ordersItem.getMenuDTO().content}"></span>
-        수량 :
-        <span th:text="${ordersItem.getQuantity()}"></span>
-        가격 :
-        <span th:text="${ordersItem.getMenuDTO().price*ordersItem.getQuantity()}"></span>
-      </div>
-      총 가격 : <p th:text="${orders.getTotalPrice()}"></p>
+    <div class="orderDetailWrap">
+        <div th:each="orders:${ordersDTOList}">
+            <p th:text="${orders.getStoreDTO().name}"></p>
+            <div th:each="ordersItem:${orders.getOrdersItemDTOList()}">
+                메뉴 이름 :
+                <span th:text="${ordersItem.getMenuDTO().name}"></span>
+                메뉴 설명 :
+                <span th:text="${ordersItem.getMenuDTO().content}"></span>
+                수량 :
+                <span th:text="${ordersItem.getQuantity()}"></span>
+                가격 :
+                <span th:text="${ordersItem.getMenuDTO().price*ordersItem.getQuantity()}"></span>
+            </div>
+            <th:block th:if="${!pendingCheck}">
+                <p>요청 사항 : <span th:text="${orders.getMemo()}"></span></p>
+            </th:block>
+            <th:block th:if="${pendingCheck}">
+                <textarea class="memos" th:data-textareaid="${orders.getId()}"
+                          placeholder="가게에 요청하실 사항을 적어주세요."></textarea>
+            </th:block>
+
+
+            <p>총 가격 : <span th:text="${orders.getTotalPrice()}"></span></p>
+        </div>
+
+
     </div>
-
-
-  </div>
+    <button th:if="${pendingCheck}" class="button" onclick="payNow()">선결제하기</button>
+    <button th:if="${pendingCheck}" class="button" onclick="payLater()">후결제하기</button>
 
 
 </div>
+<script src="https://js.tosspayments.com/v2/standard"></script>
+<script th:inline="javascript">
+    const clientKey = "test_ck_ORzdMaqN3w2vglwzRppB85AkYXQG";
+    const tossPayments = TossPayments(clientKey);
+    const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
+    var amount = 200;
+    var paymentKey = "OZTaYzXS2ovigwYnGcrTx";
+    var userEmail = "dlwlgh908@naver.com"
+    var userName = "이지호"
+    var userPhone = "01056291665"
+
+    async function requestPayment() {
+        detectCloseModal()
+        await payment.requestPayment({
+            method: "CARD",
+            amount: {
+                currency: "KRW",
+                value: amount,
+            },
+            orderId: paymentKey,
+            orderName: "음식 룸서비스 주문 내역",
+            successUrl: window.location.origin + "/success",
+            failUrl: window.location.origin + "/",
+            customerEmail: userEmail,
+            customerName: userName,
+            customerMobilePhone: userPhone,
+            card: {
+                useEscrow: false,
+                flowMode: "DEFAULT",
+                useCardPoint: false,
+                useAppCardOnly: false,
+            },
+        })
+    }
+
+    function payNow(){
+        $(".memos").each(function (memo) {
+                let memoObject = $(this)
+                let ordersId = memoObject.data("textareaid")
+            alert("...")
+                $.ajax({
+                    url: "/roomService/order/payNow",
+                    type: "post",
+                    data:{"ordersId":ordersId, "memo":memoObject.val()},
+                    success:function (){
+                       alert("???")
+                    },
+                    error:function (){
+                        alert("선결제로 바꾸면서 오류 ")
+                    }
+                })
+            }
+        )
+
+        requestPayment()
+    }
+
+
+    function detectCloseModal() {
+
+        const observer = new MutationObserver((mutationsList, observer) => {
+            const iframeExists = document.querySelector("iframe[src*='tosspayments']");
+            if (!iframeExists) {
+                // 여기서 서버 처리, 모달 닫기 등 네 맘대로 해
+                observer.disconnect();
+
+            }
+        });
+
+        observer.observe(document.body, {childList: true, subtree: true});
+
+
+    }
+
+    function payLater() {
+        $(".memos").each(function (memo) {
+                let memoObject = $(this)
+                let ordersId = memoObject.data("textareaid")
+                $.ajax({
+                    url: "/roomService/order/payLater",
+                    type: "post",
+                    data:{"ordersId":ordersId, "memo":memoObject.val()},
+                    error:function (){
+                        alert("후결제로 바꾸면서 오류 ")
+                    }
+                })
+            }
+        )
+
+
+    }
+
+
+
+
+</script>
 <script type="text/javascript" th:src="@{/js/usersOrder.js}"></script>
+
 </body>
 </html>
