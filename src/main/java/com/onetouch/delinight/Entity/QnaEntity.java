@@ -26,7 +26,9 @@ public class QnaEntity extends BaseTimeEntity {
     @Column(name = "qna_id")
     private Long id;
 
+    @Column(length = 50,nullable = false) //컬럼길이, null허용여부
     private String title;
+    @Column(length = 2000, nullable = true)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY) //지연로딩
