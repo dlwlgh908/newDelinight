@@ -16,11 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public interface QnaServiceImpl extends QnaService{
-
+public class QnaServiceImpl implements QnaService{
 
     @Override
-    public QnaDTO register(QnaDTO qnaDTO) {
+    public QnaDTO register(QnaDTO qnaDTO){
         return null;
-    }
+    };
 }
