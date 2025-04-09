@@ -106,10 +106,15 @@ body {
 
 hr {
   margin: 1rem 0;
-  color: inherit;
+  color: #999;
   border: 0;
   border-top: 1px solid;
   opacity: 0.25;
+}
+
+.hrMain {
+  margin-left: -48px;
+  margin-right: -48px;
 }
 
 h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
@@ -4409,7 +4414,7 @@ textarea.form-control-lg {
 
 .card-body {
   flex: 1 1 auto;
-  padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+  padding: 2.5rem 3rem;
   color: var(--bs-card-color);
 }
 
