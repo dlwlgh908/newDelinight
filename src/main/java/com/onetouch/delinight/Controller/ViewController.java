@@ -16,5 +16,10 @@ public class ViewController {
         return "/pages/usertest";
     }
 
+    @GetMapping("/members/update")
+    public String adminUpdate(){
+        return "/members/update";
+    }
+
 
 }
