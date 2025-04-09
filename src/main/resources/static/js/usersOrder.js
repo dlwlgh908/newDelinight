@@ -6,14 +6,9 @@ $(function () {
     }
 
 
-    function showOrderedList(){
-        $.ajax({
 
 
 
-        })
-
-    }
 
     function showMenuList() {
         $.ajax({

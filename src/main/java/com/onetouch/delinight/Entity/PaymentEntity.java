@@ -8,8 +8,10 @@
 package com.onetouch.delinight.Entity;
 
 import com.onetouch.delinight.Constant.OrderType;
+import com.onetouch.delinight.Constant.PaidCheck;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 
@@ -37,7 +39,8 @@ public class PaymentEntity {
     @Column(name="orders_key")
     private String key; //대외용 오더 키 timeStamp+orderid
 
-
+    @Enumerated(EnumType.STRING)
+    PaidCheck paidCheck;
 
 
 }

@@ -7,10 +7,11 @@
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
-import com.onetouch.delinight.Constant.OrderType;
+import com.onetouch.delinight.Constant.OrdersStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -45,7 +46,17 @@ public class OrdersEntity {
     @JoinColumn(name = "checkin_id")
     private CheckInEntity checkInEntity;
 
+    private LocalDateTime pendingTime;
+    private LocalDateTime awaitingTime;
+    private LocalDateTime preparingTime;
+    private LocalDateTime deliveringTime;
+    private LocalDateTime deliveredTime;
+
     private Long totalPrice;
+
+    @Enumerated(EnumType.STRING)
+    OrdersStatus ordersStatus; // 현 주문 상태
+
 
 
 

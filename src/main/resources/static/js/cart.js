@@ -60,19 +60,19 @@ $(function () {
 
         carts.forEach(function (cart) {
             let storeName = cart.menuDTO.storeDTO.name;
-            if(!groupedCarts[storeName]){
+            if (!groupedCarts[storeName]) {
                 groupedCarts[storeName] = [];
             }
             groupedCarts[storeName].push(cart);
             totalPrice += (cart.menuDTO.price) * (cart.quantity)
 
         })
-        Object.keys(groupedCarts).forEach(function (storeName){
+        Object.keys(groupedCarts).forEach(function (storeName) {
             let storeSection = $('<div class = "storeSection"></div>');
-            storeSection.append('<h3>'+storeName+'</h3>');
+            storeSection.append('<h3>' + storeName + '</h3>');
             let itemList = $('<ul class = "storeItemList"></ul>');
 
-            groupedCarts[storeName].forEach(function (cart){
+            groupedCarts[storeName].forEach(function (cart) {
                 let cartItem = '<li data-cartitemnum="' + cart.id + '" data-quantity="' + cart.quantity + '">' +
                     '<span class="menuName">' + cart.menuDTO.name + '</span>' +
                     '<span class="menuContent">' + cart.menuDTO.content + '</span>' +
@@ -141,7 +141,7 @@ $(function () {
 
             url: "/cart/cartToOrder",
             type: "post",
-            success:function (result){
+            success: function (result) {
                 location.reload();
 
             }

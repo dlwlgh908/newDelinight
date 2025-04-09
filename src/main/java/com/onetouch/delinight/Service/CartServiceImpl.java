@@ -8,6 +8,8 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.Menu;
+import com.onetouch.delinight.Constant.OrdersStatus;
+import com.onetouch.delinight.Constant.PaidCheck;
 import com.onetouch.delinight.DTO.CartDTO;
 import com.onetouch.delinight.DTO.CartItemDTO;
 import com.onetouch.delinight.DTO.MenuDTO;
@@ -20,12 +22,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,9 +47,8 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public Long cartToOrder(Long cartNum) {
-
-
         PaymentEntity paymentEntity = new PaymentEntity();
+        paymentEntity.setPaidCheck(PaidCheck.none);
         List<OrdersEntity> ordersEntityList = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
@@ -74,8 +77,9 @@ public class CartServiceImpl implements CartService{
                         .build();
                 ordersItemRepository.save(ordersItemEntity);
             }
-            String formatted = LocalDateTime.now().format(formatter);
+            savedOrder.setOrdersStatus(OrdersStatus.PENDING);
             savedOrder.setTotalPrice(totalPrice);
+            savedOrder.setPendingTime(LocalDateTime.now());
             savedOrder = ordersRepository.save(savedOrder);
             log.info(savedOrder);
             ordersEntityList.add(savedOrder);

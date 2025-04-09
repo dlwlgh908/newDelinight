@@ -14,7 +14,6 @@ import com.onetouch.delinight.Constant.MenuStatus;
 
 
 import com.onetouch.delinight.Constant.MenuStatus;
-import com.onetouch.delinight.Config.MenuStatus;
 import lombok.*;
 
 @Getter

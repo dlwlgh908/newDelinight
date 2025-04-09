@@ -29,6 +29,14 @@ public class StoreDTO {
     private HotelDTO hotelDTO;
 
     private MembersDTO membersDTO;
+    public StoreDTO setHotelDTO(HotelDTO hotelDTO){
+        this.hotelDTO = hotelDTO;
+        return this;
+    }
+    public StoreDTO setMemberDTO(MembersDTO membersDTO){
+        this.membersDTO = membersDTO;
+        return this;
+    }
 
 
 }

@@ -61,6 +61,7 @@ public class CartRestController {
     @PostMapping("/cartToOrder")
     public String  cartToOrder(Principal principal) {
         Long cartId = 1L;
+        log.info("진입여부");
         Long paymentId = cartService.cartToOrder(cartId);
         return "redirect:/roomService/order/read?paymentId="+paymentId;
     }
