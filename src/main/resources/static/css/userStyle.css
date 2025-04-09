@@ -373,5 +373,29 @@ footer p {
 }
 
 
+/* LayoutOne Style */
+/* Header (3칸) */
+.header {
+    display: flex;
+    justify-content: space-between; /* 양 끝 정렬 */
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px; /* 간격을 주고 싶을 때 */
+}
+
+.header-box {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    color: #444;
+    padding: 40px 0;         /* 세로 높이 늘리기 */
+    font-size: 18px;         /* 글자 크기 키우기 */
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    min-height: 80px;        /* 최소 높이 강제 */
+}
+
+
+
 
 
