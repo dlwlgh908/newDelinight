@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<h1>체크인</h1>
+    예약 번호 : <input type="text" id="reservationNum">
+    <button class="btn btn-primary mb-3" id="reservBtn">조회</button>
+    회원 조회 : <input>
+    <button class="btn btn-primary">조회</button>
+
+
+<table class="table table-hover">
+
+    <thead>
+    <th scope="col">#</th>
+    <th scope="col">이름</th>
+    <th scope="col">상세</th>
+    <th scope="col">체크인</th>
+    <th scope="col">체크아웃</th>
+    <th scope="col">핸드폰번호</th>
+    <th scope="col">인증번호(ID)</th>
+    <th scope="col">비밀번호(PW)</th>
+    <th scope="col">결제 금액</th>
+    <th scope="col">Status</th>
+    </thead>
+
+    <tbody>
+    <th:block  th:each="list:${checkInDTOList}">
+        <tr>
+            <th scope="row offset-4" th:text="${list.id}" th:value="${list.id}" class="checkinId"></th>
+
+            <td th:text="${list.roomDTO.name}"></td>
+            <td th:text="${list.roomDTO.content}"></td>
+            <td>
+                <th:block th:if="${list.checkinDate != null}">
+                    <span th:text="${list.checkinDate}"></span>
+                </th:block>
+                <th:block th:if="${list.checkinDate == null}">
+                    <input  name="checkinDate" class="checkinDate" type="date">
+                </th:block>
+            </td>
+
+            <td>
+                <th:block th:if="${list.checkoutDate != null}">
+                    <span th:text="${list.checkoutDate}"></span>
+                </th:block>
+                <th:block th:if="${list.checkoutDate == null}">
+                    <input class="checkoutDate" type="date" name="checkoutDate">
+                </th:block>
+            </td>
+
+            <td>
+                <th:block th:if="${list.guestDTO== null}">
+                        <input placeholder="핸드폰번호" class="phone">
+                </th:block>
+                <th:block th:if="${list.guestDTO != null}">
+                    <span th:text="${list.guestDTO.phone}"></span>
+                </th:block>
+            </td>
+
+            <td><span id="randomfour" placeholder="네자리 랜덤" class="certid"></span></td>
+
+            <td>
+                <th:block th:if="${list.certPass == null}">
+                    <span>Vacancy</span>
+
+                </th:block>
+                <th:block th:if="${list.certPass != null}">
+                    <span th:text="${list.certPass}"></span>
+
+                </th:block>
+            </td>
+            <td>
+
+            </td>
+            <td>
+                <th:block th:if="${list.checkInStatus.name() == 'CHECKIN'}">
+                    <button class="btn btn-danger" id="checkoutBtn" th:value="${list.id}">체크아웃</button>
+                </th:block>
+                <th:block th:if="${list.checkInStatus.name() == 'VACANCY'}">
+                    <button class="btn btn-primary" id="checkinBtn" th:value="${list.id}">체크인 등록</button>
+                </th:block>
+            </td>
+
+        </tr>
+
+
+    </th:block>
+
+
+
+
+    </tbody>
+
+</table>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+<script th:inline="javascript">
+
+    function formatDate(dateString) {
+        let year = "20" + dateString.substring(0, 2);
+        let month = dateString.substring(2, 4);
+        let day = dateString.substring(4, 6);
+        return `${year}-${month}-${day}`;
+    }
+
+    function updateRow(roomid, checkinDate, checkoutDate, certid) {
+        // 모든 checkinId 순회
+        let row = $("th.checkinId").filter(function () {
+            let renderedId = $(this).text().trim(); // th 태그의 렌더링된 텍스트 값 가져오기
+            console.log("현재 행의 roomid (렌더링된): ", renderedId, " / 비교 대상: ", roomid); // 디버깅 로그
+            return renderedId === roomid.toString(); // roomid와 비교
+        }).closest("tr"); // 매칭된 태그의 부모 <tr> 찾기
+
+        if (row.length) {
+            console.log("매칭된 행을 찾았습니다: ", row); // 성공적으로 찾은 행 출력
+            // 해당 행의 입력 필드 값 설정
+            row.find(".checkinDate").val(checkinDate);
+            row.find(".checkoutDate").val(checkoutDate);
+            row.find(".certid").text(certid);
+
+        } else {
+            console.error("해당 roomId를 가진 행을 찾을 수 없습니다: " + roomid);
+        }
+    }
+
+
+
+
+
+    $(function () {
+        $(document).on("click", "#checkinBtn", function () {
+            let id = this.getAttribute("value");
+            let checkinDate = $(this).closest("tr").find(".checkinDate").val();
+            let checkoutDate = $(this).closest("tr").find(".checkoutDate").val();
+            let phone = $(this).closest("tr").find(".phone").val();
+
+
+            alert(id)
+            alert(checkinDate)
+            alert(checkoutDate)
+            alert(phone)
+            $.ajax({
+                url : "/checkin/rest/register",
+                type: "post",
+                contentType : "application/json",
+                data : JSON.stringify({
+                    id : id,
+                    checkinDate : checkinDate,
+                    checkoutDate: checkoutDate,
+                    phone : phone,
+
+
+
+                }),
+                success: function (data) {
+                    alert("성공");
+                    console.log(data)
+                    location.reload()
+                },
+            })
+        });
+    });
+
+    $(function () {
+        $(document).on("click", "#checkoutBtn", function () {
+            let id = $(this).val();
+
+
+            alert(id)
+            $.ajax({
+                url : "/checkin/rest/out?id=" + id,
+                type: "post",
+
+                success: function (data) {
+                    alert("성공");
+                    console.log(data)
+                    location.reload()
+                },
+            })
+        });
+    });
+
+    $(function () {
+        $(document).on("click", "#reservBtn", function () {
+            let reservNum = $("#reservationNum").val();
+            let id = $(".checkinId").val();
+
+            alert(reservNum);
+
+            $.ajax({
+                url: "/checkin/rest/reservation",
+                type: "post",
+                data : {"reservNum" :reservNum },
+                success: function (response) {
+                    alert("성공")
+                    let roomid = response.roomid;
+                    let checkinDate = formatDate(response.checkinDate);
+                    let checkoutDate = formatDate(response.checkoutDate);
+                    let certid = response.certid;
+                    alert("certid : "+certid);
+                    alert(roomid);
+                    alert(id);
+
+                    updateRow(roomid, checkinDate, checkoutDate,certid)
+
+                },
+            })
+        });
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

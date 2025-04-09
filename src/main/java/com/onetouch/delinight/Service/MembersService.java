@@ -10,6 +10,7 @@ package com.onetouch.delinight.Service;
 import com.onetouch.delinight.DTO.MembersDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface MembersService {
 
     public List<MembersDTO> findAll();
 
-    public MembersDTO findadmin(String email);
+    public String login(String email, String password);
 
     public List<MembersDTO> findSuper();
     public List<MembersDTO> findHotelAd();

@@ -10,6 +10,9 @@ import com.onetouch.delinight.Constant.CheckInStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+
+import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,9 +31,10 @@ public class CheckInEntity {
     private Long id;
 
 
-    private LocalDateTime checkinDate;
+    private LocalDate checkinDate;
 
-    private LocalDateTime checkoutDate;
+    private LocalDate checkoutDate;
+
 
     private int price;
     private String phone;
@@ -61,9 +65,5 @@ public class CheckInEntity {
         return  this;
     }
 
-
-
-
-
-
 }
+

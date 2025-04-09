@@ -15,15 +15,19 @@
     </head>
 
     <body>
+        <!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
         <div layout:fragment="adminContent" id="layoutSidenav_content">
             <main>
-                <!--내용 넣는 곳-->
                 <div class="container-fluid px-4">
+                    <!--내용 넣는 곳-->
+                    <!--반드시 이 아래에서만 작업-->
+
                     <!--페이지 이름-->
                     <h1 id="test" class="mt-4">Dashboard</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item active">Dashboard-subheading</li>
                     </ol>
+
                     <!--텍스트 박스-->
                     <div class="card mb-4">
                        <div class="card-body">
@@ -40,6 +44,7 @@
                            오늘밤에도 별이 바람에 스치운다
                        </div>
                     </div>
+
                     <!--알럿창-->
                     <div class="card mb-4">
                         <div class="card-header">
@@ -58,6 +63,7 @@
                             <button class="btn btn-warning m-2" id="ajaxStart">Ajax 실행 (깃헙 아이디 검색)</button>
                         </div>
                     </div>
+
                     <!--카드-->
                     <div class="card mb-4">
                         <div class="card-header">

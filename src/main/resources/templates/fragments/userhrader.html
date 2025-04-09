@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+          rel="stylesheet">
+    <link rel="stylesheet" href="/css/userStyles.css"> <!-- 여기에 CSS 파일 경로 추가 -->
+    <title>DeliNight</title>
+</head>
+
+<body>
+<nav th:fragment="userHeader" class="navbar navbar-expand-lg sticky-top navbar-custom">
+    <div class="container-fluid d-flex justify-content-between align-items-center px-3 py-2">
+        <!-- 로고 -->
+        <a class="brand-logo" href="/users/home" style="font-family: 'SUIT', sans-serif;">
+            <i class="bi bi-moon-stars-fill" style="font-size: 1.5rem; color: #00b4d8;"></i>
+            Deli<span style="color:#00b4d8;">Night</span>
+        </a>
+
+        <!-- 메뉴 아이콘 -->
+        <div class="d-flex align-items-center gap-3">
+            <!-- 내 정보 아이콘 -->
+            <div class="dropdown">
+                <button class="btn p-0 border-0 text-dark rounded-circle" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person nav-icon fs-3" style="color: #00b4d8;"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 custom-dropdown">
+                    <!-- 마이페이지 항목 -->
+
+                    <a class="dropdown-item" href="#" data-bs-toggle="dropdown"
+                       aria-expanded="false"><i class="bi bi-person-circle me-2"></i>마이페이지</a>
+                    <a class="dropdown-item" href="/users/update"><i
+                            class="bi bi-pencil-square me-2"></i>회원정보 수정</a>
+                    <a class="dropdown-item" href="/users/passwordChange"><i
+                            class="bi bi-key me-2"></i>비밀번호 수정</a>
+                    <a class="dropdown-item text-danger" href="/users/delete"><i
+                            class="bi bi-person-x me-2"></i>회원탈퇴</a>
+
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="/logout"><i
+                            class="bi bi-door-open-fill me-2"></i>로그아웃</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 장바구니 -->
+            <a href="/cart/list" class="position-relative" style="color: #00b4d8;">
+                <i class="bi bi-cart3 nav-icon fs-4"></i> <!-- 새 아이콘 -->
+                <span class="position-absolute badge bg-danger rounded-pill badge-notify"></span>
+            </a>
+
+        </div>
+    </div>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

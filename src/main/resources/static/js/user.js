@@ -1,8 +1,9 @@
 $(document).ready(function () {
-    $("#userForm").submit(function (event) {
+
+    $("#signUpForm").submit(function (event) {
         event.preventDefault(); // 기본 제출 방지
 
-        let isValid = true;
+        let signUpCheck = true;
 
         // 정규식 패턴
         const usernamePattern = /^[a-zA-Z가-힣0-9]{2,12}$/; // 한글, 영문, 숫자 허용 (2~12자)
@@ -14,101 +15,118 @@ $(document).ready(function () {
         let username = $(".username").val();
         if (!usernamePattern.test(username)) {
             $("#usernameError").text("사용자명은 2~12자, 한글/영문/숫자만 가능합니다.");
-            isValid = false;
+            signUpCheck = false;
         } else {
             $("#usernameError").text("✅").removeClass("error").addClass("success");
         }
 
         // 이메일 검사
         let email = $(".email").val();
-        if (!emailPattern.test(userEmail)) {
+        if (!emailPattern.test(email)) {
             $("#emailError").text("유효한 이메일을 입력하세요.");
-            isValid = false;
+            signUpCheck = false;
         } else {
             $("#emailError").text("✅").removeClass("error").addClass("success");
         }
 
         // 전화번호 검사
         let phone = $("#phone").val();
-        if (!phonePattern.test(userPhone)) {
+        if (!phonePattern.test(phone)) {
             $("#phoneError").text("전화번호 형식: 010-1234-5678");
-            isValid = false;
+            signUpCheck = false;
         } else {
             $("#phoneError").text("✅").removeClass("error").addClass("success");
         }
 
         // 비밀번호 검사
         let password = $(".password").val();
-        if (!passwordPattern.test(userPassword)) {
+        if (!passwordPattern.test(password)) {
             $("#passwordError").text("비밀번호는 최소 8자, 숫자와 문자를 포함해야 합니다.");
-            isValid = false;
+            signUpCheck = false;
         } else {
             $("#passwordError").text("✅").removeClass("error").addClass("success");
         }
 
         // 모든 검사를 통과하면 폼 제출
-        if (isValid) {
+        if (signUpCheck) {
             alert("회원가입 완료!");
-            this.submit(); // 실제 폼 제출
+            $(".signUpBtn").submit(); // 실제 폼 제출
         }
     });
-});
 
-$(function () {
 
-    const usernamePattern = /^[a-zA-Z가-힣0-9]{2,12}$/; // 한글, 영문, 숫자 허용 (2~12자)
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // 이메일 형식
-    const phonePattern = /^010-\d{4}-\d{4}$/; // 010-1234-5678 형식
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/; // 최소 8자, 숫자+문자 포함
+$(document).ready(function () {
 
-    // 유효성 검사
-    $(".singUpBtn").on("click" , function () {
+    $(".signUpBtn").on("click" , function () {
 
-        let check = true
+        let signUpCheck = true
+        let usernamePattern = /^[a-zA-Z가-힣0-9]{2,12}$/; // 한글, 영문, 숫자 허용 (2~12자)
+        let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // 이메일 형식
+        let phonePattern = /^010\d{4}\d{4}$/; // 010-1234-5678 형식
+        let passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/; // 최소 8자, 숫자+문자 포함
 
-        let singUpName = $(".username").val();
-        if (usernamePattern.test(singUpName)){
-            $("#singUpNameError").text("✅").addClass("success").removeClass("error");
+        let signUpName = $(".signUpName").val()
+        if (usernamePattern.test(signUpName)){
+            $("#signUpNameError").text().addClass("success").removeClass("error");
         }else{
-            $("#singUpNameError").text("사용자 이름이 올바르지 않습니다.").removeClass("success").addClass("error");
-            check = false
+            $("#signUpNameError").text("이름이 올바르지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
         }
 
-        let singUpEmail = $(".singUpEmail").val();
-        if (emailPattern.test(singUpEmail)){
-            $("#singUpEmailError").text("✅").addClass("success").removeClass("error");
+
+        let signUpEmail = $(".signUpEmail").val()
+        if (emailPattern.test(signUpEmail)){
+            $("#signUpEmailError").text().addClass("success").removeClass("error");
         }else{
-            $("#singUpEmailError").text("이메일 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
-            check = false
+            $("#signUpEmailError").text("아이디 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
         }
 
-
-
-        let singUpPassword = $(".singUpPassword").val();
-        if (passwordPattern.test(singUpPassword)){
-            $("#singUpPasswordError").text("✅").addClass("success").removeClass("error");
+        let signUpPasswordOne = $(".signUpPasswordOne").val()
+        if (passwordPattern.test(signUpPasswordOne)){
+            $("#signUpPasswordError").text().addClass("success").removeClass("error");
         }else{
-            $("#singUpPasswordError").text("비밀번호는 최소 8자, 숫자와 문자를 포함해야 합니다.").removeClass("success").addClass("error");
-            check = false
+            $("#signUpPasswordError").text("비밀번호가 맞지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
         }
 
-        let singUpPhone = $(".singUpPhone").val();
-        if (phonePattern.test(singUpPhone)){
-            $("#singUpPhoneError").text("✅").addClass("success").removeClass("error");
+        let signUpPasswordTwo = $(".signUpPasswordTwo").val()
+        if (passwordPattern.test(signUpPasswordTwo)){
+            $("#signUpPasswordErrorTwo").text().addClass("success").removeClass("error");
         }else{
-            $("#singUpPhoneError").text("사용자 휴대폰번호가 올바르지 않습니다.").removeClass("success").addClass("error");
-            check = false
+            $("#signUpPasswordErrorTwo").text("비밀번호가 맞지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
+        }
+
+        // 두 비밀번호가 일치하는지 확인
+        if (signUpPasswordOne !== signUpPasswordTwo) {
+            $("#signUpPasswordMatchError").text("비밀번호가 서로 일치하지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false;
+        } else {
+            $("#signUpPasswordMatchError").text("").addClass("success").removeClass("error");
         }
 
 
-        // 모든 검사를 통과하면 폼 제출
-        if (check) {
-            alert("회원가입 완료!");
-            $(".singUpForm").submit(); // 실제 폼 제출
+        let signUpPhone = $(".signUpPhone").val()
+        if (phonePattern.test(signUpPhone)){
+            $("#signUpPhoneError").text().addClass("success").removeClass("error");
+        }else{
+            $("#signUpPhoneError").text("핸드폰번호 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
         }
 
+        let signUpAddress = $(".signUpAddress").val()
+        if (usernamePattern.test(signUpAddress)){
+            $("#signUpAddressError").text().addClass("success").removeClass("error");
+        }else{
+            $("#signUpAddressError").text("주소 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
+            signUpCheck = false
+        }
 
-
+        if (signUpCheck) {
+            alert("임시 비밀번호 발급 완료!");
+            $(".signUpForm").submit(); // 실제 폼 제출
+        }
 
     })
 
@@ -129,7 +147,7 @@ $(function () {
         if (usernamePattern.test(sendPasswordName)){
             $("#sendPasswordNameError").text("✅").addClass("success").removeClass("error");
         }else{
-            $("#sendPasswordNameError").text("아이디 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
+            $("#sendPasswordNameError").text("이름 형식이 올바르지 않습니다.").removeClass("success").addClass("error");
             checked = false
         }
 
@@ -219,8 +237,14 @@ $(function () {
             alert("회원정보 변경 완료!");
             $(".updateForm").submit(); // 실제 폼 제출
         }
-
     })
 
 
-})
+
+
+});
+
+
+});
+
+
