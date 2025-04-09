@@ -60,19 +60,28 @@ public class MenuController {
 
 
 
-        return "/admin/menu/register";
+        return "/admin/menu/registerIndex";
     }
 
     @PostMapping("/register")
-    public String registerProc(MenuDTO menuDTO,Principal principal){
+    public String registerProc(MenuDTO menuDTO,
+                               Principal principal){
+
+    // 혹시 @ModelAttribute로 받고 있는데 imgNum이 multipart 형식이거나 JSON으로 보내는 거라면 매핑이 안 될 수 있어.
+    //→ @RequestBody 써야 하는 상황이면 이거부터 맞춰야 해.
+
+
         log.info("등록 포스트 진입 : " + menuDTO);
         log.info("등록 포스트 진입 : " + menuDTO);
+
+        log.info("imgNum 값: " + menuDTO.getImgNum());
 
         String email = "hansin@a.a";
 
+
         menuService.register(menuDTO, email);
         log.info("저장된 데이터 : " + menuDTO);
-        return "redirect:/menu/list";
+        return "redirect:/menu/listIndex";
     }
 
     @GetMapping("/list")
@@ -83,7 +92,7 @@ public class MenuController {
         model.addAttribute("menuDTOList",menuDTOList);
         log.info(menuDTOList.getContent());
 
-        return "admin/menu/list";
+        return "/admin/menu/listIndex";
     }
     @GetMapping("/read")
     public String readView(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
@@ -91,7 +100,7 @@ public class MenuController {
                 menuService.read(id);
         model.addAttribute("menuDTO", menuDTO);
 
-            return "/admin/menu/read";
+            return "/admin/menu/readIndex";
 
     }
     @GetMapping("/update/{id}")
@@ -102,7 +111,7 @@ public class MenuController {
         log.info(menuDTO.getId());
         String imgUrl = imageService.read(id);
         model.addAttribute("imgUrl",imgUrl);
-        return "/admin/menu/update";
+        return "/admin/menu/updateIndex";
 
     }
     @PostMapping("/update")

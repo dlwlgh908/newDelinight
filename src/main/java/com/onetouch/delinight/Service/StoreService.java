@@ -16,6 +16,7 @@ public interface StoreService {
 
     public void create(StoreDTO storeDTO);
 
+
     public List<StoreDTO> list();
 
 

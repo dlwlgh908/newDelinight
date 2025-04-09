@@ -38,6 +38,11 @@ public class CheckInDTO {
 
     private int price;
 
+    private String phone;
+
+
+    private int certNum;
+    private String certPass;
 
     private UsersDTO usersDTO;
 
@@ -53,12 +58,36 @@ public class CheckInDTO {
     }
 
 
+
+
     public CheckInDTO setGuestDTO(GuestDTO guestDTO) {
         this.guestDTO = guestDTO;
         return this;
     }
 
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
+    public CheckInDTO setRoomId(Long roomid) {
+        if (this.roomDTO == null) {
+            this.roomDTO = new RoomDTO(); // roomDTO가 null이면 초기화
+        }
+        this.roomDTO.setId(roomid); // RoomDTO의 id를 설정
+        return this;
+    }
+
+    public CheckInDTO setCertNum(int certNum) {
+
+        this.certNum = certNum;
+        return this;
+    }
+
+    public CheckInDTO setCertPass(String phone) {
+        this.certPass = phone.substring(phone.length() - 4);
+        return this;
+
+    }
 
 
 }

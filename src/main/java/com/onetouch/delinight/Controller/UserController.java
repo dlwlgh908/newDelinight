@@ -187,9 +187,14 @@ public class UserController {
         }
 
         // 사용자 주문 View Mapping →→→→→→→→ RestFullController
-        @GetMapping("welcomeuser")
+        @GetMapping("welcome")
         public String WelcomeUserGET() {
-                return "/users/welcomeuser";
+                return "/users/welcome";
+        }
+
+        @GetMapping("/care")
+        public String CareUserGET() {
+                return "/users/care";
         }
 
 
