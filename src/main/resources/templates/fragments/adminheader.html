@@ -11,7 +11,9 @@
 <body>
     <nav th:fragment="adminHeader" class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="#">Start Bootstrap</a>
+        <div class="navbar-brand ps-3">
+            <a class="navbar-brand-a" href="/">Start Bootstrap</a>
+        </div>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
@@ -24,26 +26,31 @@
         <!-- Navbar-->
         <div class="navbar-nav ms-auto me-3 me-lg-4">
             <div class="navbar-hover">
-                <div class="nav-link"><i class="fas fa-user"></i></div>
+                <div class="icon-wrap">
+                    <div class="nav-link"><i class="fas fa-user"></i></div>
+                    <span class="notification-badge custom-shadow">7</span>
+                </div>
                 <div class="profile-tooltip-wrap">
-                    <div class="profile-tooltip">
+                    <div class="profile-tooltip custom-shadow">
                         <div class="profile-header">
                             <img class="avatar" src="/img/defaultImg.png" alt="#">
                             <div class="user-info">
                                 <div class="user-info-title">
-                                    <strong>최고관리자</strong>
-                                    <a href="#">정보수정</a>
+                                    <strong>홍길동</strong>
+                                    <div>최고관리자</div>
                                 </div>
                                 <div>guide@mysupereasy.co.kr</div>
-                                <div><small>소속 총판이나 지사,호텔 이름</small></div>
+                                <div><span>호텔신라 서울신라호텔</span></div>
                             </div>
                         </div>
                         <ul class="menu-list">
-                            <li><i class="fas fa-home"></i> 홈 가기</li>
-                            <li><i class="fas fa-shopping-cart"></i> 쇼핑몰 가기</li>
-                            <li><i class="fas fa-globe"></i> 슈퍼이지 가기</li>
+                            <li><a href="/members/update"><i class="fas fa-pen"></i>정보수정</a></li>
+                            <div class="icon-wrap">
+                                <li><a><i class="fas fa-bell"></i>알림함</a></li>
+                                <span class="notification-badge custom-shadow">7</span>
+                            </div>
                         </ul>
-                        <div class="logout-btn">로그아웃</div>
+                        <a class="logout-btn">로그아웃</a>
                     </div>
                 </div>
             </div>

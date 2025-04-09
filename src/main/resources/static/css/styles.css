@@ -62,7 +62,7 @@
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
   --bs-body-color: #212529;
-  --bs-body-bg: #fff;
+  --bs-body-bg: #f1f1f1;
   --bs-border-width: 1px;
   --bs-border-style: solid;
   --bs-border-color: #dee2e6;
@@ -639,6 +639,10 @@ progress {
   padding-left: calc(var(--bs-gutter-x) * 0.5);
   margin-right: auto;
   margin-left: auto;
+}
+
+.custom-shadow {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 @media (min-width: 576px) {
@@ -3645,36 +3649,82 @@ textarea.form-control-lg {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
 
+.icon-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-badge {
+  position: absolute;
+  height: 15px;
+  top: 0px;
+  right: -5px;
+  background: #ff1500;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  line-height: 1;
+  min-width: 18px;
+  text-align: center;
+}
+
+.form-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.btn-blue {
+  background-color: #003cd5;
+  color: #fff;
+}
+.btn-blue:hover {
+  background-color: #ffffff;
+  border: 1px solid #003cd5;
+  color: #003cd5;
+  font-weight: bold;
+}
+
+.text-sm {
+  font-size: 13px;
+  color: #999;
+}
+
 .navbar-hover {
   position: relative;
   display: inline-block;
 }
 
 .profile-tooltip-wrap{
-  position: relative;
+  display: none;
+  position: absolute;
   z-index: 900;
+  top: 20px;
+  right: 0px;
+  height: 60px;
+  width: 70px;
 }
 
 .profile-tooltip {
-  /*display: none;*/
+  display: none;
   position: absolute;
-  top: 60px;
+  top: 36px;
   right: 0;
   width: 280px;
   background: #fff;
   border-radius: 6px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   z-index: 1050;
 }
 
 .profile-tooltip::before {
   content: "";
   position: absolute;
-  top: -20px; /* 툴팁 위에 꼬리가 붙게 */
-  right: 20px; /* 원하는 위치로 조정 가능 */
+  top: -16px;
+  right: 20px;
   border-width: 10px;
   border-style: solid;
-  border-color: transparent transparent #d50000 transparent;
+  border-color: transparent transparent #003cd5 transparent;
+  z-index: 1040;
 }
 
 /* Hover 트리거 */
@@ -3682,20 +3732,23 @@ textarea.form-control-lg {
   display: block;
   z-index: 9;
 }
+.navbar-hover:hover .profile-tooltip-wrap {
+  display: block;
+}
 
 /* 빨간 헤더 */
 .profile-header {
-  background: #d50000;
+  background: #003cd5;
   color: white;
   border-radius: 6px 6px 0 0;
-  padding: 24px 16px 24px 16px;
+  padding: 24px 20px;
   display: flex;
   align-items: center;
 }
 
 .avatar {
-  width: 48px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
   background-color: #eee;
   background-size: cover;
   border-radius: 50%;
@@ -3704,57 +3757,81 @@ textarea.form-control-lg {
 
 .user-info {
   font-size: 13px;
-  margin-left: 16px;
+  margin-left: 14px;
 }
 
 .user-info-title {
   display: flex;
-  align-items: center;
+  font-size: 12px;
+  margin-bottom: 6px;
+  align-items: flex-end;
 }
 
 .user-info strong {
   display: block;
   font-size: 15px;
-  margin-bottom: 4px;
   margin-right: 6px;
 }
 
-.user-info-title a {
-  font-size: 10px;
+.user-info div:nth-of-type(2) {
+  font-size: 0.94em;
   opacity: 0.8;
+  margin-bottom: 2px;
 }
 
-.user-info small {
-  font-size: 11px;
-  opacity: 0.8;
+.user-info:last-child {
+  font-size: 12px;
 }
 
 /* 메뉴 리스트 */
 .menu-list {
+  display: flex;
+  flex-direction: column;
   list-style: none;
   margin: 0;
-  padding: 10px 15px;
-  border-top: 1px solid #eee;
+  margin-top: 6px;
+  padding: 14px 20px;
+  gap: 8px;
 }
 
 .menu-list li {
-  padding: 8px 0;
+  display: inline-flex;
+  width: fit-content;
   font-size: 14px;
-  color: #333;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+}
+
+.menu-list li a {
+  color: #333;
+  text-decoration: none;
+}
+
+.menu-list li:hover {
+  font-weight: bold;
+}
+
+.menu-list li i {
+  margin-right: 8px;
 }
 
 /* 로그아웃 버튼 */
 .logout-btn {
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
   color: #d50000;
-  font-weight: bold;
-  padding: 10px;
-  border-top: 1px solid #eee;
   cursor: pointer;
+  margin: 14px 0 14px 20px;
+  text-decoration: none;
+}
+
+.logout-btn:hover {
+  font-weight: bold;
+  color: #D50000;
+  text-decoration-line: underline;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -8286,7 +8363,7 @@ textarea.form-control-lg {
 
 .bg-light {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #ffffff !important;
 }
 
 .bg-dark {
@@ -11078,11 +11155,16 @@ body {
   width: 225px;
   margin: 0;
 }
+
+.sb-topnav .navbar-brand-a {
+  display: inline-flex;
+  width: fit-content;
+  text-decoration: none;
+  color: white;
+}
+
 .sb-topnav.navbar-dark #sidebarToggle {
   color: rgba(255, 255, 255, 0.5);
-}
-.sb-topnav.navbar-light #sidebarToggle {
-  color: #212529;
 }
 
 .sb-sidenav {
