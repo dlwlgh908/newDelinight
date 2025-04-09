@@ -65,7 +65,14 @@ public class OrdersServiceImpl implements OrdersService{
         return completeDTOList;
     }
 
-
+    @Override
+    public StoreDTO findStoreByADMINEmail(String email) {
+        StoreEntity store = storeRepository.findByMembersEntity_Email(email);
+        StoreDTO dto = modelMapper.map(store, StoreDTO.class)
+                .setHotelDTO(modelMapper.map(store.getHotelEntity(), HotelDTO.class))
+                .setMemberDTO(modelMapper.map(store.getMembersEntity(), MembersDTO.class));
+        return dto;
+    }
 
     @Override
     public List<OrdersDTO> read(Long paymentNum) {

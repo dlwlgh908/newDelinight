@@ -11,11 +11,9 @@ import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.StoreEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
 public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
 
-    public Optional<StoreEntity> findByMembersEntity_Email(String email);
+    public StoreEntity findByMembersEntity_Email(String email);
 
 
 }

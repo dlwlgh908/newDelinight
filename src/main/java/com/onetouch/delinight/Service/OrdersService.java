@@ -20,6 +20,7 @@ public interface OrdersService {
 
     public Page<OrdersDTO> processList(Pageable pageable, String email);
     public Page<OrdersDTO> completeList(Pageable pageable, String email);
+    public StoreDTO findStoreByADMINEmail(String email);
 
     public List<OrdersDTO> read(Long paymentNum);
 
