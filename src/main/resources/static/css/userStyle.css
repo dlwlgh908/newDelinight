@@ -1,3 +1,63 @@
+/* 드롭다운 화살표 제거 */
+.navbar .dropdown-toggle::after {
+    display: none !important;
+}
+
+/* 로고 텍스트 */
+.logo-text {
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #4dc5db;
+}
+
+/* 사용자 인사말 */
+.user-welcome span {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* 사용자 아이콘 */
+.navbar .nav-link.icon-DeliNight {
+    font-size: 1.5rem;
+    color: #4dc5db;
+    padding: 0.3rem 0.6rem;
+}
+
+/* 드롭다운 메뉴 */
+.dropdown-menu {
+    background-color: #FAFAFA;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    font-size: 0.95rem;
+}
+
+/* 드롭다운 항목 */
+.dropdown-item {
+    padding: 0.5rem 1.2rem;
+    color: #333;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.dropdown-item:hover {
+    background-color: #FFF0F0;
+    color: #4dc5db;
+}
+
+/* 장바구니 아이콘 */
+.navbar .bi-cart {
+    font-size: 1.5rem;
+    color: #4dc5db;
+}
+
+/* 드롭다운과 아이콘에 통일성 있는 마진 */
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+}
+
+
+
+
 #login-page {
     font-family: sans-serif;
     margin: 0;
@@ -270,6 +330,46 @@ footer p {
         height: 48px;
         padding: 10px;
     }
+}
+
+/* userFooter 전용 스타일 */
+.footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    color: #6c757d;
+    padding: 20px 0;
+}
+
+.footer a {
+    color: #6c757d;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #00b4d8;
+}
+
+.footer .social-icons a {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.footer .social-icons a:hover {
+    color: #00b4d8;
+}
+
+.footer .text-muted {
+    font-size: 0.875rem;
+}
+
+.footer .text-muted a {
+    font-size: 0.875rem;
+}
+
+.footer .social-icons {
+    margin-top: 10px;
 }
 
 
