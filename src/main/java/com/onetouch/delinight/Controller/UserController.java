@@ -195,7 +195,7 @@ public class UserController {
 
         @GetMapping("/care")
         public String CareUserGET() {
-                return "/users/care";
+                return "home";
         }
 
 
