@@ -42,8 +42,10 @@ public class RoomServiceController {
     @GetMapping("/order/read")
     public String read(Long paymentId, Model model){
         List<OrdersDTO> ordersDTOList = ordersService.read(paymentId);
+        boolean pendingCheck = ordersService.pendingCheck(paymentId);
         log.info(ordersDTOList);
         model.addAttribute("ordersDTOList", ordersDTOList);
+        model.addAttribute("pendingCheck", pendingCheck);
         return "roomService/order/read";
     }
 

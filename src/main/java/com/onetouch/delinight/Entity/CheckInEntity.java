@@ -6,12 +6,13 @@
  * 수정 : 2025-03-30
  *********************************************************************/
 package com.onetouch.delinight.Entity;
-
 import com.onetouch.delinight.Constant.CheckInStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -33,6 +34,7 @@ public class CheckInEntity {
     private LocalDate checkinDate;
 
     private LocalDate checkoutDate;
+
 
     private int price;
     private String phone;
@@ -63,9 +65,5 @@ public class CheckInEntity {
         return  this;
     }
 
-
-
-
-
-
 }
+

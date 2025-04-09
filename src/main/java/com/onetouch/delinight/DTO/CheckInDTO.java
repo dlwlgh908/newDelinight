@@ -40,10 +40,9 @@ public class CheckInDTO {
 
     private String phone;
 
+
     private int certNum;
     private String certPass;
-
-
 
     private UsersDTO usersDTO;
 
@@ -89,5 +88,6 @@ public class CheckInDTO {
         return this;
 
     }
+
 
 }
