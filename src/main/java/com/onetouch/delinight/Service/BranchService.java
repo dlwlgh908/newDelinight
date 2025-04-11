@@ -19,6 +19,9 @@ public interface BranchService {
 
     public List<BranchDTO> list();
 
+    public void del(Long id);
+
+
 
 
 

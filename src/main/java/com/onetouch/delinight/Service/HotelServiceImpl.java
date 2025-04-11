@@ -52,4 +52,10 @@ public class HotelServiceImpl implements HotelService{
         ).collect(Collectors.toList());
         return hotelDTOList;
     }
+
+    @Override
+    public void del(Long id) {
+        hotelRepository.deleteById(id);
+
+    }
 }

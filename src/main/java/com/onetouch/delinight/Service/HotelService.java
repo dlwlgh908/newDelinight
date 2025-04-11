@@ -18,6 +18,8 @@ public interface HotelService {
 
     public List<HotelDTO> list();
 
+    public void del(Long id);
+
 
 
 }
