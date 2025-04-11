@@ -59,4 +59,11 @@ public class HotelServiceImpl implements HotelService{
 
         return hotelEntity.getId();
     }
+  
+    @Override
+    public void del(Long id) {
+        hotelRepository.deleteById(id);
+    }
+  
+  
 }

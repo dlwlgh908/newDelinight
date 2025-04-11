@@ -1,6 +1,9 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.CheckInDTO;
+import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.DTO.UsersDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -16,6 +19,10 @@ public interface CheckInService {
     public void checkin(CheckInDTO checkInDTO);
 
     public void checkout(Long id);
+
+    public UsersDTO  checkEmail(String email);
+
+
 
 
 

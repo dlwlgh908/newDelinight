@@ -78,4 +78,9 @@ public class StoreServiceImpl implements StoreService{
         ).collect(Collectors.toList());
         return storeDTOList;
     }
+
+    @Override
+    public void del(Long id) {
+        storeRepository.deleteById(id);
+    }
 }

@@ -67,6 +67,7 @@ public class MenuController {
     public String registerProc(MenuDTO menuDTO,
                                Principal principal){
 
+
     // 혹시 @ModelAttribute로 받고 있는데 imgNum이 multipart 형식이거나 JSON으로 보내는 거라면 매핑이 안 될 수 있어.
     //→ @RequestBody 써야 하는 상황이면 이거부터 맞춰야 해.
 
@@ -81,7 +82,7 @@ public class MenuController {
 
         menuService.register(menuDTO, email);
         log.info("저장된 데이터 : " + menuDTO);
-        return "redirect:/menu/listIndex";
+        return "redirect:/menu/list";
     }
 
     @GetMapping("/list")

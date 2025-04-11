@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CheckInRepository extends JpaRepository<CheckInEntity, Long> {
 
+    public CheckInEntity findByRoomEntity_Id(Long id);
 
 
 

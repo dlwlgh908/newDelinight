@@ -20,6 +20,9 @@ public interface HotelService {
 
     public Long findHotelByEmail(String email);
 
+    public void del(Long id);
+
+
 
 
 }

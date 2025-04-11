@@ -32,10 +32,15 @@ public class UserController {
         private final UsersService usersService;
         private final ModelMapper modelMapper;
 
+        @GetMapping("/mobile")
+        public String mobileGET(){
+                return "/users/mobile";
+        }
 
 
         @GetMapping("/home")
         public String usershome(Principal principal , Model model) {
+
                 log.info("사용자 메인 페이지 진입함??????????");
                 if (principal == null) {
                         return "redirect:/users/login";
@@ -192,9 +197,9 @@ public class UserController {
                 return "/users/welcome";
         }
 
-        @GetMapping("/care")
-        public String CareUserGET() {
-                return "/users/care";
+        @GetMapping("/test")
+        public String testGET() {
+                return "/users/test";
         }
 
 

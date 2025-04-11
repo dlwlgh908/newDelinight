@@ -1,62 +1,76 @@
-/* 네비게이션 바 배경 색상과 스타일 */
-.header .navbar-custom {
-    background-color: #f1f1f1;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+:root {
+    --background-color: #ffffff;
+    --secondary-bg-color: #f6f9fc;       /* 밝은 회청색 배경 */
+    --primary-color: #4A90E2;            /* 파스텔 블루 (기존 유지) */
+    --accent-color: #3EDBBE;            /* 민트 포인트 (더 트렌디하게) */
+    --hover-bg-color: #E6F7FF;           /* 아주 연한 블루 (hover용) */
+    --text-color: #333333;
+    --subtext-color: #666666;
+    --light-text-color: #999999;
+    --border-color: #dddddd;
+    --shadow-color: rgba(0, 0, 0, 0.06);
 }
 
-/* 드롭다운 메뉴 스타일 */
-.header .custom-dropdown {
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    padding: 0.5rem 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+/* 드롭다운 화살표 제거 */
+.navbar .dropdown-toggle::after {
+    display: none !important;
 }
 
-/* 드롭다운 항목 스타일 */
-.header .custom-dropdown .dropdown-item {
+/* 로고 텍스트 */
+.logo-text {
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: var(--accent-color);
+}
+
+/* 사용자 인사말 */
+.user-welcome span {
     font-size: 1rem;
-    padding: 0.75rem 1.25rem;
     color: #333;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 드롭다운 항목 hover 효과 */
-.header .custom-dropdown .dropdown-item:hover {
-    background-color: #f1f1f1;
-    color: #00b4d8;
-}
-
-/* 드롭다운 구분선 */
-.header .custom-dropdown .dropdown-divider {
-    border-color: #ddd;
-}
-
-/* 내 정보 아이콘 및 버튼 스타일 */
-.header .nav-icon {
-    transition: color 0.3s ease;
-}
-
-.header .nav-icon:hover {
-    color: #00b4d8;
-}
-
-/* 장바구니 아이콘에 배경 효과 */
-.header .position-relative .badge-notify {
-    top: -5px;
-    right: -5px;
-    font-size: 0.7rem;
-}
-
-/* 버튼에 동그란 테두리 추가 */
-.header .btn-rounded-circle {
-    border-radius: 50%;
-}
-
-/* 네비게이션 메뉴 아이콘 */
-.header .navbar .nav-item .nav-link i {
+/* 사용자 아이콘 */
+.navbar .nav-link.icon-DeliNight {
     font-size: 1.5rem;
-    transition: color 0.3s ease;
+    color: #4dc5db;
+    padding: 0.3rem 0.6rem;
 }
+
+/* 드롭다운 메뉴 */
+.dropdown-menu {
+    background-color: #FAFAFA;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    font-size: 0.95rem;
+}
+
+/* 드롭다운 항목 */
+.dropdown-item {
+    padding: 0.5rem 1.2rem;
+    color: #333;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.dropdown-item:hover {
+    background-color: #FFF0F0;
+    color: #4dc5db;
+}
+
+/* 장바구니 아이콘 */
+.navbar .bi-cart {
+    font-size: 1.5rem;
+    color: #4dc5db;
+}
+
+/* 드롭다운과 아이콘에 통일성 있는 마진 */
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+}
+
+
+
 
 #login-page {
     font-family: sans-serif;
@@ -171,7 +185,7 @@
 
 /* userStyle.css */
 
-/* care.html에서만 적용되는 스타일 */
+/* home.html에서만 적용되는 스타일 */
 body#care-page {
     margin: 0;
     padding: 0;
@@ -222,11 +236,11 @@ main p {
 }
 
 .button-group {
-    margin-top: auto; /* 푸터 쪽으로 버튼 내림 */
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    padding-bottom: 20px; /* 푸터와 간격 */
 }
 
 .btn {
@@ -277,6 +291,7 @@ footer a {
 footer p {
     color: #666;
 }
+/* home.html에서만 적용되는 스타일 */
 
 /* update.html 전용 스타일 */
 #update-page {
@@ -331,7 +346,166 @@ footer p {
         padding: 10px;
     }
 }
+/* update.html 전용 스타일 */
+
+/* userFooter 전용 스타일 */
+.footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    color: #6c757d;
+    padding: 20px 0;
+}
+
+.footer a {
+    color: #6c757d;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #00b4d8;
+}
+
+.footer .social-icons a {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.footer .social-icons a:hover {
+    color: #00b4d8;
+}
+
+.footer .text-muted {
+    font-size: 0.875rem;
+}
+
+.footer .text-muted a {
+    font-size: 0.875rem;
+}
+
+.footer .social-icons {
+    margin-top: 10px;
+}
+/* userFooter 전용 스타일 */
+
+/* LayoutOne Style */
+/* Header (3칸) */
+.header {
+    display: flex;
+    justify-content: space-between; /* 양 끝 정렬 */
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px; /* 간격을 주고 싶을 때 */
+}
+
+.header-box {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    color: #444;
+    padding: 40px 0;         /* 세로 높이 늘리기 */
+    font-size: 18px;         /* 글자 크기 키우기 */
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    min-height: 80px;        /* 최소 높이 강제 */
+}
+/* LayoutOne Style */
 
 
+/* RoomService/order/main */
+.menuListWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.card-body {
+    display: flex;
+    align-items: flex-start;
+}
+
+.card-body img {
+    width: 100px;
+    height: auto;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    border-radius: 8px;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+/* RoomService/order/main */
+
+
+/* 공통 사용 Style */
+.common-btn {
+    background-color: #4A90E2;
+    color: #fff;
+}
+
+.common-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.common-quantity{
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+.common-quantity button{
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: white;
+    color: #4A90E2;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+.common-quantity .count{
+    width: 32px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+}
+/* 장바구니 아이콘 */
+.bi-cart {
+    font-size: 1.5rem;
+    color: #4dc5db;
+}
+
+
+
+/* 공통 사용 Style */
 
 
