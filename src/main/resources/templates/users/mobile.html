@@ -151,26 +151,6 @@
                 return;
             }
 
-            $.ajax({
-                type: "POST",
-                url: "/guests/login",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    phone: phone,
-                    reservationNumber: reservationNumber
-                }),
-                success: function(response) {
-                    if (response.success) {
-                        window.location.href = "/guests/reservationDetail?reservationId=" + response.reservationId;
-                    } else {
-                        guestError.textContent = "일치하는 예약 정보가 없습니다. 다시 확인해주세요.";
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("비회원 로그인 오류:", error);
-                    guestError.textContent = "로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
-                }
-            });
         }
 
     </script> <!-- 유효성검사 -->
