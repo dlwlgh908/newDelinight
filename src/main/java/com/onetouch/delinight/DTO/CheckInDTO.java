@@ -8,16 +8,10 @@
 package com.onetouch.delinight.DTO;
 
 import com.onetouch.delinight.Constant.CheckInStatus;
-import com.onetouch.delinight.Entity.CheckInEntity;
-import com.onetouch.delinight.Entity.GuestEntity;
-import com.onetouch.delinight.Entity.RoomEntity;
-import com.onetouch.delinight.Entity.UsersEntity;
-import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -45,8 +39,8 @@ public class CheckInDTO {
     private Long userId;
 
 
-    private int certNum;
-    private String certPass;
+    private int certId;
+    private String password;
 
     private UsersDTO usersDTO;
 
@@ -82,14 +76,14 @@ public class CheckInDTO {
         return this;
     }
 
-    public CheckInDTO setCertNum(int certNum) {
+    public CheckInDTO setCertId(int certId) {
 
-        this.certNum = certNum;
+        this.certId = certId;
         return this;
     }
 
-    public CheckInDTO setCertPass(String phone) {
-        this.certPass = phone.substring(phone.length() - 4);
+    public CheckInDTO setPassword(String phone) {
+        this.password = phone.substring(phone.length() - 4);
         return this;
 
     }

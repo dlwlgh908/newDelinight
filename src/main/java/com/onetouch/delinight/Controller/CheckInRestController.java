@@ -34,7 +34,7 @@ public class CheckInRestController {
         log.info("userId 값 : " + checkInDTO.getUserId());
 
         checkInService.checkin(checkInDTO);
-        log.info("certNum  : "+checkInDTO.getCertNum());
+        log.info("certNum  : "+checkInDTO.getCertId());
 
 
         return ResponseEntity.ok("성공");
@@ -61,7 +61,9 @@ public class CheckInRestController {
         String checkoutDate = parts[1].substring(6, 12);
         int certid = Integer.parseInt(parts[2]);
 
-        log.info(certid);
+        log.info("cert 값 나오냐??"+certid);
+        log.info("cert 값 나오냐??"+certid);
+        log.info("cert 값 나오냐??"+certid);
 
         Map<String, Object> response = new HashMap<>();
         response.put("roomid", roomid);

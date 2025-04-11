@@ -22,5 +22,10 @@ public class GuestDTO {
 
     private String reservationNum;
 
+    private String certId;
+
+    private String password;
+
+
 
 }

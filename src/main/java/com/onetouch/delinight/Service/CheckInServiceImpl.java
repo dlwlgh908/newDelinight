@@ -112,8 +112,8 @@ public class CheckInServiceImpl implements CheckInService{
                         // getGuestEntity가 null이 아니면 setGuestDTO 호출
                         if (checkInEntity.getGuestEntity() != null) {
                             checkInDTO.setGuestDTO(modelMapper.map(checkInEntity.getGuestEntity(), GuestDTO.class))
-                                    .setCertPass(checkInEntity.getGuestEntity().getPhone())
-                                    .setCertNum((int) (Math.random() * 8999) + 1000)
+                                    .setPassword(checkInEntity.getGuestEntity().getPhone())
+                                    .setCertId((int) (Math.random() * 8999) + 1000)
                                     .setEmail(checkInEntity.getGuestEntity().getEmail())
                                     .setPhone(checkInEntity.getPhone());
 
@@ -122,7 +122,7 @@ public class CheckInServiceImpl implements CheckInService{
                         else {
                             checkInDTO.setUsersDTO(modelMapper.map(checkInEntity.getUsersEntity(), UsersDTO.class))
                                     .setEmail(checkInEntity.getUsersEntity().getEmail())
-                                    .setCertNum((int) (Math.random() * 8999) + 1000)
+                                    .setCertId((int) (Math.random() * 8999) + 1000)
                                     .setPhone(checkInEntity.getUsersEntity().getPhone());
                         }}
                     // setRoomDTO는 항상 호출
@@ -153,21 +153,22 @@ public class CheckInServiceImpl implements CheckInService{
         phone = phone.substring(phone.length() - 4);
 
 
+
         log.info(phone);
         log.info(phone);
 
 
         log.info("checkin service"+checkInEntity);
-        if(checkInDTO.getCertNum() == 0) {
+        if(checkInDTO.getCertId() ==0) {
             int certNum = (int) (Math.random() * 8999) + 1000;
-            checkInDTO.setCertNum(certNum);
+            checkInDTO.setCertId(certNum);
         }
         else {
-            int certNum = checkInDTO.getCertNum();
-            checkInDTO.setCertNum(certNum);
+            int certNum = checkInDTO.getCertId();
+            checkInDTO.setCertId(certNum);
 
         }
-        checkInDTO.setCertPass(phone);
+        checkInDTO.setPassword(phone);
 
         CheckInEntity check =
                 checkInRepository.findById(checkInEntity.getId()).orElseThrow(EntityNotFoundException::new);

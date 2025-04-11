@@ -55,7 +55,6 @@
                         <th scope="col">체크아웃</th>
                         <th scope="col">핸드폰번호</th>
                         <th scope="col">이메일</th>
-                        <th scope="col">인증번호(ID)</th>
                         <th scope="col">비밀번호(PW)</th>
                         <th scope="col">결제 금액</th>
                         <th scope="col">Status</th>
@@ -116,22 +115,15 @@
                                 </td>
 
 
-                                <td>
-                                    <th:block th:if="${list.certNum ==0}">
-                                        <span>Vacancy</span>
-                                    </th:block>
-                                    <th:block th:if="${list.certNum >0}">
-                                        <span th:text="${list.certNum}"></span>
-                                    </th:block>
-                                </td>
+
 
                                 <td>
-                                    <th:block th:if="${list.certPass == null}">
-                                        <span>Vacancy</span>
+                                    <th:block th:if="${list.getPassword == null}">
+                                        <span class="certid" id="certid">Vacancy</span>
 
                                     </th:block>
-                                    <th:block th:if="${list.certPass != null}">
-                                        <span th:text="${list.certPass}"></span>
+                                    <th:block th:if="${list.getPassword != null}">
+                                        <span th:text="${list.getPassword}"></span>
 
                                     </th:block>
                                 </td>
@@ -234,6 +226,7 @@
                 row.find(".checkinDate").val(checkinDate);
                 row.find(".checkoutDate").val(checkoutDate);
                 row.find(".certid").text(certid);
+                alert("asfdasdfasdfa"+certid)
 
             } else {
                 console.error("해당 roomId를 가진 행을 찾을 수 없습니다: " + roomid);
@@ -441,7 +434,7 @@
                         let checkinDate = formatDate(response.checkinDate);
                         let checkoutDate = formatDate(response.checkoutDate);
                         let certid = response.certid;
-                        alert("certid : "+certid);
+                        alert("certidasdfasdf : "+certid);
                         alert(roomid);
                         alert(id);
 
