@@ -29,6 +29,7 @@ public class UsersRestController {
             1, "회원"
     );
 
+
     @GetMapping("/checkUser")
     public ResponseEntity<String> checkUser(@RequestParam(value = "email" , required = false) String email) {
         // Email 기반으로 회원 유형을 확인

@@ -8,8 +8,10 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.UsersDTO;
+import com.onetouch.delinight.Entity.GuestEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
+import com.onetouch.delinight.Repository.CheckInRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Repository.UsersRepository;
 import com.onetouch.delinight.Util.CustomUserDetails;
@@ -37,7 +39,7 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
 
     private final UsersRepository usersRepository;
     private final MembersRepository membersRepository;
-
+    private final CheckInRepository checkInRepository;
 
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
@@ -70,6 +72,7 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         log.info(email);
         UsersEntity usersEntity = usersRepository.selectEmail(email);
         MembersEntity membersEntity = membersRepository.findByEmail(email);
+        GuestEntity guestEntity = checkInRepository.findByGuestEntity_Phone(email).getGuestEntity();
 
         log.info(membersEntity);
 
@@ -78,6 +81,13 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
             if(membersEntity != null){
                 return new MemberDetails(membersEntity);
             }
+            if(guestEntity != null){
+                return User.builder()
+                        .username(guestEntity.getPhone())
+                        .password(guestEntity.getPassword())
+                        .build();
+            }
+
             log.info("member, user 어디에서도 찾을 수 없음");
             throw new UsernameNotFoundException("member, user 어디에서도 찾을 수 없음");
         }
