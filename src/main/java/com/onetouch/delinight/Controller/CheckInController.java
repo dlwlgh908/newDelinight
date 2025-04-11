@@ -53,7 +53,7 @@ public class CheckInController {
 
     }
 
-    @GetMapping("/listA")
+    @GetMapping("/listB")
     public String listA(Model model) {
 
         List<RoomDTO> roomDTOList =
@@ -72,7 +72,7 @@ public class CheckInController {
         model.addAttribute("checkInDTOList", checkInDTOList);
 
 
-        return "checkin/listA";
+        return "checkin/listB";
 
     }
 }

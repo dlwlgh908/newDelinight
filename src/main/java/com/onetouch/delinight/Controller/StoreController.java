@@ -37,14 +37,14 @@ public class StoreController {
         return "store/create";
     }
 
-    @GetMapping("/list")
+    @GetMapping("/listA")
     public String listView(Model model) {
 
         List<StoreDTO> storeDTOList =
             storeService.list();
         model.addAttribute("storeDTOList", storeDTOList);
 
-        return "store/list";
+        return "store/listA";
     }
 
 }
