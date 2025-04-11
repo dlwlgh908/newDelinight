@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/store")
+@RequestMapping("/members/store")
 public class StoreController {
     private final StoreService storeService;
 

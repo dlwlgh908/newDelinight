@@ -22,7 +22,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/checkin")
+@RequestMapping("/members/checkin")
 @Log4j2
 public class CheckInController {
 

@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/hotel")
+@RequestMapping("/members/hotel")
 public class HotelController {
 
 
