@@ -19,5 +19,7 @@ public interface StoreService {
 
     public List<StoreDTO> list();
 
+    public void del(Long id);
+
 
 }

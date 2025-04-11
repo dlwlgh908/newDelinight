@@ -38,11 +38,11 @@ public class BranchController {
         return "branch/create";
     }
 
-    @GetMapping("/list")
+    @GetMapping("/listA")
     public String listView(Model model) {
         List<BranchDTO> branchDTOList =
             branchService.list();
         model.addAttribute("branchDTOList", branchDTOList);
-        return "branch/list";
+        return "branch/listA";
     }
 }
