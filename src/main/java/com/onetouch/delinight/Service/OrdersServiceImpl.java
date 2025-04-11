@@ -38,12 +38,11 @@ public class OrdersServiceImpl implements OrdersService{
     private final OrdersRepository ordersRepository;
     private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
+    private final SseService sseService;
 
     @Override
     public Page<OrdersDTO> processList(Pageable pageable, String email) {
-        log.info("=============================================");
         Page<OrdersEntity> processEntityList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(email, OrdersStatus.DELIVERED, OrdersStatus.PENDING, pageable);
-        log.info(processEntityList);
         Page<OrdersDTO> processDTOList =  processEntityList.map(data->modelMapper.map(data, OrdersDTO.class)
                 .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class).setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(),RoomDTO.class).setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(),HotelDTO.class))))
                 .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
@@ -54,9 +53,7 @@ public class OrdersServiceImpl implements OrdersService{
 
     @Override
     public Page<OrdersDTO> completeList(Pageable pageable, String email) {
-        log.info("==================It`s a completeList===========================");
         Page<OrdersEntity> completeList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(email, OrdersStatus.DELIVERED,  pageable);
-        log.info(completeList);
         Page<OrdersDTO> completeDTOList =  completeList.map(data->modelMapper.map(data, OrdersDTO.class)
                 .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class).setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(),RoomDTO.class).setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(),HotelDTO.class))))
                 .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
@@ -91,7 +88,6 @@ public class OrdersServiceImpl implements OrdersService{
 
     @Override
     public void changePayNow(Long ordersId, String memo) {
-        log.info(ordersId);
         OrdersEntity ordersEntity = ordersRepository.findById(ordersId).get();
         ordersEntity.setMemo(memo);
         ordersEntity.setOrdersStatus(OrdersStatus.AWAITING);
@@ -105,20 +101,17 @@ public class OrdersServiceImpl implements OrdersService{
 
     @Override
     public void changePayLater(Long ordersId, String memo) {
-        log.info(ordersId);
         OrdersEntity ordersEntity = ordersRepository.findById(ordersId).get();
         ordersEntity.setMemo(memo);
         ordersEntity.setOrdersStatus(OrdersStatus.AWAITING);
-        log.info(ordersEntity);
-        log.info(ordersEntity);
-        log.info(ordersEntity);
-        log.info(ordersEntity);
-        log.info(ordersEntity);
         ordersEntity.setAwaitingTime(LocalDateTime.now());
         PaymentEntity paymentEntity = paymentRepository.findByOrdersEntityList_Id(ordersId);
         paymentEntity.setOrderType(OrderType.PAYLATER);
         ordersRepository.save(ordersEntity);
         paymentRepository.save(paymentEntity);
+        log.info("이치문 처럼안되는건가...?"+ordersEntity.getStoreEntity().getId());
+
+        sseService.sendToSAdmin("S"+ordersEntity.getStoreEntity().getId(),"new-order",ordersId+"번 주문이 들어왔습니다.");
 
     }
 

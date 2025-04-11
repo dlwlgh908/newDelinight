@@ -52,4 +52,11 @@ public class HotelServiceImpl implements HotelService{
         ).collect(Collectors.toList());
         return hotelDTOList;
     }
+
+    @Override
+    public Long findHotelByEmail(String email) {
+        HotelEntity hotelEntity = hotelRepository.findByMembersEntity_Email(email);
+
+        return hotelEntity.getId();
+    }
 }

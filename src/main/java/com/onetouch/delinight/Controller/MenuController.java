@@ -47,7 +47,7 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/menu")
+@RequestMapping("/members/menu")
 public class MenuController {
     private final MenuService menuService;
     private final ImageService imageService;

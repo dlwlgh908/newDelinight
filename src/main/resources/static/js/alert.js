@@ -1,5 +1,37 @@
 
-$().ready(function () {
+$(document).ready(function () {
+
+
+    const eventSource = new EventSource("/sse/connectAdmin");
+    eventSource.addEventListener("new-order",function (e) {
+        const parsedMap = JSON.parse(e.data);
+        const ordersInfo = parsedMap.data;
+        const alertCount = parsedMap.alertCount;
+        newOrder(ordersInfo, alertCount)
+
+
+    })
+
+
+    $(".testBtn").on("click",function () {
+        alert("테스트 버튼 클릭")
+        $.ajax({
+            url:"/sse/test",
+            type:"post"
+        })
+    })
+
+
+
+    function newOrder(ordersInfo, alertCount){
+        Swal.fire({
+            icon: 'info',
+            title: '주문이 들어왔습니다.',
+            text: ordersInfo,
+        });
+
+        $(".notification-badge").text(alertCount)
+    }
 
     $("#alertStart").click(function () {
         Swal.fire({
@@ -8,6 +40,7 @@ $().ready(function () {
             text: '이곳은 내용이 나타나는 곳입니다.',
         });
     });
+
 
 
     $("#confirmStart").click(function () {

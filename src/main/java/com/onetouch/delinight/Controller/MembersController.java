@@ -26,7 +26,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/members/account")
 @Log4j2
 public class MembersController {
 
