@@ -10,8 +10,9 @@ $().ready(function () {
     });
 
 
-    $("#confirmStart").click(function () {
+    $(".confirmStart").click(function () {
         Swal.fire({
+
             title: '정말로 그렇게 하시겠습니까?',
             text: "다시 되돌릴 수 없습니다. 신중하세요.",
             icon: 'warning',
@@ -28,6 +29,7 @@ $().ready(function () {
                     '승인이 완료되었습니다.',
                     '화끈하시네요~!',
                     'success'
+
                 )
             }
         })

@@ -23,7 +23,7 @@
             <!--반드시 이 아래에서만 작업-->
 
             <!--페이지 이름-->
-            <h1 id="test" class="mt-4">Branch</h1>
+            <h1 id="test" class="mt-4">Store</h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">Dashboard-subheading</li>
             </ol>
@@ -41,7 +41,7 @@
                         </thead>
 
                         <tbody>
-                        <th:block  th:each="list:${branchDTOList}">
+                        <th:block  th:each="list:${storeDTOList}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
                                 <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
@@ -129,7 +129,7 @@
                     if (result.isConfirmed) {
 
                         $.ajax({
-                            url : "/branch/rest/del",
+                            url : "/store/rest/del",
                             type: "delete",
                             data: {id : id},
                             success: function () {
