@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/branch")
+@RequestMapping("/members/branch")
 public class BranchController {
 
     private final BranchService branchService;

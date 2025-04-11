@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/room")
+@RequestMapping("/members/room")
 public class RoomController {
 
     private final RoomService roomService;

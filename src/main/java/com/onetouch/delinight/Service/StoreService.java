@@ -14,8 +14,10 @@ import java.util.List;
 
 public interface StoreService {
 
+    public Long findStoreByEmail(String email);
     public void create(StoreDTO storeDTO);
 
+    public Integer awaitingCountCheck(Long storeId);
 
     public List<StoreDTO> list();
 

@@ -12,7 +12,9 @@ import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Repository.UsersRepository;
+import com.onetouch.delinight.Util.CustomUserDetails;
 import com.onetouch.delinight.Util.EmailService;
+import com.onetouch.delinight.Util.MemberDetails;
 import com.onetouch.delinight.Util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -74,19 +76,13 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         if (usersEntity == null) {
 
             if(membersEntity != null){
-                return User.builder()
-                        .username(membersEntity.getEmail())
-                        .password(membersEntity.getPassword())
-                        .build();
+                return new MemberDetails(membersEntity);
             }
             log.info("member, user 어디에서도 찾을 수 없음");
             throw new UsernameNotFoundException("member, user 어디에서도 찾을 수 없음");
         }
 
-        return User.builder()
-                .username(usersEntity.getEmail())
-                .password(usersEntity.getPassword())
-                .build();
+        return new CustomUserDetails(usersEntity);
     }
 
 
