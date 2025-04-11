@@ -1,0 +1,55 @@
+
+.common-btn {
+    background-color: #4A90E2;
+    color: #fff;
+}
+.btn {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 4px;
+    font-size: 15px;
+    padding: 13px;
+    margin-bottom: 14px;
+    font-weight: 500;
+    border: none;
+}
+
+.common-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.common-quantity{
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+.common-quantity button{
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: white;
+    color: #4A90E2;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+.common-quantity .count{
+    width: 32px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+}

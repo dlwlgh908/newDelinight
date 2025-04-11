@@ -31,7 +31,6 @@ public class HotelEntity {
     @Column(unique = true, nullable = false, length = 50)
     private String content;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id")
     private BranchEntity branchEntity;
