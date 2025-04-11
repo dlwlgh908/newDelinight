@@ -38,7 +38,9 @@ import static com.onetouch.delinight.Entity.QQnaEntity.qnaEntity;
 @Transactional
 @RequiredArgsConstructor
 @Log4j2
-public class QnaServiceImpl implements QnaService{
+
+public class QnaServiceImpl implements QnaService {
+
 
     private final QnaRepository qnaRepository;
     private final ModelMapper modelMapper;
@@ -47,7 +49,7 @@ public class QnaServiceImpl implements QnaService{
 
 
     @Override
-    public QnaDTO register(QnaDTO qnaDTO,Long id) {
+    public QnaDTO register(QnaDTO qnaDTO, Long id) {
         QnaEntity qnaEntity = modelMapper.map(qnaDTO, QnaEntity.class);
         //체크인 id을 찾아와서
         CheckInEntity checkInEntity = checkInRepository.findByRoomEntity_Id(id);
@@ -84,7 +86,7 @@ public class QnaServiceImpl implements QnaService{
 
     @Override
     public QnaDTO update(QnaDTO qnaDTO) {
-        Optional<QnaEntity>optionalQnaEntity = qnaRepository.findById(qnaDTO.getId());
+        Optional<QnaEntity> optionalQnaEntity = qnaRepository.findById(qnaDTO.getId());
         QnaEntity qnaEntity = optionalQnaEntity.get();
         qnaEntity.setTitle(qnaDTO.getTitle());
         qnaEntity.setContent(qnaDTO.getTitle());
@@ -96,8 +98,5 @@ public class QnaServiceImpl implements QnaService{
         qnaRepository.deleteById(id);
 
     }
-
-
-
 
 }

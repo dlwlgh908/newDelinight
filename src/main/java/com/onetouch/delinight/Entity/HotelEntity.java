@@ -35,6 +35,10 @@ public class HotelEntity {
     @JoinColumn(name = "branch_id")
     private BranchEntity branchEntity;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="members_id")
+    private MembersEntity membersEntity;
+
 
 
 

@@ -1,3 +1,17 @@
+:root {
+    --background-color: #ffffff;
+    --secondary-bg-color: #f6f9fc;       /* 밝은 회청색 배경 */
+    --primary-color: #4A90E2;            /* 파스텔 블루 (기존 유지) */
+    --accent-color: #3EDBBE;            /* 민트 포인트 (더 트렌디하게) */
+    --hover-bg-color: #E6F7FF;           /* 아주 연한 블루 (hover용) */
+    --text-color: #333333;
+    --subtext-color: #666666;
+    --light-text-color: #999999;
+    --border-color: #dddddd;
+    --shadow-color: rgba(0, 0, 0, 0.06);
+}
+
+
 /* 드롭다운 화살표 제거 */
 .navbar .dropdown-toggle::after {
     display: none !important;
@@ -7,7 +21,7 @@
 .logo-text {
     font-weight: 600;
     font-size: 1.3rem;
-    color: #4dc5db;
+    color: var(--accent-color);
 }
 
 /* 사용자 인사말 */
@@ -110,15 +124,6 @@
     font-size: 14px;
 }
 
-#login-page .checkbox-group {
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-#login-page .checkbox-group input {
-    margin-right: 6px;
-}
-
 #login-page .login-btn {
     width: 100%;
     background-color: #4A90E2;
@@ -171,7 +176,7 @@
 
 /* userStyle.css */
 
-/* care.html에서만 적용되는 스타일 */
+/* home.html에서만 적용되는 스타일 */
 body#care-page {
     margin: 0;
     padding: 0;
@@ -222,11 +227,11 @@ main p {
 }
 
 .button-group {
-    margin-top: auto; /* 푸터 쪽으로 버튼 내림 */
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    padding-bottom: 20px; /* 푸터와 간격 */
 }
 
 .btn {
@@ -277,6 +282,7 @@ footer a {
 footer p {
     color: #666;
 }
+/* home.html에서만 적용되는 스타일 */
 
 /* update.html 전용 스타일 */
 #update-page {
@@ -331,6 +337,7 @@ footer p {
         padding: 10px;
     }
 }
+/* update.html 전용 스타일 */
 
 /* userFooter 전용 스타일 */
 .footer {
@@ -371,7 +378,7 @@ footer p {
 .footer .social-icons {
     margin-top: 10px;
 }
-
+/* userFooter 전용 스타일 */
 
 /* LayoutOne Style */
 /* Header (3칸) */
@@ -394,8 +401,102 @@ footer p {
     border-radius: 10px;
     min-height: 80px;        /* 최소 높이 강제 */
 }
+/* LayoutOne Style */
+
+
+/* RoomService/order/main */
+.menuListWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.card-body {
+    display: flex;
+    align-items: flex-start;
+}
+
+.card-body img {
+    width: 100px;
+    height: auto;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    border-radius: 8px;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+/* RoomService/order/main */
+
+
+/* 공통 사용 Style */
+.common-btn {
+    background-color: #4A90E2;
+    color: #fff;
+}
+
+.common-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.common-quantity{
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+.common-quantity button{
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: white;
+    color: #4A90E2;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+.common-quantity .count{
+    width: 32px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+}
+/* 장바구니 아이콘 */
+.bi-cart {
+    font-size: 1.5rem;
+    color: #4dc5db;
+}
 
 
 
+/* 공통 사용 Style */
 
 

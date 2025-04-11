@@ -8,11 +8,15 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.UsersDTO;
+import com.onetouch.delinight.Entity.GuestEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
+import com.onetouch.delinight.Repository.CheckInRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Repository.UsersRepository;
+import com.onetouch.delinight.Util.CustomUserDetails;
 import com.onetouch.delinight.Util.EmailService;
+import com.onetouch.delinight.Util.MemberDetails;
 import com.onetouch.delinight.Util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -35,7 +39,7 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
 
     private final UsersRepository usersRepository;
     private final MembersRepository membersRepository;
-
+    private final CheckInRepository checkInRepository;
 
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
@@ -68,25 +72,27 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         log.info(email);
         UsersEntity usersEntity = usersRepository.selectEmail(email);
         MembersEntity membersEntity = membersRepository.findByEmail(email);
+        GuestEntity guestEntity = checkInRepository.findByGuestEntity_Phone(email).getGuestEntity();
 
         log.info(membersEntity);
 
         if (usersEntity == null) {
 
             if(membersEntity != null){
+                return new MemberDetails(membersEntity);
+            }
+            if(guestEntity != null){
                 return User.builder()
-                        .username(membersEntity.getEmail())
-                        .password(membersEntity.getPassword())
+                        .username(guestEntity.getPhone())
+                        .password(guestEntity.getPassword())
                         .build();
             }
+
             log.info("member, user 어디에서도 찾을 수 없음");
             throw new UsernameNotFoundException("member, user 어디에서도 찾을 수 없음");
         }
 
-        return User.builder()
-                .username(usersEntity.getEmail())
-                .password(usersEntity.getPassword())
-                .build();
+        return new CustomUserDetails(usersEntity);
     }
 
 
@@ -171,21 +177,6 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         );
 
         return "임시 비밀번호가 이메일로 발송되었습니다.";
-    }
-
-    // 회원 & 비회원 구분
-    @Override
-    public Integer urlCheck(String email) {
-        // 1. Email 기반으로 회원 정보 조회
-        UsersEntity usersEntity = usersRepository.selectEmail(email);
-        log.info("조회된 회원 정보 : " + usersEntity);
-
-        // 2. 회원 정보가 없으면 비회원
-        if (usersEntity == null) {
-            return 0; // 비회원
-        }
-        // 3. 회원 정보가 존재하면 1 반환 (불필요한 추가 조회 제거)
-        return 1;
     }
 
     @Override

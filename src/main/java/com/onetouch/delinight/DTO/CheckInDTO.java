@@ -40,6 +40,10 @@ public class CheckInDTO {
 
     private String phone;
 
+    private String email;
+
+    private Long userId;
+
 
     private int certNum;
     private String certPass;
@@ -65,8 +69,9 @@ public class CheckInDTO {
         return this;
     }
 
-    public void setPhone(String phone) {
+    public CheckInDTO setPhone(String phone) {
         this.phone = phone;
+        return this;
     }
 
     public CheckInDTO setRoomId(Long roomid) {
@@ -88,6 +93,17 @@ public class CheckInDTO {
         return this;
 
     }
+
+    public CheckInDTO setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public CheckInDTO setUsersDTO(UsersDTO usersDTO) {
+        this.usersDTO = usersDTO;
+        return this;
+    }
+
 
 
 }

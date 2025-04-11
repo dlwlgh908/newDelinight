@@ -12,7 +12,6 @@ import com.onetouch.delinight.Service.UsersService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,17 +29,20 @@ import java.security.Principal;
 public class UserController {
 
         private final UsersService usersService;
-        private final ModelMapper modelMapper;
 
+        @GetMapping("/mobile")
+        public String mobileGET(){
+                return "/users/mobile";
+        }
 
 
         @GetMapping("/home")
         public String usershome(Principal principal , Model model) {
+
                 log.info("사용자 메인 페이지 진입함??????????");
                 if (principal == null) {
                         return "redirect:/users/login";
                 }
-
 
                 model.addAttribute("data" , principal.getName());
                 return "users/home";
@@ -74,7 +76,10 @@ public class UserController {
         }
 
         @GetMapping("/login")
-        public String login() {
+        public String login(Integer sep, Model model) {
+
+                model.addAttribute("sep", sep);
+
                 return "/users/login";
         }
 
@@ -193,9 +198,9 @@ public class UserController {
                 return "/users/welcome";
         }
 
-        @GetMapping("/care")
-        public String CareUserGET() {
-                return "home";
+        @GetMapping("/test")
+        public String testGET() {
+                return "/users/test";
         }
 
 

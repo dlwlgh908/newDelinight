@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public interface HotelRepository extends JpaRepository<HotelEntity, Long> {
 
-
+    public HotelEntity findByMembersEntity_Email(String email);
 
 
 
