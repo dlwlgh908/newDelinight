@@ -85,26 +85,6 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
-    public String login(String email, String password) {
-        MembersEntity membersEntity = membersRepository.selectEmail(email);
-        log.info("이메일로 조회한 db 회원정보 : "+membersEntity);
-
-
-
-        if(membersEntity == null){
-            log.info("db에 회원정보 없음");
-            return "회원 정보가 없습니다.";
-        }
-
-        if(!membersEntity.getEmail().equals(password)){
-            log.info("db에 회원정보는 있으나 비번이 틀림");
-            return "비밀번호가 틀립니다.";
-        }
-        log.info("서비스 수행 완료");
-        return null;
-    }
-
-    @Override
     public List<MembersDTO> findSuper() {
         List<MembersEntity> membersEntityList = membersRepository.selectSuperAd();
 

@@ -118,36 +118,4 @@ public class MembersController {
     public String adminloginGet(){
         return "members/adminlogin";
     }
-
-    //@PostMapping("/adminlogin")
-    //public String adminlogin(@RequestParam String email,
-    //                         @RequestParam String password,
-    //                         Model model){
-    //    String adminLogin =
-    //    membersService.login(email, password);
-    //
-    //    //로그인 정보 기입란이 공란일 시 오류메세지 출력
-    //    if(email == null || email.isBlank()){
-    //        log.info("아이디 공란!!");
-    //        model.addAttribute("error", "이메일을 입력해주세요.");
-    //        log.info("오류 있으므로 다시 로그인화면으로 리턴");
-    //        return "/members/adminlogin";
-    //    }
-    //    //adminLogin이 공란일 시 오류메세지 출력
-    //    if(password == null || password.isBlank()){
-    //        log.info("비밀번호 공란!!");
-    //        model.addAttribute("error", "비밀번호를 입력해주세요.");
-    //        log.info("오류 있으므로 다시 로그인화면으로 리턴");
-    //        return "/members/adminlogin";
-    //    }
-    //
-    //    //서비스 수행 결과 adminLogin에 오류가 있을 시
-    //    if (adminLogin != null){
-    //        model.addAttribute("error", adminLogin);
-    //        log.info("오류 있으므로 다시 로그인화면으로 리턴");
-    //        return "members/adminlogin";
-    //    }
-    //    //오류 없으면 홈화면으로 이동
-    //    return "redirect:/members/home";
-    //}
 }
