@@ -84,5 +84,31 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
+    @Order(3)
+    SecurityFilterChain FilterChain3(HttpSecurity http) throws Exception {
+
+        http.securityMatcher("/guests/**")
+                .authorizeHttpRequests(
+                        authorize -> authorize
+                                .requestMatchers("/users/home" , "/users/login" , "/**").permitAll()
+                                .anyRequest().permitAll()
+                ).csrf((csrf) -> csrf.disable())
+
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/users/login")
+                        .loginProcessingUrl("/guest/login")
+                        .defaultSuccessUrl("/users/home")
+                        .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
+                        .usernameParameter("reservationNum")
+                )
+                .logout((logout) -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/users/welcome")
+                        .invalidateHttpSession(true)
+                );
+        return http.build();
+    }
 
 }

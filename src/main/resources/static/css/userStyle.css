@@ -124,15 +124,6 @@
     font-size: 14px;
 }
 
-#login-page .checkbox-group {
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-#login-page .checkbox-group input {
-    margin-right: 6px;
-}
-
 #login-page .login-btn {
     width: 100%;
     background-color: #4A90E2;
