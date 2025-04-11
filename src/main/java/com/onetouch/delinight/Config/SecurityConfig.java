@@ -70,9 +70,9 @@ public class SecurityConfig {
                 ).csrf((csrf) -> csrf.disable())
 
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/members/adminlogin")
+                        .loginPage("/members/account/adminlogin")
                         .loginProcessingUrl("/members/adminlogin")
-                        .defaultSuccessUrl("/members/adminhome")
+                        .defaultSuccessUrl("/members/store/orders/list")
                         .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
                         .usernameParameter("email")
                 )

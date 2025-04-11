@@ -51,19 +51,7 @@ public class MembersRestController {
 
 
 
-//        try {
-//            MembersDTO membersDTO = membersService.
-//
-//            ReplyDTO replyDTO =
-//                    replyService.read(rno);
-//            return new ResponseEntity<ReplyDTO>(replyDTO, HttpStatus.OK);
-//
-//        } catch (EntityNotFoundException e) {
-//            return new ResponseEntity<String>("게시물이 삭제되었거나 잘못된 경로입니다.", HttpStatus.BAD_REQUEST);
-//
-//
-//        }
-//    }
+
 
 
 }

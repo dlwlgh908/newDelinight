@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/store")
+@RequestMapping("/members/store")
 public class StoreController {
     private final StoreService storeService;
 
@@ -37,14 +37,14 @@ public class StoreController {
         return "store/create";
     }
 
-    @GetMapping("/list")
+    @GetMapping("/listA")
     public String listView(Model model) {
 
         List<StoreDTO> storeDTOList =
             storeService.list();
         model.addAttribute("storeDTOList", storeDTOList);
 
-        return "store/list";
+        return "store/listA";
     }
 
 }

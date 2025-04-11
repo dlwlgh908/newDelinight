@@ -12,7 +12,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CheckInRepository extends JpaRepository<CheckInEntity, Long> {
 
-        public CheckInEntity findByGuestEntity_Phone(String phone);
+
+    public CheckInEntity findByGuestEntity_Phone(String phone);
+
+    // public CheckInEntity findByRoomEntity_Id(Long id);
 
 
 }

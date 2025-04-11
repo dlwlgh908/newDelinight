@@ -9,7 +9,10 @@ package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Service.OrdersService;
+import com.onetouch.delinight.Util.MemberDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +22,16 @@ import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/store/orders")
+@Log4j2
+@RequestMapping("/members/store/orders")
 public class OrderController {
     private final OrdersService ordersService;
 
     @GetMapping("/list")
-    public String orderList(Principal principal, Model model){
-        String email = "hansin@a.a";
+    public String orderList(@AuthenticationPrincipal MemberDetails memberDetails, Model model){
+        String email = memberDetails.getUsername();
+        log.info(email);
+        model.addAttribute("member", memberDetails.getMembersEntity());
         StoreDTO storeDTO = ordersService.findStoreByADMINEmail(email);
         model.addAttribute("storeDTO", storeDTO);
         return "orders/list";
