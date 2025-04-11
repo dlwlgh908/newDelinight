@@ -18,7 +18,10 @@ public interface HotelService {
 
     public List<HotelDTO> list();
 
+    public Long findHotelByEmail(String email);
+
     public void del(Long id);
+
 
 
 

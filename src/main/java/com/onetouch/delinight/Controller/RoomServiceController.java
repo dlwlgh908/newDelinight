@@ -24,7 +24,8 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/roomService")
+@RequestMapping("/users/roomservice")
+
 public class RoomServiceController {
     private final MenuService menuService;
     private final PaymentService paymentService;

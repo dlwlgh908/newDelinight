@@ -63,7 +63,7 @@ public class CartRestController {
         Long cartId = 1L;
         log.info("진입여부");
         Long paymentId = cartService.cartToOrder(cartId);
-        return "redirect:/roomService/order/read?paymentId="+paymentId;
+        return String.valueOf(paymentId);
     }
 
     @PostMapping("/plusQuantity")

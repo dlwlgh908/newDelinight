@@ -54,8 +54,16 @@ public class HotelServiceImpl implements HotelService{
     }
 
     @Override
+    public Long findHotelByEmail(String email) {
+        HotelEntity hotelEntity = hotelRepository.findByMembersEntity_Email(email);
+
+        return hotelEntity.getId();
+    }
+  
+    @Override
     public void del(Long id) {
         hotelRepository.deleteById(id);
-
     }
+  
+  
 }
