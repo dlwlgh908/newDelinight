@@ -76,7 +76,7 @@ public class UserController {
         }
 
         @GetMapping("/login")
-        public String login(int sep, Model model) {
+        public String login(Integer sep, Model model) {
 
                 model.addAttribute("sep", sep);
 
