@@ -15,7 +15,7 @@ public interface CheckInRepository extends JpaRepository<CheckInEntity, Long> {
 
     public CheckInEntity findByGuestEntity_Phone(String phone);
 
-    // public CheckInEntity findByRoomEntity_Id(Long id);
+    public CheckInEntity findByRoomEntity_Id(Long id);
 
 
 }

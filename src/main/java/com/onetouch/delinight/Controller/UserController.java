@@ -12,7 +12,6 @@ import com.onetouch.delinight.Service.UsersService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +29,6 @@ import java.security.Principal;
 public class UserController {
 
         private final UsersService usersService;
-        private final ModelMapper modelMapper;
 
         @GetMapping("/mobile")
         public String mobileGET(){
@@ -78,7 +76,10 @@ public class UserController {
         }
 
         @GetMapping("/login")
-        public String login() {
+        public String login(int sep, Model model) {
+
+                model.addAttribute("sep", sep);
+
                 return "/users/login";
         }
 

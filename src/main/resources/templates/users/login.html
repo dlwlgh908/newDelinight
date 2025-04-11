@@ -77,11 +77,31 @@
     </form>
 
 
-
 </div>
 
 
-<script>
+<script th:inline="javascript">
+
+
+    // welcome →→→→→→→→→→ 들어온 Guest 이동경로
+    $(function () {
+
+        var currentUrl = window.location.href
+
+        if (currentUrl === "http://localhost:8080/users/login?sep=1"){
+            $("#login-userTabBtn").removeClass("login-btn-active")
+            $("#login-userTabBtn").addClass("login-btn")
+            $("#login-guestTabBtn").addClass("login-btn-active")
+            $("#login-guestTabBtn").removeClass("login-btn")
+
+            guestForm.style.display = "block";
+            userForm.style.display = "none";
+
+
+        }
+
+    })
+
 
     // 탭 버튼 클릭 시 로그인 폼 전환
     document.addEventListener("DOMContentLoaded", function () {
@@ -92,6 +112,7 @@
         const guestForm = document.getElementById("guestForm");
 
         userTabBtn.addEventListener("click", function () {
+
             userTabBtn.classList.add("login-btn-active");
             guestTabBtn.classList.remove("login-btn-active");
 
