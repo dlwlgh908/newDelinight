@@ -1,7 +1,10 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.CheckInStatus;
-import com.onetouch.delinight.DTO.*;
+import com.onetouch.delinight.DTO.CheckInDTO;
+import com.onetouch.delinight.DTO.GuestDTO;
+import com.onetouch.delinight.DTO.RoomDTO;
+import com.onetouch.delinight.DTO.UsersDTO;
 import com.onetouch.delinight.Entity.*;
 import com.onetouch.delinight.Repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,7 +12,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -238,4 +240,16 @@ public class CheckInServiceImpl implements CheckInService{
         return usersDTO;
 
     }
+
+    @Override
+    public GuestDTO checkGuest(String password) {
+
+        GuestEntity guestEntity = checkInRepository.findByGuestEntity_Phone(password).getGuestEntity();
+
+        GuestDTO guestDTO = modelMapper.map(guestEntity, GuestDTO.class);
+
+        return guestDTO;
+    }
+
+
 }
