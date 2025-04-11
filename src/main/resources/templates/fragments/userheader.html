@@ -46,10 +46,31 @@
 
           <!-- 드롭다운 메뉴 -->
           <ul class="dropdown-menu dropdown-menu-end shadow-sm mt-2" style="min-width: 150px;">
-            <li><a class="dropdown-item" href="/users/update">내정보 수정</a></li>
-            <li><a class="dropdown-item" href="/users/passwordChange">비밀번호 수정</a></li>
-            <li><a class="dropdown-item" href="/orders/list">주문 내역</a></li>
-            <li><a class="dropdown-item" href="/users/logout">로그아웃</a></li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="/users/update">
+                <i class="bi bi-person-circle"></i>내정보 수정
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="/users/passwordChange">
+                <i class="bi bi-shield-lock-fill"></i> 비밀번호 수정
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="/orders/list">
+                <i class="bi bi-bag-check-fill"></i> 주문 내역
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="/users/logout">
+                <i class="bi bi-box-arrow-right"></i> 로그아웃
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="/users/delete">
+                <i class="bi bi-person-x-fill"></i> 회원탈퇴
+              </a>
+            </li>
           </ul>
         </li>
         <!-- 내정보 끝 -->

@@ -1,0 +1,223 @@
+/* 공통 색상 */
+:root {
+    /* 기본 색상 */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-gray: #f0f0f0;
+    --dark-gray: #333333;
+    --jin-gray: #777;
+    --color-sky: #4A90E2;
+
+    /* 밝은 테마 (화이트 버튼용) */
+    --white-bg: #f0f0f0;
+    --white-text: #242424;
+    --white-shadow-1: #f4f4f4;
+    --white-shadow-2: #efefef;
+    --white-shadow-3: #ececec;
+    --white-shadow-4: #e0e0e0;
+    --white-shadow-5: #dedede;
+    --white-shadow-6: #dcdcdc;
+    --white-shadow-7: #cacaca;
+    --white-shadow-8: #cecece;
+
+    /* 어두운 테마 (블랙 버튼용) */
+    --black-bg: #2a2a2a;
+    --black-text: #e0e0e0;
+    --black-shadow-1: #3a3a3a;
+    --black-shadow-2: #252525;
+    --black-shadow-3: #202020;
+    --black-shadow-4: #1c1c1c;
+    --black-shadow-5: #181818;
+    --black-shadow-6: #141414;
+    --black-shadow-7: #101010;
+    --black-shadow-8: #0a0a0a;
+}
+/* 버튼 공통 */
+button:active{
+    box-shadow: none !important;
+}
+.btn-DeliNight-white {
+    background-color: var(--color-white);
+    font: inherit;
+    border: 0;
+    border-radius: 0.5em;
+    font-size: 14px;
+    padding: 0.5em 1em;
+    font-weight: 600;
+    color: var(--white-text);
+    text-shadow: 0 0.0625em 0 var(--color-white);
+    box-shadow:
+            inset 0 0.0625em 0 0 var(--white-shadow-1),
+            0 0.0625em 0 0 var(--white-shadow-2),
+            0 0.125em 0 0 var(--white-shadow-3),
+            0 0.25em 0 0 var(--white-shadow-4),
+            0 0.3125em 0 0 var(--white-shadow-5),
+            0 0.375em 0 0 var(--white-shadow-6),
+            0 0.425em 0 0 var(--white-shadow-7),
+            0 0.425em 0.5em 0 var(--white-shadow-8);
+}
+button:not(#btn-DeliNight-white):active {
+    transform: translate(0.225em);
+    box-shadow: inset 0 0.03em 0 0 var(--white-shadow-1),
+    0 0.03em 0 0 var(--white-shadow-2),
+    0 0.0625em 0 0 var(--white-shadow-3),
+    0 0.125em 0 0 var(--white-shadow-4),
+    0 0.125em 0 0 var(--white-shadow-5),
+    0 0.2em 0 0 var(--white-shadow-6),
+    0 0.225em 0 0 var(--white-shadow-7),
+    0 0.225em 0.375em 0 var(--white-shadow-8) !important;
+}
+.btn-DeliNight-black {
+    background-color: var(--black-bg);
+    font: inherit;
+    border: 0;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 0.5em 1em;
+    font-weight: 600;
+    color: var(--black-text);
+    text-shadow: 0 0.0625em 0 var(--color-black);
+    box-shadow:
+            inset 0 0.0625em 0 0 var(--black-shadow-1),
+            0 0.0625em 0 0 var(--black-shadow-2),
+            0 0.125em 0 0 var(--black-shadow-3),
+            0 0.25em 0 0 var(--black-shadow-4),
+            0 0.3125em 0 0 var(--black-shadow-5),
+            0 0.375em 0 0 var(--black-shadow-6),
+            0 0.425em 0 0 var(--black-shadow-7),
+            0 0.425em 0.5em 0 var(--black-shadow-8);
+}
+#btn-DeliNight-black-login:active {
+    transform: translateY(0.225em);
+    box-shadow:
+            inset 0 0.03em 0 0 var(--black-shadow-1),
+            0 0.03em 0 0 var(--black-shadow-2),
+            0 0.0625em 0 0 var(--black-shadow-3),
+            0 0.125em 0 0 var(--black-shadow-4),
+            0 0.125em 0 0 var(--black-shadow-5),
+            0 0.2em 0 0 var(--black-shadow-6),
+            0 0.225em 0 0 var(--black-shadow-7),
+            0 0.225em 0.375em 0 var(--black-shadow-8) !important;
+}
+#btn-DeliNight-black-signUp:active {
+    transform: translateY(0.225em);
+    box-shadow:
+            inset 0 0.03em 0 0 var(--black-shadow-1),
+            0 0.03em 0 0 var(--black-shadow-2),
+            0 0.0625em 0 0 var(--black-shadow-3),
+            0 0.125em 0 0 var(--black-shadow-4),
+            0 0.125em 0 0 var(--black-shadow-5),
+            0 0.2em 0 0 var(--black-shadow-6),
+            0 0.225em 0 0 var(--black-shadow-7),
+            0 0.225em 0.375em 0 var(--black-shadow-8) !important;
+}
+.welcome-custom-shadow {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* 전체 페이지 배경 */
+body.welcome-body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-gray);
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 중앙 박스 */
+.welcome-header {
+    background-color: var(--color-white);
+    width: 100%;
+    max-width: 400px;
+    border-radius: 0;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+/* 콘텐츠 내부 정렬 */
+.welcome-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+/* 중앙 정렬 컨테이너 */
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 1rem;
+}
+
+/* 카드 영역 */
+.welcome-card {
+    width: 100%;
+    max-width: 420px;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* 텍스트 상단 */
+.welcome-intro {
+    margin-top: 40px;
+}
+.welcome-intro h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--dark-gray);
+}
+.welcomeSub-subtext {
+    font-size: 0.95rem;
+    color: var(--jin-gray);
+    margin: 0.2rem 0;
+}
+
+/* 버튼 그룹은 맨 아래로 */
+.welcome-btn-group {
+    margin-top: auto;
+}
+
+/* 버튼 스타일 공통 */
+button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+}
+button:last-child {
+    margin-bottom: 0;
+}
+button i {
+    margin-right: 0.5rem;
+}
+.welcome-footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 2rem;
+}
+
+.welcome-footer a {
+    color: #888;
+    text-decoration: none;
+    margin: 0 0.3rem;
+}
+
+.welcome-footer a:hover {
+    text-decoration: underline;
+}
+
+
+
