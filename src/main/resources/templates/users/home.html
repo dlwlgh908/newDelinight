@@ -16,41 +16,37 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/userStyle.css">
+    <link rel="stylesheet" href="/css/mobile.css">
 
 </head>
 <body id="care-page">
 <div layout:fragment="content">
 
-
-    <header class="header">
-
-        <div class="intro">
-            <h1>Deli Night</h1>
-            <p class="subtext">필요하신게 있으신가요? <br>
-            아래에서 원하시는 서비스를 선택해주세요.</p>
+    <!-- 룸서비스&문의하기 -->
+    <div class="flex-box">
+        <div class="subCol">
+            <button class="btn-DeliNight-white">룸서비스</button>
         </div>
-
-    </header>
-
-    <main>
-
-        <div class="button-group">
-
-            <button onclick="location.href='#'" class="btn member">
-                <i class="bi bi-house-heart-fill"></i> 룸 케어 요청하기
-            </button>
-            <button onclick="location.href='/roomService/order/main'" class="btn member">
-                <i class="bi bi-bag-fill"></i> 음식/서비스 주문하기
-            </button>
-            <button onclick="location.href='#'" class="btn guest">
-                <i class="bi bi-chat-dots-fill"></i> 프론트에 문의하기
-            </button>
-
+        <div class="subCol">
+            <button class="btn-DeliNight-white">문의하기</button>
         </div>
+    </div>
+    <!-- 룸서비스&문의하기 -->
 
+    <!-- 배너 -->
+    <div class="imgContent">
 
-    </main>
+    </div><!-- 배너 -->
+
+    <!-- 검색 -->
+    <div class="searchContent">
+
+    </div><!-- 검색 -->
+
+    <!-- 가맹점 -->
+    <div class="storeContent">
+
+    </div><!-- 가맹점 -->
 
 
 </div>

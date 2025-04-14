@@ -8,12 +8,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @SpringBootTest
 @Log4j2
 class QnaServiceImplTest {
@@ -28,11 +33,12 @@ class QnaServiceImplTest {
         QnaDTO qnaDTO = new QnaDTO();
         qnaDTO.setTitle("605호");
         qnaDTO.setContent("이불 1개 주세요");
-        qnaService.register(qnaDTO);
+        qnaService.register(qnaDTO, qnaDTO.getId());
     }
     @Test
     public void read(){
         Long id = 1L;
+
         QnaDTO qnaDTO = qnaService.read(id);
         log.info(qnaDTO);
     }
@@ -47,6 +53,9 @@ class QnaServiceImplTest {
     public void del(){
         qnaService.delete(2L);
     }
+
+
+
 
 
 }

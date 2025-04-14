@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>tt임</h1>
+[[${qnalist}]]
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">title</th>
+        <th scope="col">content</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="list:${qnalist}">
+        <tr>
+            <th th:text="${list.id}"></th>
+            <td th:text="${list.title}"></td>
+            <td th:text="${list.content}">Otto</td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+
+</body>
+</html>

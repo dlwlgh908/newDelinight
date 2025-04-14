@@ -1,10 +1,7 @@
 package com.onetouch.delinight.Entity;
 
-import com.onetouch.delinight.Constant.CheckInStatus;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -27,6 +24,7 @@ public class GuestEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
+    private String password;
 
     @Column(name = "reservation_num", nullable = false)
     private String reservationNum;

@@ -34,12 +34,22 @@ public class QnaDTO {
     private String content;
     private LocalDateTime regtime; //등록시간
     private LocalDateTime updatetime; //답변시간(response time)
+
+
+
     private CheckInEntity checkInEntity;
 
     private CheckInDTO checkInDTO;
+    private HotelDTO hotelDTO;
+    private UsersDTO usersDTO;
 
     public QnaDTO setcheckInDTO(CheckInDTO checkInDTO){
         this.checkInDTO =checkInDTO;
+        return this;
+    }
+
+    public QnaDTO sethotelDTO(HotelDTO hotelDTO){
+        this.hotelDTO = hotelDTO;
         return this;
     }
 
