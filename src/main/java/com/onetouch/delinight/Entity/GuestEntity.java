@@ -31,8 +31,8 @@ public class GuestEntity {
 
     @Column(name = "cert_id")
     private String certId;
-    @Column(name = "password")
-    private String password;
+//    @Column(name = "password")
+//    private String password;
 
 
 

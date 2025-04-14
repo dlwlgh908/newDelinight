@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,7 @@ class ReplyServiceImplTest {
 
 
         QnaEntity qnaEntity =
-        qnaRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+                qnaRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
         log.info("값 :" + qnaEntity);
         ReplyDTO replyDTO = new ReplyDTO();
         replyDTO.setId(1L);
@@ -47,7 +48,7 @@ class ReplyServiceImplTest {
         log.info(replyDTO);
 
         QnaDTO qnaDTO =
-        modelMapper.map(qnaEntity, QnaDTO.class);
+                modelMapper.map(qnaEntity, QnaDTO.class);
         replyDTO.setQnaDTO(qnaDTO);
         log.info(qnaDTO);
 
@@ -84,6 +85,27 @@ class ReplyServiceImplTest {
         log.info(replyDTO);
 
     }
+    @Test
+    public void list(){
+        List<ReplyDTO> replyDTOList =
+                replyService.list(1L);
+        log.info(replyDTOList);
+    }
+    @Test
+    public void read(){
+        ReplyDTO replyDTO = replyService.read(1L);
+        log.info(replyDTO);
+    }
+    @Test
+    public void update(){
+        ReplyEntity replyEntity = replyRepository.findById(1L).get();
+        replyEntity.setReplyText("승인");
+        replyEntity.setReplyer("신라");
+        ReplyEntity result = replyRepository.save(replyEntity);
+        log.info(result);
+
+    }
+
 
 
 }
