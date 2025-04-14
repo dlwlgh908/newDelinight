@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,71 +27,43 @@ public class CheckInServiceImpl implements CheckInService{
     private final ModelMapper modelMapper;
     private final GuestRepository guestRepository;
     private final CheckOutLogRepository checkOutLogRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
-    public void create(CheckInDTO checkInDTO, String email) {
+    public void create(RoomEntity roomEntity) {
 
-        CheckInEntity checkInEntity =
-                modelMapper.map(checkInDTO, CheckInEntity.class)
-                        .setUsersEntity(modelMapper.map(checkInDTO.getUsersDTO(), UsersEntity.class));
-
-        RoomEntity roomEntity =
-            roomRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-        UsersEntity usersEntity =
-            usersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-
-        GuestEntity guestEntity =
-            guestRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-
-
-
-
-
-        usersEntity =
-            usersRepository.selectEmail(email);
-
-
-        checkInEntity.builder()
-                .checkinDate(checkInEntity.getCheckinDate())
-                .checkoutDate(checkInEntity.getCheckoutDate())
-                .checkInStatus(checkInEntity.getCheckInStatus())
-                .price(checkInEntity.getPrice())
-                .guestEntity(checkInEntity.getGuestEntity())
-                .guestEntity(guestEntity)
-                .usersEntity(usersEntity)
-                .roomEntity(roomEntity)
-                .build();
-
+        CheckInEntity checkInEntity = CheckInEntity.builder().roomEntity(roomEntity).checkInStatus(CheckInStatus.VACANCY).build();
         checkInRepository.save(checkInEntity);
 
-    }
-
-    @Override
-    public void create(CheckInDTO checkInDTO) {
-
-        CheckInEntity checkInEntity =
-                modelMapper.map(checkInDTO, CheckInEntity.class)
-                        .setUsersEntity(modelMapper.map(checkInDTO.getUsersDTO(), UsersEntity.class));
-
-        RoomEntity roomEntity =
-                roomRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-        UsersEntity usersEntity =
-                usersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-
-        checkInEntity.builder()
-                .checkinDate(checkInEntity.getCheckinDate())
-                .checkoutDate(checkInEntity.getCheckoutDate())
-                .checkInStatus(checkInEntity.getCheckInStatus())
-                .price(checkInEntity.getPrice())
-                .guestEntity(checkInEntity.getGuestEntity())
-                .usersEntity(usersEntity)
-                .roomEntity(roomEntity)
-                .build();
-
-        checkInRepository.save(checkInEntity);
 
     }
+//
+//    @Override
+//    public void create(CheckInDTO checkInDTO) {
+//
+//        CheckInEntity checkInEntity =
+//                modelMapper.map(checkInDTO, CheckInEntity.class)
+//                        .setUsersEntity(modelMapper.map(checkInDTO.getUsersDTO(), UsersEntity.class));
+//
+//        RoomEntity roomEntity =
+//                roomRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+//        UsersEntity usersEntity =
+//                usersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+//
+//        checkInEntity.builder()
+//                .checkinDate(checkInEntity.getCheckinDate())
+//                .checkoutDate(checkInEntity.getCheckoutDate())
+//                .checkInStatus(checkInEntity.getCheckInStatus())
+//                .price(checkInEntity.getPrice())
+//                .guestEntity(checkInEntity.getGuestEntity())
+//                .usersEntity(usersEntity)
+//                .roomEntity(roomEntity)
+//                .build();
+//
+//        checkInRepository.save(checkInEntity);
+//
+//    }
 
     @Override
     public List<CheckInDTO> list() {
@@ -109,11 +82,10 @@ public class CheckInServiceImpl implements CheckInService{
                         // getGuestEntity가 null이 아니면 setGuestDTO 호출
                         if (checkInEntity.getGuestEntity() != null) {
                             checkInDTO.setGuestDTO(modelMapper.map(checkInEntity.getGuestEntity(), GuestDTO.class))
-                                    .setPassword(checkInEntity.getGuestEntity().getPhone())
+                                    .setPassword(checkInDTO.getPassword())
                                     .setCertId((int) (Math.random() * 8999) + 1000)
                                     .setEmail(checkInEntity.getGuestEntity().getEmail())
                                     .setPhone(checkInEntity.getPhone());
-
 
                         }
                         else {
@@ -121,7 +93,8 @@ public class CheckInServiceImpl implements CheckInService{
                                     .setEmail(checkInEntity.getUsersEntity().getEmail())
                                     .setCertId((int) (Math.random() * 8999) + 1000)
                                     .setPhone(checkInEntity.getUsersEntity().getPhone());
-                        }}
+                        }
+                    }
                     // setRoomDTO는 항상 호출
                     checkInDTO.setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class));
                     return checkInDTO;
@@ -139,37 +112,16 @@ public class CheckInServiceImpl implements CheckInService{
 
 
 
-
-        //4자리 난수생성(ID)
-        String phone = checkInEntity.getPhone();
-
-        log.info(phone);
-        log.info(phone);
-
-
-        phone = phone.substring(phone.length() - 4);
-
-
-
-        log.info(phone);
-        log.info(phone);
-
-
         log.info("checkin service"+checkInEntity);
-        if(checkInDTO.getCertId() ==0) {
+        if(checkInDTO.getUserId()==null) {
             int certNum = (int) (Math.random() * 8999) + 1000;
-            checkInDTO.setCertId(certNum);
+            checkInDTO.setPassword(String.valueOf(certNum));
         }
-        else {
-            int certNum = checkInDTO.getCertId();
-            checkInDTO.setCertId(certNum);
-
-        }
-        checkInDTO.setPassword(phone);
 
         CheckInEntity check =
                 checkInRepository.findById(checkInEntity.getId()).orElseThrow(EntityNotFoundException::new);
 
+        check.setPassword(checkInDTO.getPassword());
         check.setCheckinDate(checkInEntity.getCheckinDate());
         check.setCheckoutDate(checkInEntity.getCheckoutDate());
 
@@ -180,6 +132,8 @@ public class CheckInServiceImpl implements CheckInService{
             GuestEntity guestEntity = new GuestEntity();
             guestEntity.setPhone(checkInDTO.getPhone());
             guestEntity.setEmail(checkInDTO.getEmail());
+//            guestEntity.setPassword(check.getPassword());
+            guestEntity.setPassword(passwordEncoder.encode(check.getPassword()));
 
             check.setGuestEntity(guestEntity);
 
@@ -221,6 +175,8 @@ public class CheckInServiceImpl implements CheckInService{
         checkInEntity.setPhone(null);
         checkInEntity.setPrice(0);
         checkInEntity.setGuestEntity(null);
+        checkInEntity.setUsersEntity(null);
+        checkInEntity.setPassword(null);
 
         checkInRepository.save(checkInEntity);
 
