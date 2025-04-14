@@ -335,7 +335,7 @@ button i {
     text-align: center;
 }
 
-.btn-DeliNight-white {
+.userHome .btn-DeliNight-white {
     width: 160px;
     height: 40px;
     font-size: 16px;
@@ -351,7 +351,7 @@ button i {
     transition: all 0.3s ease;
 }
 
-.btn-DeliNight-white:hover {
+.userHome .btn-DeliNight-white:hover {
     background-color: var(--color-white);
     color: var(--color-black);
 }
