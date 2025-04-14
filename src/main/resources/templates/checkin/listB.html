@@ -23,9 +23,9 @@
             <!--반드시 이 아래에서만 작업-->
 
             <!--페이지 이름-->
-            <h1 id="test" class="mt-4">Hotel</h1>
+            <h1 id="test" class="mt-4">Hotel Check-In</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">Dashboard-subheading</li>
+                <li class="breadcrumb-item active">호텔 체크인</li>
             </ol>
 
             <!--텍스트 박스-->
@@ -37,7 +37,7 @@
                     <button class="btn btn-primary mb-3" id="reservBtn">조회</button>
                     회원 조회 : <input type="email" id="emailcheck">
                     <button class="btn btn-primary" id="checkIdBtn">조회</button>
-                    <div id="result">
+                    <div id="result" hidden="hidden">
                         <p>userId : <span id="id"></span></p>
                         <p>이름 : <span id="name"></span></p>
                         <p>이메일 : <span id="email"></span></p>
@@ -119,7 +119,10 @@
 
                                 <td>
                                     <th:block th:if="${list.getPassword == null}">
-                                        <span class="certid" id="certid">Vacancy</span>
+                                        <th:block th:if="${list.getUsersDTO() != null}">
+                                            <span>CheckIn</span>
+                                        </th:block>
+                                        <span th:if="${list.getUsersDTO() == null}" class="password" id="password">Vacancy</span>
 
                                     </th:block>
                                     <th:block th:if="${list.getPassword != null}">
@@ -212,7 +215,7 @@
             return `${year}-${month}-${day}`;
         }
 
-        function updateRow(roomid, checkinDate, checkoutDate, certid) {
+        function updateRow(roomid, checkinDate, checkoutDate, password) {
             // 모든 checkinId 순회
             let row = $("th.checkinId").filter(function () {
                 let renderedId = $(this).text().trim(); // th 태그의 렌더링된 텍스트 값 가져오기
@@ -225,8 +228,7 @@
                 // 해당 행의 입력 필드 값 설정
                 row.find(".checkinDate").val(checkinDate);
                 row.find(".checkoutDate").val(checkoutDate);
-                row.find(".certid").text(certid);
-                alert("asfdasdfasdfa"+certid)
+                row.find(".password").text(password);
 
             } else {
                 console.error("해당 roomId를 가진 행을 찾을 수 없습니다: " + roomid);
@@ -368,6 +370,7 @@
 
             $(document).on("click", "#checkIdBtn", function () {
                 let emailcheck = $("#emailcheck").val();
+                let result = document.getElementById('result');
 
                 alert(emailcheck);
 
@@ -377,6 +380,9 @@
                     data: {"emailcheck": emailcheck},
                     success: function (usersDTO) {
                         alert("성공")
+
+
+
 
                         $("#name").text(usersDTO.name);
                         $("#email").text(usersDTO.email);
@@ -394,6 +400,9 @@
                         $("#checkinTable tbody").append(newRow);
                         $(".trContainer").show();
 
+                        result.hidden = false;
+
+
                     },
                     error: function () {
                         // if (xhr.status === 400) {
@@ -406,6 +415,7 @@
                         // console.log("요청데이터 : ", emailcheck)
                         // console.log("응답 상태 코드 : ", xhr.status);
                         // console.log("응답 메시지", xhr.responseText);
+                        alert("해당하는 이메일 정보가 없습니다..")
 
                     },
                 })
@@ -433,12 +443,12 @@
                         let roomid = response.roomid;
                         let checkinDate = formatDate(response.checkinDate);
                         let checkoutDate = formatDate(response.checkoutDate);
-                        let certid = response.certid;
-                        alert("certidasdfasdf : "+certid);
+                        let password = response.password;
+                        alert("패스워드!!!! : "+password);
                         alert(roomid);
                         alert(id);
 
-                        updateRow(roomid, checkinDate, checkoutDate,certid)
+                        updateRow(roomid, checkinDate, checkoutDate,password)
 
                     },
                 })

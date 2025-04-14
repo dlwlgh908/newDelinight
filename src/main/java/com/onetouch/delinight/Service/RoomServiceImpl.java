@@ -34,6 +34,7 @@ public class RoomServiceImpl implements RoomService{
     private final ModelMapper modelMapper;
     private final HotelRepository hotelRepository;
     private final UsersRepository usersRepository;
+    private final CheckInService checkInService;
     @Override
     public RoomDTO create(RoomDTO roomDTO) {
 
@@ -51,7 +52,9 @@ public class RoomServiceImpl implements RoomService{
         roomEntity.setHotelEntity(hotelEntity);
         roomEntity.setUsersEntity(usersEntity);
 
-        roomRepository.save(roomEntity);
+
+        checkInService.create(roomRepository.save(roomEntity));
+
         return roomDTO;
     }
 

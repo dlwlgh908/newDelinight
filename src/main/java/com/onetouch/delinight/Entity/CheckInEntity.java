@@ -39,6 +39,8 @@ public class CheckInEntity {
     private int price;
     private String phone;
 
+    private String password;
+
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
