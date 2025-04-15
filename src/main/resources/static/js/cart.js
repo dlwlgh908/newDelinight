@@ -99,7 +99,8 @@ $(function () {
             type: "POST",
             data: {"menuNum": selectedMenu},
             success: function (result) {
-                alert(result)
+
+
             }
 
         })
@@ -142,8 +143,7 @@ $(function () {
             url: "/cart/cartToOrder",
             type: "post",
             success: function (result) {
-                location.reload();
-
+                window.location.href = '/users/roomservice/order/read?paymentId='+result;
             }
 
         })

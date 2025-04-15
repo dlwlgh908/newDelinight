@@ -8,16 +8,10 @@
 package com.onetouch.delinight.DTO;
 
 import com.onetouch.delinight.Constant.CheckInStatus;
-import com.onetouch.delinight.Entity.CheckInEntity;
-import com.onetouch.delinight.Entity.GuestEntity;
-import com.onetouch.delinight.Entity.RoomEntity;
-import com.onetouch.delinight.Entity.UsersEntity;
-import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -40,9 +34,13 @@ public class CheckInDTO {
 
     private String phone;
 
+    private String email;
 
-    private int certNum;
-    private String certPass;
+    private Long userId;
+
+
+    private int certId;
+    private String password;
 
     private UsersDTO usersDTO;
 
@@ -65,8 +63,9 @@ public class CheckInDTO {
         return this;
     }
 
-    public void setPhone(String phone) {
+    public CheckInDTO setPhone(String phone) {
         this.phone = phone;
+        return this;
     }
 
     public CheckInDTO setRoomId(Long roomid) {
@@ -77,17 +76,28 @@ public class CheckInDTO {
         return this;
     }
 
-    public CheckInDTO setCertNum(int certNum) {
+    public CheckInDTO setCertId(int certId) {
 
-        this.certNum = certNum;
+        this.certId = certId;
         return this;
     }
 
-    public CheckInDTO setCertPass(String phone) {
-        this.certPass = phone.substring(phone.length() - 4);
+    public CheckInDTO setPassword(String password) {
+        this.password = password;
         return this;
 
     }
+
+    public CheckInDTO setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public CheckInDTO setUsersDTO(UsersDTO usersDTO) {
+        this.usersDTO = usersDTO;
+        return this;
+    }
+
 
 
 }

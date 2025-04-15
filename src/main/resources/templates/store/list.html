@@ -25,10 +25,9 @@
             </a>
             </td>
             <td th:text="${list.content}"></td>
+            <td><button class="btn btn-primary" id="delBtn" th:value="${list.id}">삭제</button></td>
 
 
-
-            </td>
 
 
 
@@ -42,6 +41,37 @@
 
 </table>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script th:inline="javascript">
+    $(function () {
+        $(document).on("click", "#delBtn", function () {
+            let id = this.getAttribute("value");
+
+            alert(id)
+            let result = confirm("ㅈㅉㅇㅇ?");
+
+
+            if (result) {
+                $.ajax({
+                    url: "/store/rest/del",
+                    type: "delete",
+                    data : {id: id},
+                    success: function () {
+                        alert("성공")
+                        location.reload();
+                    },
+                    error: function () {
+
+                    },
+                });
+
+            } else {
+
+            }
+
+        });
+    });
+
+</script>
 </body>
 </html>

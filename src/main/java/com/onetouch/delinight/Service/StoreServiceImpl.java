@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.Constant.OrdersStatus;
 import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.HotelEntity;
@@ -14,6 +15,7 @@ import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.StoreEntity;
 import com.onetouch.delinight.Repository.HotelRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
+import com.onetouch.delinight.Repository.OrdersRepository;
 import com.onetouch.delinight.Repository.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +36,21 @@ public class StoreServiceImpl implements StoreService{
     private final ModelMapper modelMapper;
     private final HotelRepository hotelRepository;
     private final MembersRepository membersRepository;
+    private final OrdersRepository ordersRepository;
 
+    @Override
+    public Integer awaitingCountCheck(Long storeId) {
+        Integer awaitingCount = ordersRepository.countByStoreEntityIdAndOrdersStatus(storeId, OrdersStatus.AWAITING);
+        return awaitingCount;
+    }
 
+    @Override
+    public Long findStoreByEmail(String email) {
 
+        StoreEntity storeEntity = storeRepository.findByMembersEntity_Email(email);
+        return storeEntity.getId();
+
+    }
     @Override
     public void create(StoreDTO storeDTO) {
         StoreEntity storeEntity =
@@ -63,5 +77,10 @@ public class StoreServiceImpl implements StoreService{
                 storeEntity -> modelMapper.map(storeEntity, StoreDTO.class)
         ).collect(Collectors.toList());
         return storeDTOList;
+    }
+
+    @Override
+    public void del(Long id) {
+        storeRepository.deleteById(id);
     }
 }

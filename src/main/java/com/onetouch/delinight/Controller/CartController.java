@@ -22,7 +22,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/cart")
+@RequestMapping("/users/cart")
 @Log4j2
 public class CartController {
     private final CartService cartService;
