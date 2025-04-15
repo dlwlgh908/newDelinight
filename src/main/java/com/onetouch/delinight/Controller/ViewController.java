@@ -41,7 +41,7 @@ public class ViewController {
     }
 
     @GetMapping("/")
-    public String index(Model model, Principal principal) {
+    public String index() {
 
         return "/pages/index";
     }
