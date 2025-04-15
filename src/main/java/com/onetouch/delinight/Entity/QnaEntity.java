@@ -31,9 +31,19 @@ public class QnaEntity extends BaseTimeEntity {
     @Column(length = 2000, nullable = true)
     private String content;
 
+
+
     @ManyToOne(fetch = FetchType.LAZY) //지연로딩
     @JoinColumn(name = "checkin_id")
     private CheckInEntity checkInEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
+    private HotelEntity hotelEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id")
+    private UsersEntity usersEntity;
 
 
 

@@ -26,15 +26,14 @@ public class CheckInRestController {
 
         log.info("들어오는 값 : " + checkInDTO);
 
-        log.info(checkInDTO.getId());
-        log.info(checkInDTO.getId());
-        log.info(checkInDTO.getId());
-        log.info(checkInDTO.getId());
+        log.info("password 들어오나요? : " +checkInDTO.getPassword());
+        log.info("password 들어오나요? : " +checkInDTO.getPassword());
+        log.info("password 들어오나요? : " +checkInDTO.getPassword());
+        log.info("password 들어오나요? : " +checkInDTO.getPassword());
 
-        log.info("userId 값 : " + checkInDTO.getUserId());
 
         checkInService.checkin(checkInDTO);
-        log.info("certNum  : "+checkInDTO.getCertNum());
+        log.info("certNum  : "+checkInDTO.getCertId());
 
 
         return ResponseEntity.ok("성공");
@@ -59,15 +58,17 @@ public class CheckInRestController {
         Long roomid = Long.parseLong(parts[0]);
         String checkinDate = parts[1].substring(0, 6);
         String checkoutDate = parts[1].substring(6, 12);
-        int certid = Integer.parseInt(parts[2]);
+        int password = Integer.parseInt(parts[2]);
 
-        log.info(certid);
+        log.info("cert 값 나오냐??"+password);
+        log.info("cert 값 나오냐??"+password);
+        log.info("cert 값 나오냐??"+password);
 
         Map<String, Object> response = new HashMap<>();
         response.put("roomid", roomid);
         response.put("checkinDate", checkinDate);
         response.put("checkoutDate", checkoutDate);
-        response.put("certid", certid);
+        response.put("password", password);
 
 
         return ResponseEntity.ok(response);

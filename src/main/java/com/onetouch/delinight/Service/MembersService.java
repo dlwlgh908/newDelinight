@@ -27,8 +27,6 @@ public interface MembersService {
 
     public List<MembersDTO> findAll();
 
-    public String login(String email, String password);
-
     public List<MembersDTO> findSuper();
     public List<MembersDTO> findHotelAd();
     public List<MembersDTO> findStoreAd();

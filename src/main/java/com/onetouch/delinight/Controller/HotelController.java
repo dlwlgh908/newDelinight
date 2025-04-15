@@ -40,12 +40,12 @@ public class HotelController {
         return "hotel/create";
     }
 
-    @GetMapping("/list")
+    @GetMapping("/listA")
     public String listView(Model model) {
         List<HotelDTO> hotelDTOList=
         hotelService.list();
 
         model.addAttribute("hotelDTOList", hotelDTOList);
-        return "hotel/list";
+        return "hotel/listA";
     }
 }

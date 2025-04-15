@@ -37,14 +37,21 @@
                            <div class="row mb-1">
                                <label class="col-sm-2 col-form-label form-label">관리자 이름</label>
                                <div class="col-sm-4">
-                                   <input type="text" readonly class="form-control-plaintext" id="staticMembersName" value="홍길동">
+                                   <input type="text" readonly class="form-control-plaintext" th:value="${membersDTO.name}">
                                </div>
                            </div>
 
                            <div class="row mb-1">
                                <label class="col-sm-2 col-form-label form-label">관리자 등급</label>
                                <div class="col-sm-4">
-                                   <input type="text" readonly class="form-control-plaintext" id="staticMembersEmail" value="SuperADMIN">
+                                   <input type="text" readonly class="form-control-plaintext" th:value="${membersDTO.role}">
+                               </div>
+                           </div>
+
+                           <div class="row mb-1">
+                               <label class="col-sm-2 col-form-label form-label">이메일</label>
+                               <div class="col-sm-6">
+                                   <input type="email" readonly class="form-control-plaintext" th:value="${membersDTO.email}">
                                </div>
                            </div>
 
@@ -53,7 +60,7 @@
                            <div class="row mb-4">
                                <label class="col-sm-2 col-form-label form-label">전화번호</label>
                                <div class="col-sm-10">
-                                   <input type="number" class="form-control" id="staticMembersPhone" maxlength="13" placeholder="원래있던번호">
+                                   <input type="number" class="form-control" id="staticMembersPhone" maxlength="13" th:placeholder="${membersDTO.phone}">
                                    <div class="text-sm mt-1">
                                        전화번호를 입력하면 자동으로 하이폰이 들어갑니다. (01012345678 > 010-1234-5678)
                                    </div>
@@ -108,7 +115,7 @@
                            </div>
 
                            <div class="text-center mt-5">
-                               <button class="btn btn-primary me-2 px-4">저장</button>
+                               <button class="btn btn-primary me-2 px-4" id="delbtn">저장</button>
                                <button class="btn btn-gray px-4">취소</button>
                            </div>
                        </div>
@@ -144,6 +151,82 @@
                     $('.iconX').removeClass('open');
                 });
             </script>
+
+
+
+            <!-- 효찬님꺼 도와드린거!!!!!-->
+            <!--            <script>-->
+            <!--                $(function () {-->
+
+            <!--                    $(document).on("click", "#ddd", function () {-->
+            <!--                        let id = this.getAttribute("value");-->
+            <!--                        alert(id);-->
+
+            <!--                        let result = confirm("진짜 진짜루 삭제하시겠습니까? (다날라감 ㄹㅇ)")-->
+            <!--                        if (result) {-->
+            <!--                            $.ajax({-->
+            <!--                                url : "/branch/rest/del",-->
+            <!--                                type: "delete",-->
+            <!--                                data: {id : id},-->
+            <!--                                success: function () {-->
+            <!--                                    location.reload();-->
+            <!--                                },-->
+            <!--                                error: function () {-->
+
+            <!--                                },-->
+            <!--                            })-->
+            <!--                        } else {-->
+
+            <!--                        }-->
+
+            <!--                    });-->
+            <!--                });-->
+            <!--            </script>-->
+            <!--            <script>-->
+            <!--                $(function (){-->
+            <!--                    $(document).on("click", "#delbtn", function () {-->
+            <!--                        let id = this.getAttribute("value");-->
+
+            <!--                        Swal.fire({-->
+            <!--                            title: '진짜 진짜루 삭제하시겠습니까?',-->
+            <!--                            text: "(다날라감 ㄹㅇ)",-->
+            <!--                            icon: 'warning',-->
+            <!--                            showCancelButton: true,-->
+            <!--                            confirmButtonColor: '#3085d6',-->
+            <!--                            cancelButtonColor: '#d33',-->
+            <!--                            cancelButtonText: '취소',-->
+            <!--                            confirmButtonText: '확인',-->
+            <!--                            reverseButtons: false,-->
+
+            <!--                        }).then((result) => {-->
+
+            <!--                            if (result.isConfirmed) {-->
+
+            <!--                                $.ajax({-->
+            <!--                                    url : "/branch/rest/del",-->
+            <!--                                    type: "delete",-->
+            <!--                                    data: {id : id},-->
+            <!--                                    success: function () {-->
+            <!--                                        Swal.fire(-->
+            <!--                                            '승인이 완료되었습니다.',-->
+            <!--                                            '화끈하시네요~!',-->
+            <!--                                            'success'-->
+            <!--                                        ).then(() => {-->
+            <!--                                            location.reload();-->
+            <!--                                        })-->
+            <!--                                    },-->
+            <!--                                    error: function () {-->
+
+            <!--                                    },-->
+            <!--                                })-->
+
+
+            <!--                            }-->
+
+            <!--                        })-->
+            <!--                    });-->
+            <!--                })-->
+            <!--            </script>-->
 
             <!--푸터 절대 수정 금지!!!!-->
             <!--푸터-->

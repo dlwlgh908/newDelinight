@@ -9,6 +9,7 @@ package com.onetouch.delinight.DTO;
 
 import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
+import com.onetouch.delinight.Entity.MembersEntity;
 import jakarta.persistence.Column;
 import lombok.*;
 
@@ -32,4 +33,13 @@ public class MembersDTO {
     private Role role;
     private Status status;
 
+    public MembersDTO(MembersEntity entity) {
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.email = entity.getEmail();
+        this.phone = entity.getPhone();
+        this.password = entity.getPassword();
+        this.role = entity.getRole();
+        this.status = entity.getStatus();
+    }
 }

@@ -36,6 +36,7 @@
 button:active{
     box-shadow: none !important;
 }
+/* welcome-page-start */
 .btn-DeliNight-white {
     background-color: var(--color-white);
     font: inherit;
@@ -218,6 +219,189 @@ button i {
 .welcome-footer a:hover {
     text-decoration: underline;
 }
+/* welcome-page-end */
+
+/* login-page-start */
+.login-body{
+    font-family: sans-serif;
+    margin: auto;
+    background-color: var(--color-white);
+}
+.login-body .login-container{
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+}
+.login-body .login-header{
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    margin: 40px 0 20px;
+}
+.login-body .tab {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid var(--color-white);
+    margin-bottom: 20px;
+}
+.login-body .tab button{
+    background: none;
+    border: none;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 3px solid transparent;
+    flex: 1;
+    color: var(--jin-gray);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+.login-body .tab button:hover {
+    color: var(--color-black);
+}
+.login-body .tab .login-btn-active {
+    border-color: var(--color-black);
+    color: var(--color-black);
+}
+.login-body .login-id-input .login-password-input{
+    margin-bottom: 15px;
+}
+.login-body input[type="text"],
+.login-body input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px; /* 여백 추가 */
+    border: 1px solid #ccc;
+    font-size: 14px;
+    border-radius: 0;
+}
+.login-body .login-btn {
+    width: 100%;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    font-weight: bold;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 16px;
+    font-size: 15px;
+}
+.login-body .links {
+    text-align: center;
+    font-size: 14px;
+    color: var(--jin-gray);
+    margin-top: 10px;
+}
+.login-body .links a {
+    margin: 0 8px;
+    color: var(--jin-gray);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.login-body .links a:hover {
+    color: var(--color-black);
+}
+.login-btn {
+    background-color: var(--color-gray);
+    border: none;
+    padding: 0.5em 1em;
+}
+.login-btn-active {
+    background-color: var(--color-gray);
+    color: white;
+    font-weight: bold;
+}
+/* login-page-end */
+
+/* header-page-start */
+/* 드롭다운 화살표 제거 */
+.nav-item.dropdown > a.nav-link.dropdown-toggle::after {
+    display: none;
+}
+/* header-page-end */
+
+/* userHome-page-start */
+.flex-box {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 44px;
+    margin: 12px 0;
+    width: 400px;
+    flex-wrap: wrap;
+}
+
+.subCol {
+    text-align: center;
+}
+
+.userHome .btn-DeliNight-white {
+    width: 160px;
+    height: 40px;
+    font-size: 16px;
+    border: 2px solid var(--color-white);
+    background-color: var(--color-white);
+    color: var(--color-black);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: pre-line; /* 텍스트 줄바꿈 허용 (선택사항) */
+    transition: all 0.3s ease;
+}
+
+.userHome .btn-DeliNight-white:hover {
+    background-color: var(--color-white);
+    color: var(--color-black);
+}
+.imgContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+}
+
+.imgCol {
+    width: 380px;
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgCol img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+.searchContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+}
+
+.searchCol {
+    width: 380px;
+    height: 40px;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-white);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+    color: var(--jin-gray);
+}
+/* userHome-page-end */
+
 
 
 
