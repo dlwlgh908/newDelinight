@@ -13,15 +13,11 @@ import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.MembersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -33,9 +29,18 @@ public class MembersController {
     private final MembersService membersService;
     private final MembersRepository membersRepository;
 
+    @ModelAttribute("membersDTO")
+    public MembersDTO setUserInfo(Principal principal) {
+        if (principal == null) return null;
+
+        String email = principal.getName();
+        MembersEntity membersEntity = membersRepository.findByEmail(email);
+        return new MembersDTO(membersEntity);
+    }
+
     @GetMapping("/adminhome")
     public String adminhome() {
-        return "members/home";
+        return "/members/adminhome";
 
     }
 
@@ -115,7 +120,16 @@ public class MembersController {
     }
 
     @GetMapping("/adminlogin")
-    public String adminloginGet(){
+    public String adminloginGet(@RequestParam(value = "error", required = false) String error, Model model) {
+
+        if ("bad_credentials".equals(error)) {
+            model.addAttribute("passwordError", "잘못된 비밀번호 입니다.");
+        } else if ("members_not_found".equals(error)) {
+            model.addAttribute("emailError", "해당 이메일의 회원을 찾을 수 없습니다.");
+        } else if ("unknown".equals(error)) {
+            model.addAttribute("globalError", "알 수 없는 오류가 발생했습니다.");
+        }
+
         return "members/adminlogin";
     }
 }

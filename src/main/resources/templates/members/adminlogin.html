@@ -28,6 +28,9 @@
                         <label class="col-sm-3 col-form-label form-label">이메일</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="email">
+                            <div th:if="${emailError}" class="text-danger text-sm mt-1">
+                                <p th:text="${emailError}"></p>
+                            </div>
                         </div>
                     </div>
 
@@ -35,6 +38,9 @@
                         <label class="col-sm-3 col-form-label form-label">비밀번호</label>
                         <div class="col-sm-9">
                             <input type="password" class="form-control" name="password">
+                            <div th:if="${passwordError}" class="text-danger text-sm mt-1">
+                                <p th:text="${passwordError}"></p>
+                            </div>
                         </div>
                     </div>
 
