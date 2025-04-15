@@ -72,7 +72,7 @@ public class SecurityConfig {
                 .formLogin(formLogin -> formLogin
                         .loginPage("/members/account/adminlogin")
                         .loginProcessingUrl("/members/adminlogin")
-                        .defaultSuccessUrl("/members/store/orders/list")
+                        .defaultSuccessUrl("/members/account/adminhome")
                         .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
                         .usernameParameter("email")
                 )
