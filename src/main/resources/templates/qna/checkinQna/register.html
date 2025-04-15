@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+>
+    <head>
+        <title>델리나잇</title>
+
+        <!--별도 css 필요할 시 아래로 추가-->
+        <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
+        styles.css에 작성할것-->
+    </head>
+
+    <body>
+
+        <div layout:fragment="adminContent" id="layoutSidenav_content">
+            <main>
+                <!--내용 넣는 곳-->
+                <div class="container-fluid px-4">
+                    <!--페이지 이름-->
+                    <h1 class="mt-4">문의사항</h1>
+
+                    <!--텍스트 박스-->
+                    <div class="card mb-4">
+                       <div class="card-body">
+                           <form action="/qna/checkinQna/register" th:object="${qnaDTO}" method="post">
+                               <div class="card">
+
+                                   <input type="hidden" name="id" id="id">
+
+                                   <div class="md-3">
+                                       <label for="title" class="form-label">제목</label>
+                                       <input type="text" class="form-control" id="title" name="title">
+                                   </div>
+                                   <div class="md-3">
+                                       <label for="content" class="form-label">내용</label>
+                                       <input type="text" class="form-control" id="content" name="content">
+                                   </div>
+                               </div>
+                               <button type="submit" class="btn btn-primary">저장</button>
+                           </form>
+                       </div>
+                    </div>
+
+
+                </div>
+            </main>
+
+            <!--푸터 절대 수정 금지!!!!-->
+            <!--푸터-->
+            <div th:replace="~{fragments/adminfooter::adminFooter}"></div>
+        </div>
+    </body>
+</html>

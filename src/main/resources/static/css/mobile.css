@@ -1,0 +1,407 @@
+/* 공통 색상 */
+:root {
+    /* 기본 색상 */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-gray: #f0f0f0;
+    --dark-gray: #333333;
+    --jin-gray: #777;
+    --color-sky: #4A90E2;
+
+    /* 밝은 테마 (화이트 버튼용) */
+    --white-bg: #f0f0f0;
+    --white-text: #242424;
+    --white-shadow-1: #f4f4f4;
+    --white-shadow-2: #efefef;
+    --white-shadow-3: #ececec;
+    --white-shadow-4: #e0e0e0;
+    --white-shadow-5: #dedede;
+    --white-shadow-6: #dcdcdc;
+    --white-shadow-7: #cacaca;
+    --white-shadow-8: #cecece;
+
+    /* 어두운 테마 (블랙 버튼용) */
+    --black-bg: #2a2a2a;
+    --black-text: #e0e0e0;
+    --black-shadow-1: #3a3a3a;
+    --black-shadow-2: #252525;
+    --black-shadow-3: #202020;
+    --black-shadow-4: #1c1c1c;
+    --black-shadow-5: #181818;
+    --black-shadow-6: #141414;
+    --black-shadow-7: #101010;
+    --black-shadow-8: #0a0a0a;
+}
+/* 버튼 공통 */
+button:active{
+    box-shadow: none !important;
+}
+/* welcome-page-start */
+.btn-DeliNight-white {
+    background-color: var(--color-white);
+    font: inherit;
+    border: 0;
+    border-radius: 0.5em;
+    font-size: 14px;
+    padding: 0.5em 1em;
+    font-weight: 600;
+    color: var(--white-text);
+    text-shadow: 0 0.0625em 0 var(--color-white);
+    box-shadow:
+            inset 0 0.0625em 0 0 var(--white-shadow-1),
+            0 0.0625em 0 0 var(--white-shadow-2),
+            0 0.125em 0 0 var(--white-shadow-3),
+            0 0.25em 0 0 var(--white-shadow-4),
+            0 0.3125em 0 0 var(--white-shadow-5),
+            0 0.375em 0 0 var(--white-shadow-6),
+            0 0.425em 0 0 var(--white-shadow-7),
+            0 0.425em 0.5em 0 var(--white-shadow-8);
+}
+button:not(#btn-DeliNight-white):active {
+    transform: translate(0.225em);
+    box-shadow: inset 0 0.03em 0 0 var(--white-shadow-1),
+    0 0.03em 0 0 var(--white-shadow-2),
+    0 0.0625em 0 0 var(--white-shadow-3),
+    0 0.125em 0 0 var(--white-shadow-4),
+    0 0.125em 0 0 var(--white-shadow-5),
+    0 0.2em 0 0 var(--white-shadow-6),
+    0 0.225em 0 0 var(--white-shadow-7),
+    0 0.225em 0.375em 0 var(--white-shadow-8) !important;
+}
+.btn-DeliNight-black {
+    background-color: var(--black-bg);
+    font: inherit;
+    border: 0;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 0.5em 1em;
+    font-weight: 600;
+    color: var(--black-text);
+    text-shadow: 0 0.0625em 0 var(--color-black);
+    box-shadow:
+            inset 0 0.0625em 0 0 var(--black-shadow-1),
+            0 0.0625em 0 0 var(--black-shadow-2),
+            0 0.125em 0 0 var(--black-shadow-3),
+            0 0.25em 0 0 var(--black-shadow-4),
+            0 0.3125em 0 0 var(--black-shadow-5),
+            0 0.375em 0 0 var(--black-shadow-6),
+            0 0.425em 0 0 var(--black-shadow-7),
+            0 0.425em 0.5em 0 var(--black-shadow-8);
+}
+#btn-DeliNight-black-login:active {
+    transform: translateY(0.225em);
+    box-shadow:
+            inset 0 0.03em 0 0 var(--black-shadow-1),
+            0 0.03em 0 0 var(--black-shadow-2),
+            0 0.0625em 0 0 var(--black-shadow-3),
+            0 0.125em 0 0 var(--black-shadow-4),
+            0 0.125em 0 0 var(--black-shadow-5),
+            0 0.2em 0 0 var(--black-shadow-6),
+            0 0.225em 0 0 var(--black-shadow-7),
+            0 0.225em 0.375em 0 var(--black-shadow-8) !important;
+}
+#btn-DeliNight-black-signUp:active {
+    transform: translateY(0.225em);
+    box-shadow:
+            inset 0 0.03em 0 0 var(--black-shadow-1),
+            0 0.03em 0 0 var(--black-shadow-2),
+            0 0.0625em 0 0 var(--black-shadow-3),
+            0 0.125em 0 0 var(--black-shadow-4),
+            0 0.125em 0 0 var(--black-shadow-5),
+            0 0.2em 0 0 var(--black-shadow-6),
+            0 0.225em 0 0 var(--black-shadow-7),
+            0 0.225em 0.375em 0 var(--black-shadow-8) !important;
+}
+.welcome-custom-shadow {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* 전체 페이지 배경 */
+body.welcome-body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-gray);
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 중앙 박스 */
+.welcome-header {
+    background-color: var(--color-white);
+    width: 100%;
+    max-width: 400px;
+    border-radius: 0;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+/* 콘텐츠 내부 정렬 */
+.welcome-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+/* 중앙 정렬 컨테이너 */
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 1rem;
+}
+
+/* 카드 영역 */
+.welcome-card {
+    width: 100%;
+    max-width: 420px;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* 텍스트 상단 */
+.welcome-intro {
+    margin-top: 40px;
+}
+.welcome-intro h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--dark-gray);
+}
+.welcomeSub-subtext {
+    font-size: 0.95rem;
+    color: var(--jin-gray);
+    margin: 0.2rem 0;
+}
+
+/* 버튼 그룹은 맨 아래로 */
+.welcome-btn-group {
+    margin-top: auto;
+}
+
+/* 버튼 스타일 공통 */
+button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+}
+button:last-child {
+    margin-bottom: 0;
+}
+button i {
+    margin-right: 0.5rem;
+}
+.welcome-footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 2rem;
+}
+
+.welcome-footer a {
+    color: #888;
+    text-decoration: none;
+    margin: 0 0.3rem;
+}
+
+.welcome-footer a:hover {
+    text-decoration: underline;
+}
+/* welcome-page-end */
+
+/* login-page-start */
+.login-body{
+    font-family: sans-serif;
+    margin: auto;
+    background-color: var(--color-white);
+}
+.login-body .login-container{
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+}
+.login-body .login-header{
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    margin: 40px 0 20px;
+}
+.login-body .tab {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid var(--color-white);
+    margin-bottom: 20px;
+}
+.login-body .tab button{
+    background: none;
+    border: none;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 3px solid transparent;
+    flex: 1;
+    color: var(--jin-gray);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+.login-body .tab button:hover {
+    color: var(--color-black);
+}
+.login-body .tab .login-btn-active {
+    border-color: var(--color-black);
+    color: var(--color-black);
+}
+.login-body .login-id-input .login-password-input{
+    margin-bottom: 15px;
+}
+.login-body input[type="text"],
+.login-body input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px; /* 여백 추가 */
+    border: 1px solid #ccc;
+    font-size: 14px;
+    border-radius: 0;
+}
+.login-body .login-btn {
+    width: 100%;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    font-weight: bold;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 16px;
+    font-size: 15px;
+}
+.login-body .links {
+    text-align: center;
+    font-size: 14px;
+    color: var(--jin-gray);
+    margin-top: 10px;
+}
+.login-body .links a {
+    margin: 0 8px;
+    color: var(--jin-gray);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.login-body .links a:hover {
+    color: var(--color-black);
+}
+.login-btn {
+    background-color: var(--color-gray);
+    border: none;
+    padding: 0.5em 1em;
+}
+.login-btn-active {
+    background-color: var(--color-gray);
+    color: white;
+    font-weight: bold;
+}
+/* login-page-end */
+
+/* header-page-start */
+/* 드롭다운 화살표 제거 */
+.nav-item.dropdown > a.nav-link.dropdown-toggle::after {
+    display: none;
+}
+/* header-page-end */
+
+/* userHome-page-start */
+.flex-box {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 44px;
+    margin: 12px 0;
+    width: 400px;
+    flex-wrap: wrap;
+}
+
+.subCol {
+    text-align: center;
+}
+
+.userHome .btn-DeliNight-white {
+    width: 160px;
+    height: 40px;
+    font-size: 16px;
+    border: 2px solid var(--color-white);
+    background-color: var(--color-white);
+    color: var(--color-black);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: pre-line; /* 텍스트 줄바꿈 허용 (선택사항) */
+    transition: all 0.3s ease;
+}
+
+.userHome .btn-DeliNight-white:hover {
+    background-color: var(--color-white);
+    color: var(--color-black);
+}
+.imgContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+}
+
+.imgCol {
+    width: 380px;
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgCol img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+.searchContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+}
+
+.searchCol {
+    width: 380px;
+    height: 40px;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-white);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+    color: var(--jin-gray);
+}
+/* userHome-page-end */
+
+
+
+

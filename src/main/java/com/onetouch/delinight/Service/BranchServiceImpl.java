@@ -61,4 +61,9 @@ public class BranchServiceImpl implements BranchService{
 
         return branchDTOList;
     }
+
+    @Override
+    public void del(Long id) {
+        branchRepository.deleteById(id);
+    }
 }

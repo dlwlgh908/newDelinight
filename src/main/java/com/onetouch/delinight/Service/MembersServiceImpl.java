@@ -1,7 +1,7 @@
 /*********************************************************************
  * 클래스명 : MemberServiceImpl
  * 기능 :
- * 작성자 :
+ * 작성자 : 이효찬
  * 작성일 : 2025-03-30
  * 수정 : 2025-03-30
  *********************************************************************/
@@ -11,7 +11,9 @@ import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
+import com.onetouch.delinight.Repository.HotelRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
+import com.onetouch.delinight.Repository.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -36,6 +39,8 @@ public class MembersServiceImpl implements MembersService{
     private final MembersRepository membersRepository;
     private final ModelMapper modelMapper;
    private final PasswordEncoder passwordEncoder;
+   private final StoreService storeService;
+   private final HotelService hotelService;
 
     @Override
     public void create(MembersDTO membersDTO) {
@@ -161,4 +166,23 @@ public class MembersServiceImpl implements MembersService{
                 modelMapper.map(membersEntity, MembersDTO.class);
         return membersDTO;
     }
+
+    @Override
+    public Map<Role, Long> findRoleByEmail(String email) {
+
+        MembersEntity membersEntity = membersRepository.findByEmail(email);
+        if(membersEntity.getRole().equals(Role.STOREADMIN)){
+            Long id = storeService.findStoreByEmail(email);
+            return Map.of(Role.STOREADMIN, id);
+        }
+        else if(membersEntity.getRole().equals(Role.ADMIN)){
+            Long id = hotelService.findHotelByEmail(email);
+            return Map.of(Role.ADMIN, id);
+        }
+
+
+        return Map.of(null, 0L);
+    }
+
+
 }

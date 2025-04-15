@@ -21,7 +21,7 @@
             <div class="navbar-hover">
                 <div class="icon-wrap">
                     <div class="nav-link"><i class="fas fa-user"></i></div>
-                    <span class="notification-badge custom-shadow">7</span>
+                    <span class="notification-badge custom-shadow" th:if="${alertCount>0}" th:text="${alertCount}">7</span>
                 </div>
                 <div class="profile-tooltip-wrap">
                     <div class="profile-tooltip custom-shadow">
@@ -29,8 +29,17 @@
                             <img class="avatar" src="/img/defaultImg.png" alt="#">
                             <div class="user-info">
                                 <div class="user-info-title">
+
                                     <strong th:text="${membersDTO.name}"></strong>
                                     <div th:text="${membersDTO.role}">SuperADMIN</div>
+
+
+                                    <strong></strong>
+                                    <div>최고관리자</div>
+
+                                    <strong>홍길동</strong>
+                                    <div>SuperADMIN</div>
+
                                 </div>
                                 <div th:text="${membersDTO.email}">guide@mysupereasy.co.kr</div>
                                 <div><span>Deli-Nigth</span></div>
@@ -40,7 +49,7 @@
                             <li><a href="/members/update"><i class="fas fa-pen"></i>정보수정</a></li>
                             <div class="icon-wrap">
                                 <li><a><i class="fas fa-bell"></i>알림함</a></li>
-                                <span class="notification-badge custom-shadow">7</span>
+                                <span class="notification-badge custom-shadow" th:if="${alertCount>0}" th:text="${alertCount}"></span>
                             </div>
                         </ul>
                         <a class="logout-btn">로그아웃</a>

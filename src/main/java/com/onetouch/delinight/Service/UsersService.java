@@ -1,7 +1,7 @@
 /*********************************************************************
  * 클래스명 : UsersService
- * 기능 :
- * 작성자 :
+ * 기능 : 회원가입 , 비밀번호 변경 & 찾기 , 정보수정, 회원탈퇴
+ * 작성자 : 이동건
  * 작성일 : 2025-03-30
  * 수정 : 2025-03-30
  *********************************************************************/
@@ -16,8 +16,6 @@ public interface UsersService {
     public boolean passwordChange(UsersDTO usersDTO);
 
     public String sendTemporaryPassword(UsersDTO usersDTO);
-
-    public Integer urlCheck(String email);
 
     public void userUpdate(String email , UsersDTO usersDTO);
 

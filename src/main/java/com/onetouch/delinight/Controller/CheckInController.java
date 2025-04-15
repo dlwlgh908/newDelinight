@@ -22,7 +22,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/checkin")
+@RequestMapping("/members/checkin")
 @Log4j2
 public class CheckInController {
 
@@ -53,7 +53,7 @@ public class CheckInController {
 
     }
 
-    @GetMapping("/listA")
+    @GetMapping("/listB")
     public String listA(Model model) {
 
         List<RoomDTO> roomDTOList =
@@ -62,7 +62,8 @@ public class CheckInController {
         List<CheckInDTO> checkInDTOList =
                 checkInService.list();
 
-        log.info(checkInDTOList);
+        log.info("룸 개수"+checkInDTOList.size());
+        log.info("룸 개수"+checkInDTOList.size());
         log.info(checkInDTOList);
 
         
@@ -72,7 +73,7 @@ public class CheckInController {
         model.addAttribute("checkInDTOList", checkInDTOList);
 
 
-        return "checkin/listA";
+        return "checkin/listB";
 
     }
 }

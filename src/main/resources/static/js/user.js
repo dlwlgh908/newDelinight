@@ -213,7 +213,7 @@ $(document).ready(function () {
     $(".updateBtn").on("click" , function () {
 
         let updateCheck = true
-        let phonePattern = /^010-\d{4}-\d{4}$/; // 010-1234-5678 형식
+        let phonePattern = /^010\d{4}\d{4}$/; // 010-1234-5678 형식
         let addressPattern = /^[가-힣0-9a-zA-Z\s,\-\.]+$/;
 
         let phoneUpdate = $(".phoneUpdate").val();
