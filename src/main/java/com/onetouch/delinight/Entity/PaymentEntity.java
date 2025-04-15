@@ -1,9 +1,9 @@
 /*********************************************************************
- * 클래스명 : MembersEntity
- * 기능 :
- * 작성자 :
- * 작성일 : 2025-03-30
- * 수정 : 2025-03-30
+ * 클래스명 : PaymentEntity
+ * 기능 : 정산
+ * 작성자 : 이동건
+ * 작성일 : 2025-04-15
+ * 수정 : 2025-04-15
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
@@ -11,7 +11,6 @@ import com.onetouch.delinight.Constant.OrderType;
 import com.onetouch.delinight.Constant.PaidCheck;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 
