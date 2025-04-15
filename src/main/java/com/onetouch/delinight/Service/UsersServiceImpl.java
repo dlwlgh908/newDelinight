@@ -40,7 +40,6 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
     private final UsersRepository usersRepository;
     private final MembersRepository membersRepository;
     private final CheckInRepository checkInRepository;
-
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
@@ -71,16 +70,18 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
 
         log.info(email);
         UsersEntity usersEntity = usersRepository.selectEmail(email);
-        MembersEntity membersEntity = membersRepository.findByEmail(email);
-        GuestEntity guestEntity = checkInRepository.findByGuestEntity_Phone(email).getGuestEntity();
 
-        log.info(membersEntity);
 
         if (usersEntity == null) {
+            MembersEntity membersEntity = membersRepository.findByEmail(email);
+
 
             if(membersEntity != null){
                 return new MemberDetails(membersEntity);
+
             }
+            GuestEntity guestEntity = checkInRepository.findByGuestEntity_Phone(email).getGuestEntity();
+
             if(guestEntity != null){
                 return User.builder()
                         .username(guestEntity.getPhone())

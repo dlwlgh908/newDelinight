@@ -82,8 +82,8 @@ public class CheckInDTO {
         return this;
     }
 
-    public CheckInDTO setPassword(String phone) {
-        this.password = phone.substring(phone.length() - 4);
+    public CheckInDTO setPassword(String password) {
+        this.password = password;
         return this;
 
     }

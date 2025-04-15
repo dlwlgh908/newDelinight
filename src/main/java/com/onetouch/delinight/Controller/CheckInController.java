@@ -62,7 +62,8 @@ public class CheckInController {
         List<CheckInDTO> checkInDTOList =
                 checkInService.list();
 
-        log.info(checkInDTOList);
+        log.info("룸 개수"+checkInDTOList.size());
+        log.info("룸 개수"+checkInDTOList.size());
         log.info(checkInDTOList);
 
         

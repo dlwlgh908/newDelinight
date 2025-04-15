@@ -24,15 +24,15 @@ public class GuestEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
-    private String password;
-
     @Column(name = "reservation_num", nullable = false)
     private String reservationNum;
 
     @Column(name = "cert_id")
     private String certId;
-//    @Column(name = "password")
-//    private String password;
+
+    @Column(name = "password")
+    private String password;
+
 
 
 
