@@ -26,7 +26,9 @@
                        <div class="card-body">
                            <form action="/qna/checkinQna/register" th:object="${qnaDTO}" method="post">
                                <div class="card">
+
                                    <input type="hidden" name="id" id="id">
+
                                    <div class="md-3">
                                        <label for="title" class="form-label">제목</label>
                                        <input type="text" class="form-control" id="title" name="title">
@@ -40,6 +42,7 @@
                            </form>
                        </div>
                     </div>
+
 
                 </div>
             </main>

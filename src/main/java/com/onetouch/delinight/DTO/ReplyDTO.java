@@ -15,10 +15,13 @@ import java.time.LocalDateTime;
 public class ReplyDTO {
     private Long id;
 
-    @NotBlank(message = "답변을 작성해주세요.")
     private String replyText;
+
     private String replyer;
+
     private QnaDTO qnaDTO;
+    private Long qnaId;
+    
     private LocalDateTime regTime;
     private LocalDateTime updateTime;
 

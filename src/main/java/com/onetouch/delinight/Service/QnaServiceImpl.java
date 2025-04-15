@@ -66,10 +66,14 @@ public class QnaServiceImpl implements QnaService {
         List<QnaEntity> qnaEntityList = qnaRepository.findAll();
 
         //리스트 하나씩 꺼내서 map 엔티티를 DTO로 변환해서 자동으로 필드 복사해주는
-        List<QnaDTO> qnaDTOList =
-                qnaEntityList.stream().toList().stream().map(
-                        qnaEntity -> modelMapper.map(qnaEntity, QnaDTO.class)
-                ).collect(Collectors.toList());//다시 리스트로 모아서 저장
+//        List<QnaDTO> qnaDTOList =
+//                qnaEntityList.stream().toList().stream().map(
+//                        qnaEntity -> modelMapper.map(qnaEntity, QnaDTO.class)
+//                ).collect(Collectors.toList());//다시 리스트로 모아서 저장
+        List<QnaDTO> qnaDTOList = qnaEntityList.stream()
+                .map(qnaEntity -> modelMapper.map(qnaEntity, QnaDTO.class))
+                .collect(Collectors.toList());
+
 
         //DTO로 바꾼 Qna리스트를 반환
         return qnaDTOList;

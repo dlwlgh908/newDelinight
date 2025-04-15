@@ -20,84 +20,84 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/qna")
+@RequestMapping("/qna/checkinQna")
 public class QnaController {
     private final QnaService qnaService;
     private final QnaRepository qnaRepository;
 
     //등록get
-    @GetMapping("/checkinQna/register")
+    @GetMapping("/register")
     public String register(QnaDTO qnaDTO, Model model){
         System.out.println("qnaDTO" + qnaDTO);
         model.addAttribute("qnaDTO" ,qnaDTO);
 
-        return "/qna/checkinQna/register";
+//        return "checkinQna/register";
+        return "qna/checkinQna/register";
     }
     //등록post
     @PostMapping("/checkinQna/register")
     public String registerPost(QnaDTO qnaDTO,Principal principal){
-
+        principal.getName();
         Long id = 12L;
-
         qnaService.register(qnaDTO,id);
         return "redirect:/qna/checkinQna/list";
     }
     //목록
-    @GetMapping("/checkinQna/list")
+    @GetMapping("/list")
     public String list(Model model){
         log.info("list진입");
         List<QnaDTO> qnaDTOList =
                 qnaService.findAll();
         log.info(qnaDTOList);
         model.addAttribute("qnaDTOList",qnaDTOList);
-        return "/qna/checkinQna/list";
+        return "qna/checkinQna/list";
     }
 
 
 
     //상세보기
-    @GetMapping("/checkinQna/read")
+    @GetMapping("/read")
     public String read(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
         QnaDTO qnaDTO = qnaService.read(id);
         model.addAttribute("qnaDTO",qnaDTO);
-        return "/qna/checkinQna/read";
+        return "qna/checkinQna/read";
     }
     //수정get
-    @GetMapping("/checkinQna/update/{id}")
+    @GetMapping("/update/{id}")
     public String update(@PathVariable(name = "id")Long id,Model model){
         log.info("수정" +id);
         QnaDTO qnaDTO = qnaService.read(id);
         model.addAttribute("qnaDTO",qnaDTO);
-        return "/qna/checkinQna/update";
+        return "qna/checkinQna/update";
     }
     //수정post
-    @PostMapping("/checkinQna/update")
+    @PostMapping("/update")
     public String updatePost(QnaDTO qnaDTO){
         log.info(qnaDTO);
         qnaService.update(qnaDTO);
         return "redirect:/qna/checkinQna/read?id="+qnaDTO.getId();
     }
     //삭제
-    @GetMapping("/checkinQna/delete")
+    @GetMapping("/delete")
     public String deleteGET(Long id){
         qnaService.delete(id);
         return "redirect:/qna/checkinQna/list";
     }
 
-    @GetMapping("/checkinQna/test")
-    public String TESTGET(){
-        return "/qna/checkinQna/test";
-    }
-
-    @GetMapping("/hotelQna/list")
-    public String listA(Model model){
-        log.info("list진입");
-        List<QnaDTO> qnaDTOList =
-                qnaService.findAll();
-        log.info(qnaDTOList);
-        model.addAttribute("qnaDTOList",qnaDTOList);
-        return "/qna/hotelQna/list";
-    }
+//    @GetMapping("/checkinQna/test")
+//    public String TESTGET(){
+//        return "/qna/checkinQna/test";
+//    }
+//
+//    @GetMapping("/hotelQna/list")
+//    public String listA(Model model){
+//        log.info("list진입");
+//        List<QnaDTO> qnaDTOList =
+//                qnaService.findAll();
+//        log.info(qnaDTOList);
+//        model.addAttribute("qnaDTOList",qnaDTOList);
+//        return "/qna/hotelQna/list";
+//    }
 
 
 
