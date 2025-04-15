@@ -9,6 +9,8 @@ package com.onetouch.delinight.Entity;
 
 import com.onetouch.delinight.Constant.OrderType;
 import com.onetouch.delinight.Constant.PaidCheck;
+import com.onetouch.delinight.Constant.PaymentStatus;
+import com.onetouch.delinight.Entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "payment")
-public class PaymentEntity {
+public class PaymentEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +42,9 @@ public class PaymentEntity {
 
     @Enumerated(EnumType.STRING)
     PaidCheck paidCheck;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 
 
 }
