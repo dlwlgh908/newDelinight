@@ -123,11 +123,9 @@ public class MembersController {
     public String adminloginGet(@RequestParam(value = "error", required = false) String error, Model model) {
 
         if ("bad_credentials".equals(error)) {
-            model.addAttribute("passwordError", "잘못된 비밀번호 입니다.");
-        } else if ("members_not_found".equals(error)) {
-            model.addAttribute("emailError", "해당 이메일의 회원을 찾을 수 없습니다.");
+            model.addAttribute("passwordError", "비밀번호가 틀립니다.");
         } else if ("unknown".equals(error)) {
-            model.addAttribute("globalError", "알 수 없는 오류가 발생했습니다.");
+            model.addAttribute("emailError", "이메일이 틀립니다.");
         }
 
         return "members/adminlogin";
