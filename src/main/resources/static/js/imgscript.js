@@ -1,5 +1,5 @@
 $(function () {
-    var currentUrl = window.location.href
+
 
 
     $(".imgInput").on("change", function () {
@@ -11,8 +11,16 @@ $(function () {
 
     function insertImg() {
 
+        let currentUrl = window.location.pathname;
+        let imgType ="square";
+
+        if(currentUrl.includes("/members/hotel")){
+            imgType = "banner";
+        }
+
         let formData = new FormData();
         formData.append("image", $(".imgInput")[0].files[0])
+        formData.append("imgType", imgType)
         $.ajax({
 
             url: "/img/register",

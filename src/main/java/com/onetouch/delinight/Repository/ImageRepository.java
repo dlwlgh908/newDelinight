@@ -12,7 +12,9 @@ public interface ImageRepository extends JpaRepository<ImageEntity, Long> {
 
     public void deleteByRegTimeIsLessThanEqualAndMenuEntityIsNullAndHotelEntityIsNull(LocalDateTime time);
     public Optional<ImageEntity> findByMenuEntity_Id(Long menuEntityId);
+    public Optional<ImageEntity> findByStoreEntity_Id(Long storeEntityId);
 
     public void deleteByMenuEntity_Id(Long menuEntityId);
+    public void deleteByStoreEntity_Id(Long storeEntityId);
 
 }

@@ -44,6 +44,7 @@ public class GlobalModelAttribute {
                     model.addAttribute("alertCount", alertCount);
                     // 아무것도 아닐때(0으로 리턴)
                 }
+                model.addAttribute("member", memberDetails.getMembersEntity());
             }
         }
         else if(uri.startsWith("/users")){
