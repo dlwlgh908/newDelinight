@@ -8,8 +8,12 @@
 package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.DTO.StoreDTO;
+import com.onetouch.delinight.Service.ImageService;
 import com.onetouch.delinight.Service.StoreService;
+import com.onetouch.delinight.Util.MemberDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +24,11 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Log4j2
 @RequestMapping("/members/store")
 public class StoreController {
     private final StoreService storeService;
+    private final ImageService imageService;
 
     @GetMapping("/create")
     public String createView() {
@@ -45,6 +51,26 @@ public class StoreController {
         model.addAttribute("storeDTOList", storeDTOList);
 
         return "store/list";
+    }
+
+    @GetMapping("/update")
+    public String update(@AuthenticationPrincipal MemberDetails memberDetails, Model model){
+
+        String email = memberDetails.getUsername();
+        Long storeId = storeService.findStoreByEmail(email);
+        StoreDTO storeDTO = storeService.read(storeId);
+        log.info(storeDTO);
+        String imgUrl = imageService.readStore(storeId);
+        model.addAttribute("storeDTO", storeDTO);
+        model.addAttribute("imgUrl", imgUrl);
+
+        return "store/update";
+    }
+
+    @PostMapping("/update")
+    public String updatePost(StoreDTO storeDTO){
+        storeService.update(storeDTO);
+        return "redirect:/members/store/orders/list";
     }
 
 }

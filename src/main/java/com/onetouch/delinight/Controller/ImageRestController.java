@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -29,10 +30,10 @@ public class ImageRestController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<Map<Long , String>> imgRegister(@RequestPart(name = "image") MultipartFile multipartFile){
+    public ResponseEntity<Map<Long , String>> imgRegister(@RequestPart(name = "image") MultipartFile multipartFile, @RequestPart(name = "imgType") String imgType) throws IOException, InterruptedException {
         log.info("===================");
         log.info("들어온 이미지 파일");
-        Map<Long, String> result = imageService.register(multipartFile);
+        Map<Long, String> result = imageService.register(multipartFile, imgType);
         return ResponseEntity.ok(result);
     }
 

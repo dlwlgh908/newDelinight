@@ -22,6 +22,10 @@ public interface StoreService {
     public List<StoreDTO> list();
 
     public void del(Long id);
+    public StoreDTO read(Long id);
+
+    public void update(StoreDTO storeDTO);
+
 
 
 }
