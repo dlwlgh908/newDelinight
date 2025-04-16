@@ -21,6 +21,7 @@ import java.util.Map;
 public interface MembersService {
 
     public void create(MembersDTO membersDTO);
+    public MembersDTO update(MembersDTO membersDTO);
 
     public void hoteladcreate(MembersDTO membersDTO);
     public void storeadcreate(MembersDTO membersDTO);
@@ -32,15 +33,12 @@ public interface MembersService {
 
     public List<MembersDTO> findAll();
 
-
-    public String login(String email, String password);
-
 //    public List<MembersDTO> findSuper();
 
     Page<MembersEntity> findHotelAd(Status status, int page);
 
 
-    public List<MembersDTO> findSuper();
+    //public List<MembersDTO> findSuper();
     public List<MembersDTO> findHotelAd();
     public List<MembersDTO> findStoreAd();
 

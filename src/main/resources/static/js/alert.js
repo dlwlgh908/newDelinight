@@ -43,7 +43,7 @@ $(document).ready(function () {
 
 
 
-    $(".confirmStart").click(function () {
+    $("#confirmStart").click(function () {
 
         Swal.fire({
 

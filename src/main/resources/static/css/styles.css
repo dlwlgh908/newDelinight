@@ -2082,8 +2082,6 @@ progress {
   margin-bottom: 0;
   line-height: 1.5;
   color: #212529;
-  background-color: transparent;
-  border: solid transparent;
   border-width: 1px 0;
 }
 .form-control-plaintext:focus {
@@ -3682,11 +3680,15 @@ textarea.form-control-lg {
   display: inline-block;
 }
 
+.icon-wrap div {
+  font-size: 20px;
+}
+
 .notification-badge {
   position: absolute;
-  height: 15px;
-  top: 0px;
-  right: -5px;
+  height: 14px;
+  top: 4px;
+  right: -3px;
   background: #ff1500;
   color: white;
   font-size: 10px;
@@ -3694,7 +3696,6 @@ textarea.form-control-lg {
   border-radius: 999px;
   line-height: 1;
   min-width: 18px;
-  text-align: center;
 }
 
 .form-label {
@@ -3771,12 +3772,21 @@ textarea.form-control-lg {
 }
 
 .avatar {
-  width: 54px;
-  height: 54px;
   background-color: #eee;
   background-size: cover;
+}
+
+#profile-avatar {
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   flex-shrink: 0;
+
+}
+
+#mypage-avatar {
+  width: 200px;
+  height: 100%;
 }
 
 .user-info {

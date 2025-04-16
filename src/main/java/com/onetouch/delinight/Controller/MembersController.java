@@ -15,13 +15,11 @@ import com.onetouch.delinight.Service.MembersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,6 +43,18 @@ public class MembersController {
     public String adminhome() {
         return "/members/adminhome";
 
+    }
+
+    @GetMapping("/adminmypage")
+    public String adminMyPage(Principal principal, Model model){
+
+        return "/members/adminmypage";
+    }
+
+    @GetMapping("/adminupdate")
+    public String adminUpdate(Principal principal, Model model){
+
+        return "/members/adminupdate";
     }
 
     @GetMapping("/create")
@@ -194,7 +204,7 @@ public class MembersController {
         return "members/storeadlist";
     }
 
-   
+
     //@PostMapping("/adminlogin")
     //public String adminlogin(@RequestParam String email,
     //                         @RequestParam String password,
