@@ -193,11 +193,7 @@ public class MembersController {
         return "members/storeadlist";
     }
 
-    @GetMapping("/adminlogin")
-    public String adminloginGet() {
-        return "members/adminlogin";
-    }
-
+   
     //@PostMapping("/adminlogin")
     //public String adminlogin(@RequestParam String email,
     //                         @RequestParam String password,
@@ -229,7 +225,7 @@ public class MembersController {
     //    //오류 없으면 홈화면으로 이동
     //    return "redirect:/members/home";
     //}
-
+    @GetMapping("/adminlogin")
     public String adminloginGet(@RequestParam(value = "error", required = false) String error, Model model) {
 
         if ("bad_credentials".equals(error)) {
@@ -238,7 +234,12 @@ public class MembersController {
             model.addAttribute("emailError", "이메일이 틀립니다.");
         }
 
-        return "members/adminlogin";
+        return "/members/adminlogin";
+    }
+
+    @GetMapping("/adminlogout-success")
+    public String adminlogout(){
+        return "/members/adminlogout";
     }
 
 }
