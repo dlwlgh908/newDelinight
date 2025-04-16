@@ -20,9 +20,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class QnaDTO {
 
     private Long id;

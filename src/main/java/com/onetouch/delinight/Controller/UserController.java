@@ -8,6 +8,8 @@
 package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.DTO.UsersDTO;
+import com.onetouch.delinight.Entity.UsersEntity;
+import com.onetouch.delinight.Repository.UsersRepository;
 import com.onetouch.delinight.Service.UsersService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ import java.security.Principal;
 public class UserController {
 
         private final UsersService usersService;
+        private final UsersRepository usersRepository;
 
         @GetMapping("/mobile")
         public String mobileGET(){
@@ -38,13 +41,19 @@ public class UserController {
 
         @GetMapping("/home")
         public String usershome(Principal principal , Model model) {
-
                 log.info("사용자 메인 페이지 진입함??????????");
+
                 if (principal == null) {
                         return "redirect:/users/login";
                 }
 
-                model.addAttribute("data" , principal.getName());
+                String email = principal.getName();
+
+                // DB 사용자 이름 조회
+                UsersEntity usersEntity = usersRepository.selectEmail(email);
+                String name = usersEntity != null ? usersEntity.getName() : "고객";
+
+                model.addAttribute("data" , name);
                 return "users/home";
         }
 

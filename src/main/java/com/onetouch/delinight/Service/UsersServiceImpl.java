@@ -40,7 +40,6 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
     private final UsersRepository usersRepository;
     private final MembersRepository membersRepository;
     private final CheckInRepository checkInRepository;
-
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;

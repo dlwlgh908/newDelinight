@@ -107,6 +107,9 @@ public class MembersServiceImpl implements MembersService{
         return null;
     }
 
+    public List<MembersDTO> findSuper() {
+        List<MembersEntity> membersEntityList = membersRepository.selectSuperAd();
+
 
 
 //    @Override
