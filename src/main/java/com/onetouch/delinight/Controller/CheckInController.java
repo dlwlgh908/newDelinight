@@ -90,4 +90,5 @@ public class CheckInController {
         return "checkin/listB";
 
     }
+
 }
