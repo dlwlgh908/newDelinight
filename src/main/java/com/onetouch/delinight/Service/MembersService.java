@@ -8,7 +8,9 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.Role;
+import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.Entity.MembersEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import software.amazon.awssdk.services.s3.endpoints.internal.Value;
@@ -23,13 +25,25 @@ public interface MembersService {
     public void hoteladcreate(MembersDTO membersDTO);
     public void storeadcreate(MembersDTO membersDTO);
 
-    public Page<MembersDTO> list(Pageable pageable);
+    public Page<MembersEntity> getList(int page);
+    public Page<MembersEntity> getListHotel(int page);
+    public Page<MembersEntity> getListStore(int page);
+    public Page<MembersEntity> getListBystatus(Status status, int page);
 
     public List<MembersDTO> findAll();
+
+
+    public String login(String email, String password);
+
+//    public List<MembersDTO> findSuper();
+
+    Page<MembersEntity> findHotelAd(Status status, int page);
+
 
     public List<MembersDTO> findSuper();
     public List<MembersDTO> findHotelAd();
     public List<MembersDTO> findStoreAd();
+
 
     public MembersDTO approve(Long id);
     public MembersDTO Disapprove(Long id);

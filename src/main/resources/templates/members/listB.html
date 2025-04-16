@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+>
+    <head>
+        <title>델리나잇</title>
+
+        <!--별도 css 필요할 시 아래로 추가-->
+        <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
+        styles.css에 작성할것-->
+    </head>
+
+    <body>
+        <!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
+        <div layout:fragment="adminContent" id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-5">
+                    <!--내용 넣는 곳-->
+                    <!--반드시 이 아래에서만 작업-->
+
+                    <!--페이지 이름-->
+                    <h3 class="mt-5">Super Admin 승인</h3>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">큰페이지 〉 중간페이지 〉 작은페이지</li>
+                    </ol>
+
+                    <!--텍스트 박스-->
+                    <div class="card custom-shadow mb-4">
+                       <div class="card-body">
+
+                           <!--네비게이션-->
+                               <ul class="nav nav-pills mb-4">
+                                   <li class="nav-item">
+                                       <a class="nav-link" th:classappend="${status == null or status == ''} ? 'active'" aria-current="page" th:href="@{/members/account/listB(status=null)}">전체</a>
+                                   </li>
+                                   <li class="nav-item">
+                                       <a class="nav-link" th:classappend="${status == 'WAIT'} ? 'active'" th:href="@{/members/account/listB(status='WAIT')}">승인대기목록</a>
+                                   </li>
+                                   <li class="nav-item">
+                                       <a class="nav-link" th:classappend="${status == 'VALID'} ? 'active'"  th:href="@{/members/account/listB(status='VALID')}">승인</a>
+                                   </li>
+                                   <li class="nav-item">
+                                       <a class="nav-link" th:classappend="${status == 'NOTVALID'} ? 'active'"  th:href="@{/members/account/listB(status='NOTVALID')}">반려</a>
+                                   </li>
+                               </ul>
+
+                           <!--작업 공간-->
+                           <table class="table">
+
+                               <thead>
+                               <th scope="col">#</th>
+                               <th scope="col">이름</th>
+                               <th scope="col">이메일</th>
+                               <th scope="col">핸드폰번호</th>
+                               <th scope="col">권한</th>
+                               <th scope="col">승인여부</th>
+                               </thead>
+
+                               <tbody>
+                               <th:block  th:each="list:${paging}">
+                                   <tr>
+                                       <th scope="row offset-4" th:text="${list.id}"></th>
+                                       <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                                           [[${list.name}]]
+                                       </a>
+                                       </td>
+                                       <td th:text="${list.email}"></td>
+                                       <td th:text="${list.phone}"></td>
+
+
+                                       <td th:text="${list.role}"></td>
+
+                                       <td th:if="${list.status.name() == 'VALID'}" class="aa" th:text="승인완료"></td>
+                                       <td th:if="${list.status.name() == 'NOTVALID'}" class="aa" th:text="반려"></td>
+                                       <td th:if="${list.status.name() == 'WAIT'}">
+                                           <div th:text="승인대기중"></div>
+                                           <button class="btn btn-primary" th:value="${list.id}" id="approveBtn">승인</button>
+                                           <button class="btn btn-primary" th:value="${list.id}" id="DisapproveBtn">반려</button>
+
+                                       </td>
+
+
+
+                                   </tr>
+
+                               </th:block>
+
+
+
+                               </tbody>
+
+                           </table>
+
+                           <div th:if="${!paging.isEmpty()}">
+                               <ul class="pagination justify-content-center">
+                                   <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                                       <a class="page-link" th:href="@{|?page=${paging.number > 1 ? paging.number - 1 : 0}|}">
+                                       <span>이전</span>
+                                       </a>
+                                   </li>
+                                   <li th:each="page: ${#numbers.sequence(0, paging.totalPages -1)}"
+                                        th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                                        th:classappend="${page == paging.number} ? 'active'"
+                                        class="page-item">
+                                       <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                                   </li>
+                                   <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                                       <a class="page-link" th:href="@{|?page=${paging.number+1}}">
+                                       <span>다음</span>
+                                       </a>
+                                   </li>
+                               </ul>
+                           </div>
+                           <!--페이징처리 끝-->
+
+                       </div>
+                    </div>
+
+                    <!--알럿창-->
+                    <div class="card custom-shadow mb-4">
+                        <div class="card-header">
+                            <!--아이콘-->
+                            <!--카드헤더 제목 넣는곳-->
+                            <i class="fas fa-table me-1"></i>
+
+                            알럿창
+                        </div>
+                        <div class="card-body">
+                            <!--카드바디 내용 넣는곳-->
+                            <button class="btn btn-primary m-2" id="alertStart">Alert 실행</button>
+                            <button class="btn btn-gray m-2" id="confirmStart">Confirm 실행</button>
+                            <button class="btn btn-success m-2" id="promptStart">Prompt 실행</button>
+                            <button class="btn btn-danger m-2" id="toastStart">Toast 실행</button>
+                            <button class="btn btn-warning m-2" id="ajaxStart">Ajax 실행 (깃헙 아이디 검색)</button>
+                        </div>
+                    </div>
+
+                    <!--카드-->
+                    <div class="card custom-shadow mb-4">
+                        <div class="card-header">
+                            <!--아이콘-->
+                            <!--카드헤더 제목 넣는곳-->
+                            <i class="fas fa-table me-1"></i>
+
+                            card title
+                        </div>
+                        <div class="card-body">
+                            <!--카드바디 내용 넣는곳-->
+                            <div>
+                                내용내용내용내용내용내용내용
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!--스크립스-->
+            <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+            <script th:inline="javascript">
+                let aa = $(".aa");
+
+
+                $(function () {
+                    $(document).on("click","#approveBtn",function () {
+                        let id = this.getAttribute("value");
+                        alert(id)
+                        $.ajax({
+                            url : "/rest/approveBtn/"+id,
+                            type : "get",
+                            success: function (data) {
+                                alert("성공")
+                                console.log(data)
+                                location.reload();
+
+                            }
+
+                        })
+                    })
+                })
+
+                $(function () {
+                    $(document).on("click","#DisapproveBtn",function () {
+                        let id = this.getAttribute("value");
+                        alert(id)
+                        $.ajax({
+                            url : "/rest/DisapproveBtn/"+id,
+                            type : "get",
+                            success: function (data) {
+                                alert("성공")
+                                console.log(data)
+                                location.reload();
+
+                            }
+
+                        })
+                    })
+                })
+                // document.getElementById("approveBtn").addEventListener("click", function () {
+                //     let buttonValue = this.getAttribute("value");
+                //     alert(buttonValue)
+                //     $.ajax({
+                //         url : "/members/changestatus",
+                //         method : "post",
+                //         data : buttonValue,
+                //         success: function (data) {
+                //             alert("성공")
+                //             console.log(data)
+                //         }
+                //     })
+                // });
+            </script>
+
+
+            <!--푸터 절대 수정 금지!!!!-->
+            <!--푸터-->
+            <div th:replace="~{fragments/adminfooter::adminFooter}"></div>
+        </div>
+    </body>
+</html>
