@@ -32,13 +32,18 @@ public interface MembersService {
 
     public List<MembersDTO> findAll();
 
+
     public String login(String email, String password);
 
 //    public List<MembersDTO> findSuper();
 
     Page<MembersEntity> findHotelAd(Status status, int page);
 
-    Page<MembersEntity> findStoreAd(Status status, int page);
+
+    public List<MembersDTO> findSuper();
+    public List<MembersDTO> findHotelAd();
+    public List<MembersDTO> findStoreAd();
+
 
     public MembersDTO approve(Long id);
     public MembersDTO Disapprove(Long id);

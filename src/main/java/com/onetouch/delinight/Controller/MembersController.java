@@ -18,12 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -35,9 +32,18 @@ public class MembersController {
     private final MembersService membersService;
     private final MembersRepository membersRepository;
 
+    @ModelAttribute("membersDTO")
+    public MembersDTO setUserInfo(Principal principal) {
+        if (principal == null) return null;
+
+        String email = principal.getName();
+        MembersEntity membersEntity = membersRepository.findByEmail(email);
+        return new MembersDTO(membersEntity);
+    }
+
     @GetMapping("/adminhome")
     public String adminhome() {
-        return "members/home";
+        return "/members/adminhome";
 
     }
 
@@ -223,5 +229,16 @@ public class MembersController {
     //    //오류 없으면 홈화면으로 이동
     //    return "redirect:/members/home";
     //}
+
+    public String adminloginGet(@RequestParam(value = "error", required = false) String error, Model model) {
+
+        if ("bad_credentials".equals(error)) {
+            model.addAttribute("passwordError", "비밀번호가 틀립니다.");
+        } else if ("unknown".equals(error)) {
+            model.addAttribute("emailError", "이메일이 틀립니다.");
+        }
+
+        return "members/adminlogin";
+    }
 
 }

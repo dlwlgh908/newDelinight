@@ -10,6 +10,10 @@ public interface ReplyService {
     public ReplyDTO register(ReplyDTO replyDTO);
     //댓글 목록
     public List<ReplyDTO> findAll();
+    public List<ReplyDTO> list(Long id);
+
+    //상세보기
+    public ReplyDTO read(Long id);
     //댓글 수정
     public  ReplyDTO update(ReplyDTO replyDTO);
 
