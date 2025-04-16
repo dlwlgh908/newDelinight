@@ -3712,8 +3712,12 @@ textarea.form-control-lg {
   display: inline-block;
 }
 
-.profile-tooltip-wrap{
-  display: none;
+.profile-tooltip-wrap {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-2px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
   position: absolute;
   z-index: 900;
   top: 20px;
@@ -3723,7 +3727,10 @@ textarea.form-control-lg {
 }
 
 .profile-tooltip {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, transform 0.2s;
+  transform: translateY(-2px);
   position: absolute;
   top: 36px;
   right: 0;
@@ -3731,6 +3738,7 @@ textarea.form-control-lg {
   background: #fff;
   border-radius: 6px;
   z-index: 1050;
+  border: 1px solid var(--bs-border-color-translucent);
 }
 
 .profile-tooltip::before {
@@ -3740,22 +3748,21 @@ textarea.form-control-lg {
   right: 20px;
   border-width: 10px;
   border-style: solid;
-  border-color: transparent transparent #003cd5 transparent;
+  border-color: transparent transparent #1d253a transparent;
   z-index: 1040;
 }
 
-/* Hover 트리거 */
-.navbar-hover:hover .profile-tooltip {
-  display: block;
+.navbar-hover:hover .profile-tooltip,
+.navbar-hover:hover .profile-tooltip-wrap {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
   z-index: 9;
 }
-.navbar-hover:hover .profile-tooltip-wrap {
-  display: block;
-}
 
-/* 빨간 헤더 */
 .profile-header {
-  background: #003cd5;
+  background: #1d253a;
   color: white;
   border-radius: 6px 6px 0 0;
   padding: 24px 20px;

@@ -65,7 +65,7 @@ public class SecurityConfig {
         http.securityMatcher("/members/**")
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/members/adminhome", "/members/adminlogin", "/**").permitAll()
+                                .requestMatchers("/members/adminhome", "/members/account/adminlogin", "/members//account/adminlogout-success", "/**").permitAll()
                                 .anyRequest().permitAll()
                 ).csrf((csrf) -> csrf.disable())
 
@@ -78,7 +78,8 @@ public class SecurityConfig {
                 )
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutUrl("/logout")
+                        .logoutUrl("/members/account/adminlogout")
+                        .logoutSuccessUrl("/members/account/adminlogout-success")
                         .invalidateHttpSession(true)
                 );
         return http.build();

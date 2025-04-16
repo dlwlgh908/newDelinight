@@ -120,7 +120,7 @@ public class MembersController {
     }
 
     @GetMapping("/adminlogin")
-    public String adminloginGet(@RequestParam(value = "error", required = false) String error, Model model) {
+    public String adminlogin(@RequestParam(value = "error", required = false) String error, Model model) {
 
         if ("bad_credentials".equals(error)) {
             model.addAttribute("passwordError", "비밀번호가 틀립니다.");
@@ -128,6 +128,11 @@ public class MembersController {
             model.addAttribute("emailError", "이메일이 틀립니다.");
         }
 
-        return "members/adminlogin";
+        return "/members/adminlogin";
+    }
+
+    @GetMapping("/adminlogout-success")
+    public String adminlogout(){
+        return "/members/adminlogout";
     }
 }
