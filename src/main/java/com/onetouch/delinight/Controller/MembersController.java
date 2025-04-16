@@ -144,6 +144,7 @@ public class MembersController {
                 status1 = Status.WAIT;
                 paging =membersService.findHotelAd(status1, page);
             } else if (status.equals("VALID")) {
+
                 status1 = Status.VALID;
                 paging = membersService.findHotelAd(status1, page);
             } else if (status.equals("NOTVALID")) {
