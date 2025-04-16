@@ -1,18 +1,20 @@
 /*********************************************************************
  * 클래스명 : MembersController
  * 기능 :
- * 작성자 : 이동건
+ * 작성자 : 이효찬
  * 작성일 : 2025-03-30
- * 수정 : 2025-03-30     이동건
+ * 수정 : 2025-03-30     이효찬
  *********************************************************************/
 package com.onetouch.delinight.Controller;
 
+import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.MembersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,6 +57,7 @@ public class MembersController {
     public String hoteladmincreateView() {
         return "members/hoteladmincreate";
     }
+
     @PostMapping("/hoteladmincreate")
     public String hoteladmincreate(MembersDTO membersDTO) {
         membersService.hoteladcreate(membersDTO);
@@ -66,6 +69,7 @@ public class MembersController {
     public String storeadmincreateView() {
         return "members/storeadmincreate";
     }
+
     @PostMapping("/storeadmincreate")
     public String storeadmincreate(MembersDTO membersDTO) {
         membersService.storeadcreate(membersDTO);
@@ -74,48 +78,117 @@ public class MembersController {
     }
 
 
+//    @GetMapping("/listB")
+//    public String list(Model model) {
+//        log.info("list페이지 진입");
+//
+//        List<MembersDTO> membersDTOList =
+//                membersService.findSuper();
+//
+//        log.info(membersDTOList);
+//        model.addAttribute("memberlist", membersDTOList);
+//
+//        return "members/listB";
+//    }
 
-    @GetMapping("/list")
-    public String list(Model model) {
+
+    @GetMapping("/listB")
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+                                    @RequestParam(value = "status", required = false) String status) {
         log.info("list페이지 진입");
 
-        List<MembersDTO> membersDTOList =
-            membersService.findSuper();
+        Status status1;
 
-        log.info(membersDTOList);
-        model.addAttribute("memberlist", membersDTOList);
 
-        return "members/list";
+        Page<MembersEntity> paging = null;
+
+        if (status != null && !status.isEmpty()) {
+            if (status.equals("WAIT")) {
+                status1 = Status.WAIT;
+                paging =membersService.getListBystatus(status1, page);
+            } else if (status.equals("VALID")) {
+                status1 = Status.VALID;
+                paging = membersService.getListBystatus(status1, page);
+            } else if (status.equals("NOTVALID")) {
+                status1 = Status.NOTVALID;
+                paging = membersService.getListBystatus(status1, page);
+            }
+        } else {
+            paging = membersService.getList(page);
+
+        }
+        model.addAttribute("paging", paging);
+        model.addAttribute("status", status);
+
+        return "members/listB";
     }
 
     @GetMapping("/hoteladlist")
-    public String hoteladlist(Model model) {
+    public String hoteladlist(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+                              @RequestParam(value = "status", required = false) String status) {
         log.info("list페이지 진입");
 
-        List<MembersDTO> membersDTOList =
-                membersService.findHotelAd();
+        Status status1;
 
-        log.info(membersDTOList);
-        model.addAttribute("memberlist", membersDTOList);
 
-        return "members/list";
+        Page<MembersEntity> paging = null;
+
+        if (status != null && !status.isEmpty()) {
+            if (status.equals("WAIT")) {
+                status1 = Status.WAIT;
+                paging =membersService.findHotelAd(status1, page);
+            } else if (status.equals("VALID")) {
+                status1 = Status.VALID;
+                paging = membersService.findHotelAd(status1, page);
+            } else if (status.equals("NOTVALID")) {
+                status1 = Status.NOTVALID;
+                paging = membersService.findHotelAd(status1, page);
+            }
+        } else {
+            paging = membersService.getListHotel(page);
+
+        }
+        model.addAttribute("paging", paging);
+        model.addAttribute("status", status);
+
+
+        return "members/hoteladlist";
     }
 
     @GetMapping("/storeadlist")
-    public String storeadlist(Model model) {
-        log.info("list페이지 진입");
+    public String storeadlist(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+                              @RequestParam(value = "status", required = false) String status) {
 
-        List<MembersDTO> membersDTOList =
-                membersService.findStoreAd();
 
-        log.info(membersDTOList);
-        model.addAttribute("memberlist", membersDTOList);
+        Status status1;
 
-        return "members/list";
+
+        Page<MembersEntity> paging = null;
+
+        if (status != null && !status.isEmpty()) {
+            if (status.equals("WAIT")) {
+                status1 = Status.WAIT;
+                paging =membersService.findHotelAd(status1, page);
+            } else if (status.equals("VALID")) {
+                status1 = Status.VALID;
+                paging = membersService.findHotelAd(status1, page);
+            } else if (status.equals("NOTVALID")) {
+                status1 = Status.NOTVALID;
+                paging = membersService.findHotelAd(status1, page);
+            }
+        } else {
+            paging = membersService.getListStore(page);
+
+        }
+        model.addAttribute("paging", paging);
+        model.addAttribute("status", status);
+
+
+        return "members/storeadlist";
     }
 
     @GetMapping("/adminlogin")
-    public String adminloginGet(){
+    public String adminloginGet() {
         return "members/adminlogin";
     }
 
@@ -150,4 +223,5 @@ public class MembersController {
     //    //오류 없으면 홈화면으로 이동
     //    return "redirect:/members/home";
     //}
+
 }

@@ -9,9 +9,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,6 +67,39 @@ public class CheckInServiceImpl implements CheckInService{
 //
 //    }
 
+
+    @Override
+    public List<CheckInDTO> list2() {
+        List<CheckInEntity> checkInEntityList =
+        checkInRepository.findAll();
+        List<CheckInDTO> checkInDTOList =
+                checkInEntityList.stream().map(checkInEntity -> {
+                    CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class);
+
+                    if (checkInEntity.getCheckInStatus().equals(CheckInStatus.CHECKIN)) {
+
+                        // getGuestEntity가 null이 아니면 setGuestDTO 호출
+                        if (checkInEntity.getGuestEntity() != null) {
+                            checkInDTO.setGuestDTO(modelMapper.map(checkInEntity.getGuestEntity(), GuestDTO.class))
+                                    .setPassword(checkInDTO.getPassword())
+                                    .setCertId(checkInEntity.getGuestEntity().getCertId())
+                                    .setEmail(checkInEntity.getGuestEntity().getEmail())
+                                    .setPhone(checkInEntity.getPhone());
+
+                        }
+                        else {
+                            checkInDTO.setUsersDTO(modelMapper.map(checkInEntity.getUsersEntity(), UsersDTO.class))
+                                    .setEmail(checkInEntity.getUsersEntity().getEmail())
+                                     .setPhone(checkInEntity.getUsersEntity().getPhone());
+                        }
+                    }
+                    // setRoomDTO는 항상 호출
+                    checkInDTO.setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class));
+                    return checkInDTO;
+                }).collect(Collectors.toList());
+        return checkInDTOList;
+    }
+
     @Override
     public List<CheckInDTO> list() {
         List<CheckInEntity> checkInEntityList =
@@ -83,7 +118,7 @@ public class CheckInServiceImpl implements CheckInService{
                         if (checkInEntity.getGuestEntity() != null) {
                             checkInDTO.setGuestDTO(modelMapper.map(checkInEntity.getGuestEntity(), GuestDTO.class))
                                     .setPassword(checkInDTO.getPassword())
-                                    .setCertId((int) (Math.random() * 8999) + 1000)
+                                    .setCertId(checkInEntity.getGuestEntity().getCertId())
                                     .setEmail(checkInEntity.getGuestEntity().getEmail())
                                     .setPhone(checkInEntity.getPhone());
 
@@ -91,7 +126,6 @@ public class CheckInServiceImpl implements CheckInService{
                         else {
                             checkInDTO.setUsersDTO(modelMapper.map(checkInEntity.getUsersEntity(), UsersDTO.class))
                                     .setEmail(checkInEntity.getUsersEntity().getEmail())
-                                    .setCertId((int) (Math.random() * 8999) + 1000)
                                     .setPhone(checkInEntity.getUsersEntity().getPhone());
                         }
                     }
@@ -132,7 +166,7 @@ public class CheckInServiceImpl implements CheckInService{
             GuestEntity guestEntity = new GuestEntity();
             guestEntity.setPhone(checkInDTO.getPhone());
             guestEntity.setEmail(checkInDTO.getEmail());
-//            guestEntity.setPassword(check.getPassword());
+            guestEntity.setCertId(check.getPassword());
             guestEntity.setPassword(passwordEncoder.encode(check.getPassword()));
 
             check.setGuestEntity(guestEntity);
@@ -193,5 +227,39 @@ public class CheckInServiceImpl implements CheckInService{
 
         return usersDTO;
 
+    }
+
+    @Override
+    public List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        List<CheckInEntity> checkInEntityList = checkInRepository.selectCheckByStatus(checkInStatus);
+
+        List<CheckInDTO> checkInDTOList =
+                checkInEntityList.stream().map(checkInEntity -> {
+                    CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class);
+
+                    if (checkInEntity.getCheckInStatus().equals(CheckInStatus.CHECKIN)) {
+
+                        // getGuestEntity가 null이 아니면 setGuestDTO 호출
+                        if (checkInEntity.getGuestEntity() != null) {
+                            checkInDTO.setGuestDTO(modelMapper.map(checkInEntity.getGuestEntity(), GuestDTO.class))
+                                    .setPassword(checkInDTO.getPassword())
+                                    .setCertId(checkInEntity.getGuestEntity().getCertId())
+                                    .setEmail(checkInEntity.getGuestEntity().getEmail())
+                                    .setPhone(checkInEntity.getPhone());
+
+                        }
+                        else {
+                            checkInDTO.setUsersDTO(modelMapper.map(checkInEntity.getUsersEntity(), UsersDTO.class))
+                                    .setEmail(checkInEntity.getUsersEntity().getEmail())
+                                    .setPhone(checkInEntity.getUsersEntity().getPhone());
+                        }
+                    }
+                    // setRoomDTO는 항상 호출
+                    checkInDTO.setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class));
+                    return checkInDTO;
+                }).collect(Collectors.toList());
+        return checkInDTOList;
     }
 }

@@ -39,7 +39,7 @@ public class CheckInDTO {
     private Long userId;
 
 
-    private int certId;
+    private String certId;
     private String password;
 
     private UsersDTO usersDTO;
@@ -76,7 +76,7 @@ public class CheckInDTO {
         return this;
     }
 
-    public CheckInDTO setCertId(int certId) {
+    public CheckInDTO setCertId(String certId) {
 
         this.certId = certId;
         return this;
