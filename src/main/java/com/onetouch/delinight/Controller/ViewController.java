@@ -57,11 +57,7 @@ public class ViewController {
     }
 
 
-    @GetMapping("/members/update")
-    public String adminUpdate(Principal principal, Model model){
 
-        return "/members/update";
-    }
 
     @GetMapping("/register")
     public String register() {
