@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,7 +46,7 @@ public class QnaServiceImpl implements QnaService {
     private final QnaRepository qnaRepository;
     private final ModelMapper modelMapper;
     private final CheckInRepository checkInRepository;
-    private final HotelRepository hotelRepository;
+
 
 
     @Override
@@ -61,22 +62,10 @@ public class QnaServiceImpl implements QnaService {
     }
 
     @Override
-    public List<QnaDTO> findAll() {
-        //DB에 있는 모든 Qna 데이터를 가져오는 명령어
-        List<QnaEntity> qnaEntityList = qnaRepository.findAll();
+    public Page<QnaDTO> list(Pageable pageable) {
 
-        //리스트 하나씩 꺼내서 map 엔티티를 DTO로 변환해서 자동으로 필드 복사해주는
-//        List<QnaDTO> qnaDTOList =
-//                qnaEntityList.stream().toList().stream().map(
-//                        qnaEntity -> modelMapper.map(qnaEntity, QnaDTO.class)
-//                ).collect(Collectors.toList());//다시 리스트로 모아서 저장
-        List<QnaDTO> qnaDTOList = qnaEntityList.stream()
-                .map(qnaEntity -> modelMapper.map(qnaEntity, QnaDTO.class))
-                .collect(Collectors.toList());
-
-
-        //DTO로 바꾼 Qna리스트를 반환
-        return qnaDTOList;
+        Page<QnaEntity> pageList = qnaRepository.findAll(pageable);
+        return pageList.map(data -> modelMapper.map(data, QnaDTO.class));
     }
 
 

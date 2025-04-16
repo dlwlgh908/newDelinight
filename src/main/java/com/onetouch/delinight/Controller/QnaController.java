@@ -16,11 +16,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
+
+import static com.onetouch.delinight.Util.PagenationUtil.Pagination;
 
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/qna/checkinQna")
+@RequestMapping("/qna")
 public class QnaController {
     private final QnaService qnaService;
     private final QnaRepository qnaRepository;
@@ -31,26 +34,32 @@ public class QnaController {
         System.out.println("qnaDTO" + qnaDTO);
         model.addAttribute("qnaDTO" ,qnaDTO);
 
-//        return "checkinQna/register";
-        return "qna/checkinQna/register";
+        return "qna/register";
     }
     //등록post
-    @PostMapping("/checkinQna/register")
+    @PostMapping("/register")
     public String registerPost(QnaDTO qnaDTO,Principal principal){
-        principal.getName();
+        if (principal == null) {
+            // 익명 사용자의 경우 처리
+            System.out.println("로그인 안 됨. 익명으로 처리");
+        } else {
+            String loginId = principal.getName();
+            System.out.println("로그인 사용자: " + loginId);
+        }
         Long id = 12L;
         qnaService.register(qnaDTO,id);
-        return "redirect:/qna/checkinQna/list";
+        return "redirect:/qna/list";
     }
     //목록
     @GetMapping("/list")
-    public String list(Model model){
-        log.info("list진입");
-        List<QnaDTO> qnaDTOList =
-                qnaService.findAll();
-        log.info(qnaDTOList);
+    public String list(@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+                       Model model){
+        Page<QnaDTO> qnaDTOList = qnaService.list(pageable);
+        log.info(qnaDTOList.getPageable().getPageNumber());
         model.addAttribute("qnaDTOList",qnaDTOList);
-        return "qna/checkinQna/list";
+        log.info(qnaDTOList.getContent());
+
+        return "qna/list";
     }
 
 
@@ -60,7 +69,7 @@ public class QnaController {
     public String read(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
         QnaDTO qnaDTO = qnaService.read(id);
         model.addAttribute("qnaDTO",qnaDTO);
-        return "qna/checkinQna/read";
+        return "qna/read";
     }
     //수정get
     @GetMapping("/update/{id}")
@@ -68,36 +77,22 @@ public class QnaController {
         log.info("수정" +id);
         QnaDTO qnaDTO = qnaService.read(id);
         model.addAttribute("qnaDTO",qnaDTO);
-        return "qna/checkinQna/update";
+        return "qna/update";
     }
     //수정post
     @PostMapping("/update")
     public String updatePost(QnaDTO qnaDTO){
         log.info(qnaDTO);
         qnaService.update(qnaDTO);
-        return "redirect:/qna/checkinQna/read?id="+qnaDTO.getId();
+        return "redirect:/qna/read?id="+qnaDTO.getId();
     }
     //삭제
     @GetMapping("/delete")
     public String deleteGET(Long id){
         qnaService.delete(id);
-        return "redirect:/qna/checkinQna/list";
+        return "redirect:/qna/list";
     }
 
-//    @GetMapping("/checkinQna/test")
-//    public String TESTGET(){
-//        return "/qna/checkinQna/test";
-//    }
-//
-//    @GetMapping("/hotelQna/list")
-//    public String listA(Model model){
-//        log.info("list진입");
-//        List<QnaDTO> qnaDTOList =
-//                qnaService.findAll();
-//        log.info(qnaDTOList);
-//        model.addAttribute("qnaDTOList",qnaDTOList);
-//        return "/qna/hotelQna/list";
-//    }
 
 
 

@@ -24,20 +24,20 @@
                     <!--텍스트 박스-->
                     <div class="card mb-4">
                        <div class="card-body">
-                           <form action="/qna/checkinQna/register" th:object="${qnaDTO}" method="post">
-                               <div class="card">
+                           <form action="/qna/register" th:object="${qnaDTO}" method="post">
 
-                                   <input type="hidden" name="id" id="id">
+                               <input type="hidden" name="id" id="id">
 
-                                   <div class="md-3">
-                                       <label for="title" class="form-label">제목</label>
-                                       <input type="text" class="form-control" id="title" name="title">
-                                   </div>
-                                   <div class="md-3">
-                                       <label for="content" class="form-label">내용</label>
-                                       <input type="text" class="form-control" id="content" name="content">
-                                   </div>
+                               <div class="md-3">
+                                   <label for="title" class="form-label">제목</label>
+                                   <input type="text" class="form-control" id="title" name="title">
                                </div>
+                               <div class="md-3">
+                                   <label for="content" class="form-label">내용</label>
+                                   <textarea type="text" class="form-control" id="content" name="content"></textarea>
+
+                               </div>
+
                                <button type="submit" class="btn btn-primary">저장</button>
                            </form>
                        </div>

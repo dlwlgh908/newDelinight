@@ -17,5 +17,4 @@ public interface ReplyService {
     //댓글 수정
     public  ReplyDTO update(ReplyDTO replyDTO);
 
-    public ReplyEntity registerA(ReplyDTO replyDTO);
 }

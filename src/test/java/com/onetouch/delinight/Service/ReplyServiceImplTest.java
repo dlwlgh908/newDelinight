@@ -52,39 +52,12 @@ class ReplyServiceImplTest {
         replyDTO.setQnaDTO(qnaDTO);
         log.info(qnaDTO);
 
-//        ReplyDTO replyDTO = new ReplyDTO();
-//        replyDTO.setId(1L);
-//        replyDTO.setReplyText("댓글");
-//        replyDTO.setRepyler("신라호텔");
-//        log.info(replyDTO);
-
         replyService.register(replyDTO);
 
 
     }
 
-    @Test
-    @Commit
-    public void regiA(){
-        ReplyDTO replyDTO = new ReplyDTO();
-        replyDTO.setReplyText("확인");
-        replyDTO.setReplyer("홍길동");
 
-        QnaEntity qnaEntity = qnaRepository.findById(11L).get();
-
-
-        log.info(replyDTO);
-
-        ReplyEntity replyEntity = replyService.registerA(replyDTO);
-        log.info(replyEntity);
-        replyEntity.setQnaEntity(qnaEntity);
-
-        log.info(replyRepository.save(replyEntity));
-
-
-        log.info(replyDTO);
-
-    }
     @Test
     public void list(){
         List<ReplyDTO> replyDTOList =
