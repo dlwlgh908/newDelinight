@@ -29,8 +29,27 @@
             </ol>
 
             <!--텍스트 박스-->
+
+
+
+
             <div class="card custom-shadow mb-4">
                 <div class="card-body">
+
+                    <!--네비게이션-->
+                    <ul class="nav nav-pills mb-4">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${checkinstatus == null or checkinstatus == ''} ? 'active'" aria-current="page" th:href="@{/members/checkin/listB(checkinstatus=null)}">전체 방 목록</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${checkinstatus == 'VACANCY'} ? 'active'" th:href="@{/members/checkin/listB(checkinstatus='VACANCY')}">빈 방</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${checkinstatus == 'CHECKIN'} ? 'active'"  th:href="@{/members/checkin/listB(checkinstatus='CHECKIN')}">투숙중인 방</a>
+                        </li>
+                    </ul>
+
+
                     <!--<pre> 코드는 <>를 문자 그대로 쓸 수 있게 해준다-->
                     <h1>체크인</h1>
                     예약 번호 : <input type="text" id="reservationNum">
