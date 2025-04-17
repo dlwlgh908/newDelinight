@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
+import com.onetouch.delinight.Constant.Menu;
 import com.onetouch.delinight.Constant.MenuStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,6 +39,9 @@ public class MenuEntity {
 
     @Enumerated(EnumType.STRING)
     MenuStatus menuStatus; // 상품판매상태
+
+    @Enumerated(EnumType.STRING)
+    Menu menu; // 메뉴목록
 
 
     @ManyToOne(fetch = FetchType.LAZY)

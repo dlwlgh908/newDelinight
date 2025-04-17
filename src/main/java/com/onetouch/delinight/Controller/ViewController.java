@@ -41,7 +41,7 @@ public class ViewController {
     }
 
     @GetMapping("/")
-    public String index(Model model, Principal principal) {
+    public String index() {
 
         return "/pages/index";
     }
@@ -57,11 +57,7 @@ public class ViewController {
     }
 
 
-    @GetMapping("/members/update")
-    public String adminUpdate(Principal principal, Model model){
 
-        return "/members/update";
-    }
 
     @GetMapping("/register")
     public String register() {

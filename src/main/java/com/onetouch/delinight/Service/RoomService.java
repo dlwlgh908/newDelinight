@@ -15,7 +15,11 @@ public interface RoomService {
 
     public RoomDTO create(RoomDTO roomDTO);
 
+    public void update(RoomDTO roomDTO);
+
     public List<RoomDTO> list();
+
+
 
 
 

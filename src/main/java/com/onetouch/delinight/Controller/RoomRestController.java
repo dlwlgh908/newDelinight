@@ -34,6 +34,7 @@ public class RoomRestController {
             log.info(roomDTO.getId());
             log.info(roomDTO.getId());
 
+
             return new ResponseEntity<String>(roomDTO.getId() + "번글이 저장되었습니다.", HttpStatus.OK);
 
         }

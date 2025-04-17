@@ -30,7 +30,7 @@ public class ReplyServiceImpl implements ReplyService{
     public ReplyDTO register(ReplyDTO replyDTO) {
 
         Optional<QnaEntity> optionalQnaEntity =
-                qnaRepository.findById(replyDTO.getId());
+                qnaRepository.findById(replyDTO.getQnaId());
 
         QnaEntity qnaEntity =
                 optionalQnaEntity.orElseThrow(EntityNotFoundException::new);
@@ -54,13 +54,6 @@ public class ReplyServiceImpl implements ReplyService{
         log.info("저장 후 데이터 변환 DTO" +replyDTO);
 
         return replyDTO;
-    }
-
-    public ReplyEntity registerA(ReplyDTO replyDTO) {
-        ReplyEntity replyEntity =
-                modelMapper.map(replyDTO, ReplyEntity.class);
-        log.info(replyEntity);
-        return replyRepository.save(replyEntity);
     }
 
     @Override

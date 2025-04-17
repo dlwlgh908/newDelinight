@@ -101,6 +101,7 @@ public class MenuServiceImpl implements MenuService {
         menuEntity.setContent(menuDTO.getContent());
         menuEntity.setPrice(menuDTO.getPrice());
         menuEntity.setMenuStatus(menuDTO.getMenuStatus());
+        menuEntity.setMenu(menuDTO.getMenu());
         if (menuDTO.getImgNum() != null) {
             ImageEntity imageEntity = imageRepository.findById(menuDTO.getImgNum()).get();
             imageRepository.deleteByMenuEntity_Id(menuEntity.getId());

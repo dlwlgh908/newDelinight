@@ -1,18 +1,20 @@
 /*********************************************************************
- * 클래스명 : MembersEntity
- * 기능 :
- * 작성자 :
- * 작성일 : 2025-03-30
- * 수정 : 2025-03-30
+ * 클래스명 : PaymentEntity
+ * 기능 : 정산
+ * 작성자 : 이동건
+ * 작성일 : 2025-04-15
+ * 수정 : 2025-04-15
  *********************************************************************/
 package com.onetouch.delinight.Entity;
 
 import com.onetouch.delinight.Constant.OrderType;
 import com.onetouch.delinight.Constant.PaidCheck;
+import com.onetouch.delinight.Constant.PayType;
+import com.onetouch.delinight.Entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -23,7 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "payment")
-public class PaymentEntity {
+public class PaymentEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +40,12 @@ public class PaymentEntity {
 
     @Enumerated(EnumType.STRING)
     PaidCheck paidCheck;
+
+    @Enumerated(EnumType.STRING)
+    private PayType payType;
+
+    @Column(name = "total_amount")
+    private BigDecimal totalAmount; // 주문 총 금액
 
 
 }

@@ -45,6 +45,7 @@ public class GlobalModelAttribute {
                     // 아무것도 아닐때(0으로 리턴)
                 }
                 model.addAttribute("member", memberDetails.getMembersEntity());
+                model.addAttribute("role", memberDetails.getMembersEntity().getRole());
             }
         } else if (uri.startsWith("/users")) {
             if(uri.startsWith("/users/login")){}

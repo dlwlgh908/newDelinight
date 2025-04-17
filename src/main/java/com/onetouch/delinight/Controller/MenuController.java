@@ -47,7 +47,7 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/members/menu")
+@RequestMapping("/menu")
 public class MenuController {
     private final MenuService menuService;
     private final ImageService imageService;
@@ -86,7 +86,7 @@ public class MenuController {
     }
 
     @GetMapping("/list")
-    public String listView(Model model, @PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,Principal principal){
+    public String listView(Model model, @PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
 
         Page<MenuDTO> menuDTOList = menuService.menuList(pageable);
         log.info(menuDTOList.getPageable().getPageNumber());

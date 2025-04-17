@@ -13,7 +13,7 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "ordersEntity")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

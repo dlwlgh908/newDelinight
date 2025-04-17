@@ -48,7 +48,18 @@ public class BranchServiceImpl implements BranchService{
         branchRepository.save(branchEntity);
     }
 
+    @Override
+    public void update(BranchDTO branchDTO) {
 
+
+        BranchEntity branchEntity =
+            modelMapper.map(branchDTO, BranchEntity.class);
+        BranchEntity branch =
+                branchRepository.findById(branchEntity.getId()).orElseThrow(EntityNotFoundException::new);
+        branch.setName(branchEntity.getName());
+        branch.setContent(branchEntity.getContent());
+
+    }
 
     @Override
     public List<BranchDTO> list() {
