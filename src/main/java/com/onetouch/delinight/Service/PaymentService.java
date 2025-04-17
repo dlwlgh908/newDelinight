@@ -17,6 +17,11 @@ public interface PaymentService {
 
     public List<OrdersDTO> readOrders(Long paymentId);
 
+    // CENTER → BRANCH → HOTEL → STORE 정산 조회
     List<PaymentDTO> findAllDate(Long totalId, PayType type);
+
+    // STORE → MENU 별 정산 조회
+
+    // 총 매출
 
 }
