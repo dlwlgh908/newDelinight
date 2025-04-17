@@ -38,21 +38,21 @@
                                <div class="row mb-1">
                                    <label class="col-sm-2 col-form-label form-label">관리자 이름</label>
                                    <div class="col-sm-4">
-                                       <input type="text" readonly class="form-control-plaintext" th:value="${membersDTO.name}">
+                                       <input type="text" readonly class="form-control-plaintext" th:value="${member.name}">
                                    </div>
                                </div>
 
                                <div class="row mb-1">
                                    <label class="col-sm-2 col-form-label form-label">관리자 등급</label>
                                    <div class="col-sm-4">
-                                       <input type="text" readonly class="form-control-plaintext" th:value="${membersDTO.role}">
+                                       <input type="text" readonly class="form-control-plaintext" th:value="${member.role}">
                                    </div>
                                </div>
 
                                <div class="row mb-1">
                                    <label class="col-sm-2 col-form-label form-label">이메일</label>
                                    <div class="col-sm-6">
-                                       <input type="email" readonly class="form-control-plaintext" th:value="${membersDTO.email}">
+                                       <input type="email" readonly class="form-control-plaintext" th:value="${member.email}">
                                    </div>
                                </div>
 
@@ -61,7 +61,7 @@
                                <div class="row mb-4">
                                    <label class="col-sm-2 col-form-label form-label">전화번호</label>
                                    <div class="col-sm-10">
-                                       <input type="text" class="form-control" id="staticMembersPhone" name="phone" maxlength="13" th:placeholder="${membersDTO.phone}">
+                                       <input type="text" class="form-control" id="staticMembersPhone" name="phone" maxlength="13" th:placeholder="${member.phone}">
                                        <div class="text-sm mt-1">
                                            변경할 전화번호를 입력해주세요.
                                        </div>
@@ -79,7 +79,7 @@
                                            업로드 가능한 이미지 파일(jpg, jpeg, png, gif, svg, webp, ico)만 가능합니다.<br>
                                        </div>
                                        <div class="col-sm-10">
-                                           <input type="hidden" name="membersImage" th:value="${images}"><!--엄청 중요!! 수정 시 기본키값이 존재해야함-->
+                                           <input type="hidden" name="membersImage" th:value="${images}">
                                            <img class="avatar" name="membersImage" id="mypage-avatar" src="/img/defaultImg.png" alt="#">
                                        </div>
                                    </div>

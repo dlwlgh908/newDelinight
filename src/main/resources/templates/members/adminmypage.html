@@ -37,28 +37,28 @@
                            <div class="row mb-1">
                                <label class="col-sm-2 col-form-label form-label">관리자 이름</label>
                                <div class="col-sm-4">
-                                   <input type="text" readonly class="form-control-plaintext" th:value="${membersDTO.name}">
+                                   <input type="text" readonly class="form-control-plaintext" th:value="${member.name}">
                                </div>
                            </div>
 
                            <div class="row mb-1">
                                <label class="col-sm-2 col-form-label form-label">관리자 등급</label>
                                <div class="col-sm-4">
-                                   <input type="text" readonly class="form-control-plaintext" th:value="${membersDTO.role}">
+                                   <input type="text" readonly class="form-control-plaintext" th:value="${member.role}">
                                </div>
                            </div>
 
                            <div class="row mb-1">
                                <label class="col-sm-2 col-form-label form-label">이메일</label>
                                <div class="col-sm-6">
-                                   <input type="email" readonly class="form-control-plaintext" th:value="${membersDTO.email}">
+                                   <input type="email" readonly class="form-control-plaintext" th:value="${member.email}">
                                </div>
                            </div>
 
                            <div class="row mb-4">
                                <label class="col-sm-2 col-form-label form-label">전화번호</label>
                                <div class="col-sm-6">
-                                   <input type="text" class="form-control-plaintext" th:value="${membersDTO.phone}" readonly>
+                                   <input type="text" class="form-control-plaintext" th:value="${member.phone}" readonly>
                                </div>
                            </div>
 

@@ -47,5 +47,6 @@ public interface MembersService {
     public MembersDTO Disapprove(Long id);
 
     public Map<Role, Long> findRoleByEmail(String email);
+    public Role findOnlyRoleByEmail(String email);
 
 }
