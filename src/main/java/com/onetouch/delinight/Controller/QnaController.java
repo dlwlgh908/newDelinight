@@ -15,10 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Map;
-
-import static com.onetouch.delinight.Util.PagenationUtil.Pagination;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,7 +30,7 @@ public class QnaController {
         System.out.println("qnaDTO" + qnaDTO);
         model.addAttribute("qnaDTO" ,qnaDTO);
 
-        return "qna/register";
+        return "/qna/register";
     }
     //등록post
     @PostMapping("/register")
@@ -59,7 +55,7 @@ public class QnaController {
         model.addAttribute("qnaDTOList",qnaDTOList);
         log.info(qnaDTOList.getContent());
 
-        return "qna/list";
+        return "/qna/list";
     }
 
 
@@ -69,7 +65,7 @@ public class QnaController {
     public String read(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
         QnaDTO qnaDTO = qnaService.read(id);
         model.addAttribute("qnaDTO",qnaDTO);
-        return "qna/read";
+        return "/qna/read";
     }
     //수정get
     @GetMapping("/update/{id}")
@@ -77,7 +73,7 @@ public class QnaController {
         log.info("수정" +id);
         QnaDTO qnaDTO = qnaService.read(id);
         model.addAttribute("qnaDTO",qnaDTO);
-        return "qna/update";
+        return "/qna/update";
     }
     //수정post
     @PostMapping("/update")
@@ -87,8 +83,10 @@ public class QnaController {
         return "redirect:/qna/read?id="+qnaDTO.getId();
     }
     //삭제
-    @GetMapping("/delete")
+    @PostMapping("/delete")
     public String deleteGET(Long id){
+
+        log.info("히히아이디" + id);
         qnaService.delete(id);
         return "redirect:/qna/list";
     }
@@ -98,7 +96,10 @@ public class QnaController {
 
 
 
-
+    @GetMapping("/test")
+    public String test(){
+        return "/qna/test";
+    }
 
 
 

@@ -51,6 +51,11 @@
                                                    <div class="col" th:text="${menuDTO.menuStatus}"></div>
                                                </div>
                                                <div class="row md-3">
+                                                   <div class="col-4">메뉴종류</div>
+                                                   <div class="col" th:text="${menuDTO.menu}"></div>
+                                               </div>
+
+                                               <div class="row md-3">
                                                    <div class="col col-4">이미지</div>
                                                    <div th:if="${menuDTO.imgUrl}"><img width="100%" th:src="${menuDTO.imgUrl}"></div>
                                                </div>

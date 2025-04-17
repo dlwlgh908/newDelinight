@@ -29,89 +29,77 @@
                                     <div class="card-header">메뉴등록</div>
                                     <div class="card-body">
                                         <div class="container">
+                                            <div class="row">
 
-                                            <div class="col-2"></div>
-                                            <div class="col-4">
-                                                <input type="hidden" name="id" id="id">
-                                                <div class="mb-3 mt-3 d-flex justify-content-between align-items-center">
-                                                    <div class="me-3 flex-grow-1">
+                                                <div class="col-6">
+                                                    <input type="hidden" name="id" id="id">
+
+                                                    <div>
                                                         <label for="formFileLg">이미지등록</label>
                                                         <input name="image" class="form-control form-control image imgInput" id="formFileLg" type="file">
-                                                        <img width="200" class="menuImg img-thumbnail" src="/img/defaultImg.png" alt="미리보기 이미지">
+                                                    </div>
 
+                                                    <div class="md-3 mt-3">
+                                                        <div class="input-group md-3">
+                                                            <label class="input-group-text" for="inputGroupSelect02">메뉴종류</label>
+                                                            <select th:field="*{menu}" class="form-select" id="inputGroupSelect02" name="menu">
+                                                                <option value="KOREAN" selected>한식</option>
+                                                                <option value="WESTERN">양식</option>
+                                                                <option value="CHINESE">중식</option>
+                                                                <option value="JAPANESE">일식</option>
+                                                                <option value="DESSERT">카페</option>
+                                                                <option value="BEVERAGE">음료</option>
+                                                                <option value="ETC">기타</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="md-3 mt-3">
+                                                        <div class="input-group md-3">
+                                                            <label class="input-group-text" for="inputGroupSelect01">판매상태</label>
+                                                            <select th:field="*{menuStatus}" class="form-select" id="inputGroupSelect01" name="menustatus">
+                                                                <option value="SELL" selected>판매중</option>
+                                                                <option value="SOLD_OUT">품절</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="md-3">
+                                                        <label for="name" class="form-label">메뉴</label>
+                                                        <input type="text" class="form-control" id="name" name="name">
+                                                    </div>
+
+                                                    <div class="md-3">
+
+                                                        <label for="content" class="form-label">메뉴정보</label>
+                                                        <textarea type="text" class="form-control" id="content" name="content"></textarea>
+                                                    </div>
+
+                                                    <div class="md-3">
+                                                        <label for="price" class="form-label">가격</label>
+                                                        <input type="text" class="form-control" id="price" name="price">
+                                                    </div>
+
+                                                    <div class="hiddenImgNum"></div>
+                                                </div>
+
+                                                <div class="col-6">
+                                                    <div class="mb-3 mt-3">
+                                                        <img width="600" height="600" class="menuImg img-thumbnail" src="/img/defaultImg.png" alt="미리보기 이미지">
                                                     </div>
                                                 </div>
-                                                <div class="md-3 mt-3">
-                                                    <div class="input-group md-3">
-                                                        <select class="form-select" aria-label="Default select example">
-                                                            <option selected>메뉴목록</option>
-                                                            <option value="KOREAN">한식</option>
-                                                            <option value="WESTERN">양식</option>
-                                                            <option value="CHINESE">중식</option>
-                                                            <option value="JAPANESE">일식</option>
-                                                            <option value="DESSERT">카페</option>
-                                                            <option value="BEVERAGE">음료</option>
-                                                            <option value="ETC">기타</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="md-3">
-                                                    <label for="name" class="form-label">메뉴</label>
-                                                    <input type="text" class="form-control" id="name" name="name">
-                                                </div>
-
-                                                <div class="md-3">
-
-                                                    <label for="content" class="form-label">메뉴정보</label>
-                                                    <textarea type="text" class="form-control" id="content" name="content"></textarea>
-                                                </div>
-
-                                                <div class="md-3 mt-3">
-                                                    <div class="input-group md-3">
-                                                        <label class="input-group-text" for="inputGroupSelect01">판매상태</label>
-                                                        <select th:field="*{menuStatus}" class="form-select" id="inputGroupSelect01" name="menustatus">
-                                                            <option value="SELL" selected>판매중</option>
-                                                            <option value="SOLD_OUT">품절</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="md-3">
-                                                    <label for="price" class="form-label">가격</label>
-                                                    <input type="text" class="form-control" id="price" name="price">
-                                                </div>
-
-                                                <button type="submit" class="btn btn-primary">저장</button>
-                                                <div class="hiddenImgNum"></div>
-
-                                            </div>
-                                        </div><!--메뉴등록 위치-->
-
-
-
-
-<!--                                        <div class="md-3 mt-3">-->
-<!--                                            <label for="formFileLg">이미지등록</label>-->
-<!--                                            <input name="image" class="form-control form-control image imgInput" id="formFileLg" type="file">-->
-<!--                                            <img width="50%" class="menuImg" src="/img/defaultImg.png">-->
-<!--                                        </div>-->
-
-
-
-
+                                            </div><!--메뉴등록 위치-->
+                                        </div>
                                     </div>
+                                    <button type="submit" class="btn btn-primary">저장</button>
+
                                 </div>
                             </form>
 
 
-<!--                            <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>-->
                             <script type="text/javascript" src="/js/imgscript.js"></script>
                         </div>
                     </div>
-
-
-
 
                 </div>
             </main>

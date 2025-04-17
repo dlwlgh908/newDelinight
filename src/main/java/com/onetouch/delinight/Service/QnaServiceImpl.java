@@ -82,7 +82,8 @@ public class QnaServiceImpl implements QnaService {
         Optional<QnaEntity> optionalQnaEntity = qnaRepository.findById(qnaDTO.getId());
         QnaEntity qnaEntity = optionalQnaEntity.get();
         qnaEntity.setTitle(qnaDTO.getTitle());
-        qnaEntity.setContent(qnaDTO.getTitle());
+        qnaEntity.setContent(qnaDTO.getContent());
+        qnaRepository.save(qnaEntity);
         return null;
     }
 
