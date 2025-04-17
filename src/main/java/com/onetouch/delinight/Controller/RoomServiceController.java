@@ -9,26 +9,30 @@ package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.DTO.MenuDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
+import com.onetouch.delinight.DTO.PaymentDTO;
+import com.onetouch.delinight.Entity.PaymentEntity;
 import com.onetouch.delinight.Service.MenuService;
 import com.onetouch.delinight.Service.OrdersService;
 import com.onetouch.delinight.Service.PaymentService;
+import com.onetouch.delinight.Util.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/users/roomservice")
+@RequestMapping("/users")
 
 public class RoomServiceController {
     private final MenuService menuService;
-    private final PaymentService paymentService;
     private final OrdersService ordersService;
 
     @GetMapping("/order/main")
@@ -40,14 +44,31 @@ public class RoomServiceController {
         return "roomService/order/main";
     }
 
-    @GetMapping("/order/read")
-    public String read(Long paymentId, Model model){
-        List<OrdersDTO> ordersDTOList = ordersService.read(paymentId);
-        boolean pendingCheck = ordersService.pendingCheck(paymentId);
-        log.info(ordersDTOList);
+    @GetMapping("/order/list")
+    public String list(Principal principal, Model model){
+        List<OrdersDTO> ordersDTOList = ordersService.ordersListByEmail(principal.getName());
         model.addAttribute("ordersDTOList", ordersDTOList);
-        model.addAttribute("pendingCheck", pendingCheck);
-        return "roomService/order/read";
+        return "roomService/order/list";
+    }
+
+    @GetMapping("/order/hub")
+    public String hub(){
+        return "redirect:/users/order/list";
+    }
+
+    @GetMapping("/order/request")
+    public String request(Long paymentId, Model model){
+        List<OrdersDTO> ordersDTOList = ordersService.read(paymentId);
+        Long totalPrice = 0L;
+     for(int i = 0; i<ordersDTOList.size(); i++){
+         totalPrice += ordersDTOList.get(i).getTotalPrice();
+        }
+
+     log.info(totalPrice);
+        log.info(ordersDTOList);
+     model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("ordersDTOList", ordersDTOList);
+        return "roomService/order/request";
     }
 
 

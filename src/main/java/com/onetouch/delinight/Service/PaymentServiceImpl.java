@@ -27,24 +27,28 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 @Transactional
+@Log4j2
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService{
 
     private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
 
-    @Override
-    public List<OrdersDTO> readOrders(Long paymentId) {
 
-        PaymentEntity paymentEntity = paymentRepository.findById(paymentId).get();
-        List<OrdersEntity> ordersEntityList = paymentEntity.getOrdersEntityList();
-        List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
-                .map(data->modelMapper.map(data,OrdersDTO.class)
-                        .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
-                        .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
+//    @Override
+//    public List<OrdersDTO> readOrders(Long paymentId) {
+//
+//        PaymentEntity paymentEntity = paymentRepository.findById(paymentId).get();
+//        List<OrdersEntity> ordersEntityList = paymentEntity.getOrdersEntityList();
+//        List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
+//                .map(data->modelMapper.map(data,OrdersDTO.class)
+//                        .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
+//                        .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
+//
+//        return ordersDTOList;
+//    }
 
-        return ordersDTOList;
-    }
+       
 
     @Override
     public List<PaymentDTO> findAllDate(Long totalId, PayType type) {
@@ -119,6 +123,7 @@ public class PaymentServiceImpl implements PaymentService{
 
         return paymentDTOList; // 최종 DTOList 반환
     }
+
 
 
 }

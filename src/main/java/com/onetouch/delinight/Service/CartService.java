@@ -15,6 +15,7 @@ import java.util.List;
 
 public interface CartService {
 
+    public Long cartCheck(String email);
 
     public List<CartItemDTO> list(Long cartNum);
     public Integer add(Long cartNum, Long menuNum);

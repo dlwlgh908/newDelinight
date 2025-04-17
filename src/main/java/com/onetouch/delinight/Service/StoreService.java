@@ -21,6 +21,8 @@ public interface StoreService {
 
     public List<StoreDTO> list();
 
+    public List<StoreDTO> list(String email);
+
     public void del(Long id);
     public StoreDTO read(Long id);
 

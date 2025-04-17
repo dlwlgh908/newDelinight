@@ -7,11 +7,19 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+
+import com.onetouch.delinight.Constant.OrderType;
+import com.onetouch.delinight.Constant.PaidCheck;
+import lombok.*;
+
+import java.util.List;
+
 import com.onetouch.delinight.Constant.PaidCheck;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -21,6 +29,15 @@ import java.time.LocalDateTime;
 public class PaymentDTO {
 
     private Long id;
+
+    private OrderType orderType;
+    private PaidCheck paidCheck;
+    private List<OrdersDTO> ordersDTOList;
+
+    public PaymentDTO setOrdersDTOList(List<OrdersDTO> ordersDTOList){
+        this.ordersDTOList = ordersDTOList;
+        return this;
+
     private BigDecimal amount;          // 결제 금액
     private LocalDateTime payDateTime;  // 결제 일시
     private String orderType;           // 결제 방식(선결제 / 후결제)
@@ -42,6 +59,7 @@ public class PaymentDTO {
         this.centerName = centerName;
         this.checkInRoomNumber = checkInRoomNumber;
         this.paidCheckType = paidCheckType;
+
     }
 
 }

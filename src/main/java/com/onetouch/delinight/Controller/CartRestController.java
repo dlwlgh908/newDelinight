@@ -1,6 +1,7 @@
 package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.DTO.CartItemDTO;
+import com.onetouch.delinight.Repository.CartRepository;
 import com.onetouch.delinight.Service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,24 +19,27 @@ import java.util.List;
 @RestController
 @Log4j2
 public class CartRestController {
+    private final CartRepository cartRepository;
 
     private final CartService cartService;
 
     @GetMapping("/showList")
     public ResponseEntity<List<CartItemDTO>> showList(Principal principal) {
-        Long cartNum = 1L;
+        Long cartNum = cartService.cartCheck(principal.getName());
         List<CartItemDTO> cartItemDTOList = cartService.list(cartNum);
         return ResponseEntity.ok(cartItemDTOList);
     }
 
     @PostMapping("/addToCart")
     public ResponseEntity<String> addToCart(Long menuNum, Principal principal) {
-        Long cartId = 1L; // 원래는 회원이면 principal로 해당 카트 찾아서 맵핑
+        log.info("임"+principal.getName()
+        );
+        Long cartId = cartService.cartCheck(principal.getName()); // 원래는 회원이면 principal로 해당 카트 찾아서 맵핑
         Integer existCartItem = cartService.add(cartId, menuNum);
         if (existCartItem == 2) {
-            return ResponseEntity.ok("이미 장바구니에 담긴 음식입니다. 장바구니에서 수량을 조정해주세요.");
+            return ResponseEntity.ok("1");
         } else {
-            return ResponseEntity.ok("저장 성공");
+            return ResponseEntity.ok("2");
         }
 
     }
@@ -60,7 +64,7 @@ public class CartRestController {
 
     @PostMapping("/cartToOrder")
     public String  cartToOrder(Principal principal) {
-        Long cartId = 1L;
+        Long cartId = cartRepository.findByUsersEntity_Email(principal.getName()).getId();
         log.info("진입여부");
         Long paymentId = cartService.cartToOrder(cartId);
         return String.valueOf(paymentId);
