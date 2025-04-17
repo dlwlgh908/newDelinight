@@ -7,11 +7,10 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
-import com.onetouch.delinight.Constant.OrderType;
 import com.onetouch.delinight.Constant.PaidCheck;
-import com.onetouch.delinight.Constant.PaymentStatus;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,19 +18,30 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class PaymentDTO {
 
-    private Long id;                        // 결제 식별자
+    private Long id;
+    private BigDecimal amount;                 // 결제 금액
+    private LocalDateTime payDateTime;  // 결제 일시
+    private String orderType;           // 결제 방식(선결제 / 후결제)
+    private String storeName;           // 가맹점명
+    private String hotelName;           // 호텔명
+    private String branchName;          // 지점
+    private String centerName;          // 본사
+    private String checkInRoomNumber;   // 객실 번호(룸서비스일 경우 체크인 정보에서 가져옴)
+    private PaidCheck paidCheckType;    // 정산 여부
 
-    private String key;                     // 외부에 전달하는 고유 키
-
-    private OrderType orderType;            // 결제 유형 : 선결(PayNow) , 후결(PayLater)
-
-    private PaidCheck paidCheck;            // 결제 완료 여부 : Paid, Unpaid
-
-    private PaymentStatus paymentStatus;    // 결제 상태 : 결제완, 취소 등(Enum)
-
-    private LocalDateTime regTime;          // 결제 생성 시간(BaseTimeEntity 상속 받은 regTime)
+    public PaymentDTO(Long id, BigDecimal amount, LocalDateTime payDateTime, String orderType, String storeName, String hotelName, String branchName, String centerName, String checkInRoomNumber, PaidCheck paidCheckType) {
+        this.id = id;
+        this.amount = amount;
+        this.payDateTime = payDateTime;
+        this.orderType = orderType;
+        this.storeName = storeName;
+        this.hotelName = hotelName;
+        this.branchName = branchName;
+        this.centerName = centerName;
+        this.checkInRoomNumber = checkInRoomNumber;
+        this.paidCheckType = paidCheckType;
+    }
 
 }
