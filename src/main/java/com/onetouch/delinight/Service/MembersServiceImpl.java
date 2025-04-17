@@ -59,6 +59,9 @@ public class MembersServiceImpl implements MembersService{
     public void hoteladcreate(MembersDTO membersDTO) {
         MembersEntity membersEntity =
                 modelMapper.map(membersDTO, MembersEntity.class);
+
+
+        membersEntity.setPassword(passwordEncoder.encode(membersEntity.getPassword()));
         membersEntity.setRole(Role.ADMIN);
         membersEntity.setStatus(Status.WAIT);
 

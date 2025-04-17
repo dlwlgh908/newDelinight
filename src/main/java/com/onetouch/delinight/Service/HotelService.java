@@ -16,6 +16,8 @@ public interface HotelService {
 
     public void create(HotelDTO hotelDTO);
 
+    public void update(HotelDTO hotelDTO);
+
     public List<HotelDTO> list();
 
     public Long findHotelByEmail(String email);
