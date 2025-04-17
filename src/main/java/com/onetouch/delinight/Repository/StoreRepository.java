@@ -11,9 +11,13 @@ import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.StoreEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
 
     public StoreEntity findByMembersEntity_Email(String email);
+
+    public List<StoreEntity> findByHotelEntity_Id(Long hotelId);
 
 
 }

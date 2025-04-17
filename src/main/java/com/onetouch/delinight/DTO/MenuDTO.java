@@ -46,6 +46,10 @@ public class MenuDTO {
         return this;
     }
 
+    public MenuDTO setImgUrl(String imgUrl){
+        this.imgUrl = imgUrl;
+        return this;
+    }
     public MenuDTO setImgNum(Long imgNum) {
         this.imgNum = imgNum;
         return this;

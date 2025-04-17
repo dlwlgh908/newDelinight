@@ -77,6 +77,16 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public List<MenuDTO> menuList(Long storeId) {
+
+        List<MenuEntity> menuEntityList = menuRepository.findByStoreEntity_Id(storeId);
+        List<MenuDTO> menuDTOList = menuEntityList.stream().map(data->modelMapper.map(data, MenuDTO.class)
+                .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class)).setImgUrl(imageRepository.findByMenuEntity_Id(data.getId()).get().getFullUrl())
+        ).toList();
+        return menuDTOList;
+    }
+
+    @Override
     public Page<MenuDTO> menuList(Pageable pageable) {
         Page<MenuEntity> pageList = menuRepository.findAll(pageable);
         return pageList.map(data -> modelMapper.map(data, MenuDTO.class));

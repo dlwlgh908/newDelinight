@@ -35,6 +35,7 @@ public class StoreServiceImpl implements StoreService{
     private final MembersRepository membersRepository;
     private final OrdersRepository ordersRepository;
     private final ImageRepository imageRepository;
+    private final CheckInRepository checkInRepository;
 
     @Override
     public Integer awaitingCountCheck(Long storeId) {
@@ -64,6 +65,17 @@ public class StoreServiceImpl implements StoreService{
         storeRepository.save(storeEntity);
 
 
+    }
+
+    @Override
+    public List<StoreDTO> list(String email) {
+        CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+        Long hotelId = checkInEntity.getRoomEntity().getHotelEntity().getId();
+        List<StoreEntity> storeEntityList = storeRepository.findByHotelEntity_Id(hotelId);
+        List<StoreDTO> storeDTOList = storeEntityList.stream().map(data->modelMapper.map(
+                data, StoreDTO.class).setImgUrl(imageRepository.findByStoreEntity_Id(data.getId()).get().getFullUrl())).toList();
+
+        return storeDTOList;
     }
 
     @Override
@@ -102,7 +114,7 @@ public class StoreServiceImpl implements StoreService{
         Optional<StoreEntity> optionalStoreEntity = storeRepository.findById(id);
         if(optionalStoreEntity.isPresent()){
             StoreEntity storeEntity = optionalStoreEntity.get();
-            StoreDTO storeDTO = modelMapper.map(storeEntity, StoreDTO.class);
+            StoreDTO storeDTO = modelMapper.map(storeEntity, StoreDTO.class).setImgUrl(imageRepository.findByStoreEntity_Id(id).get().getFullUrl());
             return storeDTO;
         }
         else {

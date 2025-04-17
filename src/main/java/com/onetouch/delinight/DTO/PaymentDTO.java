@@ -7,7 +7,11 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
+import com.onetouch.delinight.Constant.OrderType;
+import com.onetouch.delinight.Constant.PaidCheck;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,5 +22,13 @@ import lombok.*;
 public class PaymentDTO {
 
     private Long id;
+    private OrderType orderType;
+    private PaidCheck paidCheck;
+    private List<OrdersDTO> ordersDTOList;
+
+    public PaymentDTO setOrdersDTOList(List<OrdersDTO> ordersDTOList){
+        this.ordersDTOList = ordersDTOList;
+        return this;
+    }
 
 }

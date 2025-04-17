@@ -93,6 +93,7 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
             throw new UsernameNotFoundException("member, user 어디에서도 찾을 수 없음");
         }
 
+        log.info("생성 됐니?");
         return new CustomUserDetails(usersEntity);
     }
 

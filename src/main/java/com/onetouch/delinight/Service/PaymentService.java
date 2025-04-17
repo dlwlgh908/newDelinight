@@ -8,11 +8,10 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.OrdersDTO;
+import com.onetouch.delinight.DTO.PaymentDTO;
 
 import java.util.List;
 
 public interface PaymentService {
-
-    public List<OrdersDTO> readOrders(Long paymentId);
 
 }

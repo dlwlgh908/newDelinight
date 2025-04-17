@@ -9,11 +9,13 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.CheckInDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
+import com.onetouch.delinight.DTO.PaymentDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.OrdersEntity;
 import com.onetouch.delinight.Entity.PaymentEntity;
 import com.onetouch.delinight.Repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,22 +24,24 @@ import java.util.List;
 
 @Service
 @Transactional
+@Log4j2
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService{
 
     private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
 
-    @Override
-    public List<OrdersDTO> readOrders(Long paymentId) {
 
-        PaymentEntity paymentEntity = paymentRepository.findById(paymentId).get();
-        List<OrdersEntity> ordersEntityList = paymentEntity.getOrdersEntityList();
-        List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
-                .map(data->modelMapper.map(data,OrdersDTO.class)
-                        .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
-                        .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
-
-        return ordersDTOList;
-    }
+//    @Override
+//    public List<OrdersDTO> readOrders(Long paymentId) {
+//
+//        PaymentEntity paymentEntity = paymentRepository.findById(paymentId).get();
+//        List<OrdersEntity> ordersEntityList = paymentEntity.getOrdersEntityList();
+//        List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
+//                .map(data->modelMapper.map(data,OrdersDTO.class)
+//                        .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
+//                        .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
+//
+//        return ordersDTOList;
+//    }
 }
