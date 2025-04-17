@@ -83,59 +83,55 @@
 </table>
 
 <script>
-    // 폼 제출 시 이벤트 처리
-    $("#paymentForm").submit(function (event) {
-        event.preventDefault();  // 폼이 실제로 제출되지 않도록 방지
 
-        // 필터 값 가져오기
-        let startDate = $("#startDate").val();
-        let endDate = $("#endDate").val();
-        let orderType = $("#orderType").val();
-        let paidCheck = $("#paidCheck").val();
-        let type = $("#type").val();  // 정산 타입 가져오기
+    $.ajax({
 
-        // 필터값을 데이터로 준비하여 AJAX 요청 보내기
-        $.ajax({
-            url: '/api/payment/allDate',
-            type: 'GET',
-            data: {
-                totalId: 1,  // 예시로 totalId를 고정값으로 사용
-                type: type,   // 사용자가 선택한 정산 타입
-                startDate: startDate,
-                endDate: endDate,
-                orderType: orderType,
-                paidCheck: paidCheck
+        url: 'api/payment/allDate',
+        type: 'get',
+        data:
+            {
+             totalId: 1,
+             type: 'CENTER'
             },
-            success: function(response) {
-                console.log(response); // 서버에서 반환된 데이터 전체를 콘솔에 출력
-
-                const tableBody = $('#paymentResults tbody');
-                tableBody.empty();  // 기존 테이블 내용 비우기
-
-                // 서버에서 받은 데이터를 테이블에 채우기
-                response.forEach(function(payment) {
-                    const row = `
-                            <tr>
-                                <td>${payment.id}</td>
-                                <td>${payment.amount}</td>
-                                <td>${payment.payDateTime}</td>
-                                <td>${payment.orderType}</td>
-                                <td>${payment.storeName}</td>
-                                <td>${payment.hotelName}</td>
-                                <td>${payment.branchName}</td>
-                                <td>${payment.centerName}</td>
-                                <td>${payment.checkInRoomNumber ?? '-'}</td>
-                                <td>${payment.paidCheckType}</td>
-                            </tr>
-                        `;
-                    tableBody.append(row);
-                });
-            },
-            error: function(xhr, status, error) {
-                console.log("정산 조회 실패:", error);
+        success:function (response) {
+            console.log("정산 데이터 조회 완료", response)
+        },
+        error:function (xhr, status, error) {
+            if (xhr.status === 400){
+                console.log("잘못된 요청(400 Error)입니다.")
+            }else if(xhr.status === 404){
+                console.log("정산 데이터(404 Error)가 없습니다.")
+            }else if (xhr.status === 500){
+                console.log("서버 오류가 발생(500 Error)했습니다.")
             }
-        });
-    });
+        }
+        /*
+            성공하면
+            "id":1,
+            "totalAmount": 10000,
+            "regTime": "2025-04-17T12:34:56",
+            "orderStatus":"PAID",
+            "storeName":"storeA",
+            "hotelName":"hotelA",
+            "branchName":"branchA",
+            "centerName":"centerA",
+            "roomNumber":"101",
+            "paidCheck":true
+
+            "id": 2,
+            "totalAmount": 150000,
+            "regTime": "2025-04-17T14:30:00",
+            "orderStatus": "UNPAID",
+            "storeName": "Store B",
+            "hotelName": "Hotel B",
+            "branchName": "Branch B",
+            "centerName": "Center B",
+            "roomNumber": "102",
+            "paidCheck": false
+         */
+
+    })
+
 </script>
 
 </body>

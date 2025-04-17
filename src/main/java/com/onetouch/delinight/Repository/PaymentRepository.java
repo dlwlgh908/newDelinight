@@ -17,39 +17,41 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 
     PaymentEntity findByOrdersEntityList_Id(Long id);
 
+    // fetch join 사용시 지연로딩 없이 즉시 로딩 및 쿼리문 1번에 다 해결 가능
+    // QueryDSL 해보려했으나 아직 실력이 부족해서 해결못함
     @Query("""
-        select p from PaymentEntity p
-        join p.ordersEntityList o
-        join o.storeEntity s
-        join s.hotelEntity h
-        join h.branchEntity b
-        join b.centerEntity c
-        where c.id = :centerId""")
-        List<PaymentEntity> findCenterForDate(@Param("centerId") Long centerId);   // centerId로 하위 조회 후 정산
+    select distinct p from PaymentEntity p
+    join fetch p.ordersEntityList o
+    join fetch o.storeEntity s
+    join fetch s.hotelEntity h
+    join fetch h.branchEntity b
+    join fetch b.centerEntity c
+    where c.id = :centerId""")
+    List<PaymentEntity> findCenterForDate(@Param("centerId") Long centerId);
 
     @Query("""
-           select p from PaymentEntity p
-           join p.ordersEntityList o
-           join o.storeEntity s
-           join s.hotelEntity h
-           join h.branchEntity b
-           where b.id = :branchId""")
-    List<PaymentEntity> findBranchForDate(@Param("branchId") Long branchId);       // branchId로 하위 조회 후 정산
+    select distinct p from PaymentEntity p
+    join fetch p.ordersEntityList o
+    join fetch o.storeEntity s
+    join fetch s.hotelEntity h
+    join fetch h.branchEntity b
+    where b.id = :branchId""")
+    List<PaymentEntity> findBranchForDate(@Param("branchId") Long branchId);
 
     @Query("""
-            select p from PaymentEntity p
-            join p.ordersEntityList o
-            join o.storeEntity s
-            join s.hotelEntity h
-            where  h.id = :hotelId""")
-    List<PaymentEntity> findHotelForDate(@Param("hotelId") Long hotelId);          // hotelId로 하위 조회 후 정산
+    select distinct p from PaymentEntity p
+    join fetch p.ordersEntityList o
+    join fetch o.storeEntity s
+    join fetch s.hotelEntity h
+    where h.id = :hotelId""")
+    List<PaymentEntity> findHotelForDate(@Param("hotelId") Long hotelId);
 
     @Query("""
-            select p from PaymentEntity p
-            join p.ordersEntityList o
-            join o.storeEntity s
-            where s.id = :storeId""")
-    List<PaymentEntity> findStoreForDate(@Param("storeId") Long storeId);           // storeId로 하위 조회 후 정산
+    select distinct p from PaymentEntity p
+    join fetch p.ordersEntityList o
+    join fetch o.storeEntity s
+    where s.id = :storeId""")
+    List<PaymentEntity> findStoreForDate(@Param("storeId") Long storeId);
 
 
 

@@ -23,21 +23,31 @@ public class PaymentRestController {
     private final PaymentService paymentService;
 
     @GetMapping("/allDate")
-    public ResponseEntity <List<PaymentDTO>> allDate (@RequestParam("totalId")Long totalId, @RequestParam("type")PayType type, @RequestParam(value = "startDate", required = false) String startDate, @RequestParam(value = "endDate", required = false) String endDate, @RequestParam(value = "orderType", required = false) String orderType, @RequestParam(value = "paidCheck", required = false) String paidCheck){
-        log.info("정산 요청 받음: totalId = {}, type = {}", totalId, type);
-        log.info("정산 데이터 조회 시작: totalId = {}, type = {}", totalId, type);
+    public ResponseEntity <List<PaymentDTO>> allDate (@RequestParam("totalId")Long totalId, @RequestParam("type")PayType type){
+        log.info("요청 받은 정산 : totalId = {}, type = {}", totalId, type);
 
-        List<PaymentDTO> paymentDTOList = paymentService.findAllDate(totalId, type);
+        try {
+            // Service 호출
+            List<PaymentDTO> paymentDTOList = paymentService.findAllDate(totalId, type);
 
-        if (paymentDTOList != null && !paymentDTOList.isEmpty()){
-            log.info("정산 데이터 조회 완료, 결과: {} 건", paymentDTOList.size());
-        }else{
-            log.info("정산 데이터가 없습니다.");
+            // 데이터가 있다면
+            if (paymentDTOList != null && !paymentDTOList.isEmpty()){
+                log.info("정산 데이터 조회 완료!! 결과 {}", paymentDTOList.size());
+                return new ResponseEntity<>(paymentDTOList, HttpStatus.OK);
+            }else { // 데이터가 없다면
+                log.info("정산 데이터가 없습니다.");
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+        }catch (IllegalArgumentException e){
+            // 타입이 유효하지 않으면
+            log.info("유효하지 않은 정산 타입 {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            // 그 외 오류
+            log.info("정산 데이터 조회 중 오류 발생 {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        log.info("정산 데이터 반환 준비 완료, 총 {} 건", paymentDTOList.size());
-
-        return new ResponseEntity<>(paymentDTOList, HttpStatus.OK);
     }
 
 }
