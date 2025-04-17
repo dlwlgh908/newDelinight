@@ -59,7 +59,7 @@ public class MembersController {
 
     @GetMapping("/create")
     public String createView() {
-        return "members/create";
+        return "members/adminhome";
     }
 
     @PostMapping("/create")
@@ -203,7 +203,6 @@ public class MembersController {
 
         return "members/storeadlist";
     }
-
 
     //@PostMapping("/adminlogin")
     //public String adminlogin(@RequestParam String email,
