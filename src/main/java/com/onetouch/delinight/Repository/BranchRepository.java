@@ -7,11 +7,16 @@
  *********************************************************************/
 package com.onetouch.delinight.Repository;
 
+import com.onetouch.delinight.DTO.BranchDTO;
 import com.onetouch.delinight.Entity.BranchEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface BranchRepository extends JpaRepository<BranchEntity, Long> {
+
 
 
 
