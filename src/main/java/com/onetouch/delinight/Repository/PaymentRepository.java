@@ -51,4 +51,6 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
             where s.id = :storeId""")
     List<PaymentEntity> findStoreForDate(@Param("storeId") Long storeId);           // storeId로 하위 조회 후 정산
 
+
+
 }

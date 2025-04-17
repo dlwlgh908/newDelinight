@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class PaymentDTO {
 
     private Long id;
-    private BigDecimal amount;                 // 결제 금액
+    private BigDecimal amount;          // 결제 금액
     private LocalDateTime payDateTime;  // 결제 일시
     private String orderType;           // 결제 방식(선결제 / 후결제)
     private String storeName;           // 가맹점명

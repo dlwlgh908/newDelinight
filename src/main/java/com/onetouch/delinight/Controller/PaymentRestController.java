@@ -23,7 +23,7 @@ public class PaymentRestController {
     private final PaymentService paymentService;
 
     @GetMapping("/allDate")
-    public ResponseEntity <List<PaymentDTO>> allDate (@RequestParam("totalId")Long totalId, @RequestParam("type")PayType type){
+    public ResponseEntity <List<PaymentDTO>> allDate (@RequestParam("totalId")Long totalId, @RequestParam("type")PayType type, @RequestParam(value = "startDate", required = false) String startDate, @RequestParam(value = "endDate", required = false) String endDate, @RequestParam(value = "orderType", required = false) String orderType, @RequestParam(value = "paidCheck", required = false) String paidCheck){
         log.info("정산 요청 받음: totalId = {}, type = {}", totalId, type);
         log.info("정산 데이터 조회 시작: totalId = {}, type = {}", totalId, type);
 
