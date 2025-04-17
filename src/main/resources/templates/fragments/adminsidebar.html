@@ -17,21 +17,24 @@
                 <!--계정-->
                 <div class="sb-sidenav-menu-heading">account</div>
                 <a class="nav-link" href="/members/account/accounthub"
-                th:if="${}">
+                   th:if="${role.name() == 'SUPERADMIN' or role.name() == 'SYSTEMADMIN' or role.name() == 'ADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
                     계정 관리
                 </a>
-                <a class="nav-link" href="/members/account/centerhub">
+                <a class="nav-link" href="/members/account/centerhub"
+                   th:if="${role.name() == 'SUPERADMIN' or role.name() == 'SYSTEMADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
-                    본사 관리<br>(본사용)
+                    본사 관리<br>
                 </a>
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="#"
+                   th:if="${role.name() == 'SYSTEMADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
-                    호텔 관리<br>(시스템어드민용)
+                    호텔 관리
                 </a>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSuperHotel" aria-expanded="false" aria-controls="collapseSuperHotel">
+                <a class="nav-link collapsed" href="#" th:if="${role.name() == 'SUPERADMIN'}"
+                   data-bs-toggle="collapse" data-bs-target="#collapseSuperHotel" aria-expanded="false" aria-controls="collapseSuperHotel">
                     <div class="sb-nav-link-icon"><i class="fas fa-hotel"></i></div>
-                    호텔 관리<br>(수퍼어드민용)
+                    호텔 관리
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
                 <div class="collapse" id="collapseSuperHotel" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -40,9 +43,17 @@
                         <a class="nav-link" href="#">직원 관리</a>
                     </nav>
                 </div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseHotel" aria-expanded="false" aria-controls="collapseHotel">
-                    <div class="sb-nav-link-icon"><i class="fas fa-hotel"></i></div>
-                    호텔 관리<br>(호텔어드민용)
+
+                <a class="nav-link" href="#" th:if="${role.name() == 'SUPERADMIN'}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
+                    지사 관리
+                </a>
+
+                <!--호텔어드민 어카운트-->
+                <a class="nav-link collapsed" href="#" th:if="${role.name() == 'ADMIN'}"
+                   data-bs-toggle="collapse" data-bs-target="#collapseHotel" aria-expanded="false" aria-controls="collapseHotel">
+                    <div class="sb-nav-link-icon"><i class="fas fa-archway"></i></div>
+                    호텔 관리
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
                 <div class="collapse" id="collapseHotel" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -52,54 +63,64 @@
                         <a class="nav-link" href="#">룸 관리</a>
                     </nav>
                 </div>
-                <a class="nav-link" href="#">
-                    <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
-                    지사 관리
+
+                <!--호텔어드민 매니지먼트-->
+                <div class="sb-sidenav-menu-heading">Management</div>
+                <a class="nav-link collapsed" href="#" th:if="${role.name() == 'ADMIN'}"
+                   data-bs-toggle="collapse" data-bs-target="#collapseStore" aria-expanded="false" aria-controls="collapseStore">
+                    <div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>
+                    가맹점 관리
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
-                <a class="nav-link">
-                    <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
+                <div class="collapse" id="collapseStore" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link"  href="/members/menu/list">가맹점 관리</a>
+                        <a class="nav-link" href="/members/menu/register">가맹주 관리</a>
+                    </nav>
+                </div>
+                <a class="nav-link collapsed" href="#" th:if="${role.name() == 'ADMIN'}"
+                   data-bs-toggle="collapse" data-bs-target="#collapseService" aria-expanded="false" aria-controls="collapseService">
+                    <div class="sb-nav-link-icon"><i class="fas fa-headset"></i></div>
+                    고객 서비스
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseService" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link"  href="/members/menu/list">룸 케어</a>
+                        <a class="nav-link" href="/members/menu/register">문의사항 관리</a>
+                    </nav>
+                </div>
+
+                <!--스토어어드민 어카운트-->
+                <a class="nav-link" href="/members/store/update" th:if="${role.name() == 'STOREADMIN'}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>
+                    가맹점 관리
+                </a>
+
+                <!--스토어어드민 매니지먼트-->
+                <a class="nav-link collapsed" href="#" th:if="${role.name() == 'STOREADMIN'}"
+                   data-bs-toggle="collapse" data-bs-target="#collapseMenu" aria-expanded="false" aria-controls="collapseMenu">
+                    <div class="sb-nav-link-icon"><i class="fas fa-utensils"></i></div>
+                    메뉴 관리
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseMenu" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link"  href="/members/menu/list">메뉴 목록보기</a>
+                        <a class="nav-link" href="/members/menu/register">메뉴 등록</a>
+                    </nav>
+                </div>
+                <a class="nav-link" th:if="${role.name() == 'STOREADMIN'}" href="/members/store/orders/list">
+                    <div class="sb-nav-link-icon"><i class="fas fa-bell-concierge"></i></div>
                     오더 관리
                 </a>
-                <div class="sb-sidenav-menu-heading">Interface</div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                    Layouts
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="#">Static Navigation</a>
-                        <a class="nav-link" href="#">Light Sidenav</a>
-                    </nav>
-                </div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                    Pages
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                            Authentication
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="#">Login</a>
-                                <a class="nav-link" href="#">Register</a>
-                                <a class="nav-link" href="#">Forgot Password</a>
-                            </nav>
-                        </div>
-                    </nav>
-                </div>
-                <div class="sb-sidenav-menu-heading">Addons</div>
-                <a class="nav-link" href="#">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                    Charts
-                </a>
-                <a class="nav-link" href="#">
-                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                    Tables
+
+
+                <!--스토어어드민 정산-->
+                <div class="sb-sidenav-menu-heading">dashboard</div>
+                <a class="nav-link">
+                    <div class="sb-nav-link-icon"><i class="fas fa-square-poll-vertical"></i></div>
+                    매출 정산보기
                 </a>
             </div>
         </div>
