@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -53,6 +54,20 @@ public class MembersServiceImpl implements MembersService{
             membersRepository.save(membersEntity);
 
 
+    }
+
+    @Override
+    public MembersDTO update(MembersDTO membersDTO) {
+        Optional<MembersEntity> optionalMembersEntity
+                = membersRepository.findById(membersDTO.getId());
+
+        MembersEntity membersEntity = optionalMembersEntity.get();
+        membersEntity.setPhone(membersDTO.getPhone());
+        membersEntity.setPassword(membersDTO.getPassword());
+        if (membersDTO.getPassword() == null){
+
+        }
+        return null;
     }
 
     @Override
@@ -90,39 +105,27 @@ public class MembersServiceImpl implements MembersService{
         return membersDTOList;
     }
 
+    //@Override
+    //public List<MembersDTO> findSuper() {
+    //    List<MembersEntity> membersEntityList = membersRepository.selectSuperAd();
+    //
+    //    List<MembersDTO> membersDTOList =
+    //    membersEntityList.stream().toList().stream().map(
+    //            membersEntity -> modelMapper.map(membersEntity, MembersDTO.class)
+    //    ).collect(Collectors.toList());
+    //
+    //    return membersDTOList;
+    //}
+
     @Override
-    public String login(String email, String password) {
-        MembersEntity membersEntity = membersRepository.selectEmail(email);
-        log.info("이메일로 조회한 db 회원정보 : "+membersEntity);
-
-
-
-        if(membersEntity == null){
-            log.info("db에 회원정보 없음");
-            return "회원 정보가 없습니다.";
-        }
-
-        if(!membersEntity.getEmail().equals(password)){
-            log.info("db에 회원정보는 있으나 비번이 틀림");
-            return "비밀번호가 틀립니다.";
-        }
-        log.info("서비스 수행 완료");
-        return null;
+    public List<MembersDTO> findHotelAd() {
+        return List.of();
     }
 
-
-
-//    @Override
-//    public List<MembersDTO> findSuper() {
-//        List<MembersEntity> membersEntityList = membersRepository.selectSuperAd();
-//
-//        List<MembersDTO> membersDTOList =
-//        membersEntityList.stream().toList().stream().map(
-//                membersEntity -> modelMapper.map(membersEntity, MembersDTO.class)
-//        ).collect(Collectors.toList());
-//
-//        return membersDTOList;
-//    }
+    @Override
+    public List<MembersDTO> findStoreAd() {
+        return List.of();
+    }
 
     @Override
     public Page<MembersEntity> findHotelAd(Status status, int page) {
@@ -136,17 +139,17 @@ public class MembersServiceImpl implements MembersService{
     }
 
 
-
-    @Override
-    public Page<MembersEntity> findStoreAd(Status status, int page) {
-
-
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.membersRepository.selectStoreAd(pageable);
-
-    }
+    //
+    //@Override
+    //public Page<MembersEntity> findStoreAd(Status status, int page) {
+    //
+    //
+    //    List<Sort.Order> sorts = new ArrayList<>();
+    //    sorts.add(Sort.Order.desc("id"));
+    //    Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+    //    return this.membersRepository.selectStoreAd(pageable);
+    //
+    //}
 
     @Override
     public Page<MembersEntity> getList(int page) {

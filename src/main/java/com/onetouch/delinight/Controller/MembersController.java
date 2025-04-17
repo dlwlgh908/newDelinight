@@ -15,16 +15,11 @@ import com.onetouch.delinight.Service.MembersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,10 +30,31 @@ public class MembersController {
     private final MembersService membersService;
     private final MembersRepository membersRepository;
 
+    @ModelAttribute("membersDTO")
+    public MembersDTO setUserInfo(Principal principal) {
+        if (principal == null) return null;
+
+        String email = principal.getName();
+        MembersEntity membersEntity = membersRepository.findByEmail(email);
+        return new MembersDTO(membersEntity);
+    }
+
     @GetMapping("/adminhome")
     public String adminhome() {
-        return "members/home";
+        return "/members/adminhome";
 
+    }
+
+    @GetMapping("/adminmypage")
+    public String adminMyPage(Principal principal, Model model){
+
+        return "/members/adminmypage";
+    }
+
+    @GetMapping("/adminupdate")
+    public String adminUpdate(Principal principal, Model model){
+
+        return "/members/adminupdate";
     }
 
     @GetMapping("/create")
@@ -138,6 +154,7 @@ public class MembersController {
                 status1 = Status.WAIT;
                 paging =membersService.findHotelAd(status1, page);
             } else if (status.equals("VALID")) {
+
                 status1 = Status.VALID;
                 paging = membersService.findHotelAd(status1, page);
             } else if (status.equals("NOTVALID")) {
@@ -187,11 +204,6 @@ public class MembersController {
         return "members/storeadlist";
     }
 
-    @GetMapping("/adminlogin")
-    public String adminloginGet() {
-        return "members/account/adminhome";
-    }
-
     //@PostMapping("/adminlogin")
     //public String adminlogin(@RequestParam String email,
     //                         @RequestParam String password,
@@ -223,5 +235,21 @@ public class MembersController {
     //    //오류 없으면 홈화면으로 이동
     //    return "redirect:/members/home";
     //}
+    @GetMapping("/adminlogin")
+    public String adminloginGet(@RequestParam(value = "error", required = false) String error, Model model) {
+
+        if ("bad_credentials".equals(error)) {
+            model.addAttribute("passwordError", "비밀번호가 틀립니다.");
+        } else if ("unknown".equals(error)) {
+            model.addAttribute("emailError", "이메일이 틀립니다.");
+        }
+
+        return "/members/adminlogin";
+    }
+
+    @GetMapping("/adminlogout-success")
+    public String adminlogout(){
+        return "/members/adminlogout";
+    }
 
 }

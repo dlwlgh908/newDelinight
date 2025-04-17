@@ -8,11 +8,12 @@
 package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.DTO.UsersDTO;
+import com.onetouch.delinight.Entity.UsersEntity;
+import com.onetouch.delinight.Repository.UsersRepository;
 import com.onetouch.delinight.Service.UsersService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +31,7 @@ import java.security.Principal;
 public class UserController {
 
         private final UsersService usersService;
-        private final ModelMapper modelMapper;
+        private final UsersRepository usersRepository;
 
         @GetMapping("/mobile")
         public String mobileGET(){
@@ -40,13 +41,19 @@ public class UserController {
 
         @GetMapping("/home")
         public String usershome(Principal principal , Model model) {
-
                 log.info("사용자 메인 페이지 진입함??????????");
+
                 if (principal == null) {
                         return "redirect:/users/login";
                 }
 
-                model.addAttribute("data" , principal.getName());
+                String email = principal.getName();
+
+                // DB 사용자 이름 조회
+                UsersEntity usersEntity = usersRepository.selectEmail(email);
+                String name = usersEntity != null ? usersEntity.getName() : "고객";
+
+                model.addAttribute("data" , name);
                 return "users/home";
         }
 
@@ -78,7 +85,10 @@ public class UserController {
         }
 
         @GetMapping("/login")
-        public String login() {
+        public String login(Integer sep, Model model) {
+
+                model.addAttribute("sep", sep);
+
                 return "/users/login";
         }
 

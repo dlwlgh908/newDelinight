@@ -26,6 +26,9 @@ public class StoreDTO {
     private String content;
 
 
+    private Long imgNum;
+
+    private String imgUrl;
     private HotelDTO hotelDTO;
 
     private MembersDTO membersDTO;

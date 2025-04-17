@@ -31,13 +31,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Order(2)
+    @Order(3)
     SecurityFilterChain FilterChain1(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(
 
                 authorize -> authorize
-                        .requestMatchers("/users/home" , "/users/login" , "/**").permitAll()
+                        .requestMatchers("/users/home" , "/users/login", "/css/**", "/js/**", "/images/**", "/**").permitAll()
                         .anyRequest().permitAll()
         ).csrf((csrf) -> csrf.disable())
 
@@ -65,24 +65,51 @@ public class SecurityConfig {
         http.securityMatcher("/members/**")
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/members/adminhome", "/members/adminlogin", "/**").permitAll()
+                                .requestMatchers("/members/adminhome", "/members/account/adminlogin", "/members//account/adminlogout-success", "/**").permitAll()
                                 .anyRequest().permitAll()
                 ).csrf((csrf) -> csrf.disable())
 
                 .formLogin(formLogin -> formLogin
                         .loginPage("/members/account/adminlogin")
                         .loginProcessingUrl("/members/adminlogin")
-                        .defaultSuccessUrl("/members/store/orders/list")
+                        .defaultSuccessUrl("/members/account/adminhome")
                         .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
                         .usernameParameter("email")
                 )
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutUrl("/logout")
+                        .logoutUrl("/members/account/adminlogout")
+                        .logoutSuccessUrl("/members/account/adminlogout-success")
                         .invalidateHttpSession(true)
                 );
         return http.build();
     }
 
+    @Bean
+    @Order(2)
+    SecurityFilterChain FilterChain3(HttpSecurity http) throws Exception {
+
+        http.securityMatcher("/guests/**")
+                .authorizeHttpRequests(
+                        authorize -> authorize
+                                .requestMatchers("/users/home" , "/users/login" , "/**").permitAll()
+                                .anyRequest().permitAll()
+                ).csrf((csrf) -> csrf.disable())
+
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/users/login")
+                        .loginProcessingUrl("/guest/login")
+                        .defaultSuccessUrl("/users/home")
+                        .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
+                        .usernameParameter("reservationNum")
+                )
+                .logout((logout) -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/users/welcome")
+                        .invalidateHttpSession(true)
+                );
+        return http.build();
+    }
 
 }
