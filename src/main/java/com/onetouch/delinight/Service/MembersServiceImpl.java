@@ -11,9 +11,7 @@ import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
-import com.onetouch.delinight.Repository.HotelRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
-import com.onetouch.delinight.Repository.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,10 +23,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -58,9 +57,26 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
+    public MembersDTO update(MembersDTO membersDTO) {
+        Optional<MembersEntity> optionalMembersEntity
+                = membersRepository.findById(membersDTO.getId());
+
+        MembersEntity membersEntity = optionalMembersEntity.get();
+        membersEntity.setPhone(membersDTO.getPhone());
+        membersEntity.setPassword(membersDTO.getPassword());
+        if (membersDTO.getPassword() == null){
+
+        }
+        return null;
+    }
+
+    @Override
     public void hoteladcreate(MembersDTO membersDTO) {
         MembersEntity membersEntity =
                 modelMapper.map(membersDTO, MembersEntity.class);
+
+
+        membersEntity.setPassword(passwordEncoder.encode(membersEntity.getPassword()));
         membersEntity.setRole(Role.ADMIN);
         membersEntity.setStatus(Status.WAIT);
 
@@ -89,58 +105,82 @@ public class MembersServiceImpl implements MembersService{
         return membersDTOList;
     }
 
-    @Override
-    public List<MembersDTO> findSuper() {
-        List<MembersEntity> membersEntityList = membersRepository.selectSuperAd();
-
-        List<MembersDTO> membersDTOList =
-        membersEntityList.stream().toList().stream().map(
-                membersEntity -> modelMapper.map(membersEntity, MembersDTO.class)
-        ).collect(Collectors.toList());
-
-        return membersDTOList;
-    }
+    //@Override
+    //public List<MembersDTO> findSuper() {
+    //    List<MembersEntity> membersEntityList = membersRepository.selectSuperAd();
+    //
+    //    List<MembersDTO> membersDTOList =
+    //    membersEntityList.stream().toList().stream().map(
+    //            membersEntity -> modelMapper.map(membersEntity, MembersDTO.class)
+    //    ).collect(Collectors.toList());
+    //
+    //    return membersDTOList;
+    //}
 
     @Override
     public List<MembersDTO> findHotelAd() {
-
-        List<MembersEntity> membersEntityList = membersRepository.selectHotelAd();
-
-        List<MembersDTO> membersDTOList =
-                membersEntityList.stream().toList().stream().map(
-                        membersEntity -> modelMapper.map(membersEntity, MembersDTO.class)
-                ).collect(Collectors.toList());
-
-
-        return membersDTOList;
+        return List.of();
     }
 
     @Override
     public List<MembersDTO> findStoreAd() {
-
-
-        List<MembersEntity> membersEntityList = membersRepository.selectStoreA();
-
-        List<MembersDTO> membersDTOList =
-                membersEntityList.stream().toList().stream().map(
-                        membersEntity -> modelMapper.map(membersEntity, MembersDTO.class)
-                ).collect(Collectors.toList());
-
-
-        return membersDTOList;
+        return List.of();
     }
 
     @Override
-    public Page<MembersDTO> list(Pageable pageable) {
-        int currentpage = pageable.getPageNumber() - 1;
-        int limits = 10;
-        Pageable temp = PageRequest.of(currentpage, limits, Sort.by(Sort.Direction.DESC, "id"));
+    public Page<MembersEntity> findHotelAd(Status status, int page) {
 
-        Page<MembersEntity> membersEntitie;
-        membersEntitie = membersRepository.findAll(temp);
 
-        Page<MembersDTO> membersDTOPage = membersEntitie.map(data -> modelMapper.map(data, MembersDTO.class));
-        return membersDTOPage;
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.membersRepository.selectHotelAdByStatus(status,pageable);
+
+    }
+
+
+    //
+    //@Override
+    //public Page<MembersEntity> findStoreAd(Status status, int page) {
+    //
+    //
+    //    List<Sort.Order> sorts = new ArrayList<>();
+    //    sorts.add(Sort.Order.desc("id"));
+    //    Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+    //    return this.membersRepository.selectStoreAd(pageable);
+    //
+    //}
+
+    @Override
+    public Page<MembersEntity> getList(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.membersRepository.selectSuperAd(pageable);
+    }
+
+    @Override
+    public Page<MembersEntity> getListHotel(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.membersRepository.selectHotelAd(pageable);
+    }
+
+    @Override
+    public Page<MembersEntity> getListStore(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.membersRepository.selectStoreAd(pageable);
+    }
+
+    @Override
+    public Page<MembersEntity> getListBystatus(Status status, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.membersRepository.selectSuperAdByStatus(status,pageable);
     }
 
     @Override
@@ -165,6 +205,12 @@ public class MembersServiceImpl implements MembersService{
         MembersDTO membersDTO =
                 modelMapper.map(membersEntity, MembersDTO.class);
         return membersDTO;
+    }
+
+    @Override
+    public Role findOnlyRoleByEmail(String email) {
+        Role role = membersRepository.findByEmail(email).getRole();
+        return role;
     }
 
     @Override

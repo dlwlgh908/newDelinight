@@ -1,4 +1,5 @@
 $(function () {
+    $(".userHeaderMsg").html("장바구니").css("font-weight","bold")
 
     showList();
 
@@ -19,14 +20,13 @@ $(function () {
     $(document).on("click", ".plusQuantity", function () {
 
 
-        let cartItemNum = $(this).closest("li").data("cartitemnum")
+        let cartItemNum = $(this).data("cartitemnum")
         $.ajax({
 
             url: "/cart/plusQuantity",
             type: "post",
             data: {"cartItemNum": cartItemNum},
             success: function (result) {
-                alert(result)
                 showList()
             },
             error: function () {
@@ -37,14 +37,13 @@ $(function () {
     $(document).on("click", ".minusQuantity", function () {
 
 
-        let cartItemNum = $(this).closest("li").data("cartitemnum")
+        let cartItemNum = $(this).data("cartitemnum")
         $.ajax({
 
             url: "/cart/minusQuantity",
             type: "post",
             data: {"cartItemNum": cartItemNum},
             success: function (result) {
-                alert(result)
                 showList()
             },
             error: function () {
@@ -54,6 +53,8 @@ $(function () {
     })
 
     function cartList(carts) {
+        $(".storeReceipt").empty();
+        $(".totalPrice").empty();
         $(".cartList").empty();
         let totalPrice = 0;
         let groupedCarts = {};
@@ -69,25 +70,35 @@ $(function () {
         })
         Object.keys(groupedCarts).forEach(function (storeName) {
             let storeSection = $('<div class = "storeSection"></div>');
-            storeSection.append('<h3>' + storeName + '</h3>');
-            let itemList = $('<ul class = "storeItemList"></ul>');
+            storeSection.append('<p style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px">' + storeName + '</p>');
+            let itemList = $('<div class = "row itemsWrap"></div>');
+            let storePrice = 0;
 
             groupedCarts[storeName].forEach(function (cart) {
-                let cartItem = '<li data-cartitemnum="' + cart.id + '" data-quantity="' + cart.quantity + '">' +
-                    '<span class="menuName">' + cart.menuDTO.name + '</span>' +
-                    '<span class="menuContent">' + cart.menuDTO.content + '</span>' +
-                    '<span class="menuQuantity">' +
-                    '<button type="button" class="minusQuantity">-</button>' + cart.quantity +
-                    '<button type="button" class="plusQuantity">+</button>' +
+
+                let priceFormatted = cart.menuDTO.price.toLocaleString('ko-KR') + '원';
+
+                let cartItem = '<div class="itemWrap row"><div class="col-4">' +
+                    '<div style="width: 100px; height: 100px;"><img class="imgBox" src="'+cart.menuDTO.imgUrl+'"></div></div><div class="col-5 itemContents"><div class="row itemName">'+cart.menuDTO.name+'</div><div class="row itemContent">'+cart.menuDTO.content+'</div><div class="row itemPrice">'+priceFormatted+'</div></div>' +
+                    '<div class="col-3" style="display: flex; align-items: center;"><span class="menuQuantity" style="display: flex; align-items: centerl" >' +
+                    '<img src="/img/dash-circle.svg" class="minusQuantity" data-cartitemnum="'+cart.id+'" style="height: 1.5em; width: 1em;">&nbsp' + cart.quantity +
+                    '&nbsp<img src="/img/plus-circle.svg" class="plusQuantity" data-cartitemnum="'+cart.id+'" style="height: 1.5em; width: 1em;">&nbsp<img src="/img/bag-x.svg" data-cartitemnum="' + cart.id + '" class="cartItemDelete" style="height: 1.5em; width: 1em;"> ' +
                     '</span>' +
-                    '<button type="button" data-cartitemnum="' + cart.id + '" class="cartItemDelete">삭제하기</button>' +
-                    '</li>';
+                    '</div></div>';
                 itemList.append(cartItem);
+                storePrice += cart.menuDTO.price*cart.quantity;
+
+
             })
             storeSection.append(itemList);
+            let storePriceFormatted =storePrice.toLocaleString('ko-KR') + '원';
+
+                $(".storeReceipt").append('<p style="width: 95%; display: flex; justify-content: space-between;"><span>'+storeName+'</span><span>'+storePriceFormatted+'</span></p>')
             $(".cartList").append(storeSection); // 메인 리스트에 추가
         })
-        $(".totalPrice").html(totalPrice + "원")
+        let totalPriceFormatted =totalPrice.toLocaleString('ko-KR') + '원';
+
+        $(".storeReceipt").append('<p style="margin-top:10px; margin-bottom:10px;width: 95%; display: flex; justify-content: space-between;"><span>총 결제 금액</span><span>'+totalPriceFormatted+'</span></p>')
 
     }
 
@@ -124,7 +135,6 @@ $(function () {
 
 
         let selecetedCartItem = $(this).data("cartitemnum")
-        alert(selecetedCartItem)
         $.ajax({
             url: "/cart/removeFromCart",
             type: "POST",
@@ -143,7 +153,7 @@ $(function () {
             url: "/cart/cartToOrder",
             type: "post",
             success: function (result) {
-                window.location.href = '/users/roomservice/order/read?paymentId='+result;
+                window.location.href = '/users/order/request?paymentId='+result;
             }
 
         })

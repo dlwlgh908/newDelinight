@@ -8,6 +8,7 @@
 package com.onetouch.delinight.DTO;
 
 
+import com.onetouch.delinight.Constant.Menu;
 import com.onetouch.delinight.Constant.MenuStatus;
 import lombok.*;
 
@@ -30,6 +31,8 @@ public class MenuDTO {
 
     MenuStatus menuStatus; //판매상태
 
+    Menu menu; //메뉴목록
+
     private String createBy;
     private String status;
 
@@ -46,6 +49,10 @@ public class MenuDTO {
         return this;
     }
 
+    public MenuDTO setImgUrl(String imgUrl){
+        this.imgUrl = imgUrl;
+        return this;
+    }
     public MenuDTO setImgNum(Long imgNum) {
         this.imgNum = imgNum;
         return this;

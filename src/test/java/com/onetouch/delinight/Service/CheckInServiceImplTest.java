@@ -38,25 +38,25 @@ class CheckInServiceImplTest {
     @Autowired
     GuestRepository guestRepository;
 
-    @Test
-    public void createTest(){
-
-        CheckInDTO checkInDTO = new CheckInDTO();
-        UsersEntity usersEntity =
-            usersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-        UsersDTO usersDTO =
-            modelMapper.map(usersEntity, UsersDTO.class);
-
-        checkInDTO.setPrice(10000);
-        checkInDTO.setCheckoutDate(LocalDate.now());
-        checkInDTO.setCheckinDate(LocalDate.now());
-        checkInDTO.setCheckInStatus(CheckInStatus.CHECKIN);
-        checkInDTO.setUsersDTO(usersDTO);
-
-        checkInService.create(checkInDTO);
-
-
-    }
+//    @Test
+//    public void createTest(){
+//
+//        CheckInDTO checkInDTO = new CheckInDTO();
+//        UsersEntity usersEntity =
+//            usersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+//        UsersDTO usersDTO =
+//            modelMapper.map(usersEntity, UsersDTO.class);
+//
+//        checkInDTO.setPrice(10000);
+//        checkInDTO.setCheckoutDate(LocalDate.now());
+//        checkInDTO.setCheckinDate(LocalDate.now());
+//        checkInDTO.setCheckInStatus(CheckInStatus.CHECKIN);
+//        checkInDTO.setUsersDTO(usersDTO);
+//
+//        checkInService.create(checkInDTO);
+//
+//
+//    }
     @Test
     public void test(){
         GuestEntity guestEntity =

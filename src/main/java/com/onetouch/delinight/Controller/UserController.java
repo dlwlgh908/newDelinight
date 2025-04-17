@@ -7,9 +7,13 @@
  *********************************************************************/
 package com.onetouch.delinight.Controller;
 
+import com.onetouch.delinight.DTO.MenuDTO;
+import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.DTO.UsersDTO;
 import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.UsersRepository;
+import com.onetouch.delinight.Service.MenuService;
+import com.onetouch.delinight.Service.StoreService;
 import com.onetouch.delinight.Service.UsersService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -32,6 +37,8 @@ public class UserController {
 
         private final UsersService usersService;
         private final UsersRepository usersRepository;
+        private final StoreService storeService;
+        private final MenuService menuService;
 
         @GetMapping("/mobile")
         public String mobileGET(){
@@ -41,20 +48,37 @@ public class UserController {
 
         @GetMapping("/home")
         public String usershome(Principal principal , Model model) {
-                log.info("사용자 메인 페이지 진입함??????????");
 
                 if (principal == null) {
                         return "redirect:/users/login";
                 }
 
                 String email = principal.getName();
+                log.info(email);
 
                 // DB 사용자 이름 조회
                 UsersEntity usersEntity = usersRepository.selectEmail(email);
                 String name = usersEntity != null ? usersEntity.getName() : "고객";
+                log.info(name+usersEntity);
 
-                model.addAttribute("data" , name);
+                List<StoreDTO> storeDTOList = storeService.list(email);
+
+                model.addAttribute("storeDTOList",storeDTOList);
+                log.info(storeDTOList);
+
+
+
                 return "users/home";
+        }
+
+        @GetMapping("/store/read")
+        public String storeRead(Long storeId, Model model){
+
+                List<MenuDTO> menuDTOList = menuService.menuList(storeId);
+                StoreDTO storeDTO = storeService.read(storeId);
+                model.addAttribute("menuDTOList", menuDTOList);
+                model.addAttribute("storeDTO", storeDTO);
+                return "/users/store/read";
         }
 
         @GetMapping("/signUp")

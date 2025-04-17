@@ -27,24 +27,28 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 @Transactional
+@Log4j2
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService{
 
     private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
 
-    @Override
-    public List<OrdersDTO> readOrders(Long paymentId) {
 
-        PaymentEntity paymentEntity = paymentRepository.findById(paymentId).get();
-        List<OrdersEntity> ordersEntityList = paymentEntity.getOrdersEntityList();
-        List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
-                .map(data->modelMapper.map(data,OrdersDTO.class)
-                        .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
-                        .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
+//    @Override
+//    public List<OrdersDTO> readOrders(Long paymentId) {
+//
+//        PaymentEntity paymentEntity = paymentRepository.findById(paymentId).get();
+//        List<OrdersEntity> ordersEntityList = paymentEntity.getOrdersEntityList();
+//        List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
+//                .map(data->modelMapper.map(data,OrdersDTO.class)
+//                        .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
+//                        .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
+//
+//        return ordersDTOList;
+//    }
 
-        return ordersDTOList;
-    }
+       
 
     @Override
     public List<PaymentDTO> findAllDate(Long totalId, PayType type) {
@@ -162,5 +166,6 @@ public class PaymentServiceImpl implements PaymentService{
             throw new IllegalArgumentException("유효하지 않은 정산 타입입니다.");
         }
 */ // 이거 지우면 안됨 무조건 지우면안됨 ㄹㅇ 지우면 안됨
+
 
 }

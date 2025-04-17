@@ -21,12 +21,12 @@ public class GlobalModelAttribute {
     private final StoreService storeService;
 
     @ModelAttribute
-    public void setGlobalAttributes(HttpServletRequest request, Model model){
+    public void setGlobalAttributes(HttpServletRequest request, Model model) {
         String uri = request.getRequestURI();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 
-        if(uri.startsWith("/members")) {
+        if (uri.startsWith("/members")) {
 
             if (principal instanceof MemberDetails memberDetails) {
                 if (memberDetails.getMembersEntity().getRole() == Role.STOREADMIN) {
@@ -45,11 +45,16 @@ public class GlobalModelAttribute {
                     // 아무것도 아닐때(0으로 리턴)
                 }
                 model.addAttribute("member", memberDetails.getMembersEntity());
+                model.addAttribute("role", memberDetails.getMembersEntity().getRole());
             }
-        }
-        else if(uri.startsWith("/users")){
-            Integer alertCount = 0;//수정할 예정
-            model.addAttribute("alertCount", alertCount);
+        } else if (uri.startsWith("/users")) {
+            if(uri.startsWith("/users/login")){}
+            else if (principal instanceof CustomUserDetails customUserDetails) {
+                String name = customUserDetails.getUsersEntity().getName();
+                model.addAttribute("data", name);
+                Integer alertCount = 0;//수정할 예정
+                model.addAttribute("alertCount", alertCount);
+            }
         }
     }
 }

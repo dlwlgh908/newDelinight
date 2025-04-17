@@ -27,8 +27,9 @@ public interface OrdersService {
     public void changePayLater(Long ordersId, String memo);
     public void changePayNow(Long ordersId, String memo);
 
-    public boolean pendingCheck(Long paymentId);
     public void changeStatus(Long ordersId, String ordersStatus);
     public OrdersStatus checkStatus(String ordersStatus);
+
+    public List<OrdersDTO> ordersListByEmail(String email);
 
 }

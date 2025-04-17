@@ -14,6 +14,7 @@ import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.OrdersEntity;
 import com.onetouch.delinight.Entity.PaymentEntity;
 import com.onetouch.delinight.Entity.StoreEntity;
+import com.onetouch.delinight.Repository.ImageRepository;
 import com.onetouch.delinight.Repository.OrdersRepository;
 import com.onetouch.delinight.Repository.PaymentRepository;
 import com.onetouch.delinight.Repository.StoreRepository;
@@ -33,6 +34,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class OrdersServiceImpl implements OrdersService{
+    private final ImageRepository imageRepository;
 
     private final StoreRepository storeRepository;
     private final OrdersRepository ordersRepository;
@@ -80,7 +82,7 @@ public class OrdersServiceImpl implements OrdersService{
                 .setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(data2->modelMapper.map(data2, OrdersItemDTO.class)
                         .setOrdersDTO(modelMapper.map(data2.getOrdersEntity(), OrdersDTO.class)).setMenuDTO(modelMapper.map(data2.getMenuEntity(),MenuDTO.class)
                                 )).toList())
-                .setStoreDTO(modelMapper.map(data.getStoreEntity(),StoreDTO.class))
+                .setStoreDTO(modelMapper.map(data.getStoreEntity(),StoreDTO.class).setImgUrl(imageRepository.findByStoreEntity_Id(data.getStoreEntity().getId()).get().getFullUrl()))
                 .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
 
         return ordersDTOList;
@@ -97,6 +99,8 @@ public class OrdersServiceImpl implements OrdersService{
         paymentEntity.setPaidCheck(PaidCheck.paid);
         ordersRepository.save(ordersEntity);
         paymentRepository.save(paymentEntity);
+        sseService.sendToSAdmin("S"+ordersEntity.getStoreEntity().getId(),"new-order",ordersId+"번 주문이 들어왔습니다.");
+
     }
 
     @Override
@@ -132,6 +136,17 @@ public class OrdersServiceImpl implements OrdersService{
     }
 
     @Override
+    public List<OrdersDTO> ordersListByEmail(String email) {
+
+        List<OrdersEntity> ordersEntityList = ordersRepository.findByCheckInEntity_UsersEntityEmail(email);
+        List<OrdersDTO> ordersDTOList = ordersEntityList.stream().map(ordersEntity-> modelMapper.map(ordersEntity, OrdersDTO.class).setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(), StoreDTO.class)
+                .setImgUrl(imageRepository.findByStoreEntity_Id(ordersEntity.getStoreEntity().getId()).get().getFullUrl())).setOrdersItemDTOList(ordersEntity.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class))).toList())).toList();
+
+
+        return ordersDTOList;
+    }
+
+    @Override
     public OrdersStatus checkStatus(String ordersStatus) {
         if(ordersStatus.equals("preparing")){
             return OrdersStatus.PREPARING;
@@ -144,11 +159,5 @@ public class OrdersServiceImpl implements OrdersService{
         }
     }
 
-    @Override
-    public boolean pendingCheck(Long paymentId) {
-        PaymentEntity paymentEntity = paymentRepository.findById(paymentId).get();
-        boolean result = paymentEntity.getOrdersEntityList().getFirst().getOrdersStatus().equals(OrdersStatus.PENDING);
-        return result;
-    }
 
 }

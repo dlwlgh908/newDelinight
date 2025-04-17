@@ -23,7 +23,7 @@
                     <!--페이지 이름-->
                     <h3 class="mt-5">정보수정</h3>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">마이페이지 〉 정보수정</li>
+                        <li class="breadcrumb-item active">홈 〉 마이페이지 〉 정보수정</li>
                     </ol>
 
                     <!--텍스트 박스-->
@@ -34,90 +34,96 @@
 
                            <hr class="hrMain">
 
-                           <div class="row mb-1">
-                               <label class="col-sm-2 col-form-label form-label">관리자 이름</label>
-                               <div class="col-sm-4">
-                                   <input type="text" readonly class="form-control-plaintext" th:value="${membersDTO.name}">
-                               </div>
-                           </div>
-
-                           <div class="row mb-1">
-                               <label class="col-sm-2 col-form-label form-label">관리자 등급</label>
-                               <div class="col-sm-4">
-                                   <input type="text" readonly class="form-control-plaintext" th:value="${membersDTO.role}">
-                               </div>
-                           </div>
-
-                           <div class="row mb-1">
-                               <label class="col-sm-2 col-form-label form-label">이메일</label>
-                               <div class="col-sm-6">
-                                   <input type="email" readonly class="form-control-plaintext" th:value="${membersDTO.email}">
-                               </div>
-                           </div>
-
-                           <hr>
-
-                           <div class="row mb-4">
-                               <label class="col-sm-2 col-form-label form-label">전화번호</label>
-                               <div class="col-sm-10">
-                                   <input type="number" class="form-control" id="staticMembersPhone" maxlength="13" th:placeholder="${membersDTO.phone}">
-                                   <div class="text-sm mt-1">
-                                       전화번호를 입력하면 자동으로 하이폰이 들어갑니다. (01012345678 > 010-1234-5678)
-                                   </div>
-                               </div>
-                           </div>
-
-                           <div class="row mb-4">
-                               <label class="col-sm-2 col-form-label form-label">프로필 이미지</label>
-                               <div class="col-sm-10">
-                                   <div class="d-flex">
-                                       <input type="file" class="form-control w-50 me-2">
-                                       <button class="btn btn-gray">파일 선택</button>
-                                   </div>
-                                   <div class="text-sm mt-1">
-                                       업로드 가능한 이미지 파일(JPEG, PNG, GIF, SVG, WebP, ICO)만 가능합니다.<br>
-                                   </div>
-                               </div>
-                           </div>
-
-                           <div class="row mb-4">
-                               <label class="col-sm-2 col-form-label form-label">로그인 비밀번호</label>
-                               <div class="col-sm-3">
-                                   <button class="btn btn-gray-outline" id="togglePasswordChange">비밀번호 변경</button>
-                               </div>
-                               <div class="col-sm-1 iconX">
-                                   <div>&times;</div>
-                               </div>
-                           </div>
-
-                           <div id="passwordChangeSection">
-                               <div class="row mb-4">
-                                   <label class="col-sm-2 col-form-label form-label">현재 비밀번호</label>
+                           <form action="/members/adminupdate" method="post" enctype="multipart/form-data">
+                               <div class="row mb-1">
+                                   <label class="col-sm-2 col-form-label form-label">관리자 이름</label>
                                    <div class="col-sm-4">
-                                       <input type="password" class="form-control" maxlength="16">
+                                       <input type="text" readonly class="form-control-plaintext" th:value="${member.name}">
                                    </div>
                                </div>
-                               <div class="row mb-4">
-                                   <label class="col-sm-2 col-form-label form-label">새 비밀번호</label>
+
+                               <div class="row mb-1">
+                                   <label class="col-sm-2 col-form-label form-label">관리자 등급</label>
                                    <div class="col-sm-4">
-                                       <input type="password" class="form-control" maxlength="16">
+                                       <input type="text" readonly class="form-control-plaintext" th:value="${member.role}">
+                                   </div>
+                               </div>
+
+                               <div class="row mb-1">
+                                   <label class="col-sm-2 col-form-label form-label">이메일</label>
+                                   <div class="col-sm-6">
+                                       <input type="email" readonly class="form-control-plaintext" th:value="${member.email}">
+                                   </div>
+                               </div>
+
+                               <hr>
+
+                               <div class="row mb-4">
+                                   <label class="col-sm-2 col-form-label form-label">전화번호</label>
+                                   <div class="col-sm-10">
+                                       <input type="text" class="form-control" id="staticMembersPhone" name="phone" maxlength="13" th:placeholder="${member.phone}">
                                        <div class="text-sm mt-1">
-                                           영문/숫자/특수문자 조합(8~16자로 작성) <br>
+                                           변경할 전화번호를 입력해주세요.
                                        </div>
                                    </div>
                                </div>
+
                                <div class="row mb-4">
-                                   <label class="col-sm-2 col-form-label form-label">새 비밀번호 확인</label>
-                                   <div class="col-sm-4">
-                                       <input type="password" class="form-control" maxlength="16">
+                                   <label class="col-sm-2 col-form-label form-label">프로필 이미지</label>
+                                   <div class="col-sm-10">
+                                       <div class="d-flex">
+                                           <input type="file" accept="image/*" name="membersImage" class="form-control w-50 me-2">
+                                           <button class="btn btn-gray">파일 선택</button>
+                                       </div>
+                                       <div class="text-sm mt-1">
+                                           업로드 가능한 이미지 파일(jpg, jpeg, png, gif, svg, webp, ico)만 가능합니다.<br>
+                                       </div>
+                                       <div class="col-sm-10">
+                                           <input type="hidden" name="membersImage" th:value="${images}">
+                                           <img class="avatar" name="membersImage" id="mypage-avatar" src="/img/defaultImg.png" alt="#">
+                                       </div>
                                    </div>
                                </div>
-                           </div>
 
-                           <div class="text-center mt-5">
-                               <button class="btn btn-primary me-2 px-4" id="delbtn">저장</button>
-                               <button class="btn btn-gray px-4">취소</button>
-                           </div>
+                               <div class="row mb-4">
+                                   <label class="col-sm-2 col-form-label form-label">로그인 비밀번호</label>
+                                   <div class="col-sm-3">
+                                       <button class="btn btn-gray-outline" id="togglePasswordChange">비밀번호 변경</button>
+                                   </div>
+                                   <div class="col-sm-1 iconX">
+                                       <div>&times;</div>
+                                   </div>
+                               </div>
+
+                               <div id="passwordChangeSection">
+                                   <div class="row mb-4">
+                                       <label class="col-sm-2 col-form-label form-label">현재 비밀번호</label>
+                                       <div class="col-sm-4">
+                                           <input type="password" class="form-control" maxlength="16">
+                                       </div>
+                                   </div>
+                                   <div class="row mb-4">
+                                       <label class="col-sm-2 col-form-label form-label">새 비밀번호</label>
+                                       <div class="col-sm-4">
+                                           <input type="password" class="form-control" name="password" maxlength="16">
+                                           <div class="text-sm mt-1">
+                                               영문/숫자/특수문자 조합(8~16자로 작성) <br>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row mb-4">
+                                       <label class="col-sm-2 col-form-label form-label">새 비밀번호 확인</label>
+                                       <div class="col-sm-4">
+                                           <input type="password" class="form-control" maxlength="16">
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="text-center mt-5">
+                                   <a class="btn btn-primary me-2 px-4" id="delbtn">저장</a>
+                                   <a href="/members/account/adminmypage" class="btn btn-gray px-4">취소</a>
+                               </div>
+                           </form>
                        </div>
                     </div>
 
@@ -126,7 +132,7 @@
 
             <!--전화번호 입력창 하이폰-->
             <script>
-                document.getElementById("phoneNumber").addEventListener("input", function (e) {
+                document.getElementById("staticMembersPhone").addEventListener("input", function (e) {
                     let value = e.target.value.replace(/\D/g, ""); // 숫자만 남김
 
                     if (value.length > 3 && value.length <= 7) {

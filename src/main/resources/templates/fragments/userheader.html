@@ -17,23 +17,26 @@
 
 <div th:fragment="userHeader">
     <nav class="navbar navbar-expand navbar-DeliNight">
-        <div class="container-fluid d-flex justify-content-between align-items-center">
+        <div class="container-fluid d-flex justify-content-between align-items-center row">
 
             <!-- 왼쪽: 로고 -->
-            <a class="navbar-brand d-flex align-items-center gap-2 logo-wrap" href="/users/home">
+            <a class="col-4 navbar-brand d-flex align-items-center gap-2 logo-wrap" href="/users/home">
                 <i class="bi bi-moon-stars-fill icon-DeliNight"></i>
                 <span class="logo-text">DeliNight</span>
             </a>
 
 
             <!-- 중앙: 사용자 인사 -->
-            <div class="user-welcome">
-                <span th:text="${data} + '님 환영합니다.'">홍길동님</span>
+            <div class="user-welcome col-4" style="text-align: center">
+                <div class="userHeaderMsg">
+                    <p style="margin-bottom: -0.5em">[[${data}]]님</p>
+                    <p style="margin-bottom: -0.5em">환영합니다</p>
+                </div>
             </div>
 
 
             <!-- 오른쪽: 내정보 시작 -->
-            <ul class="navbar-nav d-flex flex-row gap-3 justify-content-end">
+            <ul class="navbar-nav d-flex flex-row gap-3 justify-content-end col-4 ">
 
 
                 <!-- 내정보 드롭다운 -->
@@ -60,7 +63,7 @@
                         </li>
                         <li>
                             <a class="dropdown-item d-flex align-items-center gap-2"
-                               href="/orders/list">
+                               href="/users/order/list">
                                 <i class="bi bi-bag-check-fill"></i> 주문 내역
                             </a>
                         </li>
@@ -82,7 +85,7 @@
 
                 <!-- 장바구니 시작 -->
                 <li class="nav-item position-relative">
-                    <a class="nav-link text-DeliNight" href="/roomService/cart/list">
+                    <a class="nav-link text-DeliNight" href="/users/cart/list">
                         <i class="bi bi-cart icon-DeliNight fs-4"></i>
                     </a>
                 </li>

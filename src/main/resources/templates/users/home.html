@@ -32,7 +32,7 @@
             <button class="btn-DeliNight-white" onclick="location.href='#'">룸서비스</button>
         </div>
         <div class="subCol">
-            <button class="btn-DeliNight-white" onclick="location.href='/qna/checkinQna/register'">문의하기</button>
+            <button class="btn-DeliNight-white" onclick="location.href='/qna/register'">문의하기</button>
         </div>
     </div>
 
@@ -45,9 +45,26 @@
 
     <!-- 가맹점 섹션 -->
     <div class="storeContent">
-        <!-- 추후 가맹점 리스트/추천 등 삽입 예정 -->
+
+        <div class="row itemWrap" th:each="storeDTO : ${storeDTOList}" th:data-storeid="${storeDTO.getId()}">
+            <div class="col-4"><div style="width: 100px; height: 100px"><img class="imgBox" th:src="${storeDTO.getImgUrl()}"></div></div>
+            <div class="col-8 itemContents">
+                <div class="row itemName">[[${storeDTO.getName()}]]
+                </div>
+                <div class="row itemContent">[[${storeDTO.getContent()}]]</div>
+            </div>
+        </div>
     </div>
 
+    <script th:inline="javascript">
+
+        $(".itemWrap").on("click", function () {
+            let storeId = $(this).data("storeid")
+            location.href = "/users/store/read?storeId="+storeId;
+        })
+
+
+    </script>
 
 </div>
 </body>
