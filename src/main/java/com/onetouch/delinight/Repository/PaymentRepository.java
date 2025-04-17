@@ -7,35 +7,48 @@
  *********************************************************************/
 package com.onetouch.delinight.Repository;
 
-import com.onetouch.delinight.Constant.OrderType;
-import com.onetouch.delinight.Constant.PaidCheck;
 import com.onetouch.delinight.Entity.PaymentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
 public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 
     PaymentEntity findByOrdersEntityList_Id(Long id);
 
-    // 조건 1: 주문이 속한 스토어의 ID가 storeID와 같아야 함(스토어 어드민 전용 조건)
-    // 조건 2: 결제 생성일(regTime)이 시작일~종료일 사이여야 함
-    // 조건 3: 결제 타입이 선결제인지 후결제인지 확인 (OrderType enum 사용)
-    // 조건 4: 정산 여부가 정산(PAID)인지 미정산(UNPAID)인지 구분 (PaidCheck enum 사용)
     @Query("""
-    SELECT p 
-    FROM PaymentEntity p 
-    JOIN p.ordersEntityList o 
-    WHERE o.storeEntity.id = :storeId 
-    AND p.regTime BETWEEN :startDate AND :endDate 
-    AND p.orderType = :orderType 
-    AND p.paidCheck = :paidCheck
-    """)
-    public List<PaymentEntity> findPaymentsForSettlement(@Param("storeId") Long storeId, @Param("startDate")LocalDateTime startDate, @Param("endDate")LocalDateTime endDate, @Param("orderType") OrderType orderType, @Param("paidCheck") PaidCheck paidCheck);
+        select p from PaymentEntity p
+        join p.ordersEntityList o
+        join o.storeEntity s
+        join s.hotelEntity h
+        join h.branchEntity b
+        join b.centerEntity c
+        where c.id = :centerId""")
+        List<PaymentEntity> findCenterForDate(@Param("centerId") Long centerId);   // centerId로 하위 조회 후 정산
 
+    @Query("""
+           select p from PaymentEntity p
+           join p.ordersEntityList o
+           join o.storeEntity s
+           join s.hotelEntity h
+           join h.branchEntity b
+           where b.id = :branchId""")
+    List<PaymentEntity> findBranchForDate(@Param("branchId") Long branchId);       // branchId로 하위 조회 후 정산
 
-    PaidCheck paidCheck(PaidCheck paidCheck);
+    @Query("""
+            select p from PaymentEntity p
+            join p.ordersEntityList o
+            join o.storeEntity s
+            join s.hotelEntity h
+            where  h.id = :hotelId""")
+    List<PaymentEntity> findHotelForDate(@Param("hotelId") Long hotelId);          // hotelId로 하위 조회 후 정산
+
+    @Query("""
+            select p from PaymentEntity p
+            join p.ordersEntityList o
+            join o.storeEntity s
+            where s.id = :storeId""")
+    List<PaymentEntity> findStoreForDate(@Param("storeId") Long storeId);           // storeId로 하위 조회 후 정산
+
 }
