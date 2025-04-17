@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Controller;
 
+import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
@@ -20,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,19 +32,62 @@ public class MembersController {
     private final MembersService membersService;
     private final MembersRepository membersRepository;
 
-    @ModelAttribute("membersDTO")
-    public MembersDTO setUserInfo(Principal principal) {
-        if (principal == null) return null;
+    @GetMapping("/accounthub")
+    public String accounthub(Principal principal){
+        Role role = membersService.findOnlyRoleByEmail(principal.getName());
 
-        String email = principal.getName();
-        MembersEntity membersEntity = membersRepository.findByEmail(email);
-        return new MembersDTO(membersEntity);
+        //로그인한 사람 롤 찾기
+        //수퍼 어드민
+        if(role.equals(Role.SUPERADMIN)){
+            return "redirect:/members/account/hoteladlist";
+        }
+        //호텔 어드민
+        else if(role.equals(Role.ADMIN)){
+            return "redirect:/members/account/storeadlist" ;
+        }
+        else{ // 시스템 어드민일 경우
+            return "redirect:/members/account/listB";
+        }
+    }
+
+    @GetMapping("/centerhub")
+    public String centerhub(Principal principal, Model model){
+        Role role = membersService.findOnlyRoleByEmail(principal.getName());
+        model.addAttribute("role", role);
+
+        //수퍼 어드민
+        if(role.equals(Role.SUPERADMIN)){
+            return "redirect:/members/account/";
+        }
+        else{ // 시스템 어드민일 경우
+            return "redirect:/members/account/";
+        }
+    }
+
+    @GetMapping("/paymenthub")
+    public String paymenthub(Principal principal){
+        Role role = membersService.findOnlyRoleByEmail(principal.getName());
+
+        //수퍼 어드민
+        if(role.equals(Role.SUPERADMIN)){
+            return "redirect:/members/account/";
+        }
+        //호텔 어드민
+        else if(role.equals(Role.ADMIN)){
+            return "redirect:/members/account/" ;
+        }
+        //스토어 어드민
+        else  if(role.equals(Role.STOREADMIN)) {
+            return "redirect:/members/account/";
+        }
+        else{ // 시스템 어드민일 경우
+            return "redirect:/members/account/";
+        }
     }
 
     @GetMapping("/adminhome")
     public String adminhome() {
         return "/members/adminhome";
-
     }
 
     @GetMapping("/adminmypage")
@@ -204,38 +249,6 @@ public class MembersController {
         return "members/storeadlist";
     }
 
-
-    //@PostMapping("/adminlogin")
-    //public String adminlogin(@RequestParam String email,
-    //                         @RequestParam String password,
-    //                         Model model){
-    //    String adminLogin =
-    //    membersService.login(email, password);
-    //
-    //    //로그인 정보 기입란이 공란일 시 오류메세지 출력
-    //    if(email == null || email.isBlank()){
-    //        log.info("아이디 공란!!");
-    //        model.addAttribute("error", "이메일을 입력해주세요.");
-    //        log.info("오류 있으므로 다시 로그인화면으로 리턴");
-    //        return "/members/adminlogin";
-    //    }
-    //    //adminLogin이 공란일 시 오류메세지 출력
-    //    if(password == null || password.isBlank()){
-    //        log.info("비밀번호 공란!!");
-    //        model.addAttribute("error", "비밀번호를 입력해주세요.");
-    //        log.info("오류 있으므로 다시 로그인화면으로 리턴");
-    //        return "/members/adminlogin";
-    //    }
-    //
-    //    //서비스 수행 결과 adminLogin에 오류가 있을 시
-    //    if (adminLogin != null){
-    //        model.addAttribute("error", adminLogin);
-    //        log.info("오류 있으므로 다시 로그인화면으로 리턴");
-    //        return "members/adminlogin";
-    //    }
-    //    //오류 없으면 홈화면으로 이동
-    //    return "redirect:/members/home";
-    //}
     @GetMapping("/adminlogin")
     public String adminloginGet(@RequestParam(value = "error", required = false) String error, Model model) {
 

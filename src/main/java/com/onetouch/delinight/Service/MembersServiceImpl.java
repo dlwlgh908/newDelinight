@@ -205,6 +205,12 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
+    public Role findOnlyRoleByEmail(String email) {
+        Role role = membersRepository.findByEmail(email).getRole();
+        return role;
+    }
+
+    @Override
     public Map<Role, Long> findRoleByEmail(String email) {
 
         MembersEntity membersEntity = membersRepository.findByEmail(email);
