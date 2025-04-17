@@ -19,7 +19,7 @@ public interface QnaService {
     //문의사항 등록
     public QnaDTO register(QnaDTO qnaDTO,Long id);
     //목록
-    public List<QnaDTO> findAll();
+    public Page<QnaDTO> list(Pageable pageable);
     //상세보기
     public QnaDTO read(Long id);
     //수정
