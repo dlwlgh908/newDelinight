@@ -104,7 +104,7 @@ public class MembersController {
 
     @GetMapping("/create")
     public String createView() {
-        return "members/adminhome";
+        return "members/create";
     }
 
     @PostMapping("/create")
