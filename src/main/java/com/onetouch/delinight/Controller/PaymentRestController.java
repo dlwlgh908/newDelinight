@@ -1,21 +1,20 @@
 package com.onetouch.delinight.Controller;
 
-import com.onetouch.delinight.Constant.OrderType;
-import com.onetouch.delinight.Constant.PaidCheck;
+import com.onetouch.delinight.Constant.PayType;
 import com.onetouch.delinight.DTO.PaymentDTO;
 import com.onetouch.delinight.Service.PaymentService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("/api/payment")
 @RequiredArgsConstructor
@@ -23,29 +22,22 @@ public class PaymentRestController {
 
     private final PaymentService paymentService;
 
-    @GetMapping("/storePayment")
-    public List<PaymentDTO> storePayment(@RequestParam("storeId") Long storeId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate, @RequestParam String orderType, @RequestParam String paidCheck) {
-        System.out.println("storeId = " + storeId);
-        System.out.println("startDate = " + startDate);
-        System.out.println("endDate = " + endDate);
-        System.out.println("orderType = " + orderType);
-        System.out.println("paidCheck = " + paidCheck);
-        OrderType ot;
-        PaidCheck pc;
+    @GetMapping("/allDate")
+    public ResponseEntity <List<PaymentDTO>> allDate (@RequestParam("totalId")Long totalId, @RequestParam("type")PayType type){
+        log.info("정산 요청 받음: totalId = {}, type = {}", totalId, type);
+        log.info("정산 데이터 조회 시작: totalId = {}, type = {}", totalId, type);
 
-        if(paidCheck.equals("paid")) {
-            pc = PaidCheck.paid;
-        }else {
-            pc = PaidCheck.none;
+        List<PaymentDTO> paymentDTOList = paymentService.findAllDate(totalId, type);
+
+        if (paymentDTOList != null && !paymentDTOList.isEmpty()){
+            log.info("정산 데이터 조회 완료, 결과: {} 건", paymentDTOList.size());
+        }else{
+            log.info("정산 데이터가 없습니다.");
         }
 
-        if (orderType.equals("PAYNOW")) {
-            ot = OrderType.PAYNOW;
-        }else {
-            ot = OrderType.PAYLATER;
-        }
+        log.info("정산 데이터 반환 준비 완료, 총 {} 건", paymentDTOList.size());
 
-        return paymentService.selectSettlementPaymentList(storeId, startDate, endDate, ot, pc);
+        return new ResponseEntity<>(paymentDTOList, HttpStatus.OK);
     }
 
 }

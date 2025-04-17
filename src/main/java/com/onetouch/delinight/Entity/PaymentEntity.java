@@ -9,11 +9,12 @@ package com.onetouch.delinight.Entity;
 
 import com.onetouch.delinight.Constant.OrderType;
 import com.onetouch.delinight.Constant.PaidCheck;
-import com.onetouch.delinight.Constant.PaymentStatus;
+import com.onetouch.delinight.Constant.PayType;
 import com.onetouch.delinight.Entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -44,7 +45,10 @@ public class PaymentEntity extends BaseTimeEntity {
     PaidCheck paidCheck;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
+    private PayType payType;
+
+    @Column(name = "total_amount")
+    private BigDecimal totalAmount; // 주문 총 금액
 
 
 }

@@ -79,7 +79,7 @@ public class CheckInController {
             }
         } else {
             checkInDTOList =
-                checkInService.list2();
+                    checkInService.list2();
 
         }
 
@@ -90,5 +90,4 @@ public class CheckInController {
         return "checkin/listB";
 
     }
-
 }

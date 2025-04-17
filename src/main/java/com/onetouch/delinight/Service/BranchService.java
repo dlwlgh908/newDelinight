@@ -17,6 +17,8 @@ public interface BranchService {
 
     public void create(BranchDTO branchDTO);
 
+    public void update(BranchDTO branchDTO);
+
     public List<BranchDTO> list();
 
     public void del(Long id);

@@ -6,57 +6,100 @@
 </head>
 <body>
 
-  <h1>스토어 정산 내역</h1>
-  <table style="border: #0a0a0a" id="paymentTable">
-      <thead>
-          <tr>
-              <th>결제 ID</th>
-              <th>결제 상태</th>
-              <th>정산여부</th>
-              <th>결제타입</th>
-              <th>등록일</th>
-          </tr>
-      </thead>
-      <tbody id="paymentTableBody">
+<form id="filterForm">
+    <h1>정산 내역</h1>
+    <div>
+        <label>시작일 :
+            <input type="datetime-local" id="startDate" name="startDate" required>
+        </label>
+        <label>종료일 :
+            <input type="datetime-local" id="endDate" name="endDate" required>
+        </label>
+        <label>결제타입 :
+            <select id="orderType" name="orderType">
+                <option value="">전체</option>
+                <option value="PAYNOW">선결제</option>
+                <option value="PAYLATER">후결제</option>
+            </select>
+        </label>
+        <label>정산여부:
+            <select id="paidCheck" name="paidCheck">
+                <option value="">전체</option>
+                <option value="paid">정산</option>
+                <option value="none">미정산</option>
+            </select>
+        </label>
+        <button type="submit">검색</button>
+    </div>
+    <table style="border: 1px" id="resultTable">
+        <thead>
+        <tr>
+            <th>결제 ID</th>
+            <th>결제 상태</th>
+            <th>정산 여부</th>
+            <th>결제 타입</th>
+            <th>등록일</th>
+        </tr>
+        </thead>
+        <tbody id="resultBody">
+        <!-- AJAX로 데이터 삽입 -->
+        </tbody>
+    </table>
+</form>
 
-      </tbody>
-  </table>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-      const url = `/api/payment/storePayment`;
+        // 폼 제출 시 이벤트 처리
+        $("#filterForm").submit(function (event) {
+            event.preventDefault();  // 폼이 실제로 제출되지 않도록 방지
 
-      $.ajax({
-          url: url,
-          method: "GET",
-          data: {
-              storeId: 1,
-              startDate: "2025-04-01T00:00:00",
-              endDate: "2025-04-30T23:59:59",
-              orderType: "PAYNOW",
-              paidCheck: "paid"
-          },
-          success: function(data) {
-              const tableBody = document.getElementById("paymentTableBody");
-              tableBody.innerHTML = "";
+            // 필터 값 가져오기
+            let startDate = $("#startDate").val();
+            let endDate = $("#endDate").val();
+            let orderType = $("#orderType").val();
+            let paidCheck = $("#paidCheck").val();
 
-              data.forEach(payment => {
-                  const row = document.createElement("tr");
-                  row.innerHTML = `
-                    <td>${payment.id}</td>
-                    <td>${payment.PaymentStatus}</td>
-                    <td>${payment.paidCheck}</td>
-                    <td>${payment.orderType}</td>
-                    <td>${payment.regTime}</td>
-                `;
-                  tableBody.appendChild(row);
-              });
-          },
-          error: function(xhr, status, error) {
-              console.error("데이터 불러오기 실패", error);
-          }
-      });
-  </script>
+            // 필터값을 데이터로 준비하여 AJAX 요청 보내기
+            $.ajax({
+                url: '/api/payment/allDate',
+                type: 'GET',
+                data: {
+                    totalId: 1, // 예시: 고정된 totalId, 실제로는 동적으로 설정 가능
+                    type: 'CENTER', // 예시: CENTER 타입, 실제로는 동적으로 설정 가능
+                    startDate: startDate,
+                    endDate: endDate,
+                    orderType: orderType,
+                    paidCheck: paidCheck
+                },
+                success: function(response) {
+                    console.log("정산 데이터 조회 성공:", response)
+
+                    // 결과 테이블에 데이터 채우기
+                    let resultBody = $("#resultBody");
+                    resultBody.empty();  // 기존 결과 초기화
+
+                    if (response && response.length > 0) {
+                        response.forEach(function(payment) {
+                            let row = `<tr>
+                                         <td>${payment.id}</td>
+                                         <td>${payment.orderType}</td>
+                                         <td>${payment.paidCheck}</td>
+                                         <td>${payment.amount}</td>
+                                       </tr>`
+                            resultBody.append(row)
+                        });
+                    } else {
+                        resultBody.append("<tr><td colspan='5'>조회된 결과가 없습니다.</td></tr>")
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log("정산 조회 실패:", error)
+                }
+            })
+        })
+
+    </script>
 
 </body>
 </html>

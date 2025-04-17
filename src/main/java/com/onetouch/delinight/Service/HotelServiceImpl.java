@@ -43,6 +43,20 @@ public class HotelServiceImpl implements HotelService{
     }
 
     @Override
+    public void update(HotelDTO hotelDTO) {
+
+
+        HotelEntity hotelEntity =
+            modelMapper.map(hotelDTO, HotelEntity.class);
+        HotelEntity hotel =
+                hotelRepository.findById(hotelEntity.getId()).orElseThrow(EntityNotFoundException::new);
+
+        hotel.setName(hotelEntity.getName());
+        hotel.setContent(hotelEntity.getContent());
+
+    }
+
+    @Override
     public List<HotelDTO> list() {
         List<HotelEntity> hotelEntityList =
             hotelRepository.findAll();

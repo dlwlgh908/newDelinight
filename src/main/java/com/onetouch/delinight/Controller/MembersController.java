@@ -104,7 +104,7 @@ public class MembersController {
 
     @GetMapping("/create")
     public String createView() {
-        return "members/create";
+        return "members/adminhome";
     }
 
     @PostMapping("/create")
@@ -248,6 +248,7 @@ public class MembersController {
 
         return "members/storeadlist";
     }
+
 
     @GetMapping("/adminlogin")
     public String adminloginGet(@RequestParam(value = "error", required = false) String error, Model model) {
