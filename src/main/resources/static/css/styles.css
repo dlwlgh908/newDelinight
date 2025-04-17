@@ -3680,10 +3680,6 @@ textarea.form-control-lg {
   display: inline-block;
 }
 
-.icon-wrap div {
-  font-size: 20px;
-}
-
 .notification-badge {
   position: absolute;
   height: 14px;
