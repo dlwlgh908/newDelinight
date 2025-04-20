@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @NoArgsConstructor
-public class PaymentDTO {
+public class PaymentDTO{
 
     private Long id;
     private BigDecimal amount;          // 결제 금액

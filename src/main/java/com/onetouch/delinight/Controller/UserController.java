@@ -207,11 +207,6 @@ public class UserController {
                 return "/users/welcome";
         }
 
-        @GetMapping("/test")
-        public String testGET() {
-                return "/users/test";
-        }
-
 
 
 }

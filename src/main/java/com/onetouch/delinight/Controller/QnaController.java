@@ -5,10 +5,6 @@ import com.onetouch.delinight.Repository.QnaRepository;
 import com.onetouch.delinight.Service.QnaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +16,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/qna/checkinQna")
+@RequestMapping("/qna")
 public class QnaController {
     private final QnaService qnaService;
     private final QnaRepository qnaRepository;
