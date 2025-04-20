@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MembersRepository extends JpaRepository<MembersEntity, Long> {
 
@@ -43,5 +44,8 @@ public interface MembersRepository extends JpaRepository<MembersEntity, Long> {
     MembersEntity selectEmail(String email);
     //MembersEntity findByEmail(String email);
     MembersEntity findByEmail(String email);
+
+    @Query("select m from MembersEntity m where m.email = :email")
+    Optional<MembersEntity> findByEmail2(String email);
 
 }

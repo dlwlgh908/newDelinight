@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 @Transactional
-@Log4j2
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService{
 
@@ -48,7 +47,11 @@ public class PaymentServiceImpl implements PaymentService{
 //        return ordersDTOList;
 //    }
 
-       
+
+    @Override
+    public List<OrdersDTO> readOrders(Long paymentId) {
+        return null;
+    }
 
     @Override
     public List<PaymentDTO> findAllDate(Long totalId, PayType type) {

@@ -25,22 +25,22 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class PaymentDTO {
 
     private Long id;
 
-    private OrderType orderType;
+    private String orderType;
     private PaidCheck paidCheck;
     private List<OrdersDTO> ordersDTOList;
 
-    public PaymentDTO setOrdersDTOList(List<OrdersDTO> ordersDTOList){
+    public PaymentDTO setOrdersDTOList(List<OrdersDTO> ordersDTOList) {
         this.ordersDTOList = ordersDTOList;
         return this;
-
+    }
     private BigDecimal amount;          // 결제 금액
     private LocalDateTime payDateTime;  // 결제 일시
-    private String orderType;           // 결제 방식(선결제 / 후결제)
     private String storeName;           // 가맹점명
     private String hotelName;           // 호텔명
     private String branchName;          // 지점

@@ -38,7 +38,7 @@
 
                 <!--본사관리-->
                 <!--시스템어드민, 수퍼어드민-->
-                <a class="nav-link" href="/members/account/centerhub"
+                <a class="nav-link" href="/members/center/create"
                    th:if="${role.name() == 'SUPERADMIN' or role.name() == 'SYSTEMADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-hotel"></i></div>
                     본사 관리<br>
@@ -66,7 +66,7 @@
                 </a>
                 <div class="collapse" id="collapseSuperHotel" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="#">호텔 관리</a>
+                        <a class="nav-link" href="/members/hotel/listA">호텔 관리</a>
                         <a class="nav-link" href="#">직원 관리</a>
                     </nav>
                 </div>

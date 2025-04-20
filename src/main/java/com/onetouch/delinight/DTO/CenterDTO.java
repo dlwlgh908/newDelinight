@@ -30,5 +30,6 @@ public class CenterDTO {
 
 
     private MembersEntity membersEntity;
+    private Long membersId;
 
 }

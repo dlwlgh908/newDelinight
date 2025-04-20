@@ -28,7 +28,7 @@ public interface MenuService {
     //상세보기
     public MenuDTO read(Long id);
     //목록
-    public Page<MenuDTO> menuList(Pageable pageable);
+    public Page<MenuDTO> menuList(Pageable pageable, String email);
 
     public List<MenuDTO> menuList(Long storeId);
     //수정

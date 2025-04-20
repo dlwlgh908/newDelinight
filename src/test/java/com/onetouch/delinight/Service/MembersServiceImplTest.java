@@ -32,15 +32,10 @@ class MembersServiceImplTest {
     @Commit
     public void EncodingTest(){
         MembersEntity membersEntity = membersRepository.findById(21L).get();
-        MembersEntity membersEntity1 = membersEntity;
-        membersEntity.setPassword(passwordEncoder.encode(membersEntity1.getPassword()));
+        membersEntity.setPassword(passwordEncoder.encode("akqjqtk12!"));
         membersRepository.save(membersEntity);
     }
 
-//    @Autowired
-//    MembersService membersService;
-//    @Autowired
-//    MembersRepository membersRepository;
 //
 //
 //    @Test

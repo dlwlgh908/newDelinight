@@ -32,6 +32,12 @@ public class MembersController {
     private final MembersService membersService;
     private final MembersRepository membersRepository;
 
+    @GetMapping("redirectPage")
+    public  String redirectPage(){
+
+        return "/members/redirectPage";
+    }
+
     @GetMapping("/accounthub")
     public String accounthub(Principal principal){
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
@@ -111,7 +117,7 @@ public class MembersController {
     public String createProc(MembersDTO membersDTO) {
         membersService.create(membersDTO);
 
-        return "redirect:members/adminhome";
+        return "redirect:/members/account/redirectPage";
     }
 
     @GetMapping("/hoteladmincreate")
@@ -123,7 +129,7 @@ public class MembersController {
     public String hoteladmincreate(MembersDTO membersDTO) {
         membersService.hoteladcreate(membersDTO);
 
-        return "redirect:/members/adminhome";
+        return "redirect:/members/account/redirectPage";
     }
 
     @GetMapping("/storeadmincreate")
@@ -135,7 +141,7 @@ public class MembersController {
     public String storeadmincreate(MembersDTO membersDTO) {
         membersService.storeadcreate(membersDTO);
 
-        return "redirect:/members/adminhome";
+        return "redirect:/members/account/redirectPage";
     }
 
 

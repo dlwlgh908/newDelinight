@@ -42,6 +42,22 @@ public class MembersServiceImpl implements MembersService{
    private final HotelService hotelService;
 
     @Override
+    public MembersDTO findByEmail(String email) {
+
+        Optional<MembersEntity> membersEntity = membersRepository.findByEmail2(email);
+
+        if(membersEntity.isPresent()){
+            MembersDTO membersDTO = modelMapper.map(membersEntity.get(), MembersDTO.class);
+            return membersDTO;
+        }
+        else {
+            MembersDTO membersDTO = new MembersDTO().builder().email("ghost").build();
+            return membersDTO;
+        }
+
+    }
+
+    @Override
     public void create(MembersDTO membersDTO) {
 
         MembersEntity membersEntity =
