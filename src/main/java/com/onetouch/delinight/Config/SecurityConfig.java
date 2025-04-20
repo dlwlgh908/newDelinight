@@ -65,20 +65,21 @@ public class SecurityConfig {
         http.securityMatcher("/members/**")
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/members/adminhome", "/members/adminlogin", "/**").permitAll()
+                                .requestMatchers("/members/adminhome", "/members/account/adminlogin", "/members//account/adminlogout-success", "/**").permitAll()
                                 .anyRequest().permitAll()
                 ).csrf((csrf) -> csrf.disable())
 
                 .formLogin(formLogin -> formLogin
                         .loginPage("/members/account/adminlogin")
                         .loginProcessingUrl("/members/adminlogin")
-                        .defaultSuccessUrl("/members/store/orders/list")
+                        .defaultSuccessUrl("/members/account/adminhome")
                         .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
                         .usernameParameter("email")
                 )
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutUrl("/logout")
+                        .logoutUrl("/members/account/adminlogout")
+                        .logoutSuccessUrl("/members/account/adminlogout-success")
                         .invalidateHttpSession(true)
                 );
         return http.build();

@@ -59,6 +59,20 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
+    public void update(RoomDTO roomDTO) {
+
+
+        RoomEntity roomEntity =
+            modelMapper.map(roomDTO, RoomEntity.class);
+        RoomEntity room =
+                roomRepository.findById(roomEntity.getId()).orElseThrow(EntityNotFoundException::new);
+
+        room.setName(roomEntity.getName());
+        room.setContent(roomEntity.getContent());
+
+    }
+
+    @Override
     public List<RoomDTO> list() {
         List<RoomEntity> roomEntityList =
             roomRepository.findAll();

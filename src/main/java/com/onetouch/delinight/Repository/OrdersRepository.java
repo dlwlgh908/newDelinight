@@ -24,6 +24,7 @@ public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
 
     Integer countByStoreEntityIdAndOrdersStatus(Long storeId, OrdersStatus status);
 
+    List<OrdersEntity> findByCheckInEntity_UsersEntityEmail(String email);
     Page<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(String email, OrdersStatus ordersStatus, OrdersStatus ordersStatus2, Pageable pageable);
     Page<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(String email, OrdersStatus ordersStatus, Pageable pageable    );
 

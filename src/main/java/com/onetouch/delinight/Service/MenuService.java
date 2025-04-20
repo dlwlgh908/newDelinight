@@ -29,6 +29,8 @@ public interface MenuService {
     public MenuDTO read(Long id);
     //목록
     public Page<MenuDTO> menuList(Pageable pageable);
+
+    public List<MenuDTO> menuList(Long storeId);
     //수정
     public MenuDTO update(MenuDTO menuDTO);
     //삭제

@@ -41,9 +41,6 @@ public class PaymentEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     OrderType orderType; // 선결제(PAYNOW) or 후결제(PAYLATER)
 
-    @Column(name="orders_key")
-    private String key; //대외용 오더 키 timeStamp+orderid
-
     @Enumerated(EnumType.STRING)
     PaidCheck paidCheck;
 

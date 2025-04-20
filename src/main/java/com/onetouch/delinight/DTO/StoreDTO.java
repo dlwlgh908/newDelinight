@@ -38,6 +38,10 @@ public class StoreDTO {
         this.membersDTO = membersDTO;
         return this;
     }
+    public StoreDTO setImgUrl(String imgUrl){
+        this.imgUrl = imgUrl;
+        return this;
+    }
 
 
 }

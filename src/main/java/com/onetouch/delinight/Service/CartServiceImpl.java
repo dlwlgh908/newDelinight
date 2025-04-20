@@ -45,13 +45,14 @@ public class CartServiceImpl implements CartService{
     private final OrdersRepository ordersRepository;
     private final OrdersItemRepository ordersItemRepository;
     private final PaymentRepository paymentRepository;
+    private final ImageRepository imageRepository;
+    private final CheckInRepository checkInRepository;
 
     @Override
     public Long cartToOrder(Long cartNum) {
         PaymentEntity paymentEntity = new PaymentEntity();
         paymentEntity.setPaidCheck(PaidCheck.none);
         List<OrdersEntity> ordersEntityList = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
 
@@ -78,6 +79,9 @@ public class CartServiceImpl implements CartService{
                         .build();
                 ordersItemRepository.save(ordersItemEntity);
             }
+            String email = cartRepository.findById(cartNum).get().getUsersEntity().getEmail();
+            CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+            savedOrder.setCheckInEntity(checkInEntity);
             savedOrder.setOrdersStatus(OrdersStatus.PENDING);
             savedOrder.setTotalPrice(totalPrice);
             savedOrder.setPendingTime(LocalDateTime.now());
@@ -87,7 +91,6 @@ public class CartServiceImpl implements CartService{
         }
 
         savedPaymentEntity.setOrdersEntityList(ordersEntityList);
-        savedPaymentEntity.setKey(formatter+savedPaymentEntity.getKey());
         paymentRepository.save(savedPaymentEntity);
 
         return savedPaymentEntity.getId();
@@ -138,12 +141,23 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
+    public Long cartCheck(String email) {
+
+        CartEntity cartEntity = cartRepository.findByUsersEntity_Email(email);
+        return cartEntity.getId();
+    }
+
+    @Override
     public List<CartItemDTO> list(Long cartNum) {
         List<CartItemEntity> entities = cartItemRepository.findByCartEntity_Id(cartNum);
+
+        log.info(entities);
         List<CartItemDTO> cartItemDTOList = entities.stream().map(data->modelMapper.map(data,CartItemDTO.class)
                 .setCartDTO(modelMapper.map(data.getCartEntity(), CartDTO.class))
-                .setMenuDTO(modelMapper.map(data.getMenuEntity(),MenuDTO.class).setStoreDTO(modelMapper.map(data.getMenuEntity().getStoreEntity(), StoreDTO.class))
+                .setMenuDTO(modelMapper.map(data.getMenuEntity(),MenuDTO.class).setImgUrl(imageRepository.findByMenuEntity_Id(data.getMenuEntity().getId()).get().getFullUrl()).setStoreDTO(modelMapper.map(data.getMenuEntity().getStoreEntity(), StoreDTO.class))
                 )).toList();
+
+        log.info(cartItemDTOList);
         return cartItemDTOList;
     }
 
