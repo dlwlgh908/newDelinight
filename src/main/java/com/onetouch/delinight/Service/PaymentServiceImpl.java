@@ -7,21 +7,24 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.Constant.PaidCheck;
 import com.onetouch.delinight.Constant.PayType;
-import com.onetouch.delinight.DTO.CheckInDTO;
-import com.onetouch.delinight.DTO.OrdersDTO;
-import com.onetouch.delinight.DTO.PaymentDTO;
-import com.onetouch.delinight.DTO.StoreDTO;
+import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.*;
+import com.onetouch.delinight.Repository.CenterRepository;
 import com.onetouch.delinight.Repository.PaymentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -32,6 +35,7 @@ public class PaymentServiceImpl implements PaymentService{
 
     private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
+    private final CenterRepository centerRepository;
 
     @Override
     public List<OrdersDTO> readOrders(Long paymentId) {
@@ -47,15 +51,95 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
+    public boolean isOrderToCompany(OrdersEntity order, Long totalId, PayType payType) {
+        log.info("{}, {}, {}",order, totalId, payType);
+        StoreEntity storeEntity = order.getStoreEntity();
+
+        if (storeEntity == null) {
+            return false;
+        }
+
+        return switch (payType) {
+            case STORE -> storeEntity.getId().equals(totalId);
+            case HOTEL -> {
+                HotelEntity hotelEntity = storeEntity.getHotelEntity();
+                yield hotelEntity.getId().equals(totalId);
+            }
+            case BRANCH -> {
+                BranchEntity branchEntity = storeEntity.getHotelEntity().getBranchEntity();
+                yield branchEntity != null && branchEntity.getId().equals(totalId);
+            }
+            case CENTER -> {
+                CenterEntity centerEntity = storeEntity.getHotelEntity().getBranchEntity().getCenterEntity();
+                yield centerEntity != null && centerEntity.getId().equals(totalId);
+            }
+        };
+
+    }
+
+
+    @Override
+    public SettlementDTO settlementCenter(Long centerId) {
+        log.info("정산 로직 시작 - centerId : {}",centerId);
+
+        // TEST CENTER_ID 직접 조회
+        CenterEntity centerEntity = centerRepository.findById(centerId).orElseThrow(EntityNotFoundException::new);
+        log.info("CENTER 조회 성공 - {}", centerEntity);
+
+        // 1. 해당 CENTER_ID에 속하는 결제 내역 조회
+        List<PaymentEntity> paymentEntityList = paymentRepository.findCenterForDate(centerId);
+        log.info("결제 내역 조회 성공 - 건수 : {}",paymentEntityList.size());
+
+        if (paymentEntityList == null || paymentEntityList.isEmpty()) {
+            return SettlementDTO.builder()
+                    .totalAmount(BigDecimal.ZERO)
+                    .paymentCount(0)
+                    .unpaidCount(0L)
+                    .paymentList(Collections.emptyList())
+                    .build();
+        }
+
+        // 2. Entity → DTO 변환
+        List<PaymentDTO> paymentDTOList =
+                paymentEntityList.stream().map(data -> modelMapper.map(data, PaymentDTO.class)).toList();
+
+        // 3. 총 결제 금액
+        BigDecimal totalAmount =
+                paymentDTOList.stream().map(PaymentDTO::getAmount)
+                        .filter(Objects::nonNull)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // 4. 미정산 건수
+        Long unpaidCount =
+                paymentDTOList.stream()
+                        .filter(dto -> dto.getPaidCheckType() == PaidCheck.none).count();
+
+        // 5. 결과 리턴
+        SettlementDTO result = SettlementDTO.builder()
+                .totalAmount(totalAmount)
+                .paymentCount(paymentDTOList.size())
+                .unpaidCount(unpaidCount)
+                .paymentList(paymentDTOList)
+                .build();
+
+        return result;
+    }
+
+
+    @Override
     public List<PaymentDTO> findAllDate(Long totalId, PayType type) {
+        log.info("findAllDate 시작 - totalId : {}, type: {}",totalId,type);
+
         List<PaymentEntity> paymentList = new ArrayList<>();
         List<PaymentEntity> filteredPaymentList = new ArrayList<>();
 
         if (type == PayType.STORE) {
             paymentList = paymentRepository.findStoreForDate(totalId);
+            log.info("store 결제 건수 : {}",paymentList.size());
             paymentList.forEach(payment -> {
                 payment.getOrdersEntityList().forEach(order -> {
                     if (order.getStoreEntity().getId().equals(totalId)) {
+                        log.info("일치하는 주문 {} , {}", order.getStoreEntity().getId(), order);
                         filteredPaymentList.add(
                                 PaymentEntity.builder()
                                         .id(payment.getId())
@@ -71,9 +155,11 @@ public class PaymentServiceImpl implements PaymentService{
             });
         } else if (type == PayType.HOTEL) {
             paymentList = paymentRepository.findHotelForDate(totalId);
+            log.info("Hotel 결제 건수 {}",paymentList.size());
             paymentList.forEach(payment -> {
                 payment.getOrdersEntityList().forEach(order -> {
                     if (order.getStoreEntity().getHotelEntity().getId().equals(totalId)) {
+                        log.info("Hotel 일치하는 주문 발견 {} {}", order.getStoreEntity().getId(), order);
                         filteredPaymentList.add(
                                 PaymentEntity.builder()
                                         .id(payment.getId())
@@ -89,9 +175,11 @@ public class PaymentServiceImpl implements PaymentService{
             });
         } else if (type == PayType.BRANCH) {
             paymentList = paymentRepository.findBranchForDate(totalId);
+            log.info("Branch 결제 건수 : {}",paymentList.size());
             paymentList.forEach(payment -> {
                 payment.getOrdersEntityList().forEach(order -> {
                     if (order.getStoreEntity().getHotelEntity().getBranchEntity().getId().equals(totalId)) {
+                        log.info("Branch 일치하는 주문 발견 {} {}", order.getStoreEntity().getId(), order);
                         filteredPaymentList.add(
                                 PaymentEntity.builder()
                                         .id(payment.getId())
@@ -107,9 +195,11 @@ public class PaymentServiceImpl implements PaymentService{
             });
         } else if (type == PayType.CENTER) {
             paymentList = paymentRepository.findCenterForDate(totalId);
+            log.info("Center 결제 건수 {}",paymentList.size());
             paymentList.forEach(payment -> {
                 payment.getOrdersEntityList().forEach(order -> {
                     if (order.getStoreEntity().getHotelEntity().getBranchEntity().getCenterEntity().getId().equals(totalId)) {
+                        log.info("Center 일치하는 주문 발견 {} {}", order.getStoreEntity().getId(), order);
                         filteredPaymentList.add(
                                 PaymentEntity.builder()
                                         .id(payment.getId())
@@ -124,6 +214,7 @@ public class PaymentServiceImpl implements PaymentService{
                 });
             });
         }
+        log.info("필터링 된 결제 건수 {}", filteredPaymentList.size());
 
         // DTO 변환
         return filteredPaymentList.stream()
@@ -151,9 +242,6 @@ public class PaymentServiceImpl implements PaymentService{
                 })
                 .collect(Collectors.toList());
     }
-
-
-
     /*@Override
     public List<PaymentDTO> findAllDate(Long totalId, PayType type) {
 
@@ -273,6 +361,10 @@ public class PaymentServiceImpl implements PaymentService{
             throw new IllegalArgumentException("유효하지 않은 정산 타입입니다.");
         }
 */ // 이거 지우면 안됨 무조건 지우면안됨 ㄹㅇ 지우면 안됨
+
+
+
+
 
 
 
