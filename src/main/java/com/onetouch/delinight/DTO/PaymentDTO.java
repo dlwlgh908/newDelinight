@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @NoArgsConstructor
-public class PaymentDTO {
+public class PaymentDTO{
 
     private Long id;
 

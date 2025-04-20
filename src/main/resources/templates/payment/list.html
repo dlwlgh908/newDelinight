@@ -85,52 +85,49 @@
 <script>
 
     $.ajax({
-
-        url: 'api/payment/allDate',
+        url: '/api/payment/allDate', // 파라미터는 data에서 관리
         type: 'get',
-        data:
-            {
-             totalId: 1,
-             type: 'CENTER'
-            },
-        success:function (response) {
-            console.log("정산 데이터 조회 완료", response)
+        data: {
+            totalId: 1,
+            type: 'CENTER' // 여기서 실제 사용하고 싶은 값 설정
         },
-        error:function (xhr, status, error) {
+        success: function (response) {
+            console.log("정산 데이터 조회 완료", response);
+
+            $('#paymentResults tbody').empty();
+
+            response.forEach(function (payment) {
+                let paidCheckText = payment.paidCheck ? '정산 완료' : '미정산';
+                let orderTypeText = payment.orderType === 'paid' ? '선결제' : '후결제';
+                let roomNumberText = payment.roomNumber ? payment.roomNumber : '-';
+
+                let str = `<tr>
+                         <td>${payment.id}</td>
+                         <td>${Number(payment.amount).toLocaleString()}원</td>
+                         <td>${payment.payDateTime.replace('T',' ')}</td>
+                         <td>${orderTypeText}</td>
+                         <td>${payment.storeName}</td>
+                         <td>${payment.hotelName}</td>
+                         <td>${payment.branchName}</td>
+                         <td>${payment.centerName}</td>
+                         <td>${roomNumberText}</td>
+                         <td>${paidCheckText}</td>
+                       </tr>`;
+                $('#paymentResults tbody').append(str);
+            });
+        },
+        error: function (xhr, status, error) {
             if (xhr.status === 400){
-                console.log("잘못된 요청(400 Error)입니다.")
-            }else if(xhr.status === 404){
-                console.log("정산 데이터(404 Error)가 없습니다.")
-            }else if (xhr.status === 500){
-                console.log("서버 오류가 발생(500 Error)했습니다.")
+                console.log("잘못된 요청(400 Error)입니다.");
+            } else if(xhr.status === 404){
+                console.log("정산 데이터(404 Error)가 없습니다.");
+            } else if (xhr.status === 500){
+                console.log("서버 오류가 발생(500 Error)했습니다.");
+            } else {
+                console.log("기타 오류 발생", xhr.responseText);
             }
         }
-        /*
-            성공하면
-            "id":1,
-            "totalAmount": 10000,
-            "regTime": "2025-04-17T12:34:56",
-            "orderStatus":"PAID",
-            "storeName":"storeA",
-            "hotelName":"hotelA",
-            "branchName":"branchA",
-            "centerName":"centerA",
-            "roomNumber":"101",
-            "paidCheck":true
-
-            "id": 2,
-            "totalAmount": 150000,
-            "regTime": "2025-04-17T14:30:00",
-            "orderStatus": "UNPAID",
-            "storeName": "Store B",
-            "hotelName": "Hotel B",
-            "branchName": "Branch B",
-            "centerName": "Center B",
-            "roomNumber": "102",
-            "paidCheck": false
-         */
-
-    })
+    });
 
 </script>
 

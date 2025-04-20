@@ -27,30 +27,136 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 @Transactional
-@Log4j2
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService{
 
     private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
 
+    @Override
+    public List<OrdersDTO> readOrders(Long paymentId) {
 
-//    @Override
-//    public List<OrdersDTO> readOrders(Long paymentId) {
-//
-//        PaymentEntity paymentEntity = paymentRepository.findById(paymentId).get();
-//        List<OrdersEntity> ordersEntityList = paymentEntity.getOrdersEntityList();
-//        List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
-//                .map(data->modelMapper.map(data,OrdersDTO.class)
-//                        .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
-//                        .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
-//
-//        return ordersDTOList;
-//    }
+        PaymentEntity paymentEntity = paymentRepository.findById(paymentId).get();
+        List<OrdersEntity> ordersEntityList = paymentEntity.getOrdersEntityList();
+        List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
+                .map(data->modelMapper.map(data,OrdersDTO.class)
+                        .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
+                        .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
 
-       
+        return ordersDTOList;
+    }
 
     @Override
+    public List<PaymentDTO> findAllDate(Long totalId, PayType type) {
+        List<PaymentEntity> paymentList = new ArrayList<>();
+        List<PaymentEntity> filteredPaymentList = new ArrayList<>();
+
+        if (type == PayType.STORE) {
+            paymentList = paymentRepository.findStoreForDate(totalId);
+            paymentList.forEach(payment -> {
+                payment.getOrdersEntityList().forEach(order -> {
+                    if (order.getStoreEntity().getId().equals(totalId)) {
+                        filteredPaymentList.add(
+                                PaymentEntity.builder()
+                                        .id(payment.getId())
+                                        .orderType(payment.getOrderType())
+                                        .paidCheck(payment.getPaidCheck())
+                                        .totalAmount(payment.getTotalAmount())
+                                        .paymentTime(payment.getRegTime())
+                                        .ordersEntityList(List.of(order))
+                                        .build()
+                        );
+                    }
+                });
+            });
+        } else if (type == PayType.HOTEL) {
+            paymentList = paymentRepository.findHotelForDate(totalId);
+            paymentList.forEach(payment -> {
+                payment.getOrdersEntityList().forEach(order -> {
+                    if (order.getStoreEntity().getHotelEntity().getId().equals(totalId)) {
+                        filteredPaymentList.add(
+                                PaymentEntity.builder()
+                                        .id(payment.getId())
+                                        .orderType(payment.getOrderType())
+                                        .paidCheck(payment.getPaidCheck())
+                                        .totalAmount(payment.getTotalAmount())
+                                        .paymentTime(payment.getRegTime())
+                                        .ordersEntityList(List.of(order))
+                                        .build()
+                        );
+                    }
+                });
+            });
+        } else if (type == PayType.BRANCH) {
+            paymentList = paymentRepository.findBranchForDate(totalId);
+            paymentList.forEach(payment -> {
+                payment.getOrdersEntityList().forEach(order -> {
+                    if (order.getStoreEntity().getHotelEntity().getBranchEntity().getId().equals(totalId)) {
+                        filteredPaymentList.add(
+                                PaymentEntity.builder()
+                                        .id(payment.getId())
+                                        .orderType(payment.getOrderType())
+                                        .paidCheck(payment.getPaidCheck())
+                                        .totalAmount(payment.getTotalAmount())
+                                        .paymentTime(payment.getRegTime())
+                                        .ordersEntityList(List.of(order))
+                                        .build()
+                        );
+                    }
+                });
+            });
+        } else if (type == PayType.CENTER) {
+            paymentList = paymentRepository.findCenterForDate(totalId);
+            paymentList.forEach(payment -> {
+                payment.getOrdersEntityList().forEach(order -> {
+                    if (order.getStoreEntity().getHotelEntity().getBranchEntity().getCenterEntity().getId().equals(totalId)) {
+                        filteredPaymentList.add(
+                                PaymentEntity.builder()
+                                        .id(payment.getId())
+                                        .orderType(payment.getOrderType())
+                                        .paidCheck(payment.getPaidCheck())
+                                        .totalAmount(payment.getTotalAmount())
+                                        .paymentTime(payment.getRegTime())
+                                        .ordersEntityList(List.of(order))
+                                        .build()
+                        );
+                    }
+                });
+            });
+        }
+
+        // DTO 변환
+        return filteredPaymentList.stream()
+                .map(payment -> {
+                    OrdersEntity order = payment.getOrdersEntityList().get(0);
+                    StoreEntity store = order.getStoreEntity();
+                    HotelEntity hotel = store.getHotelEntity();
+                    BranchEntity branch = hotel.getBranchEntity();
+                    CenterEntity center = branch.getCenterEntity();
+
+                    String roomNumber = order.getCheckInEntity() != null
+                            ? String.valueOf(order.getCheckInEntity().getRoomEntity())
+                            : null;
+
+                    return new PaymentDTO(
+                            payment.getId(),
+                            payment.getTotalAmount(),
+                            payment.getRegTime(),
+                            order.getOrdersStatus().name(),
+                            store.getName(),
+                            hotel.getName(),
+                            branch.getName(),
+                            center.getName(),
+                            roomNumber,
+                            payment.getPaidCheck()
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
+    /*@Override
     public List<PaymentDTO> findAllDate(Long totalId, PayType type) {
 
         log.info("totalId : {}, payType : {}", totalId, type);
@@ -63,71 +169,74 @@ public class PaymentServiceImpl implements PaymentService{
             case STORE -> paymentRepository.findStoreForDate(totalId);              // STORE 기준 조회
             default -> throw new IllegalArgumentException("유효하지 않는 정산 타입");
         };
-        log.info("paymentEntityList : {}", paymentEntityList);
+
+        log.info("조회된 결제 건수 : {}", paymentEntityList.size());
 
         // 최종 결과를 담을 새 결제 리스트
-        List<PaymentEntity> PaymentEntityListNew = new ArrayList<>();
+        List<PaymentEntity> filterPayment = new ArrayList<>();
 
         // 가져온 결제 데이터(paymentEntityList) 하나씩 순회
         for (PaymentEntity paymentEntity : paymentEntityList) {
             // 각 결제에 연결된 주문 리스트 순회
             for (OrdersEntity order : paymentEntity.getOrdersEntityList()) {
+
+                // 주문에 연결된 StoreId 확인
+                Long storeId = order.getStoreEntity() != null ? order.getStoreEntity().getId() : null;
+                log.info("storeId: {}, totalId: {}", storeId, totalId);
+
                 // 정산 타입에 따라 주문이 속한 ID가 totalId와 일치하는지 비교
                 boolean isMatch = switch (type){
                     case CENTER -> order.getStoreEntity().getHotelEntity().getBranchEntity().getCenterEntity().getId().equals(totalId); // CENTER ID 비교
                     case BRANCH -> order.getStoreEntity().getHotelEntity().getBranchEntity().getId().equals(totalId);                   // BRANCH ID 비교
                     case HOTEL -> order.getStoreEntity().getHotelEntity().getId().equals(totalId);                                      // HOTEL ID 비교
-                    case STORE -> order.getStoreEntity().getHotelEntity().getId().equals(totalId);                                      // STORE ID 비교
+                    case STORE  -> storeId != null && storeId.equals(totalId);                                                          // STORE ID 비교
+                    default -> false;
                 };
+
+                log.info("일치 여부: {}", isMatch ? "일치" : "불일치");
+
                 // 일치하는 주문만 추출해 새로운 paymentEntity 생성 및 리스트 추가
                 if (isMatch) {
-                    PaymentEntityListNew.add(paymentEntity.builder()
-                                    .id(paymentEntity.getId())                      // 기존 결제 ID 복사
-                                    .orderType(paymentEntity.getOrderType())        // 주문 유형 복사
-                                    .paidCheck(paymentEntity.getPaidCheck())        // 정산 여부 복사
-                                    .totalAmount(paymentEntity.getTotalAmount())    // 총 금액 복사
-                                    .ordersEntityList(List.of(order))               // 주문 리스트를 현재 주문 하나만 포함하여 설정
-                                    .build());                                      // 새 PaymentEntity 객체 생성
+                    filterPayment.add(PaymentEntity.builder()
+                            .id(paymentEntity.getId())                      // 기존 결제 ID 복사
+                            .orderType(paymentEntity.getOrderType())        // 주문 유형 복사
+                            .paidCheck(paymentEntity.getPaidCheck())        // 정산 여부 복사
+                            .totalAmount(paymentEntity.getTotalAmount())    // 총 금액 복사.regTime(paymentEntity.getRegTime())            // 등록 시간 복사
+                            .ordersEntityList(List.of(order))               // 주문 리스트를 현재 주문 하나만 포함하여 설정
+                            .build());                                      // 새 PaymentEntity 객체 생성
                 }
             }
         }
 
-        // 필터링된 결제 리스트를 DTO 리스트로 변환
-        List<PaymentDTO> paymentDTOList = PaymentEntityListNew.stream()
-                .map(data -> {
-                    // 결제에 연결된 철 번째 주문 가져오기
-                    OrdersEntity order = data.getOrdersEntityList().getFirst();
+        log.info("필터링 된 결제 건수 : {}", filterPayment.size());
 
-                    // 주문에 연결된 매장 → 호텔 → 지점 → 센터 정보 추출
+        // Step 3. DTO 변환
+        return filterPayment.stream()
+                .map(payment -> {
+                    OrdersEntity order = payment.getOrdersEntityList().get(0); // 첫 번째 주문만 가져옴
                     StoreEntity store = order.getStoreEntity();
                     HotelEntity hotel = store.getHotelEntity();
                     BranchEntity branch = hotel.getBranchEntity();
                     CenterEntity center = branch.getCenterEntity();
 
-                    // 체크인 정보가 있으면 방 번호 가져오기
                     String roomNumber = order.getCheckInEntity() != null ? String.valueOf(order.getCheckInEntity().getRoomEntity()) : null;
 
                     // DTO 객체 생성 후 반환
-                    PaymentDTO paymentDTO = new PaymentDTO(
-                            data.getId(),                       // 결제 ID
-                            data.getTotalAmount(),              // 총 금액
-                            data.getRegTime(),                  // 등록 시간
-                            order.getOrdersStatus().name(),     // 주문 상태
-                            store.getName(),                    // 매장 이름
-                            hotel.getName(),                    // 호텔 이름
-                            branch.getName(),                   // 지점 이름
-                            center.getName(),                   // 센터 이름
-                            roomNumber,                         // 방 번호
-                            data.getPaidCheck()                 // 결제 상태(정산여부)
+                    return new PaymentDTO(
+                            payment.getId(),
+                            payment.getTotalAmount(),
+                            payment.getRegTime(),
+                            order.getOrdersStatus().name(),
+                            store.getName(),
+                            hotel.getName(),
+                            branch.getName(),
+                            center.getName(),
+                            roomNumber,
+                            payment.getPaidCheck()
                     );
-
-                    return paymentDTO;
-
                 })
-                .collect(Collectors.toList()); // List 반환
-
-        return paymentDTOList; // 최종 DTOList 반환
-    }
+                .collect(Collectors.toList());
+    }*/ // 이거 지우면 안됨 무조건 지우면 안됨 ㄹㅇ 지우면 안됨
     /*
         List<PaymentEntity> paymentEntityList;
         List<PaymentEntity> paymentEntityList2 =new ArrayList<>();
@@ -166,6 +275,7 @@ public class PaymentServiceImpl implements PaymentService{
             throw new IllegalArgumentException("유효하지 않은 정산 타입입니다.");
         }
 */ // 이거 지우면 안됨 무조건 지우면안됨 ㄹㅇ 지우면 안됨
+
 
 
 }
