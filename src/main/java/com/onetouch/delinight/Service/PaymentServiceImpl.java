@@ -134,9 +134,7 @@ public class PaymentServiceImpl implements PaymentService{
                     BranchEntity branch = hotel.getBranchEntity();
                     CenterEntity center = branch.getCenterEntity();
 
-                    String roomNumber = order.getCheckInEntity() != null
-                            ? String.valueOf(order.getCheckInEntity().getRoomEntity())
-                            : null;
+                    String roomNumber = order.getCheckInEntity() != null ? String.valueOf(order.getCheckInEntity().getRoomEntity()) : null;
 
                     return new PaymentDTO(
                             payment.getId(),
