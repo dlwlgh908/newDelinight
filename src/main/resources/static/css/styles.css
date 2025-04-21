@@ -3799,8 +3799,12 @@ textarea.form-control-lg {
 
 .user-info strong {
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   margin-right: 6px;
+}
+
+.user-info-role{
+  font-size: 11px;
 }
 
 .user-info div:nth-of-type(2) {
