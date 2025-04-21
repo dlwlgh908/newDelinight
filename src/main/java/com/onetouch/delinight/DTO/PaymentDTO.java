@@ -22,7 +22,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@AllArgsConstructor
 public class PaymentDTO {
 
     private Long id;
