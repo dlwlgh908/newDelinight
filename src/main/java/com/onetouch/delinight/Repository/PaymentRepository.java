@@ -30,36 +30,36 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 
 
     @Query("""
-    select distinct p from PaymentEntity p
-    join fetch p.ordersEntityList o
-    join fetch o.storeEntity s
-    join fetch s.hotelEntity h
-    join fetch h.branchEntity b
-    join fetch b.centerEntity c
+    select p from PaymentEntity p
+    join  p.ordersEntityList o
+    join  o.storeEntity s
+    join  s.hotelEntity h
+    join  h.branchEntity b
+    join  b.centerEntity c
     where c.id = :centerId""")
     List<PaymentEntity> findCenterForDate(@Param("centerId") Long centerId);
 
     @Query("""
-    select distinct p from PaymentEntity p
-    join fetch p.ordersEntityList o
-    join fetch o.storeEntity s
-    join fetch s.hotelEntity h
-    join fetch h.branchEntity b
+    select p from PaymentEntity p
+    join  p.ordersEntityList o
+    join  o.storeEntity s
+    join  s.hotelEntity h
+    join  h.branchEntity b
     where b.id = :branchId""")
     List<PaymentEntity> findBranchForDate(@Param("branchId") Long branchId);
 
     @Query("""
-    select distinct p from PaymentEntity p
-    join fetch p.ordersEntityList o
-    join fetch o.storeEntity s
-    join fetch s.hotelEntity h
+    select p from PaymentEntity p
+    join  p.ordersEntityList o
+    join  o.storeEntity s
+    join  s.hotelEntity h
     where h.id = :hotelId""")
     List<PaymentEntity> findHotelForDate(@Param("hotelId") Long hotelId);
 
     @Query("""
-    select distinct p from PaymentEntity p
-    join fetch p.ordersEntityList o
-    join fetch o.storeEntity s
+    select p from PaymentEntity p
+    join  p.ordersEntityList o
+    join  o.storeEntity s
     where s.id = :storeId""")
     List<PaymentEntity> findStoreForDate(@Param("storeId") Long storeId);
 

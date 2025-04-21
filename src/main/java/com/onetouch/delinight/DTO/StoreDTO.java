@@ -7,9 +7,6 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
-import com.onetouch.delinight.Entity.HotelEntity;
-import com.onetouch.delinight.Entity.MembersEntity;
-import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -27,6 +24,7 @@ public class StoreDTO {
 
 
     private Long imgNum;
+
 
     private String imgUrl;
     private HotelDTO hotelDTO;

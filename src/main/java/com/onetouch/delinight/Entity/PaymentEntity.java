@@ -15,6 +15,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -34,6 +35,8 @@ public class PaymentEntity extends BaseTimeEntity {
 
     @OneToMany
     private List<OrdersEntity> ordersEntityList;
+
+    private LocalDateTime paymentTime;
 
     @Enumerated(EnumType.STRING)
     OrderType orderType; // 선결제(PAYNOW) or 후결제(PAYLATER)

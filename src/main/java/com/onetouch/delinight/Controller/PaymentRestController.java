@@ -2,15 +2,13 @@ package com.onetouch.delinight.Controller;
 
 import com.onetouch.delinight.Constant.PayType;
 import com.onetouch.delinight.DTO.PaymentDTO;
+import com.onetouch.delinight.DTO.SettlementDTO;
 import com.onetouch.delinight.Service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,6 +46,13 @@ public class PaymentRestController {
             log.info("정산 데이터 조회 중 오류 발생 {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/centerDate/center/{centerId}")
+    public ResponseEntity<SettlementDTO> centerDate(@PathVariable Long centerId){
+        log.info("{}", centerId);
+        SettlementDTO settlementDTO = paymentService.settlementCenter(centerId);
+        return ResponseEntity.ok(settlementDTO);
     }
 
 }
