@@ -87,8 +87,9 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Page<MenuDTO> menuList(Pageable pageable) {
-        Page<MenuEntity> pageList = menuRepository.findAll(pageable);
+    public Page<MenuDTO> menuList(Pageable pageable, String email) {
+        StoreEntity storeEntity = storeRepository.findByMembersEntity_Email(email);
+        Page<MenuEntity> pageList = menuRepository.findByStoreEntity_Id(storeEntity.getId(), pageable);
         return pageList.map(data -> modelMapper.map(data, MenuDTO.class));
     }
 

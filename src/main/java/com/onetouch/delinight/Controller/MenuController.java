@@ -47,7 +47,7 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/menu")
+@RequestMapping("/members/menu")
 public class MenuController {
     private final MenuService menuService;
     private final ImageService imageService;
@@ -82,13 +82,14 @@ public class MenuController {
 
         menuService.register(menuDTO, email);
         log.info("저장된 데이터 : " + menuDTO);
-        return "redirect:/menu/list";
+        return "redirect:/members/menu/list";
     }
 
     @GetMapping("/list")
-    public String listView(Model model, @PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+    public String listView(Model model, @PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, Principal principal){
 
-        Page<MenuDTO> menuDTOList = menuService.menuList(pageable);
+
+         Page<MenuDTO> menuDTOList = menuService.menuList(pageable, principal.getName());
         log.info(menuDTOList.getPageable().getPageNumber());
         model.addAttribute("menuDTOList",menuDTOList);
         log.info(menuDTOList.getContent());
@@ -121,7 +122,7 @@ public class MenuController {
 
         menuService.update(menuDTO);
 
-        return "redirect:/menu/read?id="+menuDTO.getId();
+        return "redirect:/members/menu/read?id="+menuDTO.getId();
     }
 
 

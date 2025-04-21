@@ -9,6 +9,8 @@ package com.onetouch.delinight.Repository;
 
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.MenuEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,6 +19,8 @@ import java.util.List;
 public interface MenuRepository extends JpaRepository<MenuEntity, Long> {
 
     public List<MenuEntity> findByStoreEntity_HotelEntity_Id(Long hotelId);
+
+    public Page<MenuEntity> findByStoreEntity_Id(Long email, Pageable pageable);
 
 //    public List<MenuEntity> findByMembersEntity_Email(String email);
 

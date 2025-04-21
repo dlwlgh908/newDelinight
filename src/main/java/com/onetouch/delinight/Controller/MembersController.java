@@ -32,6 +32,12 @@ public class MembersController {
     private final MembersService membersService;
     private final MembersRepository membersRepository;
 
+    @GetMapping("redirectPage")
+    public  String redirectPage(){
+
+        return "/members/redirectPage";
+    }
+
     @GetMapping("/accounthub")
     public String accounthub(Principal principal){
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
@@ -44,6 +50,10 @@ public class MembersController {
         //호텔 어드민
         else if(role.equals(Role.ADMIN)){
             return "redirect:/members/account/storeadlist" ;
+        }
+        //스토어 어드민
+        else if(role.equals(Role.STOREADMIN)){
+            return "redirect:/members/store/orders/list" ;
         }
         else{ // 시스템 어드민일 경우
             return "redirect:/members/account/listB";
@@ -111,7 +121,7 @@ public class MembersController {
     public String createProc(MembersDTO membersDTO) {
         membersService.create(membersDTO);
 
-        return "redirect:members/adminhome";
+        return "redirect:/members/account/redirectPage";
     }
 
     @GetMapping("/hoteladmincreate")
@@ -123,7 +133,7 @@ public class MembersController {
     public String hoteladmincreate(MembersDTO membersDTO) {
         membersService.hoteladcreate(membersDTO);
 
-        return "redirect:/members/adminhome";
+        return "redirect:/members/account/redirectPage";
     }
 
     @GetMapping("/storeadmincreate")
@@ -135,7 +145,7 @@ public class MembersController {
     public String storeadmincreate(MembersDTO membersDTO) {
         membersService.storeadcreate(membersDTO);
 
-        return "redirect:/members/adminhome";
+        return "redirect:/members/account/redirectPage";
     }
 
 

@@ -74,7 +74,7 @@
 
                                        <td th:if="${list.status.name() == 'VALID'}" class="aa" th:text="승인완료"></td>
                                        <td th:if="${list.status.name() == 'NOTVALID'}" class="aa" th:text="반려"></td>
-                                       <td th:if="${list.status.name() == 'WAIT'}">
+                                       <td th:if="${list.status.name() == 'WAIT'}" style="display: flex; justify-content: space-between">
                                            <div th:text="승인대기중"></div>
                                            <button class="btn btn-primary" th:value="${list.id}" id="approveBtn">승인</button>
                                            <button class="btn btn-primary" th:value="${list.id}" id="DisapproveBtn">반려</button>
@@ -117,42 +117,6 @@
 
                        </div>
                     </div>
-
-                    <!--알럿창-->
-                    <div class="card custom-shadow mb-4">
-                        <div class="card-header">
-                            <!--아이콘-->
-                            <!--카드헤더 제목 넣는곳-->
-                            <i class="fas fa-table me-1"></i>
-
-                            알럿창
-                        </div>
-                        <div class="card-body">
-                            <!--카드바디 내용 넣는곳-->
-                            <button class="btn btn-primary m-2" id="alertStart">Alert 실행</button>
-                            <button class="btn btn-gray m-2" id="confirmStart">Confirm 실행</button>
-                            <button class="btn btn-success m-2" id="promptStart">Prompt 실행</button>
-                            <button class="btn btn-danger m-2" id="toastStart">Toast 실행</button>
-                            <button class="btn btn-warning m-2" id="ajaxStart">Ajax 실행 (깃헙 아이디 검색)</button>
-                        </div>
-                    </div>
-
-                    <!--카드-->
-                    <div class="card custom-shadow mb-4">
-                        <div class="card-header">
-                            <!--아이콘-->
-                            <!--카드헤더 제목 넣는곳-->
-                            <i class="fas fa-table me-1"></i>
-
-                            card title
-                        </div>
-                        <div class="card-body">
-                            <!--카드바디 내용 넣는곳-->
-                            <div>
-                                내용내용내용내용내용내용내용
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </main>
 
@@ -166,12 +130,10 @@
                 $(function () {
                     $(document).on("click","#approveBtn",function () {
                         let id = this.getAttribute("value");
-                        alert(id)
                         $.ajax({
                             url : "/rest/approveBtn/"+id,
                             type : "get",
                             success: function (data) {
-                                alert("성공")
                                 console.log(data)
                                 location.reload();
 
@@ -184,7 +146,6 @@
                 $(function () {
                     $(document).on("click","#DisapproveBtn",function () {
                         let id = this.getAttribute("value");
-                        alert(id)
                         $.ajax({
                             url : "/rest/DisapproveBtn/"+id,
                             type : "get",

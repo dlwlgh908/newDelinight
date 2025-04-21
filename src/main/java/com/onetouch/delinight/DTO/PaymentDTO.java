@@ -20,11 +20,12 @@ import java.util.List;
 @Setter
 @ToString
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class PaymentDTO {
 
     private Long id;
+    private String orderType;
     private PaidCheck paidCheck;
     private BigDecimal amount;          // 결제 금액
     private LocalDateTime payDateTime;  // 결제 날짜
@@ -41,7 +42,6 @@ public class PaymentDTO {
     public PaymentDTO setOrdersDTOList(List<OrdersDTO> ordersDTOList) {
         this.ordersDTOList = ordersDTOList;
         return this;
-
 
     }
 

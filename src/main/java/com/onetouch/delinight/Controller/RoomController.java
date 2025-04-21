@@ -38,11 +38,11 @@ public class RoomController {
         return "room/create";
     }
 
-    @GetMapping("/list")
+    @GetMapping("/listB")
     public String listView(Model model) {
         List<RoomDTO> roomDTOList =
             roomService.list();
         model.addAttribute("roomDTOList", roomDTOList);
-        return "room/list";
+        return "room/listB";
     }
 }

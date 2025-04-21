@@ -49,4 +49,6 @@ public interface MembersService {
     public Map<Role, Long> findRoleByEmail(String email);
     public Role findOnlyRoleByEmail(String email);
 
+     public MembersDTO findByEmail(String email);
+
 }
