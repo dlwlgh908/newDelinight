@@ -1,20 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-          rel="stylesheet">
-</head>
-<body>
-<h1>center 등록 페이지</h1>
-<form action="/members/center/create" method="post">
-    본사명 : <input name="name">
-    본사설명 : <input name="content">
-    <button>전송</button>
-</form>
+    <title>델리나잇</title>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <!--별도 css 필요할 시 아래로 추가-->
+    <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
+    styles.css에 작성할것-->
+</head>
+
+<body>
+<!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+            <!--내용 넣는 곳-->
+            <!--반드시 이 아래에서만 작업-->
+
+            <!--페이지 이름-->
+            <h1 id="test" class="mt-4">Center List</h1>
+            <form action="/members/center/create" class="centerFormData" method="post">
+                본사명 : <input name="name">
+                본사설명 : <input name="content">
+                <button type="submit" class="btn btn-primary">전송</button>
+                <input type="text" class="searchEmail" placeholder="할당할 이메일(superadmin의 이메일)을 입력해주세요.">
+                <button type="button" class="btn btn-primary searchBtn">검색</button>
+            </form>
+            <div class="emailResult">
+
+            </div>
+        </div>
+    </main>
+    <script th:inline="javascript">
+
+        $(document).on("click", ".addMembers",function () {
+            let membersId = $(this).data("membersid");
+            $(".centerFormData").append("<input type='hidden' name='membersId' value='"+membersId+"'>")
+            Swal.fire({
+                icon: 'success',
+                title: '추가 완료',
+                text: '본사 관리자가 추가 되었습니다.',
+            });
+        })
+        $(".searchBtn").on("click", function () {
+            let email = $(".searchEmail").val()
+            $.ajax({
+                type:"get",
+                url:"/rest/searchMembers",
+                data:{"email" : email},
+                success:function (result){
+                    alert(result)
+                    if(result.email==="ghost"){
+                        $(".emailResult").empty();
+                    }
+
+                    let str = "<p>"+result.email+"</p><button class='addMembers btn btn-primary' data-membersid='"+result.id+"'>추가하기</button>"
+                    $(".emailResult").html(str)
+
+                }
+
+            })
+        })
+    </script>
+</div>
+
 </body>
 </html>

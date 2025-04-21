@@ -37,7 +37,7 @@ public class CenterServiceImpl implements CenterService{
     public void create(CenterDTO centerDTO, String email) {
 
         MembersEntity membersEntity =
-            membersRepository.findByEmail(email);
+            membersRepository.findById(centerDTO.getMembersId()).get();
 
         CenterEntity centerEntity =
             modelMapper.map(centerDTO, CenterEntity.class);

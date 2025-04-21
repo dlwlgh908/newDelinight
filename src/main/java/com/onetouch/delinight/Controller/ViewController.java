@@ -69,8 +69,8 @@ public class ViewController {
         return "/admin/menu/registerIndex";
     }
     @GetMapping("/listIndex")
-    public String listView(Pageable pageable, Model model){
-        Page<MenuDTO> menuList = menuService.menuList(pageable);
+    public String listView(Pageable pageable, Model model, Principal principal){
+        Page<MenuDTO> menuList = menuService.menuList(pageable, principal.getName());
         model.addAttribute("menuDTOList",menuList);
 
 

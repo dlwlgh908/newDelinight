@@ -20,15 +20,16 @@ import java.util.List;
 @Setter
 @ToString
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentDTO {
 
     private Long id;
+    private String orderType;
     private PaidCheck paidCheck;
     private BigDecimal amount;          // 결제 금액
     private LocalDateTime payDateTime;  // 결제 일시
-    private String orderType;           // 결제 방식(선결제 / 후결제)
     private String storeName;           // 가맹점명
     private String hotelName;           // 호텔명
     private String branchName;          // 지점
@@ -41,7 +42,6 @@ public class PaymentDTO {
     public PaymentDTO setOrdersDTOList(List<OrdersDTO> ordersDTOList) {
         this.ordersDTOList = ordersDTOList;
         return this;
-
 
     }
 

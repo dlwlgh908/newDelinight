@@ -48,6 +48,13 @@ public class MembersRestController {
 
 
     }
+    @GetMapping("/searchMembers")
+    public ResponseEntity<MembersDTO> searchMembers(@RequestParam(name = "email") String email){
+
+        log.info(email);
+        MembersDTO membersDTO = membersService.findByEmail(email);
+        return ResponseEntity.ok(membersDTO);
+    }
 
 
 
