@@ -51,6 +51,10 @@ public class MembersController {
         else if(role.equals(Role.ADMIN)){
             return "redirect:/members/account/storeadlist" ;
         }
+        //스토어 어드민
+        else if(role.equals(Role.STOREADMIN)){
+            return "redirect:/members/store/orders/list" ;
+        }
         else{ // 시스템 어드민일 경우
             return "redirect:/members/account/listB";
         }

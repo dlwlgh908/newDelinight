@@ -130,12 +130,10 @@
                 $(function () {
                     $(document).on("click","#approveBtn",function () {
                         let id = this.getAttribute("value");
-                        alert(id)
                         $.ajax({
                             url : "/rest/approveBtn/"+id,
                             type : "get",
                             success: function (data) {
-                                alert("성공")
                                 console.log(data)
                                 location.reload();
 
@@ -148,7 +146,6 @@
                 $(function () {
                     $(document).on("click","#DisapproveBtn",function () {
                         let id = this.getAttribute("value");
-                        alert(id)
                         $.ajax({
                             url : "/rest/DisapproveBtn/"+id,
                             type : "get",
