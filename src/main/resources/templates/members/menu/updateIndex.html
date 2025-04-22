@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layoutDesktop/layout}"
+>
+    <head>
+        <title>델리나잇</title>
+
+        <!--별도 css 필요할 시 아래로 추가-->
+        <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
+        styles.css에 작성할것-->
+    </head>
+
+    <body>
+        <div layout:fragment="adminContent" id="layoutSidenav_content">
+            <main>
+                <!--내용 넣는 곳-->
+                <div class="container-fluid px-4">
+                    <!--페이지 이름-->
+                    <h1 class="mt-3">메뉴 정보 수정</h1>
+                    <!--텍스트 박스-->
+                    <div class="card md-4">
+                        <div class="card-body">
+                            <form action="/members/menu/update" method="post" enctype="multipart/form-data" th:object="${menuDTO}" >
+                                <div class="card">
+                                    <div class="card-header">메뉴 정보 수정</div>
+                                    <div class="card-body">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="row mb-3">
+                                                        <label for="id" class="col-sm-4 col-form-label">주문번호</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text"  readonly class="form-control-plaintext" id="id" th:field="*{id}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="name" class="col-sm-4 col-form-label">메뉴</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text"  class="form-control" id="name" th:field="*{name}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="content" class="col-sm-4 col-form-label">메뉴정보</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text"  class="form-control" id="content" th:field="*{content}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="price" class="col-sm-4 col-form-label inputs">가격</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text"  class="form-control" id="price" th:field="*{price}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="md-3 mt-3">
+                                                        <div class="input-group md-3">
+                                                            <select th:field="*{menuStatus}" class="form-select"aria-label="Default select example">
+                                                                <option value="SELL">판매중</option>
+                                                                <option value="SOLD_OUT">품절</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="md-3 mt-3">
+                                                        <div class="input-group md-3">
+                                                            <select th:field="*{menu}" class="form-select" aria-label="Default select example">
+                                                                <option value="KOREAN" >한식</option>
+                                                                <option value="WESTERN">양식</option>
+                                                                <option value="CHINESE">중식</option>
+                                                                <option value="JAPANESE">일식</option>
+                                                                <option value="DESSERT">카페</option>
+                                                                <option value="BEVERAGE">음료</option>
+                                                                <option value="ETC">기타</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="row md-3 mt-3">
+                                                        <input hidden readonly name="id" th:value="${menuDTO.id}">
+                                                        <img width="600" class="menuImg" th:src="${imgUrl}">
+                                                        <input type="file" class="imgInput">
+                                                        <div class="hiddenImgNum"></div>
+                                                    </div>
+
+                                                    <div class="hiddenImgNum"></div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <button type="submit" class="col-6 btn btn-primary">수정</button>
+                                                <button type="submit" class="col-6 btn btn-danger">삭제</button>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </form>
+                            <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+                            <script type="text/javascript" src="/js/imgscript.js"></script>
+
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+
+            <!--푸터 절대 수정 금지!!!!-->
+            <!--푸터-->
+            <div th:replace="~{fragments/adminfooter::adminFooter}"></div>
+        </div>
+    </body>
+</html>

@@ -35,7 +35,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             log.info("아이디는 맞는데 비번이 틀림!!");
         }
 
-        response.sendRedirect("/members/account/adminlogin?error=" + errorParam);
+        response.sendRedirect("/members/account/login?error=" + errorParam);
     }
 
 }

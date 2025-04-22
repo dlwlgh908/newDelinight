@@ -29,6 +29,7 @@ public class MembersDTO {
     private String email;
 
     private String phone;
+    private String roleStr;
 
     private Role role;
     private Status status;

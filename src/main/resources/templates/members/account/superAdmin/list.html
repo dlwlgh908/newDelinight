@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/desktop/layout}"
+>
+<head>
+    <style>
+
+
+        .btn-copy {
+            /* button */
+            --button-bg: #353434;
+            --button-hover-bg: #464646;
+            --button-text-color: #cccccc;
+            --button-hover-text-color: #8bb9fe;
+            --button-border-radius: 10px;
+            --button-diameter: 36px;
+            --button-outline-width: 1px;
+            --button-outline-color: rgb(141, 141, 141);
+            /* tooltip */
+            --tooltip-bg: #f4f3f3;
+            --toolptip-border-radius: 4px;
+            --tooltip-font-family: Menlo, Roboto Mono, monospace;
+            /* 👆 this field should not be empty */
+            --tooltip-font-size: 12px;
+            /* 👆 this field should not be empty */
+            --tootip-text-color: rgb(50, 50, 50);
+            --tooltip-padding-x: 7px;
+            --tooltip-padding-y: 7px;
+            --tooltip-offset: 8px;
+            /* --tooltip-transition-duration: 0.3s; */
+            /* 👆 if you need a transition,
+            just remove the comment,
+            but I didn't like the transition :| */
+        }
+
+        .btn-copy {
+            box-sizing: border-box;
+            width: var(--button-diameter);
+            height: var(--button-diameter);
+            border-radius: var(--button-border-radius);
+            background-color: var(--button-bg);
+            color: var(--button-text-color);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            outline: none;
+        }
+
+        .btn-copy > .cp-tooltip {
+            position: absolute;
+            opacity: 0;
+            visibility: 0;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font: var(--tooltip-font-size) var(--tooltip-font-family);
+            color: var(--tootip-text-color);
+            background: var(--tooltip-bg);
+            padding: var(--tooltip-padding-y) var(--tooltip-padding-x);
+            border-radius: var(--toolptip-border-radius);
+            pointer-events: none;
+            transition: all var(--tooltip-transition-duration) cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .btn-copy > .cp-tooltip::before {
+            content: attr(data-text-initial);
+        }
+
+        .btn-copy > .cp-tooltip::after {
+            content: "";
+            position: absolute;
+            bottom: calc(var(--tooltip-padding-y) / 2 * -1);
+            width: var(--tooltip-padding-y);
+            height: var(--tooltip-padding-y);
+            background: inherit;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            z-index: -999;
+            pointer-events: none;
+        }
+
+        .btn-copy svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cp-check-mark {
+            display: none;
+        }
+
+        /* actions */
+
+        .btn-copy:hover .cp-tooltip,
+        .btn-copy:focus:not(:focus-visible) .cp-tooltip {
+            opacity: 1;
+            visibility: visible;
+            top: calc((100% + var(--tooltip-offset)) * -1);
+        }
+
+        .btn-copy:focus:not(:focus-visible) .cp-tooltip::before {
+            content: attr(data-text-end);
+        }
+
+        .btn-copy:focus:not(:focus-visible) .cp-clipboard {
+            display: none;
+        }
+
+        .btn-copy:focus:not(:focus-visible) .cp-check-mark {
+            display: block;
+        }
+
+        .btn-copy:hover,
+        .btn-copy:focus {
+            background-color: var(--button-hover-bg);
+        }
+
+        .btn-copy:active {
+            outline: var(--button-outline-width) solid var(--button-outline-color);
+        }
+
+        .btn-copy:hover svg {
+            color: var(--button-hover-text-color);
+        }
+
+    </style>
+    <title>델리나잇</title>
+
+    <!--별도 css 필요할 시 아래로 추가-->
+    <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
+    styles.css에 작성할것-->
+</head>
+
+<body>
+<!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-5">
+            <!--내용 넣는 곳-->
+            <!--반드시 이 아래에서만 작업-->
+
+            <!--페이지 이름-->
+            <h3 class="mt-5">본사 관리자 승인 페이지</h3>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">큰페이지 〉 중간페이지 〉 작은페이지</li>
+            </ol>
+
+            <!--텍스트 박스-->
+            <div class="card custom-shadow mb-4">
+                <div class="card-body">
+                    <!--네비게이션-->
+                    <div class="btnWrap"
+                         style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                        <ul class="nav nav-pills mb-4" style="margin-right: auto;">
+                            <li class="nav-item">
+                                <a class="nav-link" th:classappend="${status == null or status == ''} ? 'active'"
+                                   aria-current="page" th:href="@{/members/account/superAdmin/list(status=null)}">전체</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:classappend="${status == 'WAIT'} ? 'active'"
+                                   th:href="@{/members/account/superAdmin/list(status='WAIT')}">승인대기목록</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:classappend="${status == 'VALID'} ? 'active'"
+                                   th:href="@{/members/account/superAdmin/list(status='VALID')}">승인</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:classappend="${status == 'NOTVALID'} ? 'active'"
+                                   th:href="@{/members/account/superAdmin/list(status='NOTVALID')}">반려</a>
+                            </li>
+                        </ul>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            초대 링크 복사하기 ➡ &nbsp
+
+                            <button class="btn-copy copyBtn">
+                      <span
+                              data-text-end="Copied!"
+                              data-text-initial="Copy to clipboard"
+                              class="cp-tooltip"
+                      >
+                      </span>
+                                <span>
+                            <svg
+                                    xml:space="preserve"
+                                    style="enable-background:new 0 0 512 512"
+                                    viewBox="0 0 6.35 6.35"
+                                    y="0"
+                                    x="0"
+                                    height="20"
+                                    width="20"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="cp-clipboard"
+                            >
+                              <g>
+                                <path
+                                        fill="currentColor"
+                                        d="M2.43.265c-.3 0-.548.236-.573.53h-.328a.74.74 0 0 0-.735.734v3.822a.74.74 0 0 0 .735.734H4.82a.74.74 0 0 0 .735-.734V1.529a.74.74 0 0 0-.735-.735h-.328a.58.58 0 0 0-.573-.53zm0 .529h1.49c.032 0 .049.017.049.049v.431c0 .032-.017.049-.049.049H2.43c-.032 0-.05-.017-.05-.049V.843c0-.032.018-.05.05-.05zm-.901.53h.328c.026.292.274.528.573.528h1.49a.58.58 0 0 0 .573-.529h.328a.2.2 0 0 1 .206.206v3.822a.2.2 0 0 1-.206.205H1.53a.2.2 0 0 1-.206-.205V1.529a.2.2 0 0 1 .206-.206z"
+                                ></path>
+                              </g>
+                            </svg>
+                            <svg
+                                    xml:space="preserve"
+                                    style="enable-background:new 0 0 512 512"
+                                    viewBox="0 0 24 24"
+                                    y="0"
+                                    x="0"
+                                    height="18"
+                                    width="18"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="cp-check-mark"
+                            >
+                              <g>
+                                <path
+                                        data-original="#000000"
+                                        fill="currentColor"
+                                        d="M9.707 19.121a.997.997 0 0 1-1.414 0l-5.646-5.647a1.5 1.5 0 0 1 0-2.121l.707-.707a1.5 1.5 0 0 1 2.121 0L9 14.171l9.525-9.525a1.5 1.5 0 0 1 2.121 0l.707.707a1.5 1.5 0 0 1 0 2.121z"
+                                ></path>
+                              </g>
+                            </svg>
+                          </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!--작업 공간-->
+                    <table class="table">
+
+                        <thead>
+                        <th scope="col">#</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">이메일</th>
+                        <th scope="col">핸드폰번호</th>
+                        <th scope="col">권한</th>
+                        <th scope="col">승인여부</th>
+                        </thead>
+
+                        <tbody>
+                        <th:block th:each="list:${paging}">
+                            <tr>
+                                <th scope="row offset-4" th:text="${list.id}"></th>
+                                <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                                    [[${list.name}]]
+                                </a>
+                                </td>
+                                <td th:text="${list.email}"></td>
+                                <td th:text="${list.phone}"></td>
+
+
+                                <td th:text="${list.role}"></td>
+
+                                <td th:if="${list.status.name() == 'VALID'}" class="aa" th:text="승인완료"></td>
+                                <td th:if="${list.status.name() == 'NOTVALID'}" class="aa" th:text="반려"></td>
+                                <td th:if="${list.status.name() == 'WAIT'}"
+                                    style="display: flex; justify-content: space-between">
+                                    <div th:text="승인대기중"></div>
+                                    <button class="btn btn-primary" th:value="${list.id}" id="approveBtn">승인</button>
+                                    <button class="btn btn-primary" th:value="${list.id}" id="DisapproveBtn">반려</button>
+
+                                </td>
+
+
+                            </tr>
+
+                        </th:block>
+
+
+                        </tbody>
+
+                    </table>
+
+                    <div th:if="${!paging.isEmpty()}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                                <a class="page-link" th:href="@{|?page=${paging.number > 1 ? paging.number - 1 : 0}|}">
+                                    <span>이전</span>
+                                </a>
+                            </li>
+                            <li th:each="page: ${#numbers.sequence(0, paging.totalPages -1)}"
+                                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                                th:classappend="${page == paging.number} ? 'active'"
+                                class="page-item">
+                                <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                                <a class="page-link" th:href="@{|?page=${paging.number+1}}">
+                                    <span>다음</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--페이징처리 끝-->
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <input readonly style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width:300px;border: 0px solid black; border-bottom: 1.5px solid black" class="linkValue"
+           >
+
+    <!--스크립스-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+    <script th:inline="javascript">
+        let aa = $(".aa");
+
+        $(".copyBtn").on("click", function () {
+            let fullLink = "http://localhost:8080/members/account/accountRequest?role=super";
+
+            let tempInput = $("<input>");
+            $("body").append(tempInput);
+            tempInput.val(fullLink).select();
+            let copy = document.execCommand('copy');
+            if (copy) {
+
+            }
+            tempInput.remove();
+
+        })
+
+
+        $(function () {
+            $(document).on("click", "#approveBtn", function () {
+                let id = this.getAttribute("value");
+                alert(id)
+                $.ajax({
+                    url: "/rest/approveBtn/" + id,
+                    type: "get",
+                    success: function (data) {
+                        alert("성공")
+                        console.log(data)
+                        location.reload();
+
+                    }
+
+                })
+            })
+        })
+
+        $(function () {
+            $(document).on("click", "#DisapproveBtn", function () {
+                let id = this.getAttribute("value");
+                alert(id)
+                $.ajax({
+                    url: "/rest/DisapproveBtn/" + id,
+                    type: "get",
+                    success: function (data) {
+                        alert("성공")
+                        console.log(data)
+                        location.reload();
+
+                    }
+
+                })
+            })
+        })
+        // document.getElementById("approveBtn").addEventListener("click", function () {
+        //     let buttonValue = this.getAttribute("value");
+        //     alert(buttonValue)
+        //     $.ajax({
+        //         url : "/members/changestatus",
+        //         method : "post",
+        //         data : buttonValue,
+        //         success: function (data) {
+        //             alert("성공")
+        //             console.log(data)
+        //         }
+        //     })
+        // });
+    </script>
+
+
+    <!--푸터 절대 수정 금지!!!!-->
+    <!--푸터-->
+    <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
+</div>
+</body>
+</html>

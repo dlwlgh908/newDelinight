@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layoutDesktop/layout}"
+>
+<head>
+    <title>델리나잇</title>
+
+    <!--css, link, -->
+</head>
+
+<body>
+<!--layout:fragment명과 id명 절대 수정 금지!!!!-->
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-5">
+            <!--작업 영역-->
+            <!--반드시 이 안에서만 작업-->
+
+            <!--페이지 제목 명명-->
+            <h3 class="mt-5">페이지명</h3>
+            <ol class="breadcrumb mb-4">
+                <!--페이지 소제목 명명-->
+                <li class="breadcrumb-item active">큰페이지 〉 중간페이지 〉 작은페이지</li>
+            </ol>
+
+            <!--기본 카드 양식-->
+            <div class="card custom-shadow mb-4">
+                <div class="card-body">
+                    <!--카드 제목-->
+                    <table class="table">
+
+                        <thead>
+                        <th scope="col">#</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">설명</th>
+                        <th scope="col">설명</th>
+                        <th scope="col"><div class="row">
+                            <div class="col offset-8">
+
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary modalregister" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    +
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">방 등록</h1>
+                                                <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close">X</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!--부트스트랩에서 끌어옴-->
+                                                <div class="form-floating mb-3">
+                                                    <label for="name" class="name">방 이름</label>
+                                                    <input type="text" class="form-control name" id="name" placeholder="방 이름">
+                                                </div>
+                                                <div class="form-floating">
+                                                    <label for="content" class="content">설명</label>
+                                                    <textarea cols="20" rows="20" class="form-control content" id="content" placeholder="설명"></textarea>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary room_registerbtn">저장</button>
+                                                <button type="button" class="btn btn-primary room_dbtn">삭제!</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </th>
+                        </thead>
+
+                        <tbody>
+                        <th:block  th:each="list:${roomDTOList}">
+                            <tr>
+                                <th scope="row offset-4" th:text="${list.id}"></th>
+                                <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                                    [[${list.name}]]
+                                </a>
+                                </td>
+                                <td th:text="${list.content}"></td>
+                                <td th:text="${list.hotelDTO.name}"></td>
+                                <td>
+                                    <button class="btn btn-primary">삭제</button>
+                                    <button class="btn btn-primary">수정</button>
+                                </td>
+
+
+
+                            </tr>
+
+                        </th:block>
+
+
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+            <!--기본 알럿 양식-->
+            <!--알럿 사용 시, alert.js 파일에서 사용할 부분만 복사한 뒤 본 작업파일 하단 스크립트란에 붙여 사용-->
+            <div class="card custom-shadow mb-4">
+                <div class="card-body">
+                    <h5 class="mb-4 fw-bold">알럿창</h5>
+                    <hr class="hrMain">
+
+                    <!--알럿 버튼 양식-->
+                    <!--마음에 드는 양식을 골라 복붙하여 사용(클래스 따라 css가 자동으로 적용됨)-->
+                    <!--이때, 자신이 사용할 이름으로 반드시 id 바꿔줄것(하단 스크립트 포함)-->
+                    <!--id를 바꾸지 않으면 새 스크립트를 쓰든말든 기존의 양식과 똑같이 실행돼버림-->
+                    <button class="btn btn-primary m-2" id="alertStart">Alert 실행</button>
+                    <button class="btn btn-gray m-2" id="confirmStart">Confirm 실행</button>
+                    <button class="btn btn-success m-2" id="promptStart">Prompt 실행</button>
+                    <button class="btn btn-danger m-2" id="toastStart">Toast 실행</button>
+                    <button class="btn btn-warning m-2" id="ajaxStart">Ajax 실행 (깃헙 아이디 검색)</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!--스크립트 영역-->
+    <!--추가할 스크립트가 있다면 이곳에서 <script>태그 열고 작업-->
+    <!--기존 config 파일과 겹칠 수 있으므로 class나 id는 직접 작명해주세요-->
+    <script th:inline="javascript">
+        let test = document.getElementById("name").value;
+        console.log(test);
+        console.log(name);
+        let modalregister = $(".modalregister")
+        let modal = $(".modal")
+        let room_registerbtn = $(".room_registerbtn")
+        let room_dbtn = $(".room_dbtn")
+
+        room_dbtn.on("click", function () {
+            alert("gdgd")
+        });
+
+
+        room_registerbtn.on("click", function () {
+            let name = $("#name").val()
+            let content = $("#content").val()
+
+
+            let roomDTO = {
+                name: name,
+                content: content
+            }
+            alert(name)
+            alert(content)
+            console.log(roomDTO)
+
+            $.ajax({
+                url: "/room/rest/register",
+                method: "post",
+                data: roomDTO,
+                success: function (data) {
+                    alert(data)
+                    modal.modal("hide");
+                    location.reload();
+
+                },
+            })
+        });
+
+
+
+    </script>
+
+    <!--푸터-->
+    <!--콘텐츠 내부에 포함된 형식이므로 첨삭 엄금!!!-->
+    <div th:replace="~{fragments/adminfooter::adminFooter}"></div>
+</div>
+</body>
+</html>
