@@ -223,7 +223,6 @@
     <!--스크립트 시작 -->
     <script>
         $(document).on("click", "#addCheckinBtn", function () {
-            alert("user 추가 버튼 클릭")
 
         });
 
@@ -307,11 +306,6 @@
                 let userId = $(this).closest("tr").find(".userId").val();
 
 
-                alert(id)
-                alert(checkinDate)
-                alert(checkoutDate)
-                alert(phone)
-                alert(email)
                 $.ajax({
                     url : "/checkin/rest/register",
                     type: "post",
@@ -326,7 +320,6 @@
 
                     }),
                     success: function (data) {
-                        alert("성공");
                         console.log(data)
                         location.reload()
                     },
@@ -339,13 +332,11 @@
                 let id = $(this).val();
 
 
-                alert(id)
                 $.ajax({
                     url : "/checkin/rest/out?id=" + id,
                     type: "post",
 
                     success: function (data) {
-                        alert("성공");
                         console.log(data)
                         location.reload()
                     },
@@ -361,10 +352,6 @@
                 let email = $("#email").text();
                 let userId = $("#id").text();
 
-                alert(id)
-                alert(email)
-                alert(phone)
-                alert(userId);
 
                 updateRow2(id, phone, email,userId);
                 $(".plusBtn").hide();
@@ -376,9 +363,6 @@
                 let phone = $("#phone").text();
                 let email = $("#email").text();
 
-                alert(id)
-                alert(email)
-                alert(phone)
 
                 updateRow3(id, phone, email);
 
@@ -391,14 +375,12 @@
                 let emailcheck = $("#emailcheck").val();
                 let result = document.getElementById('result');
 
-                alert(emailcheck);
 
                 $.ajax({
                     url: "/checkin/rest/checkemail",
                     type: "post",
                     data: {"emailcheck": emailcheck},
                     success: function (usersDTO) {
-                        alert("성공")
 
 
 
@@ -458,14 +440,10 @@
                     type: "post",
                     data : {"reservNum" :reservNum },
                     success: function (response) {
-                        alert("성공")
                         let roomid = response.roomid;
                         let checkinDate = formatDate(response.checkinDate);
                         let checkoutDate = formatDate(response.checkoutDate);
                         let password = response.password;
-                        alert("패스워드!!!! : "+password);
-                        alert(roomid);
-                        alert(id);
 
                         updateRow(roomid, checkinDate, checkoutDate,password)
 
