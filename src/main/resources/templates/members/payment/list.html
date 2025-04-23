@@ -12,7 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 <body>
@@ -82,47 +82,44 @@
 
                         </div>
 
-                        <!-- 결제 내역 테이블 -->
-                        <table id="paymentResults">
-                            <thead>
-                            <tr>
-                                <th>결제 ID</th>
-                                <th>등록일시</th>
-                                <th>결제 일시</th>
-                                <th>결제 방식</th>
-                                <th>센터명</th>
-                                <th>지점명</th>
-                                <th>호텔명</th>
-                                <th>매장명</th>
-                                <th>결제 금액</th>
-                                <th>미정산 금액</th>
-                                <th>정산 여부</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!-- AJAX 데이터 삽입 -->
-                            </tbody>
-                        </table>
+                        <div class="row">
+                            <!-- 테이블 영역 -->
+                            <div class="col-md-6">
+                                <div>
+                                    <table id="paymentResults" class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>결제 ID</th>
+                                            <th>결제일시</th>
+                                            <th>정산여부</th>
+                                            <th>금액</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!-- 테이블 내용 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div>
+                                    <div id="unpaidPrice">미결제 금액: 0원</div>
+                                    <div id="totalPrice">총 결제 금액: 0원</div>
+                                </div>
+                            </div>
+
+                            <!-- 차트 영역 -->
+                            <div class="col-md-6">
+                                <canvas id="paymentChart"></canvas>
+                            </div>
+                        </div>
 
                     </form>
 
-
                 </div>
             </div>
 
 
 
-            <!-- 총 결제 금액과 미결제 금액을 나란히 배치 -->
-            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-                <!-- 미결제 금액 왼쪽에 배치 -->
-                <div id="unpaidPrice" style="font-weight: bold; font-size: 18px;">
-                    미결제 금액: 0원
-                </div>
-                <!-- 총 결제 금액 오른쪽에 배치 -->
-                <div id="totalPrice" style="font-weight: bold; font-size: 18px;">
-                    총 결제 금액: 0원
-                </div>
-            </div>
+
 
 
         </div>
@@ -132,25 +129,28 @@
 
         // 이번 달 자동 조회 함수
         function loadCurrentMonth() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth(); // 0-based (1월 = 0)
+            let now = new Date();
+            let year = now.getFullYear();
+            let month = now.getMonth(); // 0-based (1월 = 0)
 
             // 시작일: 1일
-            const startDate = new Date(year, month, 2).toISOString().slice(0, 10);
+            let startDate = new Date(year, month, 2)
 
             // 종료일: 다음 달 0일 == 이번 달 마지막 날
-            const endDate = new Date(year, month + 1, 1).toISOString().slice(0, 10);
+            let endDate = new Date(year, month + 1, 1)
+
+            let formattedStartDate = startDate.toISOString().slice(0, 10)
+            let formattedEndDate = endDate.toISOString().slice(0, 10)
 
             // 날짜 input에 기본값 세팅
-            $('#startDate').val(startDate);
-            $('#endDate').val(endDate);
+            $('#startDate').val(formattedStartDate);
+            $('#endDate').val(formattedStartDate);
 
             // 자동 조회용 데이터 구성
             const queryData = {
                 type: $('#type').val(), // 기본은 "STORE"
-                startDate: startDate,
-                endDate: endDate,
+                startDate: formattedStartDate,
+                endDate: formattedEndDate,
                 orderType: '',       // 전체
                 paidCheck: ''        // 전체
             };
@@ -178,6 +178,17 @@
                     let totalPrice = 0      // 총 결제 금액
                     let unpaidPrice = 0     // 미정산 금액
                     let totalVat = 0        // 부가세 합계
+                    let charData = {
+                        label: [],  // x축
+                        datasets: [{
+                            label: '금액',
+                            data: [],   // y축
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+
+                    }
 
                     if (response.length === 0) {
                         $('#paymentResults tbody').append('<tr><td colspan="10">정산 데이터가 없습니다.</td></tr>')
@@ -187,17 +198,8 @@
                     }
 
                     response.forEach(function (payment) {
-                        let paidCheckText = payment.paidCheck === 'paid' ? '정산 완료' : '미정산';
-                        let orderTypeText = payment.orderType === '선결제' ? '선결제' : '후결제';
-                        let payDateText = payment.payDateTime ? payment.payDateTime.replace('T', ' ') : '-';
-                        let regDateText = payment.regTime ? new Date(payment.regTime).toLocaleDateString("ko-KR") : '-';
 
                         payment.ordersDTOList.forEach(function (order) {
-
-                            let storeName = order.storeDTO.name
-                            let hotelName = order.storeDTO.hotelDTO.name
-                            let branchName = order.storeDTO.hotelDTO.branchDTO.name
-                            let centerName = order.storeDTO.hotelDTO.branchDTO.centerDTO.name
 
                             let thisPrice = Number(order.totalPrice) || 0
                             totalPrice += totalPrice
@@ -209,17 +211,25 @@
                             let vat = thisUnpaid * 0.1
                             totalVat += vat
 
+                            let regTimeFormat = new Date(payment.regTime).toLocaleDateString('ko-KR', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit'
+                            }).replaceAll('.','-')
+
                             let str = `<tr>
-                                     <td>${payment.totalId}</td>
-                                     <td>${regDateText}</td>
-                                     <td>${payDateText}</td>
-                                     <td>${orderTypeText}</td>
-                                     <td>${thisPrice.toLocaleString()}원</td>
-                                     <td>${thisUnpaid.toLocaleString()}</td>
-                                     <td>${paidCheckText}</td>
-                                   </tr>`;
+                                         <td>${payment.totalId}</td>
+                                         <td>${regTimeFormat}</td>
+                                         <td>${payment.checkPaid}</td>
+                                         <td>${thisPrice.toLocaleString()}원</td>
+                                       </tr>`;
 
                             $('#paymentResults tbody').append(str);
+
+                            // 차트 데이터 추가
+                            charData.label.push(payment.regTime)
+                            charData.datasets[0].data.push(thisPrice)
+
                         });
                     });
 
@@ -228,6 +238,9 @@
 
                     $('#totalPrice').text(`총 결제 금액 : ${totalPriceWithUnpaid.toLocaleString()}원`)
                     $('#unpaidPrice').text(`미결제 금액 : ${unpaidPriceWithVat.toLocaleString()}원 (부가세) : ${totalVat.toLocaleString()}원 포함`)
+
+                    // 차트 그리기
+                    drawChart(charData)
 
                 },
                 error: function (xhr, status, error) {
@@ -242,6 +255,30 @@
                         console.log("기타 오류 발생", xhr.responseText);
                     }
                 }
+            })
+        }
+
+        // 차트 그리기 함수
+        function drawChart(data) {
+
+            let ctx = document.getElementById('paymentChart').getContext('2d')
+            let myChart = new Chart(ctx, {
+
+                type: 'bar',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback:function (value) {
+                                    return value.toLocaleString() + '원'
+                                }
+                            }
+                        }
+                    }
+                }
+
             })
         }
 
@@ -267,56 +304,6 @@
             // 엑셀 파일로 다운로드
             XLSX.writeFile(download, "payment_details.xlsx");
         });
-
-        let adminInfo = {}
-
-        function adminOrganization(callback) {
-
-            $.ajax({
-
-                url: '/api/payment/adminInfo',
-                method: 'get',
-                success:function (response) {
-                    console.log("사용자 조직 정보", response)
-                    adminInfo = response
-                    if (callback) callback()
-                },
-                error:function (error) {
-                    console.log("조직 정보 로드 실패", error)
-                }
-
-            })
-
-        }
-
-        // 자동 조회 시, 조직 정보 로드 후 실행
-        $(document).ready(function () {
-            adminOrganization(() => {
-                loadCurrentMonth()
-            })
-        })
-
-        // 조회 버튼 클릭 시 필터 기반 조회
-        $('#paymentForm').on('submit', function (e) {
-            e.preventDefault()
-
-            let queryData = {
-                type: $('#type').val(),
-                startDate: $('#startDate').val(),
-                endDate: $('#endDate').val(),
-                orderType: $('#orderType').val(),
-                paidCheck: $('#paidCheck').val()
-            }
-
-            if (adminInfo.centerId) queryData.centerId = adminInfo.centerId
-            if (adminInfo.branchId) queryData.branchId = adminInfo.branchId
-            if (adminInfo.hotelId) queryData.hotelId = adminInfo.hotelId
-            if (adminInfo.storeId) queryData.storeId = adminInfo.storeId
-
-            console.log('전송 데이터 : ', queryData)
-            loadPayment(queryData)
-
-        })
 
     </script>
 </div>

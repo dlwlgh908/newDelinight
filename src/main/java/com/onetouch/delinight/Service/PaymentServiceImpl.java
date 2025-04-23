@@ -7,10 +7,12 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.DTO.CheckInDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
 import com.onetouch.delinight.DTO.PaymentDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
+import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.OrdersEntity;
 import com.onetouch.delinight.Entity.PaymentEntity;
 import com.onetouch.delinight.Repository.CustomPaymentRepositoryImpl;
@@ -48,8 +50,17 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override   // 계산식은 이후 자바스크립트로 처리할 예정
-    public List<PaymentDTO> paymentByCriteria(String priceMonth, String type, Long storeId, Boolean isPaid, String admin) {
-        List<PaymentDTO> paymentDTOList = customPaymentRepository.findPaymentByCriteria(priceMonth, type, storeId, isPaid, admin);
+    public List<PaymentDTO> paymentByCriteria(String priceMonth, String type, Long storeId, Boolean isPaid, MembersEntity member) {
+        Role role = member.getRole();
+        // SYSTEMADMIN, SUPERADMIN은 모든 결제 내역 조회 가능
+        if (role == Role.SYSTEMADMIN || role == Role.SUPERADMIN){
+            log.info("관리자 권한으로 모든 결제 내역 조회중");
+        }
+        // ADMIN, STOREADMIN은 특정 매장에 대한 결제 내역만 조회 가능
+        if (role == Role.ADMIN || role == Role.STOREADMIN){
+            log.info("호텔 관리자 권한으로 매장 결제 내역 조회");
+        }
+        List<PaymentDTO> paymentDTOList = customPaymentRepository.findPaymentByCriteria(priceMonth, null, storeId, isPaid);
         log.info("레포지토리에서 {}개의 PaymentDTO를 조회함.", paymentDTOList.size());
         return paymentDTOList;
     }
