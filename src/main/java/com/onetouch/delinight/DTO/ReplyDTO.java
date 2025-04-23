@@ -1,7 +1,5 @@
 package com.onetouch.delinight.DTO;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,15 +19,15 @@ public class ReplyDTO {
 
     private String replyer;
 
-    private QnaDTO qnaDTO;
+    private InquireDTO inquireDTO;
 
-    private Long qnaId;
+    private Long inquireId;
     
     private LocalDateTime regTime;
     private LocalDateTime updateTime;
 
-    public ReplyDTO setQnaDTO(QnaDTO qnaDTO){
-        this.qnaDTO =qnaDTO;
+    public ReplyDTO setInquireDTO(InquireDTO inquireDTO){
+        this.inquireDTO = inquireDTO;
         return this;
     }
 

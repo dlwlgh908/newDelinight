@@ -1,8 +1,8 @@
 package com.onetouch.delinight.Controller.Members;
 
-import com.onetouch.delinight.DTO.QnaDTO;
-import com.onetouch.delinight.Repository.QnaRepository;
-import com.onetouch.delinight.Service.QnaService;
+import com.onetouch.delinight.DTO.InquireDTO;
+import com.onetouch.delinight.Repository.InquireRepository;
+import com.onetouch.delinight.Service.InquireService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -19,10 +19,10 @@ import java.security.Principal;
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/members/qna")
-public class MembersQnaController {
-    private final QnaService qnaService;
-    private final QnaRepository qnaRepository;
+@RequestMapping("/members/inquire")
+public class MembersInquireController {
+    private final InquireService inquireService;
+    private final InquireRepository inquireRepository;
 
 
 
@@ -37,22 +37,22 @@ public class MembersQnaController {
             // 로그인 안 된 경우 로그인 페이지로 보내기
             return "redirect:/users/login";
         }
-        //로그인한 사장님의 이메일로 Qna리스트 가져오기
+        //로그인한 사장님의 이메일로 Inquire리스트 가져오기
         String email = principal.getName();
-        Page<QnaDTO> qnaDTOList = qnaService.qnaList(pageable, principal.getName());
-        if (qnaDTOList.getPageable().isPaged()){
-            log.info("현재 페이지 번호 : {} ",qnaDTOList.getPageable().getPageNumber());
+        Page<InquireDTO> inquireDTOList = inquireService.inquireList(pageable, principal.getName());
+        if (inquireDTOList.getPageable().isPaged()){
+            log.info("현재 페이지 번호 : {} ",inquireDTOList.getPageable().getPageNumber());
         }else {
             log.info("페이징 정보 없음");
         }
 
-        if (qnaDTOList.isEmpty()){
-            model.addAttribute("message", "등록된 Qna가 없습니다.");
+        if (inquireDTOList.isEmpty()){
+            model.addAttribute("message", "등록된 Inquire가 없습니다.");
         }
-        model.addAttribute("qnaDTOList",qnaDTOList);
-        log.info(qnaDTOList.getContent());
+        model.addAttribute("inquireDTOList",inquireDTOList);
+        log.info(inquireDTOList.getContent());
 
-        return "/members/qna/list";
+        return "/members/inquire/list";
     }
 
 
@@ -60,9 +60,9 @@ public class MembersQnaController {
     //상세보기
     @GetMapping("/read")
     public String read(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
-        QnaDTO qnaDTO = qnaService.read(id);
-        model.addAttribute("qnaDTO",qnaDTO);
-        return "/members/qna/read";
+        InquireDTO inquireDTO = inquireService.read(id);
+        model.addAttribute("inquireDTO", inquireDTO);
+        return "/members/inquire/read";
     }
 
 

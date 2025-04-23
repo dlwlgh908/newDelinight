@@ -103,22 +103,22 @@
                 <div class="col-6">
                     <div class="row md-3">
                         <div class="col-4">글번호</div>
-                        <div class="col" th:text="${qnaDTO.id}"></div>
+                        <div class="col" th:text="${inquireDTO.id}"></div>
                     </div>
 
                     <div class="row md-3">
                         <div class="col-4">제목</div>
-                        <div class="col" th:text="${qnaDTO.title}"></div>
+                        <div class="col" th:text="${inquireDTO.title}"></div>
                     </div>
 
                     <div class="row md-3">
                         <div class="col-4">내용</div>
-                        <div class="col" th:text="${qnaDTO.content}"></div>
+                        <div class="col" th:text="${inquireDTO.content}"></div>
                     </div>
 
                 </div>
                 <div class="col-6">
-                    <a th:href="@{|/templates/members/qna/update/${qnaDTO.id}|}" class="md-3 mt-3 btn-DeliNight-black" style="width: 80px; height: 60px">수정</a>
+                    <a th:href="@{|/templates/members/inquire/update/${inquireDTO.id}|}" class="md-3 mt-3 btn-DeliNight-black" style="width: 80px; height: 60px">수정</a>
                 </div>
             </div>
 
@@ -145,7 +145,7 @@
             const replyTextVal = $(".replyText").val().trim(); //클래스가 붙은 입력창에서 값을 가져옴
             //trim()은 공백을 제거 (양쪽 끝에있는 스페이스, 탭같은거)
             const replyer = $(".replyer").val().trim();
-            const qnaId = [[${qnaDTO.id}]]; //서버에 넘겨주는 QnaId
+            const inquireId = [[${inquireDTO.id}]]; //서버에 넘겨주는 InquireId
 
             if (!replyTextVal){
                 alert("댓글 내용을 입력해주세요.")
@@ -155,13 +155,13 @@
             const insertD = {
                 replyText: replyTextVal,
                 replyer : replyer,
-                qnaId: qnaId
+                inquireId: inquireId
             };//서버로 보낼 데이터 묶음 내용 + 글번호
 
             $.ajax({
                 url: "/reply/register",
                 type: "post",
-                data: $.param(insertD),//객체를 replyText=내용&qnaId=숫자 이런 식의 문자열로 바꿈
+                data: $.param(insertD),//객체를 replyText=내용&inquireId=숫자 이런 식의 문자열로 바꿈
                 success: function (response) {
                     alert(response); //예) "3번글이 저장되었습니다.
                     $(".replyText").val(""); //입력창 초기화
@@ -194,12 +194,12 @@
         });
 
         $(function select(){
-            var qnaId = [[${qnaDTO.id}]]
+            var inquireId = [[${inquireDTO.id}]]
 
 
             $.ajax({
 
-                url: "/reply/list/" + qnaId,
+                url: "/reply/list/" + inquireId,
                 type: "get",
                 success: function (data) {
                     console.log(data)

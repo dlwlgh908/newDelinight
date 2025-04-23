@@ -1,10 +1,10 @@
 package com.onetouch.delinight.Service;
 
-import com.onetouch.delinight.DTO.QnaDTO;
+import com.onetouch.delinight.DTO.InquireDTO;
 import com.onetouch.delinight.DTO.ReplyDTO;
-import com.onetouch.delinight.Entity.QnaEntity;
+import com.onetouch.delinight.Entity.InquireEntity;
 import com.onetouch.delinight.Entity.ReplyEntity;
-import com.onetouch.delinight.Repository.QnaRepository;
+import com.onetouch.delinight.Repository.InquireRepository;
 import com.onetouch.delinight.Repository.ReplyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -14,12 +14,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Log4j2
 @Transactional
@@ -27,7 +24,7 @@ class ReplyServiceImplTest {
     @Autowired
     ReplyRepository replyRepository;
     @Autowired
-    QnaRepository qnaRepository;
+    InquireRepository inquireRepository;
     @Autowired
     ReplyService replyService;
     @Autowired
@@ -38,19 +35,19 @@ class ReplyServiceImplTest {
     public void register(){
 
 
-        QnaEntity qnaEntity =
-                qnaRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-        log.info("값 :" + qnaEntity);
+        InquireEntity inquireEntity =
+                inquireRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+        log.info("값 :" + inquireEntity);
         ReplyDTO replyDTO = new ReplyDTO();
         replyDTO.setId(1L);
         replyDTO.setReplyText("확인");
         replyDTO.setReplyer("신라호텔");
         log.info(replyDTO);
 
-        QnaDTO qnaDTO =
-                modelMapper.map(qnaEntity, QnaDTO.class);
-        replyDTO.setQnaDTO(qnaDTO);
-        log.info(qnaDTO);
+        InquireDTO inquireDTO =
+                modelMapper.map(inquireEntity, InquireDTO.class);
+        replyDTO.setInquireDTO(inquireDTO);
+        log.info(inquireDTO);
 
         replyService.register(replyDTO);
 

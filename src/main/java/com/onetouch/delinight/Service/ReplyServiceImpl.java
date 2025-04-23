@@ -1,10 +1,10 @@
 package com.onetouch.delinight.Service;
 
-import com.onetouch.delinight.DTO.QnaDTO;
+import com.onetouch.delinight.DTO.InquireDTO;
 import com.onetouch.delinight.DTO.ReplyDTO;
-import com.onetouch.delinight.Entity.QnaEntity;
+import com.onetouch.delinight.Entity.InquireEntity;
 import com.onetouch.delinight.Entity.ReplyEntity;
-import com.onetouch.delinight.Repository.QnaRepository;
+import com.onetouch.delinight.Repository.InquireRepository;
 import com.onetouch.delinight.Repository.ReplyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -23,24 +23,24 @@ import java.util.stream.Collectors;
 @Transactional
 public class ReplyServiceImpl implements ReplyService{
     private final ReplyRepository replyRepository;
-    private final QnaRepository qnaRepository;
+    private final InquireRepository inquireRepository;
     private final ModelMapper modelMapper;
 
     @Override
     public ReplyDTO register(ReplyDTO replyDTO) {
 
-        Optional<QnaEntity> optionalQnaEntity =
-                qnaRepository.findById(replyDTO.getQnaId());
+        Optional<InquireEntity> optionalInquireEntity =
+                inquireRepository.findById(replyDTO.getInquireId());
 
-        QnaEntity qnaEntity =
-                optionalQnaEntity.orElseThrow(EntityNotFoundException::new);
+        InquireEntity inquireEntity =
+                optionalInquireEntity.orElseThrow(EntityNotFoundException::new);
 
         log.info("서비스에 들어온 dto : " + replyDTO);
 
         ReplyEntity replyEntity =
                 modelMapper.map(replyDTO,ReplyEntity.class);
 
-        replyEntity.setQnaEntity(qnaEntity);
+        replyEntity.setInquireEntity(inquireEntity);
 
         ReplyEntity result = replyRepository.save(replyEntity);
 
@@ -49,7 +49,7 @@ public class ReplyServiceImpl implements ReplyService{
         replyDTO =
                 modelMapper.map(result,ReplyDTO.class);
 
-        replyDTO.setQnaDTO(modelMapper.map(result.getQnaEntity(), QnaDTO.class));
+        replyDTO.setInquireDTO(modelMapper.map(result.getInquireEntity(), InquireDTO.class));
 
         log.info("저장 후 데이터 변환 DTO" +replyDTO);
 
@@ -58,7 +58,7 @@ public class ReplyServiceImpl implements ReplyService{
 
     @Override
     public List<ReplyDTO> findAll() {
-        //DB에 있는 모든 Qna 데이터를 가져오는 명령어
+        //DB에 있는 모든 Inquire 데이터를 가져오는 명령어
         List<ReplyEntity> replyEntityList = replyRepository.findAll();
 
         //리스트 하나씩 꺼내서 map 엔티티를 DTO로 변환해서 자동으로 필드 복사해주는
@@ -67,14 +67,14 @@ public class ReplyServiceImpl implements ReplyService{
                         replyEntity -> modelMapper.map(replyEntity, ReplyDTO.class)
                 ).collect(Collectors.toList());//다시 리스트로 모아서 저장
 
-        //DTO로 바꾼 Qna리스트를 반환
+        //DTO로 바꾼 Inquire리스트를 반환
         return replyDTOList;
     }
 
     @Override
     public List<ReplyDTO> list(Long id) {
         List<ReplyEntity> replyEntityList =
-                replyRepository.findByQnaEntity_Id(id);
+                replyRepository.findByInquireEntity_Id(id);
         List<ReplyDTO> replyDTOList =
                 replyEntityList.stream().map(
                         replyEntity -> {

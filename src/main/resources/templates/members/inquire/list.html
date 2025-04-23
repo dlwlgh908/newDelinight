@@ -106,17 +106,17 @@
                 <th>요청시간</th>
                 <th>답변시간</th>
                 </thead>
-                <th:block th:each="qnaDTO: ${qnaDTOList}">
+                <th:block th:each="inquireDTO: ${inquireDTOList}">
                     <tr>
                         <td>
-                            <a th:href="@{/templates/members/qna/read(id=${qnaDTO.id})}">
-                                [[${qnaDTO.id}]]
+                            <a th:href="@{/templates/members/inquire/read(id=${inquireDTO.id})}">
+                                [[${inquireDTO.id}]]
                             </a>
                         </td>
-                        <td th:text="${qnaDTO.title}"></td>
-                        <td th:text="${qnaDTO.content}"></td>
-                        <td th:text="${#temporals.format(qnaDTO.regtime,'yy/MM/dd/ HH:mm')}"></td>
-                        <td th:text="${#temporals.format(qnaDTO.updatetime,'yy/MM/dd/ HH:mm')}"></td>
+                        <td th:text="${inquireDTO.title}"></td>
+                        <td th:text="${inquireDTO.content}"></td>
+                        <td th:text="${#temporals.format(inquireDTO.regtime,'yy/MM/dd/ HH:mm')}"></td>
+                        <td th:text="${#temporals.format(inquireDTO.updatetime,'yy/MM/dd/ HH:mm')}"></td>
                     </tr>
                 </th:block>
 
@@ -126,33 +126,33 @@
 
             <ul class="pagination justify-content-center">
                 <!-- 처음 페이지 버튼 -->
-                <li class="page-menu" th:classappend="${qnaDTOList.number == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/templates/members/qna/list?page=0}">처음</a>
+                <li class="page-menu" th:classappend="${inquireDTOList.number == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/templates/members/inquire/list?page=0}">처음</a>
                 </li>
 
                 <!-- 이전 페이지 버튼 -->
-                <li class="page-menu" th:classappend="${!qnaDTOList.hasPrevious()} ? 'disabled'">
-                    <a class="page-link" th:href="@{/templates/members/qna/list?page={prev}(prev=${qnaDTOList.number - 1})}">이전</a>
+                <li class="page-menu" th:classappend="${!inquireDTOList.hasPrevious()} ? 'disabled'">
+                    <a class="page-link" th:href="@{/templates/members/inquire/list?page={prev}(prev=${inquireDTOList.number - 1})}">이전</a>
                 </li>
 
                 <!-- 현재 페이지 기준 앞 4개, 뒤 5개 -->
                 <li class="page-menu"
                     th:each="pageNum : ${#numbers.sequence(
-                                (qnaDTOList.number - 4 > 0 ? qnaDTOList.number - 4 : 0),
-                                (qnaDTOList.number + 5 < qnaDTOList.totalPages - 1 ? qnaDTOList.number + 5 : qnaDTOList.totalPages - 1)
+                                (inquireDTOList.number - 4 > 0 ? inquireDTOList.number - 4 : 0),
+                                (inquireDTOList.number + 5 < inquireDTOList.totalPages - 1 ? inquireDTOList.number + 5 : inquireDTOList.totalPages - 1)
                                 )}"
-                    th:classappend="${pageNum == qnaDTOList.number} ? 'active'">
-                    <a class="page-link" th:href="@{/templates/members/qna/list?page={p}(p=${pageNum})}" th:text="${pageNum + 1}"></a>
+                    th:classappend="${pageNum == inquireDTOList.number} ? 'active'">
+                    <a class="page-link" th:href="@{/templates/members/inquire/list?page={p}(p=${pageNum})}" th:text="${pageNum + 1}"></a>
                 </li>
 
                 <!-- 다음 페이지 버튼 -->
-                <li class="page-menu" th:classappend="${!qnaDTOList.hasNext()} ? 'disabled'">
-                    <a class="page-link" th:href="@{/templates/members/qna/list?page={next}(next=${qnaDTOList.number + 1})}">다음</a>
+                <li class="page-menu" th:classappend="${!inquireDTOList.hasNext()} ? 'disabled'">
+                    <a class="page-link" th:href="@{/templates/members/inquire/list?page={next}(next=${inquireDTOList.number + 1})}">다음</a>
                 </li>
 
                 <!-- 마지막 페이지 버튼 -->
-                <li class="page-menu" th:classappend="${qnaDTOList.number == qnaDTOList.totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/templates/members/qna/list?page={last}(last=${qnaDTOList.totalPages - 1})}">마지막</a>
+                <li class="page-menu" th:classappend="${inquireDTOList.number == inquireDTOList.totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/templates/members/inquire/list?page={last}(last=${inquireDTOList.totalPages - 1})}">마지막</a>
                 </li>
             </ul>
 

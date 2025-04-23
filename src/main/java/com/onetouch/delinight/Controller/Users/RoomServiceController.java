@@ -36,14 +36,14 @@ public class RoomServiceController {
         List<MenuDTO> menuDTOList = menuService.menuListByHotel(1L);
         model.addAttribute("menuDTOList", menuDTOList);
         log.info(menuDTOList);
-        return "roomService/order/main";
+        return "users/order/main";
     }
 
     @GetMapping("/list")
     public String list(Principal principal, Model model){
         List<OrdersDTO> ordersDTOList = ordersService.ordersListByEmail(principal.getName());
         model.addAttribute("ordersDTOList", ordersDTOList);
-        return "roomService/order/list";
+        return "users/order/list";
     }
 
     @GetMapping("/hub")
@@ -63,7 +63,7 @@ public class RoomServiceController {
         log.info(ordersDTOList);
      model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("ordersDTOList", ordersDTOList);
-        return "roomService/order/request";
+        return "users/order/request";
     }
 
 

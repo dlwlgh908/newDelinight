@@ -24,8 +24,8 @@ public class ReplyEntity extends BaseTimeEntity{
     private String replyer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "qnaEntity_id")
-    private QnaEntity qnaEntity;
+    @JoinColumn(name = "inquireEntity_id")
+    private InquireEntity inquireEntity;
 
 
 
