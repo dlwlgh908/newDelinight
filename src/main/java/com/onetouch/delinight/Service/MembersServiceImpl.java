@@ -88,16 +88,36 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
-    public MembersDTO update(MembersDTO membersDTO) {
+    public MembersDTO update(MembersDTO membersDTO,
+                             String currentPasswordInput,
+                             String newPasswordInput,
+                             String confirmPasswordInput) {
+
         Optional<MembersEntity> optionalMembersEntity
                 = membersRepository.findById(membersDTO.getId());
 
         MembersEntity membersEntity = optionalMembersEntity.get();
+
+        // 인풋값 null 체크
+        if (currentPasswordInput == null || newPasswordInput == null || confirmPasswordInput == null) {
+            throw new IllegalArgumentException("비밀번호를 입력해주세요.");
+        }
+        // 현재 비밀번호 확인
+        if (!membersEntity.getPassword().equals(currentPasswordInput)) {
+            throw new IllegalArgumentException("비밀번호가 틀립니다.");
+        }
+        // 비밀번호, 새 비밀번호 대조
+        if (!newPasswordInput.equals(confirmPasswordInput)) {
+            throw new IllegalArgumentException("비밀번호 확인이 틀립니다.");
+        }
+
         membersEntity.setPhone(membersDTO.getPhone());
         membersEntity.setPassword(membersDTO.getPassword());
-        if (membersDTO.getPassword() == null){
 
-        }
+        // 다 되면 저장
+        membersEntity.setPassword(newPasswordInput);
+
+        membersRepository.save(membersEntity);
         return null;
     }
 

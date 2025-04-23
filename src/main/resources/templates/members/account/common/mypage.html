@@ -21,9 +21,10 @@
                     <!--반드시 이 아래에서만 작업-->
 
                     <!--페이지 이름-->
-                    <h3 class="mt-5">마이페이지</h3>
+                    <h3 class="mt-5">내 정보</h3>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">홈 〉 마이페이지</li>
+                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">마이페이지</a>
                     </ol>
 
                     <!--텍스트 박스-->
@@ -48,6 +49,8 @@
                                </div>
                            </div>
 
+                           <hr>
+
                            <div class="row mb-1">
                                <label class="col-sm-2 col-form-label form-label">이메일</label>
                                <div class="col-sm-6">
@@ -62,18 +65,9 @@
                                </div>
                            </div>
 
-                           <hr>
-
-                           <div class="row mb-4">
-                               <label class="col-sm-2 col-form-label form-label">프로필 이미지</label>
-                               <div class="col-sm-10">
-                                   <img class="avatar" id="mypage-avatar" src="/img/defaultImg.png" alt="#">
-                               </div>
-                           </div>
-
                            <div class="text-center mt-5">
-                               <a href="/members/account/adminupdate" class="btn btn-primary me-2 px-4" id="delbtn">수정</a>
-                               <a href="/members/account/adminhome" class="btn btn-gray px-4">취소</a>
+                               <a href="/members/account/update" class="btn btn-primary me-2 px-4" id="delbtn">수정</a>
+                               <a href="/members/account/home" class="btn btn-gray px-4">취소</a>
                            </div>
                        </div>
                     </div>
