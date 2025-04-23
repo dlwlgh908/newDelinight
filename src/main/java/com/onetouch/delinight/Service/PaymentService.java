@@ -9,6 +9,7 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.OrdersDTO;
 import com.onetouch.delinight.DTO.PaymentDTO;
+import com.onetouch.delinight.Entity.MembersEntity;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface PaymentService {
     public List<OrdersDTO> readOrders(Long paymentId);
 
 
-    public List<PaymentDTO> paymentByCriteria(String priceMonth, String type, Long storeId, Boolean isPaid, String admin);
+    public List<PaymentDTO> paymentByCriteria(String priceMonth, String type, Long storeId, Boolean isPaid, MembersEntity member);
 
 
 
