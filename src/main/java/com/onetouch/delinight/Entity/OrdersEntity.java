@@ -53,6 +53,10 @@ public class OrdersEntity {
     private LocalDateTime deliveringTime;
     private LocalDateTime deliveredTime;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "log_id")
+    private CheckOutLogEntity checkOutLogEntity;
+
     private Long totalPrice;
 
     @Enumerated(EnumType.STRING)
@@ -60,6 +64,12 @@ public class OrdersEntity {
 
     @Enumerated(EnumType.STRING)
     OrdersStatus ordersStatus; // 현 주문 상태
+
+//    public OrdersEntity setCheckOutLogEntity(CheckOutLogEntity checkOutLogEntity) {
+//        this.checkOutLogEntity = checkOutLogEntity;
+//        return this;
+//    }
+
 
 
     @ManyToOne(fetch = FetchType.LAZY)

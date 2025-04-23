@@ -29,7 +29,7 @@ public class CenterDTO {
     private String content;
 
 
-    private MembersEntity membersEntity;
+    private MembersDTO membersDTO;
     private Long membersId;
 
 }

@@ -28,4 +28,13 @@ public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
     Page<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(String email, OrdersStatus ordersStatus, OrdersStatus ordersStatus2, Pageable pageable);
     Page<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(String email, OrdersStatus ordersStatus, Pageable pageable    );
 
+//    @Query("select sum(o.totalPrice) from OrdersEntity o where o.checkInEntity.id = :id")
+//    Long selectPriceByCheckinId(@Param("id") Long id);
+
+    @Query("select o from OrdersEntity o where o.checkInEntity.id = :id")
+    OrdersEntity selectCheckinId(Long id);
+
+
+
+
 }
