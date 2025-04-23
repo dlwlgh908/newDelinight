@@ -24,6 +24,5 @@ public interface UsersRepository extends JpaRepository<UsersEntity, Long> {
 
     void deleteByEmail(String email);
 
-    // 로그인한 사용자를 username 으로 찾는 메서드
-    Optional<UsersEntity> findByName(String name);
+
 }

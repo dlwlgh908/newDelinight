@@ -8,6 +8,7 @@ import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.CheckInRepository;
 import com.onetouch.delinight.Repository.QnaRepository;
 import com.onetouch.delinight.Repository.UsersRepository;
+import com.onetouch.delinight.Service.CheckInService;
 import com.onetouch.delinight.Service.MembersService;
 import com.onetouch.delinight.Service.QnaService;
 import jakarta.transaction.Transactional;
@@ -34,47 +35,30 @@ public class UsersQnaController {
     private final MembersService membersService;
     private final UsersRepository usersRepository;
     private final CheckInRepository checkInRepository;
+    private final CheckInService checkInService;
 
     //등록get
-    @Transactional
     @GetMapping("/register")
-    public String register(QnaDTO qnaDTO,Long roomID, Long usersId){
-        //연관 엔티티 가져오기 (체크인, 유저, 호텔)
-        CheckInEntity checkInEntity = checkInRepository.findById(roomID)
-                .orElseThrow(() -> new RuntimeException("체크인 정보를 찾을 수 없습니다."));
+    public String register(QnaDTO qnaDTO){
 
-        UsersEntity usersEntity = usersRepository.findById(usersId)
-                .orElseThrow(()-> new RuntimeException("사용자 정보 없음"));
-
-        HotelEntity hotelEntity = checkInEntity.getRoomEntity().getHotelEntity(); // CheckIn → Hotel 관계 있을 경우
-
-        // DTO → Entity 변환
-        QnaEntity qnaEntity = QnaEntity.builder()
-                .title(qnaDTO.getTitle())
-                .content(qnaDTO.getContent())
-                .checkInEntity(checkInEntity)
-                .usersEntity(usersEntity)
-                .hotelEntity(hotelEntity)
-                .build();
-
-        // 저장
-        qnaRepository.save(qnaEntity);
 
         return "/users/qna/register";
     }
     //등록post
     @PostMapping("/register")
-    public String registerPost(QnaDTO qnaDTO,@RequestParam Long roomId,Principal principal){
-        if (principal == null) {
-            throw new RuntimeException("로그인한 사용자만 문의글을 등록할 수 있습니다.");
-        }
-        //로그인 사용자 Id 가져오기
-        String loginId = principal.getName();
-        UsersEntity usersEntity = usersRepository.findByName(loginId)
-                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+    public String registerPost(QnaDTO qnaDTO,Principal principal){
 
-        //Qna등록 (roomId, userId 함께 전달)
-        qnaService.register(qnaDTO, roomId, usersEntity.getId());
+//        if (principal == null) {
+//            // 익명 사용자의 경우 처리
+//            System.out.println("로그인 안 됨. 익명으로 처리");
+//        } else {
+//            String loginId = principal.getName();
+//            System.out.println("로그인 사용자: " + loginId);
+//        }
+//        Long id = 12L;
+//        qnaService.register(qnaDTO,id);
+
+
         return "redirect:/users/qna/list";
     }
     //목록

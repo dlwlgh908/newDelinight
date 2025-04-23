@@ -17,7 +17,8 @@ import java.util.List;
 
 public interface QnaService {
     //문의사항 등록
-    public QnaDTO register(QnaDTO qnaDTO,Long roomId, Long usersId);
+    public QnaDTO register(QnaDTO qnaDTO,Long id);
+    public QnaDTO register(QnaDTO qnaDTO, Long checkInId, Long usersId);
     //목록
     public Page<QnaDTO> qnaList(Pageable pageable,String email);
     public List<QnaDTO> qnaList(Long hotelId);
@@ -28,7 +29,6 @@ public interface QnaService {
     public QnaDTO update(QnaDTO qnaDTO);
     //삭제
     public void delete(Long id);
-
 
 
 

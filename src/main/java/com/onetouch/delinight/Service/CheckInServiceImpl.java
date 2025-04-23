@@ -216,6 +216,12 @@ public class CheckInServiceImpl implements CheckInService{
 
     }
 
+//    @Override
+//    public Long findCheckin(String email) {
+//        Long result = checkInRepository.findByUsersEntity_Email(email).getId();
+//        return result;
+//    }
+
     @Override
     public UsersDTO checkEmail(String email) {
         UsersEntity usersEntity =

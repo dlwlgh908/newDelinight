@@ -24,6 +24,7 @@ public interface CheckInService {
 
     public void checkout(Long id);
 
+//    public Long findCheckin(String email);
     public UsersDTO  checkEmail(String email);
 
     public List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus);

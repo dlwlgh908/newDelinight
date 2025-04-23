@@ -51,41 +51,42 @@ public class QnaServiceImpl implements QnaService {
     private final UsersRepository usersRepository;
 
     @Override
-    public QnaDTO register(QnaDTO qnaDTO, Long roomId, Long usersId) {
-
-        // DTO -> Entity로 변환
+    public QnaDTO register(QnaDTO qnaDTO, Long id) {
         QnaEntity qnaEntity = modelMapper.map(qnaDTO, QnaEntity.class);
-
-        //체크인 정보 조회(roomId로)
-        CheckInEntity checkInEntity = checkInRepository.findByRoomEntity_Id(roomId);
-        if (checkInEntity != null) {
-            throw new RuntimeException("해당 룸 ID로 체크인 정보를 칮을 수 없습니다.");
-        }
-
-        //체크인 -> 룸 -> 호텔 추출
-        HotelEntity hotelEntity = checkInEntity.getRoomEntity().getHotelEntity();
-
-        //사용자 정보 조희
-        UsersEntity usersEntity = usersRepository.findById(usersId)
-                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
-
-        //Qna에 연결 정보 설정
-        qnaEntity.setCheckInEntity(checkInEntity); //체크인 기록
-        qnaEntity.setHotelEntity(hotelEntity); //호텔 정보
-        qnaEntity.setUsersEntity(usersEntity); //사용자 정보
-
-        //저장
+        //체크인 id을 찾아와서
+        CheckInEntity checkInEntity = checkInRepository.findByRoomEntity_Id(id);
+        qnaEntity.setCheckInEntity(checkInEntity);
         qnaEntity = qnaRepository.save(qnaEntity);
-
-        //결과를 DTO로 변환해서 반환
-        return modelMapper.map(qnaEntity, QnaDTO.class);
-
-
+        qnaDTO = modelMapper.map(qnaEntity, QnaDTO.class);
+        return qnaDTO;
 
     }
 
+    @Override
+    public QnaDTO register(QnaDTO qnaDTO, Long checkInId, Long usersId) {
+        // 1. 체크인 정보 가져오기
+        CheckInEntity checkIn = checkInRepository.findById(checkInId)
+                .orElseThrow(() -> new IllegalArgumentException("체크인 정보가 없습니다."));
 
+        // 2. 유저 정보 가져오기
+        UsersEntity usersEntity = usersRepository.findById(usersId)
+                .orElseThrow(() -> new IllegalArgumentException("유저 정보가 없습니다."));
 
+        // 3. 호텔 정보는 체크인 안에 있음
+        HotelEntity hotelEntity = checkIn.getRoomEntity().getHotelEntity();
+
+        // 4. QnaEntity로 변환 후 저장
+        QnaEntity qnaEntity = QnaEntity.builder()
+                .title(qnaDTO.getTitle())
+                .content(qnaDTO.getContent())
+                .checkInEntity(checkIn)
+                .usersEntity(usersEntity)
+                .hotelEntity(hotelEntity)
+                .build();
+        qnaRepository.save(qnaEntity).getId();
+
+        return null;
+    }
 
     @Override
     public Page<QnaDTO> qnaList(Pageable pageable,String email) {
