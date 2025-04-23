@@ -68,7 +68,7 @@ public class UserController {
 
 
 
-                return "users/home";
+                return "/users/home";
         }
 
         @GetMapping("/store/read")
@@ -93,7 +93,7 @@ public class UserController {
                         // 오류 메시지를 모델에 담기
                         model.addAttribute("error" , bindingResult.getAllErrors());
                         log.info("여기 실행함??????????????????????????????????????????????");
-                        return "redirect:/users/signUp";
+                        return "redirect:/users/account/signUp";
                 }
 
                 try {
@@ -121,7 +121,7 @@ public class UserController {
         @GetMapping("/passwordChange")
         public String passwordChangeGET() {
                 log.info("passwordChange");
-                return "/users/passwordChange";
+                return "/users/account/passwordChange";
         }
 
         @PostMapping("/passwordChange")
@@ -146,7 +146,7 @@ public class UserController {
         @GetMapping("/sendPassword")
         public String sendPasswordGET() {
                 log.info("sendPassword진입완료!!!!!!!!!!!!!!");
-                return "/users/sendPassword";
+                return "/users/account/sendPassword";
         }
 
         @PostMapping("/sendPassword")

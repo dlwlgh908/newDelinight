@@ -7,7 +7,6 @@ import com.onetouch.delinight.Util.MemberDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -59,6 +58,8 @@ public class GlobalModelAttribute {
             }
         } else if (uri.startsWith("/users")) {
             if(uri.startsWith("/users/login")){}
+            if(uri.startsWith("/users/logout")){}
+            if(uri.startsWith("/users/welcome")){}
             else if (principal instanceof CustomUserDetails customUserDetails) {
                 String name = customUserDetails.getUsersEntity().getName();
                 model.addAttribute("data", name);
