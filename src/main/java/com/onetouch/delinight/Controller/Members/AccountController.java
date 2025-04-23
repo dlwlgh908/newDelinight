@@ -9,12 +9,14 @@ package com.onetouch.delinight.Controller.Members;
 
 import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
+import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.CenterService;
 import com.onetouch.delinight.Service.HotelService;
 import com.onetouch.delinight.Service.MembersService;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.security.Principal;
 import java.util.Objects;
@@ -157,27 +160,46 @@ public class AccountController {
         return "/members/account/common/update";
     }
 
-    @PostMapping("/update-password")
-    public ResponseEntity<String> updatePassword(
-            Principal principal,
-            @RequestParam("currentPassword") String currentPasswordInput,
-            @RequestParam("newPassword") String newPasswordInput,
-            @RequestParam("confirmPassword") String confirmPasswordInput
-    ) {
-        String email = principal.getName();
-        MembersEntity membersEntity = membersRepository.findByEmail(email);
+    //@PostMapping("/update-password")
+    //public ResponseEntity<String> updatePassword(
+    //        Principal principal,
+    //        @RequestParam("currentPassword") String currentPasswordInput,
+    //        @RequestParam("newPassword") String newPasswordInput,
+    //        @RequestParam("confirmPassword") String confirmPasswordInput
+    //) {
+    //    String email = principal.getName();
+    //    MembersEntity membersEntity = membersRepository.findByEmail(email);
+    //
+    //    MembersDTO membersDTO = new MembersDTO();
+    //    membersDTO.setId(membersEntity.getId());
+    //    membersDTO.setPhone(membersEntity.getPhone());
+    //    membersDTO.setPassword(newPasswordInput);
+    //
+    //    try {
+    //        membersService.update(membersDTO, currentPasswordInput, newPasswordInput, confirmPasswordInput);
+    //        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+    //    } catch (IllegalArgumentException e) {
+    //        return ResponseEntity.badRequest().body(e.getMessage());
+    //    }
+    //}
 
-        MembersDTO membersDTO = new MembersDTO();
+    @PostMapping("/update")
+    public String updateProc(Principal principal,
+            @ModelAttribute MembersDTO membersDTO, Model model) {
+
+        log.info("update post 페이지"+membersDTO);
+        log.info("update post 페이지"+membersDTO);
+        log.info("update post 페이지"+membersDTO);
+
+        MembersEntity membersEntity = membersRepository.findByEmail(principal.getName());
+
         membersDTO.setId(membersEntity.getId());
-        membersDTO.setPhone(membersEntity.getPhone()); // 폰 번호도 유지하려면 같이 넣어줘야 함
-        membersDTO.setPassword(newPasswordInput); // 비밀번호 업데이트할 내용
+        membersService.update(membersDTO);
 
-        try {
-            membersService.update(membersDTO, currentPasswordInput, newPasswordInput, confirmPasswordInput);
-            return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        MembersEntity members = membersRepository.findByEmail(principal.getName());
+        model.addAttribute("member", members);
+
+        return "/members/account/mypage";
     }
 
 
