@@ -9,7 +9,6 @@ package com.onetouch.delinight.DTO;
 
 import com.onetouch.delinight.Constant.OrderType;
 import com.onetouch.delinight.Constant.OrdersStatus;
-import com.onetouch.delinight.Entity.StoreEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -52,6 +51,10 @@ public class OrdersDTO {
     public OrdersDTO setOrdersItemDTOList(List<OrdersItemDTO> ordersItemDTOList){
         this.ordersItemDTOList = ordersItemDTOList;
         return this;
+    }
+
+    public OrderType orderType(){
+        return orderType;
     }
 
 }
