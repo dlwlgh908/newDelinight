@@ -30,5 +30,9 @@ public class HotelDTO {
     private String content;
 
     private BranchDTO branchDTO;
+    public HotelDTO setBranchDTO(BranchDTO branchDTO){
+        this.branchDTO=branchDTO;
+        return this;
+    }
 
 }

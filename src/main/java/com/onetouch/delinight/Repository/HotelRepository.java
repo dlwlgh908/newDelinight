@@ -9,7 +9,7 @@ package com.onetouch.delinight.Repository;
 
 import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
-import com.onetouch.delinight.Entity.QnaEntity;
+import com.onetouch.delinight.Entity.InquireEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

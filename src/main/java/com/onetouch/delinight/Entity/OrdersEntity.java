@@ -58,6 +58,12 @@ public class OrdersEntity {
     OrdersStatus ordersStatus; // 현 주문 상태
 
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id")
+    private PaymentEntity paymentEntity;
+
+
+
 
 
 

@@ -31,4 +31,9 @@ public class BranchDTO {
 
     private CenterDTO centerDTO;
 
+    public BranchDTO setCenterDTO(CenterDTO centerDTO){
+        this.centerDTO = centerDTO;
+        return this;
+    }
+
 }

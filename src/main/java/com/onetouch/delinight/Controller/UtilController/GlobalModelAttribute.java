@@ -25,13 +25,14 @@ public class GlobalModelAttribute {
         String uri = request.getRequestURI();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        try {
 
 
         if (uri.startsWith("/members")) {
 
             if (principal instanceof MemberDetails memberDetails) {
-                if (memberDetails.getMembersEntity().getRole() == Role.STOREADMIN) {
+                try {
+
+                    if (memberDetails.getMembersEntity().getRole() == Role.STOREADMIN) {
                     log.info(storeService.findStoreByEmail(memberDetails.getUsername()));
                     log.info(memberDetails);
                     Integer alertCount = storeService.awaitingCountCheck(storeService.findStoreByEmail(memberDetails.getUsername()));
@@ -48,6 +49,13 @@ public class GlobalModelAttribute {
                 }
                 model.addAttribute("member", memberDetails.getMembersEntity());
                 model.addAttribute("role", memberDetails.getMembersEntity().getRole());
+                }
+                catch (Exception e){
+
+                    throw new RuntimeException("로그인 필요");
+
+
+                }
             }
         } else if (uri.startsWith("/users")) {
             if(uri.startsWith("/users/login")){}
@@ -59,12 +67,6 @@ public class GlobalModelAttribute {
             }
         }
 
-        }
-        catch (Exception e){
 
-            throw new RuntimeException("로그인 필요");
-
-
-        }
     }
 }

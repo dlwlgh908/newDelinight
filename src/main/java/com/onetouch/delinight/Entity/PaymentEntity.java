@@ -33,7 +33,7 @@ public class PaymentEntity extends BaseTimeEntity {
     @Column(name = "payment_id")
     private Long id;
 
-    @OneToMany
+    @OneToMany(mappedBy = "paymentEntity", fetch = FetchType.LAZY)
     private List<OrdersEntity> ordersEntityList;
 
     private LocalDateTime paymentTime;
@@ -49,6 +49,9 @@ public class PaymentEntity extends BaseTimeEntity {
 
     @Column(name = "total_amount")
     private BigDecimal totalAmount; // 주문 총 금액
+
+    private Long totalId;
+    private String priceMonth;
 
 
 }

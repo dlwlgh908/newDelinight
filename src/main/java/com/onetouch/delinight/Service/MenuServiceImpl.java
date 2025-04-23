@@ -81,7 +81,7 @@ public class MenuServiceImpl implements MenuService {
 
         List<MenuEntity> menuEntityList = menuRepository.findByStoreEntity_Id(storeId);
         List<MenuDTO> menuDTOList = menuEntityList.stream().map(data->modelMapper.map(data, MenuDTO.class)
-                .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class)).setImgUrl(imageRepository.findByMenuEntity_Id(data.getId()).get().getFullUrl())
+                .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class)).setImgUrl(imageRepository.findByMenuEntity_Id(data.getId()).map(image -> image.getFullUrl()).orElse(null))
         ).toList();
         return menuDTOList;
     }

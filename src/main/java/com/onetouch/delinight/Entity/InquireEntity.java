@@ -18,12 +18,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "qna")
-public class QnaEntity extends BaseTimeEntity {
+@Table(name = "inquire")
+public class InquireEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "qna_id")
+    @Column(name = "inquire_id")
     private Long id;
 
     @Column(length = 50,nullable = false) //컬럼길이, null허용여부

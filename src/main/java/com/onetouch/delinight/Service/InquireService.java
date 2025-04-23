@@ -7,26 +7,25 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
-import com.onetouch.delinight.DTO.HotelDTO;
-import com.onetouch.delinight.DTO.QnaDTO;
+import com.onetouch.delinight.DTO.InquireDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.method.P;
 
 import java.util.List;
 
-public interface QnaService {
+public interface InquireService {
     //문의사항 등록
-    public QnaDTO register(QnaDTO qnaDTO,Long id);
+    public InquireDTO register(InquireDTO inquireDTO, Long roomId, Long usersId);
     //목록
-    public Page<QnaDTO> list(Pageable pageable);
+    public Page<InquireDTO> inquireList(Pageable pageable, String email);
+    public List<InquireDTO> inquireList(Long hotelId);
+
     //상세보기
-    public QnaDTO read(Long id);
+    public InquireDTO read(Long id);
     //수정
-    public QnaDTO update(QnaDTO qnaDTO);
+    public InquireDTO update(InquireDTO inquireDTO);
     //삭제
     public void delete(Long id);
-
 
 
 

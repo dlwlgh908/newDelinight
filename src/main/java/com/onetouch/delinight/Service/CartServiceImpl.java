@@ -87,6 +87,7 @@ public class CartServiceImpl implements CartService{
             savedOrder.setPendingTime(LocalDateTime.now());
             savedOrder = ordersRepository.save(savedOrder);
             log.info(savedOrder);
+            savedOrder.setPaymentEntity(savedPaymentEntity);
             ordersEntityList.add(savedOrder);
         }
 
@@ -155,7 +156,7 @@ public class CartServiceImpl implements CartService{
         log.info(entities);
         List<CartItemDTO> cartItemDTOList = entities.stream().map(data->modelMapper.map(data,CartItemDTO.class)
                 .setCartDTO(modelMapper.map(data.getCartEntity(), CartDTO.class))
-                .setMenuDTO(modelMapper.map(data.getMenuEntity(),MenuDTO.class).setImgUrl(imageRepository.findByMenuEntity_Id(data.getMenuEntity().getId()).get().getFullUrl()).setStoreDTO(modelMapper.map(data.getMenuEntity().getStoreEntity(), StoreDTO.class))
+                .setMenuDTO(modelMapper.map(data.getMenuEntity(),MenuDTO.class).setImgUrl(imageRepository.findByMenuEntity_Id(data.getMenuEntity().getId()).map(image -> image.getFullUrl()).orElse(null)).setStoreDTO(modelMapper.map(data.getMenuEntity().getStoreEntity(), StoreDTO.class))
                 )).toList();
 
         log.info(cartItemDTOList);

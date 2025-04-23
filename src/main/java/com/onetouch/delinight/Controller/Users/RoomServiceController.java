@@ -63,7 +63,7 @@ public class RoomServiceController {
         log.info(ordersDTOList);
      model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("ordersDTOList", ordersDTOList);
-        return "roomService/order/request";
+        return "users/order/request";
     }
 
 

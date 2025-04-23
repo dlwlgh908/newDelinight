@@ -35,6 +35,8 @@ public class PaymentDTO {
     private String centerName;          // 본사
     private String checkInRoomNumber;   // 객실 번호(룸서비스일 경우 체크인 정보에서 가져옴)
     private PaidCheck paidCheckType;    // 정산 여부
+    private Long totalId;
+    private String priceMonth;
 
     private List<OrdersDTO> ordersDTOList;
 

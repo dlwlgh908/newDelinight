@@ -8,9 +8,6 @@
 package com.onetouch.delinight.DTO;
 
 import com.onetouch.delinight.Entity.CheckInEntity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -21,7 +18,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
-public class QnaDTO {
+public class InquireDTO {
 
     private Long id;
     @NotBlank(message = "제목을 작성해주세요.")
@@ -41,12 +38,12 @@ public class QnaDTO {
     private HotelDTO hotelDTO;
     private UsersDTO usersDTO;
 
-    public QnaDTO setcheckInDTO(CheckInDTO checkInDTO){
+    public InquireDTO setcheckInDTO(CheckInDTO checkInDTO){
         this.checkInDTO =checkInDTO;
         return this;
     }
 
-    public QnaDTO sethotelDTO(HotelDTO hotelDTO){
+    public InquireDTO sethotelDTO(HotelDTO hotelDTO){
         this.hotelDTO = hotelDTO;
         return this;
     }
