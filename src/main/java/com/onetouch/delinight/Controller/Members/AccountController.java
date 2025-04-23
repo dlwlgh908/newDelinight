@@ -18,6 +18,7 @@ import com.onetouch.delinight.Service.MembersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -89,15 +90,18 @@ public class AccountController {
         //로그인한 사람 롤 찾기
         //수퍼 어드민
         if(role.equals(Role.SUPERADMIN)){
-            return "redirect:/members/account/hotelAdmin/list";
+            return "redirect:/members/account/hoteladlist";
         }
         //호텔 어드민
         else if(role.equals(Role.ADMIN)){
-            return "redirect:/members/account/storeAdmin/list" ;
+            return "redirect:/members/account/storeadlist" ;
         }
-
+        //스토어 어드민
+        else if(role.equals(Role.STOREADMIN)){
+            return "redirect:/members/store/orders/list" ;
+        }
         else{ // 시스템 어드민일 경우
-            return "redirect:/members/account/superAdmin/list";
+            return "redirect:/members/account/listB";
         }
     }
 
@@ -153,24 +157,33 @@ public class AccountController {
         return "/members/account/common/update";
     }
 
+    @PostMapping("/update-password")
+    public ResponseEntity<String> updatePassword(
+            Principal principal,
+            @RequestParam("currentPassword") String currentPasswordInput,
+            @RequestParam("newPassword") String newPasswordInput,
+            @RequestParam("confirmPassword") String confirmPasswordInput
+    ) {
+        String email = principal.getName();
+        MembersEntity membersEntity = membersRepository.findByEmail(email);
 
-//    @GetMapping("/listB")
-//    public String list(Model model) {
-//        log.info("list페이지 진입");
-//
-//        List<MembersDTO> membersDTOList =
-//                membersService.findSuper();
-//
-//        log.info(membersDTOList);
-//        model.addAttribute("memberlist", membersDTOList);
-//
-//        return "members/listB";
-//    }
+        MembersDTO membersDTO = new MembersDTO();
+        membersDTO.setId(membersEntity.getId());
+        membersDTO.setPhone(membersEntity.getPhone()); // 폰 번호도 유지하려면 같이 넣어줘야 함
+        membersDTO.setPassword(newPasswordInput); // 비밀번호 업데이트할 내용
+
+        try {
+            membersService.update(membersDTO, currentPasswordInput, newPasswordInput, confirmPasswordInput);
+            return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 
     @GetMapping("/superAdmin/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-                                    @RequestParam(value = "status", required = false) String status, Principal principal) {
+                       @RequestParam(value = "status", required = false) String status, Principal principal) {
         log.info("list페이지 진입");
 
         Status status1;
@@ -227,7 +240,7 @@ public class AccountController {
             paging = membersService.getListHotel(page, principal.getName());
 
         }
-         model.addAttribute("parentId", parentId);
+        model.addAttribute("parentId", parentId);
         model.addAttribute("paging", paging);
         model.addAttribute("status", status);
 
