@@ -31,12 +31,24 @@ public class MembersQnaController {
 
     //목록
     @GetMapping("/list")
-    public String list(@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
-                       Model model, Principal principal){
+    public String list(@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,Principal principal,
+                       Model model){
+        if (principal == null) {
+            // 로그인 안 된 경우 로그인 페이지로 보내기
+            return "redirect:/users/login";
+        }
+        //로그인한 사장님의 이메일로 Qna리스트 가져오기
+        String email = principal.getName();
+        Page<QnaDTO> qnaDTOList = qnaService.qnaList(pageable, principal.getName());
+        if (qnaDTOList.getPageable().isPaged()){
+            log.info("현재 페이지 번호 : {} ",qnaDTOList.getPageable().getPageNumber());
+        }else {
+            log.info("페이징 정보 없음");
+        }
 
-        String agentEmail = principal.getName();
-        Page<QnaDTO> qnaDTOList = qnaService.list(pageable); // 메일을 리스트 함수에 같이 던져서 그걸로 자기 호텔에 관련된 문의사항만 볼 수 있게 수정이 필요함
-        log.info(qnaDTOList.getPageable().getPageNumber());
+        if (qnaDTOList.isEmpty()){
+            model.addAttribute("message", "등록된 Qna가 없습니다.");
+        }
         model.addAttribute("qnaDTOList",qnaDTOList);
         log.info(qnaDTOList.getContent());
 
