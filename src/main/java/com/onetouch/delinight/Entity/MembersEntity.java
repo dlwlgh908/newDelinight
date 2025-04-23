@@ -44,4 +44,13 @@ public class MembersEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @JoinColumn(name = "center_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    private CenterEntity centerEntity;
+
+
+    @JoinColumn(name = "hotel_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    private HotelEntity hotelEntity;
 }

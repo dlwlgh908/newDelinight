@@ -60,7 +60,7 @@ public class MenuController {
 
 
 
-        return "/admin/menu/registerIndex";
+        return "/members/menu/registerIndex";
     }
 
     @PostMapping("/register")
@@ -94,7 +94,7 @@ public class MenuController {
         model.addAttribute("menuDTOList",menuDTOList);
         log.info(menuDTOList.getContent());
 
-        return "/admin/menu/listIndex";
+        return "/members/menu/listIndex";
     }
     @GetMapping("/read")
     public String readView(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
@@ -102,7 +102,7 @@ public class MenuController {
                 menuService.read(id);
         model.addAttribute("menuDTO", menuDTO);
 
-            return "/admin/menu/readIndex";
+            return "/members/menu/readIndex";
 
     }
     @GetMapping("/update/{id}")
@@ -113,7 +113,7 @@ public class MenuController {
         log.info(menuDTO.getId());
         String imgUrl = imageService.read(id);
         model.addAttribute("imgUrl",imgUrl);
-        return "/admin/menu/updateIndex";
+        return "/members/menu/updateIndex";
 
     }
     @PostMapping("/update")

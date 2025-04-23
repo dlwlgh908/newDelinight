@@ -24,13 +24,13 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/users")
+@RequestMapping("/users/order/")
 
 public class RoomServiceController {
     private final MenuService menuService;
     private final OrdersService ordersService;
 
-    @GetMapping("/order/main")
+    @GetMapping("/main")
     public String main(Model model){
         Long hotelNum = 1L;// 체크인 서비스에서 findHotelNum 메소드 만들어서 findbyCheckInNum로 룸찾고 룸에서 호텔 찾아서 넘겨줄 예정
         List<MenuDTO> menuDTOList = menuService.menuListByHotel(1L);
@@ -39,19 +39,19 @@ public class RoomServiceController {
         return "roomService/order/main";
     }
 
-    @GetMapping("/order/list")
+    @GetMapping("/list")
     public String list(Principal principal, Model model){
         List<OrdersDTO> ordersDTOList = ordersService.ordersListByEmail(principal.getName());
         model.addAttribute("ordersDTOList", ordersDTOList);
         return "roomService/order/list";
     }
 
-    @GetMapping("/order/hub")
+    @GetMapping("/hub")
     public String hub(){
         return "redirect:/users/order/list";
     }
 
-    @GetMapping("/order/request")
+    @GetMapping("/request")
     public String request(Long paymentId, Model model){
         List<OrdersDTO> ordersDTOList = ordersService.read(paymentId);
         Long totalPrice = 0L;

@@ -30,6 +30,7 @@ public class MembersDTO {
 
     private String phone;
     private String roleStr;
+    private Long parentId;
 
     private Role role;
     private Status status;

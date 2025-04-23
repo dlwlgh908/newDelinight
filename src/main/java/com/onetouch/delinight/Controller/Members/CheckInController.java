@@ -30,32 +30,32 @@ public class CheckInController {
 
     private final CheckInService checkInService;
     private final RoomService roomService;
+//
+//    @GetMapping("/list")
+//    public String listView(Model model) {
+//
+//        List<RoomDTO> roomDTOList =
+//                roomService.list();
+//
+//
+//
+//
+//        List<CheckInDTO> checkInDTOList =
+//                checkInService.list();
+//
+//        log.info(checkInDTOList);
+//        log.info(checkInDTOList);
+//
+//
+//        model.addAttribute("roomDTOList", roomDTOList);
+//        model.addAttribute("checkInDTOList", checkInDTOList);
+//
+//
+//        return "members/checkin/list";
+//
+//    }
 
     @GetMapping("/list")
-    public String listView(Model model) {
-
-        List<RoomDTO> roomDTOList =
-                roomService.list();
-
-
-
-
-        List<CheckInDTO> checkInDTOList =
-                checkInService.list();
-
-        log.info(checkInDTOList);
-        log.info(checkInDTOList);
-
-
-        model.addAttribute("roomDTOList", roomDTOList);
-        model.addAttribute("checkInDTOList", checkInDTOList);
-
-
-        return "members/checkin/list";
-
-    }
-
-    @GetMapping("/listB")
     public String listA(Model model, @RequestParam(value = "checkinstatus", required = false) String checkinstatus) {
 
         List<RoomDTO> roomDTOList =

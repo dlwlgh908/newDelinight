@@ -33,24 +33,24 @@ public class StoreController {
     @GetMapping("/create")
     public String createView() {
 
-        return "store/create";
+        return "members/store/create";
     }
 
     @PostMapping("/create")
     public String createProc(StoreDTO storeDTO) {
         storeService.create(storeDTO);
 
-        return "store/create";
+        return "redirect:/members/store/list";
     }
 
-    @GetMapping("/listA")
+    @GetMapping("/list")
     public String listView(Model model) {
 
         List<StoreDTO> storeDTOList =
             storeService.list();
         model.addAttribute("storeDTOList", storeDTOList);
 
-        return "store/listA";
+        return "members/store/listA";
     }
 
     @GetMapping("/update")
@@ -64,13 +64,13 @@ public class StoreController {
         model.addAttribute("storeDTO", storeDTO);
         model.addAttribute("imgUrl", imgUrl);
 
-        return "store/update";
+        return "members/store/update";
     }
 
     @PostMapping("/update")
     public String updatePost(StoreDTO storeDTO){
         storeService.update(storeDTO);
-        return "redirect:/members/store/orders/list";
+        return "redirect:/members/store/list";
     }
 
 }

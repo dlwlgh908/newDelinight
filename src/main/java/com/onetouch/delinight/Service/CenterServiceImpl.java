@@ -33,6 +33,7 @@ public class CenterServiceImpl implements CenterService{
     private final MembersRepository membersRepository;
 
 
+
     @Override
     public void create(CenterDTO centerDTO, String email) {
 
@@ -65,6 +66,15 @@ public class CenterServiceImpl implements CenterService{
         MembersDTO membersDTO =
         modelMapper.map(membersEntity, MembersDTO.class);
         return membersDTO;
+    }
+
+    @Override
+    public Long findCenter(String email) {
+
+        CenterEntity centerEntity = centerRepository.findByMembersEntity_Email(email);
+
+        return centerEntity.getId();
+
     }
 
     @Override

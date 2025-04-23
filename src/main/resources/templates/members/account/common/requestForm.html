@@ -17,14 +17,22 @@
 </head>
 <body>
 
-<form action="/members/account/create" method="post">
+<form action="/members/account/accountRequest" method="post">
 
     <div class="d-flex justify-content-center">
         <div class="card custom-shadow mb-4 mt-10" style="width: 600px;">
             <div class="card-body">
-                <h5 class="mb-4 fw-bold">Super Admin 계정 신청</h5>
 
+                <h5 th:if="${role.equals('본사 관리자')}" class="mb-4 fw-bold">본사 관리자 계정 신청</h5>
+                <h5 th:if="${role.equals('호텔 관리자')}" class="mb-4 fw-bold">호텔 관리자 계정 신청</h5>
+                <h5 th:if="${role.equals('가맹점 관리자')}" class="mb-4 fw-bold">가맹점 관리자 계정 신청</h5>
                 <hr class="hrMain">
+
+                <input th:if="${role.equals('본사 관리자')}" type="hidden" name="roleStr" value="center">
+                <input th:if="${role.equals('호텔 관리자')}" type="hidden" name="roleStr" value="hotel">
+                <input th:if="${role.equals('가맹점 관리자')}" type="hidden" name="roleStr" value="store">
+                <input th:if="${role.equals('호텔 관리자')}" type="hidden" name="parentId" th:value="${parentId}">
+                <input th:if="${role.equals('가맹점 관리자')}" type="hidden" name="parentId" th:value="${parentId}">
 
                 <div class="row mb-4 mt-5">
                     <label class="col-sm-3 col-form-label form-label">이름</label>

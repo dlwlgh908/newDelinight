@@ -25,6 +25,8 @@ public class GlobalModelAttribute {
         String uri = request.getRequestURI();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        try {
+
 
         if (uri.startsWith("/members")) {
 
@@ -55,6 +57,14 @@ public class GlobalModelAttribute {
                 Integer alertCount = 0;//수정할 예정
                 model.addAttribute("alertCount", alertCount);
             }
+        }
+
+        }
+        catch (Exception e){
+
+            throw new RuntimeException("로그인 필요");
+
+
         }
     }
 }

@@ -38,7 +38,7 @@ public class BranchController {
         return "members/branch/create";
     }
 
-    @GetMapping("/listA")
+    @GetMapping("/list")
     public String listView(Model model) {
         List<BranchDTO> branchDTOList =
             branchService.list();

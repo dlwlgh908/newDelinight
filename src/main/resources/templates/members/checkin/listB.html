@@ -2,7 +2,7 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layoutDesktop/layout}"
+      layout:decorate="~{layout/desktop/layout}"
 >
 <head>
     <title>델리나잇</title>
@@ -39,13 +39,13 @@
                     <!--네비게이션-->
                     <ul class="nav nav-pills mb-4">
                         <li class="nav-item">
-                            <a class="nav-link" th:classappend="${checkinstatus == null or checkinstatus == ''} ? 'active'" aria-current="page" th:href="@{/members/checkin/listB(checkinstatus=null)}">전체 방 목록</a>
+                            <a class="nav-link" th:classappend="${checkinstatus == null or checkinstatus == ''} ? 'active'" aria-current="page" th:href="@{/members/checkin/list(checkinstatus=null)}">전체 방 목록</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:classappend="${checkinstatus == 'VACANCY'} ? 'active'" th:href="@{/members/checkin/listB(checkinstatus='VACANCY')}">빈 방</a>
+                            <a class="nav-link" th:classappend="${checkinstatus == 'VACANCY'} ? 'active'" th:href="@{/members/checkin/list(checkinstatus='VACANCY')}">빈 방</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:classappend="${checkinstatus == 'CHECKIN'} ? 'active'"  th:href="@{/members/checkin/listB(checkinstatus='CHECKIN')}">투숙중인 방</a>
+                            <a class="nav-link" th:classappend="${checkinstatus == 'CHECKIN'} ? 'active'"  th:href="@{/members/checkin/list(checkinstatus='CHECKIN')}">투숙중인 방</a>
                         </li>
                     </ul>
 
@@ -457,7 +457,7 @@
 
     <!--푸터 절대 수정 금지!!!!-->
     <!--푸터-->
-    <div th:replace="~{fragments/adminfooter::adminFooter}"></div>
+    <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
 </div>
 </body>
 </html>

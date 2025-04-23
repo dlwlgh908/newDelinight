@@ -23,6 +23,7 @@ public interface CenterService {
 
     public CenterDTO read(String email);
 
+    public Long findCenter(String email);
 
 
 

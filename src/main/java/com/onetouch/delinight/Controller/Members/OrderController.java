@@ -34,7 +34,7 @@ public class OrderController {
         model.addAttribute("member", memberDetails.getMembersEntity());
         StoreDTO storeDTO = ordersService.findStoreByADMINEmail(email);
         model.addAttribute("storeDTO", storeDTO);
-        return "orders/list";
+        return "members/orders/list";
 
     }
 

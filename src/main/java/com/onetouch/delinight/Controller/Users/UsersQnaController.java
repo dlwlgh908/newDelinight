@@ -1,4 +1,4 @@
-package com.onetouch.delinight.Controller.Members;
+package com.onetouch.delinight.Controller.Users;
 
 import com.onetouch.delinight.DTO.QnaDTO;
 import com.onetouch.delinight.Repository.QnaRepository;
@@ -19,8 +19,8 @@ import java.security.Principal;
 @Controller
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("/qna")
-public class QnaController {
+@RequestMapping("/users/qna")
+public class UsersQnaController {
     private final QnaService qnaService;
     private final QnaRepository qnaRepository;
 
@@ -30,7 +30,7 @@ public class QnaController {
         System.out.println("qnaDTO" + qnaDTO);
         model.addAttribute("qnaDTO" ,qnaDTO);
 
-        return "/qna/register";
+        return "/users/qna/register";
     }
     //등록post
     @PostMapping("/register")
@@ -44,18 +44,18 @@ public class QnaController {
         }
         Long id = 12L;
         qnaService.register(qnaDTO,id);
-        return "redirect:/qna/list";
+        return "redirect:/users/qna/list";
     }
     //목록
     @GetMapping("/list")
     public String list(@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
-                       Model model){
+                       Model model, Principal principal){ // 로그인한 유저의 글만 보이게!
         Page<QnaDTO> qnaDTOList = qnaService.list(pageable);
         log.info(qnaDTOList.getPageable().getPageNumber());
         model.addAttribute("qnaDTOList",qnaDTOList);
         log.info(qnaDTOList.getContent());
 
-        return "/qna/list";
+        return "/users/qna/list";
     }
 
 
@@ -65,7 +65,7 @@ public class QnaController {
     public String read(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
         QnaDTO qnaDTO = qnaService.read(id);
         model.addAttribute("qnaDTO",qnaDTO);
-        return "/qna/read";
+        return "/users/qna/read";
     }
     //수정get
     @GetMapping("/update/{id}")
@@ -73,14 +73,14 @@ public class QnaController {
         log.info("수정" +id);
         QnaDTO qnaDTO = qnaService.read(id);
         model.addAttribute("qnaDTO",qnaDTO);
-        return "/qna/update";
+        return "/users/qna/update";
     }
     //수정post
     @PostMapping("/update")
     public String updatePost(QnaDTO qnaDTO){
         log.info(qnaDTO);
         qnaService.update(qnaDTO);
-        return "redirect:/qna/read?id="+qnaDTO.getId();
+        return "redirect:/users/qna/read?id="+qnaDTO.getId();
     }
     //삭제
     @PostMapping("/delete")
@@ -88,18 +88,10 @@ public class QnaController {
 
         log.info("히히아이디" + id);
         qnaService.delete(id);
-        return "redirect:/qna/list";
+        return "redirect:/users/qna/list";
     }
 
 
-
-
-
-
-    @GetMapping("/test")
-    public String test(){
-        return "/qna/test";
-    }
 
 
 

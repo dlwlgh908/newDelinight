@@ -27,18 +27,18 @@ public interface MembersRepository extends JpaRepository<MembersEntity, Long> {
     @Query("select m from MembersEntity m where m.role = 'SUPERADMIN' and m.status = :status")
     Page<MembersEntity> selectSuperAdByStatus(Status status, Pageable pageable);
 
-    @Query("select m from MembersEntity m where m.role = 'ADMIN'")
-    Page<MembersEntity> selectHotelAd(Pageable pageable);
+    @Query("select m from MembersEntity m where m.role = 'ADMIN' and m.centerEntity.id = :id")
+    Page<MembersEntity> selectHotelAd(Pageable pageable, Long id);
 
-    @Query("select m from MembersEntity m where m.role = 'STOREADMIN'")
-    Page<MembersEntity> selectStoreAd(Pageable pageable);
+    @Query("select m from MembersEntity m where m.role = 'STOREADMIN' and m.hotelEntity.id = :id")
+    Page<MembersEntity> selectStoreAd(Pageable pageable, Long id);
 
 
-    @Query("select m from MembersEntity m where m.role = 'ADMIN' and m.status=:status")
-    Page<MembersEntity> selectHotelAdByStatus(Status status, Pageable pageable);
+    @Query("select m from MembersEntity m where m.role = 'ADMIN' and m.status=:status and m.centerEntity.id =:id")
+    Page<MembersEntity> selectHotelAdByStatus(Status status, Pageable pageable, Long id);
 
-    @Query("select m from MembersEntity m where m.role = 'STOREADMIN' and m.status = :status")
-    Page<MembersEntity> selectStoreAdByStatus(Status status, Pageable pageable);
+    @Query("select m from MembersEntity m where m.role = 'STOREADMIN' and m.status = :status and m.hotelEntity.id =:id")
+    Page<MembersEntity> selectStoreAdByStatus(Status status, Pageable pageable,Long id);
 
     @Query("select m from MembersEntity m where m.email = :email")
     MembersEntity selectEmail(String email);

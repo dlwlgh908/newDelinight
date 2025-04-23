@@ -12,6 +12,8 @@ import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.MembersRepository;
+import com.onetouch.delinight.Service.CenterService;
+import com.onetouch.delinight.Service.HotelService;
 import com.onetouch.delinight.Service.MembersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,6 +33,8 @@ public class AccountController {
 
     private final MembersService membersService;
     private final MembersRepository membersRepository;
+    private final CenterService centerService;
+    private final HotelService hotelService;
 
     @GetMapping("/redirectPage")
     public  String redirectPage(){
@@ -43,12 +47,15 @@ public class AccountController {
 
         if(role.equals("super")){
             model.addAttribute("role", "본사 관리자");
+            model.addAttribute("parentId",id);
         }
         else if(role.equals("hotel")){
             model.addAttribute("role", "호텔 관리자");
+            model.addAttribute("parentId", id);
         }
         else {
             model.addAttribute("role", "가맹점 관리자");
+            model.addAttribute("parentId", id);
         }
 
         return "/members/account/common/requestForm";
@@ -59,13 +66,16 @@ public class AccountController {
         String roleStr = membersDTO.getRoleStr();
 
         if(roleStr.equals("super")){
+            membersDTO.setRole(Role.SUPERADMIN);
             membersService.create(membersDTO);
         }
         else if(roleStr.equals("hotel")){
-            membersService.hoteladcreate(membersDTO);
+            membersDTO.setRole(Role.ADMIN);
+            membersService.create(membersDTO);
         }
         else {
-            membersService.storeadcreate(membersDTO);
+            membersDTO.setRole(Role.STOREADMIN);
+            membersService.create(membersDTO);
         }
 
         return "redirect:/members/account/redirectPage";
@@ -79,16 +89,13 @@ public class AccountController {
         //로그인한 사람 롤 찾기
         //수퍼 어드민
         if(role.equals(Role.SUPERADMIN)){
-            return "redirect:/members/account/hotelAdmin/hoteladlist";
+            return "redirect:/members/account/hotelAdmin/list";
         }
         //호텔 어드민
         else if(role.equals(Role.ADMIN)){
-            return "redirect:/members/account/storeAdmin/storeadlist" ;
+            return "redirect:/members/account/storeAdmin/list" ;
         }
-        //스토어 어드민
-        else if(role.equals(Role.STOREADMIN)){
-            return "redirect:/members/store/orders/list" ;
-        }
+
         else{ // 시스템 어드민일 경우
             return "redirect:/members/account/superAdmin/list";
         }
@@ -101,10 +108,10 @@ public class AccountController {
 
         //수퍼 어드민
         if(role.equals(Role.SUPERADMIN)){
-            return "redirect:/members/account/";
+            return "redirect:/members/center/read";
         }
         else{ // 시스템 어드민일 경우
-            return "redirect:/members/account/";
+            return "redirect:/members/center/list";
         }
     }
 
@@ -146,42 +153,6 @@ public class AccountController {
         return "/members/account/common/update";
     }
 
-    @GetMapping("/superAdmin/creaete")
-    public String superAdminAccountCreate() {
-        return "members/account/superAdmin/create";
-    }
-
-    @PostMapping("/superAdmin/create")
-    public String superAdminAccountCreatePost(MembersDTO membersDTO) {
-        membersService.create(membersDTO);
-
-        return "redirect:/members/account/redirectPage";
-    }
-
-    @GetMapping("/hotelAdmin/create")
-    public String hotelAdminAccountCreate() {
-        return "members/account/hotelAdmin/create";
-    }
-
-    @PostMapping("/hotelAdmin/create")
-    public String hotelAdminAccountCreatePost(MembersDTO membersDTO) {
-        membersService.hoteladcreate(membersDTO);
-
-        return "redirect:/members/account/redirectPage";
-    }
-
-    @GetMapping("/storeAdmin/create")
-    public String storeAdminAccountCreate() {
-        return "members/account/storeAdmin/create";
-    }
-
-    @PostMapping("/storeAdmin/create")
-    public String storeAdminAccountCreatePost(MembersDTO membersDTO) {
-        membersService.storeadcreate(membersDTO);
-
-        return "redirect:/members/account/redirectPage";
-    }
-
 
 //    @GetMapping("/listB")
 //    public String list(Model model) {
@@ -199,7 +170,7 @@ public class AccountController {
 
     @GetMapping("/superAdmin/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-                                    @RequestParam(value = "status", required = false) String status) {
+                                    @RequestParam(value = "status", required = false) String status, Principal principal) {
         log.info("list페이지 진입");
 
         Status status1;
@@ -228,12 +199,14 @@ public class AccountController {
         return "members/account/superAdmin/list";
     }
 
-    @GetMapping("/hoteladlist")
+    @GetMapping("/hotelAdmin/list")
     public String hoteladlist(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-                              @RequestParam(value = "status", required = false) String status) {
+                              @RequestParam(value = "status", required = false) String status, Principal principal) {
         log.info("list페이지 진입");
 
         Status status1;
+        Long parentId = centerService.findCenter(principal.getName());
+
 
 
         Page<MembersEntity> paging = null;
@@ -241,61 +214,64 @@ public class AccountController {
         if (status != null && !status.isEmpty()) {
             if (status.equals("WAIT")) {
                 status1 = Status.WAIT;
-                paging =membersService.findHotelAd(status1, page);
+                paging =membersService.findAccount(status1, page, principal.getName(), "hotel");
             } else if (status.equals("VALID")) {
 
                 status1 = Status.VALID;
-                paging = membersService.findHotelAd(status1, page);
+                paging = membersService.findAccount(status1, page, principal.getName(), "hotel");
             } else if (status.equals("NOTVALID")) {
                 status1 = Status.NOTVALID;
-                paging = membersService.findHotelAd(status1, page);
+                paging = membersService.findAccount(status1, page, principal.getName(), "hotel");
             }
         } else {
-            paging = membersService.getListHotel(page);
+            paging = membersService.getListHotel(page, principal.getName());
 
         }
+         model.addAttribute("parentId", parentId);
         model.addAttribute("paging", paging);
         model.addAttribute("status", status);
 
 
-        return "members/hoteladlist";
+        return "members/account/hotelAdmin/list";
     }
 
-    @GetMapping("/storeadlist")
+    @GetMapping("/storeAdmin/list")
     public String storeadlist(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-                              @RequestParam(value = "status", required = false) String status) {
+                              @RequestParam(value = "status", required = false) String status, Principal principal) {
 
 
         Status status1;
 
+        Long parentId = hotelService.findHotelByEmail( principal.getName());
+
 
         Page<MembersEntity> paging = null;
 
         if (status != null && !status.isEmpty()) {
             if (status.equals("WAIT")) {
                 status1 = Status.WAIT;
-                paging =membersService.findHotelAd(status1, page);
+                paging =membersService.findAccount(status1, page, principal.getName(), "store");
             } else if (status.equals("VALID")) {
                 status1 = Status.VALID;
-                paging = membersService.findHotelAd(status1, page);
+                paging = membersService.findAccount(status1, page, principal.getName(), "store");
             } else if (status.equals("NOTVALID")) {
                 status1 = Status.NOTVALID;
-                paging = membersService.findHotelAd(status1, page);
+                paging = membersService.findAccount(status1, page, principal.getName(), "store");
             }
         } else {
-            paging = membersService.getListStore(page);
+            paging = membersService.getListStore(page, principal.getName());
 
         }
         model.addAttribute("paging", paging);
         model.addAttribute("status", status);
+        model.addAttribute("parentId", parentId);
 
-
-        return "members/storeadlist";
+        return "members/account/storeAdmin/list";
     }
 
 
     @GetMapping("/login")
-    public String adminloginGet(@RequestParam(value = "error", required = false) String error, Model model) {
+    public String login(@RequestParam(value = "error", required = false) String error, Model model) {
 
         if ("bad_credentials".equals(error)) {
             model.addAttribute("passwordError", "비밀번호가 틀립니다.");
@@ -306,9 +282,9 @@ public class AccountController {
         return "/members/account/common/login";
     }
 
-    @GetMapping("/adminlogout-success")
-    public String adminlogout(){
-        return "/members/adminlogout";
+    @GetMapping("/logout-success")
+    public String logout(){
+        return "/members/account/common/logout";
     }
 
 }

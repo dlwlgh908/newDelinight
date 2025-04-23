@@ -22,20 +22,16 @@ public interface MembersService {
 
     public void create(MembersDTO membersDTO);
     public MembersDTO update(MembersDTO membersDTO);
-
-    public void hoteladcreate(MembersDTO membersDTO);
-    public void storeadcreate(MembersDTO membersDTO);
-
     public Page<MembersEntity> getList(int page);
-    public Page<MembersEntity> getListHotel(int page);
-    public Page<MembersEntity> getListStore(int page);
+    public Page<MembersEntity> getListHotel(int page, String email);
+    public Page<MembersEntity> getListStore(int page, String email);
     public Page<MembersEntity> getListBystatus(Status status, int page);
 
     public List<MembersDTO> findAll();
 
 //    public List<MembersDTO> findSuper();
 
-    Page<MembersEntity> findHotelAd(Status status, int page);
+    Page<MembersEntity> findAccount(Status status, int page, String email, String sep);
 
 
     //public List<MembersDTO> findSuper();

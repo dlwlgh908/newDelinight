@@ -10,7 +10,11 @@ package com.onetouch.delinight.Service;
 import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.Entity.CenterEntity;
+import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
+import com.onetouch.delinight.Repository.CenterRepository;
+import com.onetouch.delinight.Repository.HotelRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +44,9 @@ public class MembersServiceImpl implements MembersService{
    private final PasswordEncoder passwordEncoder;
    private final StoreService storeService;
    private final HotelService hotelService;
+   private final CenterRepository centerRepository;
+   private final HotelRepository hotelRepository;
+   private final CenterService centerService;
 
     @Override
     public MembersDTO findByEmail(String email) {
@@ -63,10 +70,18 @@ public class MembersServiceImpl implements MembersService{
         MembersEntity membersEntity =
             modelMapper.map(membersDTO, MembersEntity.class);
         String password = passwordEncoder.encode(membersDTO.getPassword());
-        membersEntity.setRole(Role.SUPERADMIN);
+        membersEntity.setRole(membersDTO.getRole());
         membersEntity.setStatus(Status.WAIT);
         membersEntity.setPassword(password);
 
+        if(membersDTO.getRole().equals(Role.ADMIN)){
+            Optional<CenterEntity> optionalCenterEntity = centerRepository.findById(membersDTO.getParentId());
+            optionalCenterEntity.ifPresent(membersEntity::setCenterEntity);
+        }
+        if(membersDTO.getRole().equals(Role.STOREADMIN)){
+            Optional<HotelEntity> optionalHotelEntity = hotelRepository.findById(membersDTO.getParentId());
+            optionalHotelEntity.ifPresent(membersEntity::setHotelEntity);
+        }
             membersRepository.save(membersEntity);
 
 
@@ -84,29 +99,6 @@ public class MembersServiceImpl implements MembersService{
 
         }
         return null;
-    }
-
-    @Override
-    public void hoteladcreate(MembersDTO membersDTO) {
-        MembersEntity membersEntity =
-                modelMapper.map(membersDTO, MembersEntity.class);
-
-
-        membersEntity.setPassword(passwordEncoder.encode(membersEntity.getPassword()));
-        membersEntity.setRole(Role.ADMIN);
-        membersEntity.setStatus(Status.WAIT);
-
-        membersRepository.save(membersEntity);
-    }
-
-    @Override
-    public void storeadcreate(MembersDTO membersDTO) {
-        MembersEntity membersEntity =
-                modelMapper.map(membersDTO, MembersEntity.class);
-        membersEntity.setRole(Role.STOREADMIN);
-        membersEntity.setStatus(Status.WAIT);
-
-        membersRepository.save(membersEntity);
     }
 
     @Override
@@ -144,13 +136,26 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
-    public Page<MembersEntity> findHotelAd(Status status, int page) {
+    public Page<MembersEntity> findAccount(Status status, int page, String email, String sep) {
 
+        if(sep.equals("hotel")){
 
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.membersRepository.selectHotelAdByStatus(status,pageable);
+            Long id = centerService.findCenter(email);
+            List<Sort.Order> sorts = new ArrayList<>();
+            sorts.add(Sort.Order.desc("id"));
+            Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+            return membersRepository.selectHotelAdByStatus(status,pageable, id);
+
+        }
+        else {
+            Long id = hotelService.findHotelByEmail(email);
+            List<Sort.Order> sorts = new ArrayList<>();
+            sorts.add(Sort.Order.desc("id"));
+            Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+            return membersRepository.selectStoreAdByStatus(status,pageable, id);
+
+        }
+
 
     }
 
@@ -176,19 +181,21 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
-    public Page<MembersEntity> getListHotel(int page) {
+    public Page<MembersEntity> getListHotel(int page, String email) {
+        Long id = centerService.findCenter(email);
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("id"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.membersRepository.selectHotelAd(pageable);
+        return this.membersRepository.selectHotelAd(pageable,id);
     }
 
     @Override
-    public Page<MembersEntity> getListStore(int page) {
+    public Page<MembersEntity> getListStore(int page, String email) {
+        Long id = hotelService.findHotelByEmail(email);
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("id"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.membersRepository.selectStoreAd(pageable);
+        return this.membersRepository.selectStoreAd(pageable, id);
     }
 
     @Override
@@ -242,8 +249,8 @@ public class MembersServiceImpl implements MembersService{
             return Map.of(Role.ADMIN, id);
         }
 
-
-        return Map.of(null, 0L);
+        Long id = centerService.findCenter(email);
+        return Map.of(Role.SUPERADMIN, id);
     }
 
 

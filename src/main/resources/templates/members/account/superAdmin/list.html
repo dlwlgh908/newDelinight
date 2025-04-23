@@ -155,6 +155,7 @@
                     <!--네비게이션-->
                     <div class="btnWrap"
                          style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+
                         <ul class="nav nav-pills mb-4" style="margin-right: auto;">
                             <li class="nav-item">
                                 <a class="nav-link" th:classappend="${status == null or status == ''} ? 'active'"
@@ -314,13 +315,27 @@
 
         $(".copyBtn").on("click", function () {
             let fullLink = "http://localhost:8080/members/account/accountRequest?role=super";
-
             let tempInput = $("<input>");
             $("body").append(tempInput);
             tempInput.val(fullLink).select();
             let copy = document.execCommand('copy');
             if (copy) {
+                let btn = $(this);
+                let tooltip = btn.find(".cp-tooltip");
+                let clipboardIcon = btn.find(".cp-clipboard");
+                let checkIcon = btn.find(".cp-check-mark");
 
+                // 상태: Copied로 전환
+                tooltip.text("Copied!");
+                clipboardIcon.hide();
+                checkIcon.show();
+
+                // 2초 후 다시 원상복귀
+                setTimeout(function () {
+                    tooltip.text("Copy to clipboard");
+                    clipboardIcon.show();
+                    checkIcon.hide();
+                }, 1000); // 2초 (2000ms)
             }
             tempInput.remove();
 

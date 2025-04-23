@@ -44,7 +44,7 @@ public class HotelController {
         return "members/hotel/create";
     }
 
-    @GetMapping("/listA")
+    @GetMapping("/list")
     public String listView(Model model) {
         List<HotelDTO> hotelDTOList =
                 hotelService.list();

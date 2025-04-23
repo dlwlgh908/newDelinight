@@ -25,7 +25,7 @@ public class CartController {
     public String list(){
 
 
-        return "roomservice/cart/list";
+        return "users/cart/list";
     }
 
 

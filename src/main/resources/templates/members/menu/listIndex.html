@@ -2,7 +2,7 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layoutDesktop/layout}"
+      layout:decorate="~{layout/desktop/layout}"
 >
     <head>
         <title>델리나잇</title>
@@ -18,16 +18,23 @@
                 <!--내용 넣는 곳-->
                 <div class="container-fluid px-4">
                     <!--페이지 이름-->
-                    <h1 class="mt-4">메뉴목록</h1>
+                    <h3 class="mt-4">등록된 메뉴 목록</h3>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">큰페이지 〉 중간페이지 〉 작은페이지</li>
+                    </ol>
                     <!--텍스트 박스-->
                     <div class="card mb-4">
                        <div class="card-body">
+                           <div class="row" style="justify-content: end">
+                           <a href="/members/menu/register" class="btn btn-primary" style="margin-bottom: -35px; width: 90px; height:40px; margin-right: 10px">추가하기</a>
+                           </div>
                            <table class="table table-striped">
                                <thead>
                                <th>메뉴번호</th>
                                <th>메뉴</th>
                                <th>가격</th>
                                <th>판매여부</th>
+
                                </thead>
                                <th:block th:each="menuDTO : ${menuDTOList.content}">
                                    <tr>
@@ -87,7 +94,7 @@
 
             <!--푸터 절대 수정 금지!!!!-->
             <!--푸터-->
-            <div th:replace="~{fragments/adminfooter::adminFooter}"></div>
+            <div th:replace="~{fragmentes/desktop/adminfooter::adminFooter}"></div>
         </div>
     </body>
 </html>

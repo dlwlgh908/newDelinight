@@ -28,17 +28,17 @@ public class RoomController {
     @GetMapping("/create")
     public String createView() {
 
-        return "room/create";
+        return "members/room/create";
     }
 
     @PostMapping("/create")
     public String createProc(RoomDTO roomDTO) {
 
         roomService.create(roomDTO);
-        return "room/create";
+        return "redirect:/members/room/list";
     }
 
-    @GetMapping("/listB")
+    @GetMapping("/list")
     public String listView(Model model) {
         List<RoomDTO> roomDTOList =
             roomService.list();
