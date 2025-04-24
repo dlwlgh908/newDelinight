@@ -47,6 +47,8 @@ public class CartServiceImpl implements CartService{
     private final PaymentRepository paymentRepository;
     private final ImageRepository imageRepository;
     private final CheckInRepository checkInRepository;
+    private final UsersRepository usersRepository;
+    private final GuestRepository guestRepository;
 
     @Override
     public Long cartToOrder(Long cartNum) {
@@ -85,8 +87,8 @@ public class CartServiceImpl implements CartService{
             savedOrder.setOrdersStatus(OrdersStatus.PENDING);
             savedOrder.setTotalPrice(totalPrice);
             savedOrder.setPendingTime(LocalDateTime.now());
+            savedOrder.setPaymentEntity(savedPaymentEntity);
             savedOrder = ordersRepository.save(savedOrder);
-            log.info(savedOrder);
             ordersEntityList.add(savedOrder);
         }
 
@@ -144,7 +146,13 @@ public class CartServiceImpl implements CartService{
     @Override
     public Long cartCheck(String email) {
 
+        log.info(email);
         CartEntity cartEntity = cartRepository.findByUsersEntity_Email(email);
+        log.info(cartEntity);
+        if(cartEntity==null){
+            cartEntity = cartRepository.findByGuestEntity_Phone(email);
+            log.info(cartEntity+"2222");
+        }
         return cartEntity.getId();
     }
 
@@ -152,7 +160,6 @@ public class CartServiceImpl implements CartService{
     public List<CartItemDTO> list(Long cartNum) {
         List<CartItemEntity> entities = cartItemRepository.findByCartEntity_Id(cartNum);
 
-        log.info(entities);
         List<CartItemDTO> cartItemDTOList = entities.stream().map(data->modelMapper.map(data,CartItemDTO.class)
                 .setCartDTO(modelMapper.map(data.getCartEntity(), CartDTO.class))
                 .setMenuDTO(modelMapper.map(data.getMenuEntity(),MenuDTO.class).setImgUrl(imageRepository.findByMenuEntity_Id(data.getMenuEntity().getId()).get().getFullUrl()).setStoreDTO(modelMapper.map(data.getMenuEntity().getStoreEntity(), StoreDTO.class))
@@ -160,6 +167,35 @@ public class CartServiceImpl implements CartService{
 
         log.info(cartItemDTOList);
         return cartItemDTOList;
+    }
+
+    @Override
+    public void makeCart(int sep, Long id) {
+        CartEntity cartEntity = new CartEntity();
+        if(sep==1){
+            cartEntity.setUsersEntity(usersRepository.findById(id).get());
+        }
+        else {
+            cartEntity.setGuestEntity(guestRepository.findById(id).get());
+        }
+        cartRepository.save(cartEntity);
+    }
+
+    @Override
+    public void deleteCart(int sep, Long id) {
+
+        if(sep == 1) { // users일 경우
+
+            log.info("sep1에 접근");
+            CartEntity cartEntity = cartRepository.findByUsersEntity_Id(id);
+            cartRepository.deleteById(cartEntity.getId());
+        }
+        else {
+            log.info("sep2에 접근");
+            CartEntity cartEntity = cartRepository.findByGuestEntity_Id(id);
+            cartRepository.deleteById(cartEntity.getId());
+        }
+
     }
 
     @Override

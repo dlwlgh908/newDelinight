@@ -47,6 +47,10 @@ public class OrdersEntity {
     @JoinColumn(name = "checkin_id")
     private CheckInEntity checkInEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "log_id")
+    private CheckOutLogEntity checkOutLogEntity;
+
     private LocalDateTime pendingTime;
     private LocalDateTime awaitingTime;
     private LocalDateTime preparingTime;

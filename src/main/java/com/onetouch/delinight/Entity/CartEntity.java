@@ -29,6 +29,10 @@ public class CartEntity {
     @JoinColumn(name = "user_id")
     private UsersEntity usersEntity;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="guest_id")
+    private GuestEntity guestEntity;
+
 
     private Long totalPrice;
 

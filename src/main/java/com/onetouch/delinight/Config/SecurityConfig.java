@@ -98,10 +98,10 @@ public class SecurityConfig {
 
                 .formLogin(formLogin -> formLogin
                         .loginPage("/users/login")
-                        .loginProcessingUrl("/guest/login")
+                        .loginProcessingUrl("/guests/login")
                         .defaultSuccessUrl("/users/home")
                         .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
-                        .usernameParameter("reservationNum")
+                        .usernameParameter("phone")
                 )
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
