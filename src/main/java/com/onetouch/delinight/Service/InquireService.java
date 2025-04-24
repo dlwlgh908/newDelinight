@@ -25,6 +25,10 @@ public interface InquireService{
     public List<InquireDTO> inquireListByUsers (Long usersId);
 
 
+    public Page<InquireDTO> inquireListTEST(Pageable pageable,String email);
+
+
+
     //상세보기
     public InquireDTO read(Long id);
     //수정
