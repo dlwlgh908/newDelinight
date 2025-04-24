@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CustomPaymentRepository {
 
-     List<PaymentDTO> findPaymentByCriteria(String priceMonth, String type, Long storeId, Boolean isPaid);
+     List<PaymentDTO> findPaymentByCriteria(String priceMonth, Long storeId, Boolean isPaid, Long memberId);
 
 
 }

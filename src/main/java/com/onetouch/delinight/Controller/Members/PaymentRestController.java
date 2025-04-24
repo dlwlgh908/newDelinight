@@ -2,18 +2,13 @@ package com.onetouch.delinight.Controller.Members;
 
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.DTO.PaymentDTO;
-import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Service.MembersService;
 import com.onetouch.delinight.Service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -26,35 +21,73 @@ public class PaymentRestController {
 
     private final PaymentService paymentService;
     private final MembersService membersService;
-    private final ModelMapper modelMapper;
 
-    @GetMapping("/totalPrice")
-    public ResponseEntity<List<PaymentDTO>> paymentTotalPrice(@RequestParam(value = "priceMonth", required = false) String priceMonth, @RequestParam(value = "type", required = false) String type, @RequestParam(value = "storeId", required = false) Long storeId, @RequestParam(value = "isPaid", required = false) Boolean isPaid, Principal principal) {
-
-        try {
-            // 1. 현재 로그인한 사용자의 정보 가져오기
-            String admin = principal.getName();
-            // 2. 이메일로 회원 정보 조회
-            MembersDTO membersDTO = membersService.findByEmail(admin);
-            log.info("membersDTO: " + membersDTO);
-            // 3. 서비스 메서드 호출: 가격 월, 타입, 매장 ID, 결제 상태로 필터링된 결제 정보 조회
-            List<PaymentDTO> paymentDTOList = paymentService.paymentByCriteria(priceMonth, null, storeId, isPaid, modelMapper.map(membersDTO, MembersEntity.class));
-            // 4. 응답으로 반환
-            if (paymentDTOList.isEmpty()) {
-                log.info("paymentDTOList is empty");
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 조회된 데이터가 없으면 204 No Content 반환
-            }
-            return new ResponseEntity<>(paymentDTOList, HttpStatus.OK); // 200 OK와 함께 데이터 반환
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            log.info("sajkdhaklsdfghaslkfdaskljdgaslkgdaslgdasldgas");
-            // 3. 예외 처리: 예외가 발생하면 500 Internal Server Error 반환
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+    @GetMapping("/criteria")
+    public List<PaymentDTO> paymentCriteria(
+            @RequestParam(required = false) String priceMonth,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Long storeId,
+            @RequestParam(required = false) Boolean isPaid,
+            @RequestParam Long memberId){
+            // 1. 서비스 메서드 호출후 결제 내역을 조회
+            List<PaymentDTO> paymentDTOList = paymentService.paymentByCriteria(priceMonth, type, storeId, isPaid, memberId);
+            // 2. 조회된 결제 내역을 반환
+            return paymentDTOList;
     }
 
+    @PostMapping("/process")
+    public List<PaymentDTO> processPayments(@RequestBody List<PaymentDTO> paymentDTOList) {
+        // 1. 서비스 호출 후 결제처리 된 결제 내역처리
+        List<PaymentDTO> processedPayment = paymentService.processPayments(paymentDTOList);
+        // 2. 처리된 결제 내역 반환
+        return processedPayment;
+    }
 
+    @GetMapping("/totalPrice")
+    public ResponseEntity<?> paymentTotalPrice(
+            @RequestParam(value = "priceMonth", required = false) String priceMonth,
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "storeId", required = false) Long storeId,
+            @RequestParam(value = "isPaid", required = false) Boolean isPaid,
+            @RequestParam(value = "download", required = false, defaultValue = "false") Boolean download,
+            Principal principal
+    ){
+
+        log.info("priceMonth: {}, type: {}, storeId: {}, isPaid: {}, download: {}, principal: {}", priceMonth, type, storeId, isPaid, download, principal);
+
+         try {
+             // 1. 현재 로그인한 사용자 정보 가져오기
+             String admin = principal.getName();
+
+             // 2. 이메일로 회원 정보 조회
+             MembersDTO membersDTO = membersService.findByEmail(admin);
+             Long memberId = membersDTO.getId();
+             log.info("회원 정보 : {}", membersDTO);
+
+             // 3. 서비스 호출 : 가격 월, 타입, 매장 ID, 결제 상태로 필터링된 결제 정보 조회
+             List<PaymentDTO> paymentDTOList = paymentService.paymentByCriteria(priceMonth, type, storeId, isPaid, memberId);
+
+             // 4. 조회된 데이터가 없다면
+             if (paymentDTOList.isEmpty()) {
+                 log.info("조회된 데이터가 없습니다.");
+                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+             }
+
+             // 후처리 된 결제 내역
+             List<PaymentDTO> processedPayment = paymentService.processPayments(paymentDTOList);
+             log.info("결제 내역 후처리 완료");
+
+             // 후처리 된 결제 내역 반환
+             return new ResponseEntity<>(processedPayment, HttpStatus.OK);
+
+         }catch (Exception e){
+
+            log.info("결제 내역 조회 중 오류 발생");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+         }
+
+    }
 
 
 }
