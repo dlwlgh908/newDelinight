@@ -8,6 +8,7 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.CartItemDTO;
+import com.onetouch.delinight.Entity.GuestEntity;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,9 @@ public interface CartService {
     public Long cartCheck(String email);
 
     public List<CartItemDTO> list(Long cartNum);
+    public void makeCart(int sep, Long id);
+    public void deleteCart(int sep, Long cartNum);
+
     public Integer add(Long cartNum, Long menuNum);
     public String clear(Long cartNum);
 
