@@ -230,6 +230,14 @@ public class CheckInServiceImpl implements CheckInService{
     }
 
     @Override
+    public CheckInDTO findCheckInByEmail(String email) {
+        CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+        CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class);
+
+        return checkInDTO;
+    }
+
+    @Override
     public List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("id"));

@@ -28,6 +28,8 @@ public interface CheckInService {
 
     public List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus);
 
+    public CheckInDTO findCheckInByEmail(String email);
+
 
 
 

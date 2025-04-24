@@ -182,6 +182,13 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
     }
 
     @Override
+    public UsersDTO findUsersByEmail(String email) {
+        UsersEntity usersEntity = usersRepository.findByEmail(email);
+        UsersDTO usersDTO = modelMapper.map(usersEntity,UsersDTO.class);
+        return usersDTO;
+    }
+
+    @Override
     public void userDelete(String email) {
         try {
             usersRepository.deleteByEmail(email);

@@ -17,10 +17,13 @@ import java.util.List;
 
 public interface InquireService{
     //문의사항 등록
-    public InquireDTO register(InquireDTO inquireDTO,Long id);
+    public InquireDTO register(InquireDTO inquireDTO,String email);
+
     //목록
     public Page<InquireDTO> inquireList(Pageable pageable,String email);
     public List<InquireDTO> inquireList(Long hotelId);
+    public List<InquireDTO> inquireListByUsers (Long usersId);
+
 
     //상세보기
     public InquireDTO read(Long id);
