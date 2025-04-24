@@ -122,4 +122,16 @@ public class StoreServiceImpl implements StoreService{
             return null;
         }
     }
+
+    @Override
+    public List<StoreDTO> storeList(String email) {
+        List<StoreEntity> storeEntityList =
+            storeRepository.selectallByHotelAdmin(email);
+        List<StoreDTO> storeDTOList =
+                storeEntityList.stream().toList().stream().map(
+                        storeEntity -> modelMapper.map(storeEntity, StoreDTO.class)
+                ).collect(Collectors.toList());
+
+        return storeDTOList;
+    }
 }

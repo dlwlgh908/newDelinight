@@ -5,6 +5,14 @@
       layout:decorate="~{layout/desktop/layout}"
 >
 <head>
+    <style>
+        .modal-body{
+            height: 400px;
+            overflow:scroll;
+
+        }
+
+    </style>
     <title>델리나잇</title>
 
 
@@ -38,6 +46,8 @@
                         <th scope="col">#</th>
                         <th scope="col">이름</th>
                         <th scope="col">설명</th>
+                        <th scope="col">관리자</th>
+                        <th scope="col">호텔 삭제</th>
                         </thead>
 
                         <tbody>
@@ -49,7 +59,18 @@
                                 </a>
                                 </td>
                                 <td th:text="${list.content}"></td>
-                                <td><button class="btn btn-primary" id="delBtn"  th:value="${list.id}">삭제</button></td>
+                                <td th:if="${list.membersDTO!=null}" th:text="${list.membersDTO.name}"></td>
+                                <td th:if="${list.membersDTO==null}">
+
+
+                                    <button type="button" class="addMembers btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-hotelid="${list.getId()}">
+                                        관리자 추가하기
+                                    </button>
+
+
+
+                                </td>
+                                <td><button class="btn btn-primary" id="delBtn"  th:value="${list.id}">삭제하기</button></td>
 
 
 
@@ -63,6 +84,38 @@
                         </tbody>
 
                     </table>
+
+                    <!-- Button trigger modal -->
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">관리자 추가하기</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <table>
+                                        <thead>
+                                        <th>#</th>
+                                        <th>이름</th>
+                                        <th>이메일</th>
+                                        <th>추가하기</th>
+                                        </thead>
+                                        <tbody class="resultSpace">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -72,6 +125,53 @@
 
     <!--스크립트 시작 -->
     <script>
+        $(document).on("click",".addMembers2",function () {
+            let memberId = $(this).data("memberid")
+            let hotelId = $(".resultSpace").data("hotelid")
+            $.ajax({
+
+                url:"/hotel/rest/addMember",
+                type:"post",
+                data: {"membersId":memberId, "hotelId":hotelId},
+                success:function (){
+                    alert("멤버가 추가되었습니다.")
+                },
+                error:function (err) {
+                    console.log(err)
+                }
+
+
+            })
+
+
+
+        })
+
+
+        $(document).on("click",".addMembers",function () {
+            let hotelId = $(this).data("hotelid")
+
+            $.ajax({
+                url: "/hotel/rest/membersList",
+                type: "get",
+                success:function (result) {
+                    $(".resultSpace").empty();
+                    let str = ""
+                    result.forEach(function (resultItem) {
+                        console.log(resultItem.name)
+                        str+="<tr><td>"+resultItem.id+"</td><td>"+resultItem.name+"</td><td>"+resultItem.email+"</td><td><button class='btn-primary btn addMembers2' data-memberid='"+resultItem.id+"'>추가하기</button></td></tr>"
+                        $(".resultSpace").append(str)
+                        $(".resultSpace").attr("data-hotelid",hotelId);
+                    })
+
+
+                }
+
+
+            })
+
+        })
+
         $(function (){
             $(document).on("click", "#delBtn", function () {
 

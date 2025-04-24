@@ -93,11 +93,11 @@ public class AccountController {
         //로그인한 사람 롤 찾기
         //수퍼 어드민
         if(role.equals(Role.SUPERADMIN)){
-            return "redirect:/members/account/hoteladlist";
+            return "redirect:/members/account/hotelAdmin/list";
         }
         //호텔 어드민
         else if(role.equals(Role.ADMIN)){
-            return "redirect:/members/account/storeadlist" ;
+            return "redirect:/members/account/storeAdmin/list" ;
         }
         //스토어 어드민
         else if(role.equals(Role.STOREADMIN)){

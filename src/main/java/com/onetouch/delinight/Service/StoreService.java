@@ -28,6 +28,9 @@ public interface StoreService {
 
     public void update(StoreDTO storeDTO);
 
+    public List<StoreDTO> storeList(String email);
+
+
 
 
 }
