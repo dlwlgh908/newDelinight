@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rest")
@@ -49,10 +51,20 @@ public class MembersRestController {
 
     }
     @GetMapping("/searchMembers")
-    public ResponseEntity<MembersDTO> searchMembers(@RequestParam(name = "email") String email){
+    public ResponseEntity<MembersDTO> searchMembers(@RequestParam(name = "email") String email, Principal principal){
 
         log.info(email);
+        log.info(principal.getName());
+        log.info(principal.getName());
+        MembersDTO membersDTO1 =
+        membersService.findByEmail(principal.getName());
+
+
+
         MembersDTO membersDTO = membersService.findByEmail(email);
+
+        membersService.create(membersDTO);
+
         return ResponseEntity.ok(membersDTO);
     }
 

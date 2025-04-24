@@ -32,8 +32,7 @@ public class CartRestController {
 
     @PostMapping("/addToCart")
     public ResponseEntity<String> addToCart(Long menuNum, Principal principal) {
-        log.info("임"+principal.getName()
-        );
+        log.info("임"+principal.getName());
         Long cartId = cartService.cartCheck(principal.getName()); // 원래는 회원이면 principal로 해당 카트 찾아서 맵핑
         Integer existCartItem = cartService.add(cartId, menuNum);
         if (existCartItem == 2) {

@@ -24,13 +24,14 @@ import java.util.stream.Collectors;
 public class CheckInServiceImpl implements CheckInService{
 
     private final CheckInRepository checkInRepository;
+    private  final OrdersService ordersService;
     private final RoomRepository roomRepository;
     private final UsersRepository usersRepository;
     private final ModelMapper modelMapper;
     private final GuestRepository guestRepository;
     private final CheckOutLogRepository checkOutLogRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final CartService cartService;
 
     @Override
     public void create(RoomEntity roomEntity) {
@@ -175,11 +176,14 @@ public class CheckInServiceImpl implements CheckInService{
             guestEntity.setReservationNum(reservationNum);
             checkInRepository.save(check);
             guestRepository.save(guestEntity);
+            cartService.makeCart(2, guestEntity.getId());
 
-        } else if (checkInDTO.getUserId() != null) {
+
+        } else {
             UsersEntity usersEntity =
                     usersRepository.findById(checkInDTO.getUserId()).orElseThrow(EntityNotFoundException::new);
             check.setUsersEntity(usersEntity);
+            cartService.makeCart(1, usersEntity.getId());
 
             checkInRepository.save(check);
 
@@ -192,8 +196,16 @@ public class CheckInServiceImpl implements CheckInService{
     public void checkout(Long id) {
         CheckInEntity checkInEntity =
                 checkInRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        if(checkInEntity.getGuestEntity()!=null){
+            cartService.deleteCart(2,checkInEntity.getGuestEntity().getId());
+        }
+        else {
+            cartService.deleteCart(1,checkInEntity.getUsersEntity().getId());
+        }
 
         CheckOutLogEntity checkOutLogEntity = new CheckOutLogEntity();
+
+        ordersService.checkInToCheckOut(checkInEntity.getId(), checkOutLogEntity.getId());
 
         checkOutLogEntity.setRoomEntity(checkInEntity.getRoomEntity());
         checkOutLogEntity.setCheckinDate(checkInEntity.getCheckinDate());
@@ -232,8 +244,7 @@ public class CheckInServiceImpl implements CheckInService{
     @Override
     public CheckInDTO findCheckInByEmail(String email) {
         CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
-        CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class);
-
+        CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity.getRoomEntity().getHotelEntity(),HotelDTO.class)));
         return checkInDTO;
     }
 

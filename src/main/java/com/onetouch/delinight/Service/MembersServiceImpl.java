@@ -41,12 +41,12 @@ import java.util.stream.Collectors;
 public class MembersServiceImpl implements MembersService{
     private final MembersRepository membersRepository;
     private final ModelMapper modelMapper;
-   private final PasswordEncoder passwordEncoder;
-   private final StoreService storeService;
-   private final HotelService hotelService;
-   private final CenterRepository centerRepository;
-   private final HotelRepository hotelRepository;
-   private final CenterService centerService;
+    private final PasswordEncoder passwordEncoder;
+    private final StoreService storeService;
+    private final HotelService hotelService;
+    private final CenterRepository centerRepository;
+    private final HotelRepository hotelRepository;
+    private final CenterService centerService;
 
     @Override
     public MembersDTO findByEmail(String email) {
@@ -68,7 +68,7 @@ public class MembersServiceImpl implements MembersService{
     public void create(MembersDTO membersDTO) {
 
         MembersEntity membersEntity =
-            modelMapper.map(membersDTO, MembersEntity.class);
+                modelMapper.map(membersDTO, MembersEntity.class);
         String password = passwordEncoder.encode(membersDTO.getPassword());
         membersEntity.setRole(membersDTO.getRole());
         membersEntity.setStatus(Status.WAIT);
@@ -82,24 +82,80 @@ public class MembersServiceImpl implements MembersService{
             Optional<HotelEntity> optionalHotelEntity = hotelRepository.findById(membersDTO.getParentId());
             optionalHotelEntity.ifPresent(membersEntity::setHotelEntity);
         }
-            membersRepository.save(membersEntity);
+        membersRepository.save(membersEntity);
 
 
     }
 
     @Override
-    public MembersDTO update(MembersDTO membersDTO) {
-        Optional<MembersEntity> optionalMembersEntity
-                = membersRepository.findById(membersDTO.getId());
+    public void update(MembersDTO membersDTO) {
 
-        MembersEntity membersEntity = optionalMembersEntity.get();
-        membersEntity.setPhone(membersDTO.getPhone());
-        membersEntity.setPassword(membersDTO.getPassword());
-        if (membersDTO.getPassword() == null){
+        MembersEntity membersEntity =
+                modelMapper.map(membersDTO, MembersEntity.class);
+        MembersEntity members =
+                membersRepository.findById(membersEntity.getId()).orElseThrow(EntityNotFoundException::new);
 
-        }
-        return null;
+
+        log.info("update 진입함!!");
+        log.info("update 진입함!!");
+        log.info("update 진입함!!");
+
+        members.setPhone(membersEntity.getPhone());
+
+        log.info("정상적으로 저장됨!!");
+        log.info("정상적으로 저장됨!!");
+        log.info("정상적으로 저장됨!!");
     }
+
+    //@Override
+    //public MembersDTO update(MembersDTO membersDTO,
+    //                         String currentPasswordInput,
+    //                         String newPasswordInput,
+    //                         String confirmPasswordInput) {
+    //
+    //    Optional<MembersEntity> optionalMembersEntity
+    //            = membersRepository.findById(membersDTO.getId());
+    //
+    //    MembersEntity membersEntity = optionalMembersEntity.get();
+    //
+    //    log.info("update 진입함!!");
+    //    log.info("update 진입함!!");
+    //    log.info("update 진입함!!");
+    //
+    //    // 인풋값 null 체크
+    //    if (currentPasswordInput == null || newPasswordInput == null || confirmPasswordInput == null) {
+    //        throw new IllegalArgumentException("비밀번호를 입력해주세요.");
+    //    }
+    //    // 현재 비밀번호 확인
+    //    if (!membersEntity.getPassword().equals(currentPasswordInput)) {
+    //        throw new IllegalArgumentException("비밀번호가 틀립니다.");
+    //    }
+    //    // 비밀번호, 새 비밀번호 대조
+    //    if (!newPasswordInput.equals(confirmPasswordInput)) {
+    //        throw new IllegalArgumentException("비밀번호 확인이 틀립니다.");
+    //    }
+    //    log.info("비밀번호 유효성 검사 끝남");
+    //    log.info("비밀번호 유효성 검사 끝남");
+    //    log.info("비밀번호 유효성 검사 끝남");
+    //
+    //
+    //    membersEntity.setPhone(membersDTO.getPhone());
+    //    membersEntity.setPassword(membersDTO.getPassword());
+    //
+    //    log.info("폰번호랑 패스워드 가져옴");
+    //    log.info("폰번호랑 패스워드 가져옴");
+    //    log.info("폰번호랑 패스워드 가져옴");
+    //
+    //
+    //    // 다 되면 저장
+    //    membersEntity.setPassword(newPasswordInput);
+    //
+    //    membersRepository.save(membersEntity);
+    //    log.info("정상적으로 저장됨!!");
+    //    log.info("정상적으로 저장됨!!");
+    //    log.info("정상적으로 저장됨!!");
+    //    return null;
+    //}
 
     @Override
     public List<MembersDTO> findAll() {
@@ -210,11 +266,11 @@ public class MembersServiceImpl implements MembersService{
     public MembersDTO approve(Long id) {
 
         MembersEntity membersEntity =
-        membersRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+                membersRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         membersEntity.setStatus(Status.VALID);
 
         MembersDTO membersDTO =
-            modelMapper.map(membersEntity, MembersDTO.class);
+                modelMapper.map(membersEntity, MembersDTO.class);
         return membersDTO;
     }
 

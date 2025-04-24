@@ -30,7 +30,7 @@ public class CheckInDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate checkoutDate;
 
-    private int price;
+    private Long price;
 
     private String phone;
 
@@ -97,6 +97,13 @@ public class CheckInDTO {
         this.usersDTO = usersDTO;
         return this;
     }
+
+//    public CheckInDTO setOrderPrice(Long price) {
+//        this.price = price;
+//        return this;
+//    }
+
+
 
 
 
