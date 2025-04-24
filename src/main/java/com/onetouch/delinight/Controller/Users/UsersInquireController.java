@@ -10,6 +10,7 @@ import com.onetouch.delinight.Repository.InquireRepository;
 import com.onetouch.delinight.Repository.UsersRepository;
 import com.onetouch.delinight.Service.MembersService;
 import com.onetouch.delinight.Service.InquireService;
+import com.onetouch.delinight.Service.UsersService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,79 +32,46 @@ import java.security.Principal;
 @RequestMapping("/users/inquire")
 public class UsersInquireController {
     private final InquireService inquireService;
-    private final InquireRepository inquireRepository;
-    private final MembersService membersService;
-    private final UsersRepository usersRepository;
-    private final CheckInRepository checkInRepository;
+
+    private final UsersService usersService;
 
     //등록get
     @Transactional
     @GetMapping("/register")
     public String register(InquireDTO inquireDTO, Long roomID, Long usersId){
-        //연관 엔티티 가져오기 (체크인, 유저, 호텔)
-        CheckInEntity checkInEntity = checkInRepository.findById(roomID)
-                .orElseThrow(() -> new RuntimeException("체크인 정보를 찾을 수 없습니다."));
 
-        UsersEntity usersEntity = usersRepository.findById(usersId)
-                .orElseThrow(()-> new RuntimeException("사용자 정보 없음"));
 
-        HotelEntity hotelEntity = checkInEntity.getRoomEntity().getHotelEntity(); // CheckIn → Hotel 관계 있을 경우
-
-        // DTO → Entity 변환
-        InquireEntity inquireEntity = InquireEntity.builder()
-                .title(inquireDTO.getTitle())
-                .content(inquireDTO.getContent())
-                .checkInEntity(checkInEntity)
-                .usersEntity(usersEntity)
-                .hotelEntity(hotelEntity)
-                .build();
-
-        // 저장
-        inquireRepository.save(inquireEntity);
-
-        return "/users/inquire/register";
+        return "users/inquire/register";
     }
     //등록post
     @PostMapping("/register")
-    public String registerPost(InquireDTO inquireDTO, @RequestParam Long roomId, Principal principal){
-        if (principal == null) {
-            throw new RuntimeException("로그인한 사용자만 문의글을 등록할 수 있습니다.");
-        }
-        //로그인 사용자 Id 가져오기
-        String loginId = principal.getName();
-        UsersEntity usersEntity = usersRepository.findByName(loginId)
-                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+    public String registerPost(InquireDTO inquireDTO, Principal principal){
 
-        //Inquire등록 (roomId, userId 함께 전달)
-        inquireService.register(inquireDTO, roomId);
+        String loginId = null;
+        if (principal == null) {
+            // 익명 사용자의 경우 처리
+            System.out.println("로그인 안 됨. 익명으로 처리");
+        } else {
+            loginId = principal.getName();
+            System.out.println("로그인 사용자: " + loginId);
+        }
+        inquireService.register(inquireDTO,loginId);
         return "redirect:/users/inquire/list";
     }
     //목록
     @GetMapping("/list")
-    public String list(@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,Principal principal,
-                       Model model){
-        if (principal == null) {
-            // 로그인 안 된 경우 로그인 페이지로 보내기
-            return "redirect:/users/login";
-        }
-        //로그인한 사장님의 이메일로 Inquire리스트 가져오기
-        String email = principal.getName();
-        Page<InquireDTO> inquireDTOList = inquireService.inquireList(pageable, principal.getName());
-        if (inquireDTOList.getPageable().isPaged()){
-            log.info("현재 페이지 번호 : {} ",inquireDTOList.getPageable().getPageNumber());
-        }else {
-            log.info("페이징 정보 없음");
-        }
+    public String list(Model model,@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, Principal principal){ //usersId 파라미터로 받아서 해당 유저의 문의글만 조회
 
-        if (inquireDTOList.isEmpty()){
-            model.addAttribute("message", "등록된 Inquire가 없습니다.");
-        }
+
+        Page<InquireDTO> inquireDTOList = inquireService.inquireList(pageable,principal.getName());
+
+        log.info("list 읽어옴? : " + inquireDTOList);
+
         model.addAttribute("inquireDTOList",inquireDTOList);
-        log.info(inquireDTOList.getContent());
+        log.info("inquireDTOList 읽어옴??? : " + inquireDTOList);
 
         return "/users/inquire/list";
     }
-
 
 
     //상세보기
