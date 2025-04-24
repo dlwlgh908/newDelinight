@@ -21,7 +21,8 @@ import java.util.Map;
 public interface MembersService {
 
     public void create(MembersDTO membersDTO);
-    public MembersDTO update(MembersDTO membersDTO);
+    public void update(MembersDTO membersDTO);
+    //public MembersDTO update(MembersDTO membersDTO, String currentPasswordInput, String newPasswordInput, String confirmPasswordInput);
     public Page<MembersEntity> getList(int page);
     public Page<MembersEntity> getListHotel(int page, String email);
     public Page<MembersEntity> getListStore(int page, String email);
@@ -29,7 +30,7 @@ public interface MembersService {
 
     public List<MembersDTO> findAll();
 
-//    public List<MembersDTO> findSuper();
+    //    public List<MembersDTO> findSuper();
 
     Page<MembersEntity> findAccount(Status status, int page, String email, String sep);
 
@@ -45,6 +46,6 @@ public interface MembersService {
     public Map<Role, Long> findRoleByEmail(String email);
     public Role findOnlyRoleByEmail(String email);
 
-     public MembersDTO findByEmail(String email);
+    public MembersDTO findByEmail(String email);
 
 }

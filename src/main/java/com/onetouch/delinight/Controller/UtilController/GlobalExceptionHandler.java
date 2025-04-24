@@ -13,10 +13,15 @@ import java.io.IOException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
-    public void handleRuntimeException(RuntimeException ex, HttpServletResponse response) throws IOException{
+    public void handleRuntimeException(RuntimeException ex, HttpServletResponse response) throws IOException {
         log.error("Exception 발생 : ", ex);
-        response.sendRedirect("/members/account/login");
-    }
+        if (ex.getMessage().equals("멤버 로그인 필요")) {
+            response.sendRedirect("/members/account/login");
+        }
 
+    else if(ex.getMessage().equals("유저 로그인 필요")){
+        response.sendRedirect("/users/login");
+        }
+    }
 
 }

@@ -2,6 +2,7 @@ package com.onetouch.delinight.Controller.UtilController;
 
 import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Service.StoreService;
+import com.onetouch.delinight.Util.CustomGuestDetails;
 import com.onetouch.delinight.Util.CustomUserDetails;
 import com.onetouch.delinight.Util.MemberDetails;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
+
+import javax.naming.Name;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -51,12 +54,13 @@ public class GlobalModelAttribute {
                 }
                 catch (Exception e){
 
-                    throw new RuntimeException("로그인 필요");
+                    throw new RuntimeException("멤버 로그인 필요");
 
 
                 }
             }
         } else if (uri.startsWith("/users")) {
+            try {
             if(uri.startsWith("/users/login")){}
             if(uri.startsWith("/users/logout")){}
             if(uri.startsWith("/users/welcome")){}
@@ -65,6 +69,16 @@ public class GlobalModelAttribute {
                 model.addAttribute("data", name);
                 Integer alertCount = 0;//수정할 예정
                 model.addAttribute("alertCount", alertCount);
+            }
+            else if (principal instanceof CustomGuestDetails customGuestDetails){
+                String phone = customGuestDetails.getUsername();
+                model.addAttribute("data", phone);
+                Integer alertCount = 0;
+                model.addAttribute("alertCount", alertCount);
+            }
+            }
+            catch (Exception e){
+                throw  new RuntimeException("게스트 로그인 필요");
             }
         }
 

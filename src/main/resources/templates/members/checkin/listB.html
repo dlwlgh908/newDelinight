@@ -150,7 +150,14 @@
                                     </th:block>
                                 </td>
                                 <td>
+                                    <!--결제 금액 들어올 자리-->
+                                    <th:block th:if="${list.price == null}">
+                                        <span>null</span>
+                                    </th:block>
 
+                                    <th:block th:if="${list.price != null}">
+                                        <span th:text="${list.price}"></span>
+                                    </th:block>
                                 </td>
                                 <td>
                                     <th:block th:if="${list.checkInStatus.name() == 'CHECKIN'}">

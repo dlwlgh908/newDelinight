@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 @Log4j2
-public class StoreServiceImpl implements StoreService{
+public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
     private final ModelMapper modelMapper;
@@ -50,14 +50,15 @@ public class StoreServiceImpl implements StoreService{
         return storeEntity.getId();
 
     }
+
     @Override
     public void create(StoreDTO storeDTO) {
         StoreEntity storeEntity =
-            modelMapper.map(storeDTO, StoreEntity.class);
+                modelMapper.map(storeDTO, StoreEntity.class);
         HotelEntity hotelEntity =
-            hotelRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+                hotelRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
         MembersEntity membersEntity =
-            membersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+                membersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
 
         storeEntity.setHotelEntity(hotelEntity);
         storeEntity.setMembersEntity(membersEntity);
@@ -70,9 +71,19 @@ public class StoreServiceImpl implements StoreService{
     @Override
     public List<StoreDTO> list(String email) {
         CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
-        Long hotelId = checkInEntity.getRoomEntity().getHotelEntity().getId();
+        CheckInEntity checkInEntity1 = checkInRepository.findByGuestEntity_Phone(email);
+        Long hotelId= 0L;
+        if (checkInEntity != null) {
+
+            hotelId = checkInEntity.getRoomEntity().getHotelEntity().getId();
+
+        } else {
+            hotelId = checkInEntity1.getRoomEntity().getHotelEntity().getId();
+
+
+        }
         List<StoreEntity> storeEntityList = storeRepository.findByHotelEntity_Id(hotelId);
-        List<StoreDTO> storeDTOList = storeEntityList.stream().map(data->modelMapper.map(
+        List<StoreDTO> storeDTOList = storeEntityList.stream().map(data -> modelMapper.map(
                 data, StoreDTO.class).setImgUrl(imageRepository.findByStoreEntity_Id(data.getId()).get().getFullUrl())).toList();
 
         return storeDTOList;
@@ -81,11 +92,11 @@ public class StoreServiceImpl implements StoreService{
     @Override
     public List<StoreDTO> list() {
         List<StoreEntity> storeEntityList =
-            storeRepository.findAll();
+                storeRepository.findAll();
         List<StoreDTO> storeDTOList =
-        storeEntityList.stream().toList().stream().map(
-                storeEntity -> modelMapper.map(storeEntity, StoreDTO.class)
-        ).collect(Collectors.toList());
+                storeEntityList.stream().toList().stream().map(
+                        storeEntity -> modelMapper.map(storeEntity, StoreDTO.class)
+                ).collect(Collectors.toList());
         return storeDTOList;
     }
 
@@ -100,7 +111,7 @@ public class StoreServiceImpl implements StoreService{
         StoreEntity storeEntity = storeRepository.findById(storeDTO.getId()).get();
         storeEntity.setName(storeDTO.getName());
         storeEntity.setContent(storeDTO.getContent());
-        if(storeDTO.getImgNum()!=null){
+        if (storeDTO.getImgNum() != null) {
             ImageEntity imageEntity = imageRepository.findById(storeDTO.getImgNum()).get();
             imageRepository.deleteByStoreEntity_Id(storeEntity.getId());
             imageEntity.setStoreEntity(storeEntity);
@@ -112,12 +123,11 @@ public class StoreServiceImpl implements StoreService{
     @Override
     public StoreDTO read(Long id) {
         Optional<StoreEntity> optionalStoreEntity = storeRepository.findById(id);
-        if(optionalStoreEntity.isPresent()){
+        if (optionalStoreEntity.isPresent()) {
             StoreEntity storeEntity = optionalStoreEntity.get();
             StoreDTO storeDTO = modelMapper.map(storeEntity, StoreDTO.class).setImgUrl(imageRepository.findByStoreEntity_Id(id).get().getFullUrl());
             return storeDTO;
-        }
-        else {
+        } else {
             log.info("현재 등록 되어 있는 가맹점이 없습니다.");
             return null;
         }

@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface HotelService {
 
-    public void create(HotelDTO hotelDTO);
+    public void create(HotelDTO hotelDTO, String email);
 
     public void update(HotelDTO hotelDTO);
 
@@ -23,6 +23,8 @@ public interface HotelService {
     public Long findHotelByEmail(String email);
 
     public void del(Long id);
+
+    public void modify(Long id, Long hotelId);
 
 
 
