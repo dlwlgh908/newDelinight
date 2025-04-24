@@ -22,6 +22,8 @@ public interface OrdersService {
     public Page<OrdersDTO> completeList(Pageable pageable, String email);
     public StoreDTO findStoreByADMINEmail(String email);
 
+    public void checkInToCheckOut(Long checkInId, Long checkOutId);
+
     public List<OrdersDTO> read(Long paymentNum);
 
     public void changePayLater(Long ordersId, String memo);

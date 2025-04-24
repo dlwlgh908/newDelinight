@@ -22,6 +22,8 @@ import java.util.List;
 public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
 
 
+    OrdersEntity findByCheckInEntity_Id(Long id);
+    void deleteByCheckInEntity_Id(Long id);
     Integer countByStoreEntityIdAndOrdersStatus(Long storeId, OrdersStatus status);
 
     List<OrdersEntity> findByCheckInEntity_UsersEntityEmail(String email);
