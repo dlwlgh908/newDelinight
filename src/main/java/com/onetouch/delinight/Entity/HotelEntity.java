@@ -37,7 +37,14 @@ public class HotelEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="members_id")
+    @ToString.Exclude
     private MembersEntity membersEntity;
+
+
+    public HotelEntity setMembersEntity(MembersEntity membersEntity) {
+        this.membersEntity = membersEntity;
+        return this;
+    }
 
 
 

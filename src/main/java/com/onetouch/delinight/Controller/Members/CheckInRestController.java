@@ -62,7 +62,6 @@ public class CheckInRestController {
 
         log.info("cert 값 나오냐??"+password);
         log.info("cert 값 나오냐??"+password);
-        log.info("cert 값 나오냐??"+password);
 
         Map<String, Object> response = new HashMap<>();
         response.put("roomid", roomid);

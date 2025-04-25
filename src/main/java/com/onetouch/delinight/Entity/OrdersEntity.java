@@ -47,11 +47,19 @@ public class OrdersEntity {
     @JoinColumn(name = "checkin_id")
     private CheckInEntity checkInEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "log_id")
+    private CheckOutLogEntity checkOutLogEntity;
+
     private LocalDateTime pendingTime;
     private LocalDateTime awaitingTime;
     private LocalDateTime preparingTime;
     private LocalDateTime deliveringTime;
     private LocalDateTime deliveredTime;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "log_id")
+    private CheckOutLogEntity checkOutLogEntity;
 
     private Long totalPrice;
 
@@ -60,6 +68,12 @@ public class OrdersEntity {
 
     @Enumerated(EnumType.STRING)
     OrdersStatus ordersStatus; // 현 주문 상태
+
+//    public OrdersEntity setCheckOutLogEntity(CheckOutLogEntity checkOutLogEntity) {
+//        this.checkOutLogEntity = checkOutLogEntity;
+//        return this;
+//    }
+
 
 
     @ManyToOne(fetch = FetchType.LAZY)

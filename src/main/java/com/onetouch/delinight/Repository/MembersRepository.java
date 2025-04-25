@@ -24,6 +24,9 @@ public interface MembersRepository extends JpaRepository<MembersEntity, Long> {
     @Query("select m from MembersEntity m where m.role = 'SUPERADMIN'")
     Page<MembersEntity> selectSuperAd(Pageable pageable);
 
+    @Query("select m from MembersEntity m where m.role= 'ADMIN'")
+    List<MembersEntity> selectHotelAd();
+
     @Query("select m from MembersEntity m where m.role = 'SUPERADMIN' and m.status = :status")
     Page<MembersEntity> selectSuperAdByStatus(Status status, Pageable pageable);
 
@@ -47,5 +50,9 @@ public interface MembersRepository extends JpaRepository<MembersEntity, Long> {
 
     @Query("select m from MembersEntity m where m.email = :email")
     Optional<MembersEntity> findByEmail2(String email);
+
+
+
+
 
 }

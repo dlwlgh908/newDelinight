@@ -33,6 +33,8 @@ public class OrdersDTO {
     private List<OrdersItemDTO> ordersItemDTOList;
     private OrdersStatus ordersStatus;
     private PaidCheck paid;
+    private CheckOutLogDTO checkOutLogDTO;
+
 
     private LocalDateTime pendingTime;
     private LocalDateTime awaitingTime;
@@ -49,6 +51,11 @@ public class OrdersDTO {
         this.checkInDTO = checkInDTO;
         return this;
     }
+
+//    public OrdersDTO setCheckOutLogDTO(CheckOutLogDTO checkOutLogDTO) {
+//        this.checkOutLogDTO = checkOutLogDTO;
+//        return this;
+//    }
 
     public OrdersDTO setOrdersItemDTOList(List<OrdersItemDTO> ordersItemDTOList){
         this.ordersItemDTOList = ordersItemDTOList;
