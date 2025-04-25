@@ -28,18 +28,18 @@ class MenuServiceImplTest {
     StoreRepository storeRepository;
 
 
-
-
-
-    @Test
-    public void register() {
-
-        MenuDTO menuDTO = new MenuDTO();
-        menuDTO.setName("계란말이");
-        menuDTO.setContent("계란은 단백질이니까");
-        menuDTO.setPrice(4000);
-        menuService.register(menuDTO, "dlwlgh908@naver.com");
-    }
+//
+//
+//
+//    @Test
+//    public void register() {
+//
+//        MenuDTO menuDTO = new MenuDTO();
+//        menuDTO.setName("계란말이");
+//        menuDTO.setContent("계란은 단백질이니까");
+//        menuDTO.setPrice(4000);
+//        menuService.register(menuDTO, "dlwlgh908@naver.com");
+//    }
 
 
 

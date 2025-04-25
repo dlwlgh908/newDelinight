@@ -20,6 +20,7 @@ import java.util.Map;
 
 public interface MembersService {
 
+    public boolean assignCheck(String email, int sep);
     public void create(MembersDTO membersDTO);
     public void update(MembersDTO membersDTO);
     //public MembersDTO update(MembersDTO membersDTO, String currentPasswordInput, String newPasswordInput, String confirmPasswordInput);

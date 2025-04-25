@@ -212,6 +212,8 @@ public class CheckInServiceImpl implements CheckInService{
         checkOutLogEntity.setCheckoutDate(checkInEntity.getCheckoutDate());
         checkOutLogEntity.setPhone(checkInEntity.getPhone());
         checkOutLogEntity.setPrice(checkInEntity.getPrice());
+        checkOutLogEntity.setUsersEntity(checkInEntity.getUsersEntity());
+        checkOutLogEntity.setGuestEntity(checkInEntity.getGuestEntity());
 
         checkOutLogRepository.save(checkOutLogEntity);
 

@@ -16,6 +16,7 @@ import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.CenterRepository;
 import com.onetouch.delinight.Repository.HotelRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
+import com.onetouch.delinight.Repository.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class MembersServiceImpl implements MembersService{
+    private final StoreRepository storeRepository;
     private final MembersRepository membersRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
@@ -62,6 +64,23 @@ public class MembersServiceImpl implements MembersService{
             return membersDTO;
         }
 
+    }
+
+    @Override
+    public boolean assignCheck(String email, int sep) {
+
+        boolean result = false;
+        if(sep == 1){
+            result = centerRepository.existsByMembersEntity_Email(email);
+        }
+        else if(sep ==2){
+            result = hotelRepository.existsByMembersEntity_Email(email);
+        }
+        else {
+            result = storeRepository.existsByMembersEntity_Email(email);
+        }
+
+        return result;
     }
 
     @Override

@@ -17,6 +17,8 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
 
     public StoreEntity findByMembersEntity_Email(String email);
 
+    public boolean existsByMembersEntity_Email(String email);
+
     public List<StoreEntity> findByHotelEntity_Id(Long hotelId);
 
 
