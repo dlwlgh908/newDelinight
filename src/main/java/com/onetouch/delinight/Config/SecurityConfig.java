@@ -65,7 +65,7 @@ public class SecurityConfig {
         http.securityMatcher("/members/**")
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/members/adminhome", "/members/account/adminlogin", "/members//account/adminlogout-success", "/**").permitAll()
+                                .requestMatchers("/members/adminhome", "/members/account/adminlogin", "/members/account/adminlogout-success", "/**").permitAll()
                                 .anyRequest().permitAll()
                 ).csrf((csrf) -> csrf.disable())
 

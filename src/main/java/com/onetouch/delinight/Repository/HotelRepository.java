@@ -22,6 +22,7 @@ public interface HotelRepository extends JpaRepository<HotelEntity, Long> {
 
     public HotelEntity findByMembersEntity_Email(String email);
 
+    public boolean existsByMembersEntity_Email(String email);
 
     @Query("select h from HotelEntity h where h.branchEntity.centerEntity.membersEntity.email = :email")
     public List<HotelEntity> selectallBySuper(String email);

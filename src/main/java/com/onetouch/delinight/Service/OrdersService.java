@@ -18,6 +18,7 @@ import java.util.List;
 
 public interface OrdersService {
 
+    public OrdersDTO readOne(Long ordersId);
     public Page<OrdersDTO> processList(Pageable pageable, String email);
     public Page<OrdersDTO> completeList(Pageable pageable, String email);
     public StoreDTO findStoreByADMINEmail(String email);

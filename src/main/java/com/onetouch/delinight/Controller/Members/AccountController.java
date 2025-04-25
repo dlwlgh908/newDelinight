@@ -16,6 +16,7 @@ import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.CenterService;
 import com.onetouch.delinight.Service.HotelService;
 import com.onetouch.delinight.Service.MembersService;
+import com.onetouch.delinight.Service.StoreService;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -41,23 +42,27 @@ public class AccountController {
     private final HotelService hotelService;
 
     @GetMapping("/redirectPage")
-    public  String redirectPage(){
+    public String redirectPage() {
 
         return "members/account/common/redirectPage";
     }
 
-    @GetMapping("/accountRequest")
-    public String accountRequest(String role, Long id, Model model){
+    @GetMapping("/waitRedirectPage")
+    public String waitRedirectPage() {
 
-        if(role.equals("super")){
+        return "members/account/common/waitRedirectPage";
+    }
+
+    @GetMapping("/accountRequest")
+    public String accountRequest(String role, Long id, Model model) {
+
+        if (role.equals("super")) {
             model.addAttribute("role", "본사 관리자");
-            model.addAttribute("parentId",id);
-        }
-        else if(role.equals("hotel")){
+            model.addAttribute("parentId", id);
+        } else if (role.equals("hotel")) {
             model.addAttribute("role", "호텔 관리자");
             model.addAttribute("parentId", id);
-        }
-        else {
+        } else {
             model.addAttribute("role", "가맹점 관리자");
             model.addAttribute("parentId", id);
         }
@@ -66,18 +71,16 @@ public class AccountController {
     }
 
     @PostMapping("/accountRequest")
-    public String accountRequestPost(MembersDTO membersDTO){
+    public String accountRequestPost(MembersDTO membersDTO) {
         String roleStr = membersDTO.getRoleStr();
 
-        if(roleStr.equals("super")){
+        if (roleStr.equals("super")) {
             membersDTO.setRole(Role.SUPERADMIN);
             membersService.create(membersDTO);
-        }
-        else if(roleStr.equals("hotel")){
+        } else if (roleStr.equals("hotel")) {
             membersDTO.setRole(Role.ADMIN);
             membersService.create(membersDTO);
-        }
-        else {
+        } else {
             membersDTO.setRole(Role.STOREADMIN);
             membersService.create(membersDTO);
         }
@@ -87,23 +90,34 @@ public class AccountController {
     }
 
     @GetMapping("/accounthub")
-    public String accounthub(Principal principal){
+    public String accounthub(Principal principal) {
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
 
         //로그인한 사람 롤 찾기
         //수퍼 어드민
-        if(role.equals(Role.SUPERADMIN)){
-            return "redirect:/members/account/hotelAdmin/list";
+        if (role.equals(Role.SUPERADMIN)) {
+            if (membersService.assignCheck(principal.getName(), 1)) {
+                return "redirect:/members/account/hotelAdmin/list";
+            } else {
+                return "redirect:/members/account/waitRedirectPage";
+            }
         }
         //호텔 어드민
-        else if(role.equals(Role.ADMIN)){
-            return "redirect:/members/account/storeAdmin/list" ;
+        else if (role.equals(Role.ADMIN)) {
+            if (membersService.assignCheck(principal.getName(), 2)) {
+                return "redirect:/members/account/storeAdmin/list";
+            } else {
+                return "redirect:/members/account/waitRedirectPage";
+            }
         }
         //스토어 어드민
-        else if(role.equals(Role.STOREADMIN)){
-            return "redirect:/members/store/orders/list" ;
-        }
-        else{ // 시스템 어드민일 경우
+        else if (role.equals(Role.STOREADMIN)) {
+            if (membersService.assignCheck(principal.getName(), 3)) {
+                return "redirect:/members/store/orders/list";
+            } else {
+                return "redirect:/members/account/waitRedirectPage";
+            }
+        } else { // 시스템 어드민일 경우
             return "redirect:/members/account/superAdmin/list";
         }
     }
@@ -249,7 +263,7 @@ public class AccountController {
         if (status != null && !status.isEmpty()) {
             if (status.equals("WAIT")) {
                 status1 = Status.WAIT;
-                paging =membersService.findAccount(status1, page, principal.getName(), "hotel");
+                paging = membersService.findAccount(status1, page, principal.getName(), "hotel");
             } else if (status.equals("VALID")) {
 
                 status1 = Status.VALID;
@@ -277,7 +291,7 @@ public class AccountController {
 
         Status status1;
 
-        Long parentId = hotelService.findHotelByEmail( principal.getName());
+        Long parentId = hotelService.findHotelByEmail(principal.getName());
 
 
         Page<MembersEntity> paging = null;
@@ -285,7 +299,7 @@ public class AccountController {
         if (status != null && !status.isEmpty()) {
             if (status.equals("WAIT")) {
                 status1 = Status.WAIT;
-                paging =membersService.findAccount(status1, page, principal.getName(), "store");
+                paging = membersService.findAccount(status1, page, principal.getName(), "store");
             } else if (status.equals("VALID")) {
                 status1 = Status.VALID;
                 paging = membersService.findAccount(status1, page, principal.getName(), "store");
@@ -318,7 +332,7 @@ public class AccountController {
     }
 
     @GetMapping("/logout-success")
-    public String logout(){
+    public String logout() {
         return "/members/account/common/logout";
     }
 
