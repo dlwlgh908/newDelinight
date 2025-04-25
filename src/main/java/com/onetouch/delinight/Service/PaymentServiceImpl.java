@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.Constant.PaidCheck;
 import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.DTO.CheckInDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
@@ -23,6 +24,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
-    public List<PaymentDTO> paymentByCriteria(String priceMonth, String type, Long storeId, Boolean isPaid, Long memberId) {
+    public List<PaymentDTO> paymentByCriteria (PaidCheck paidCheck, Long memberId, LocalDate startDate, LocalDate endDate) {
 
         Role role = membersRepository.findById(memberId).get().getRole();
 
@@ -64,13 +67,14 @@ public class PaymentServiceImpl implements PaymentService{
             log.info("추 후 플랫폼에 속해 있는 매출을 볼 수 있게 할 예정");
         } else if (role.equals(Role.SUPERADMIN)) {
             log.info("슈퍼 어드민은 전체 매출과 호텔별 매출 조회");
-            paymentDTOList = customPaymentRepository.findPaymentByCriteria(priceMonth, storeId, isPaid, memberId);
+
+            paymentDTOList = customPaymentRepository.findPaymentByCriteria(paidCheck, memberId, startDate, endDate);
         } else if (role.equals(Role.ADMIN)) {
             log.info("호텔 어드미은 전체 매출과 스토어별 매출 조회");
-            paymentDTOList = customPaymentRepository.findPaymentByCriteria(priceMonth, storeId, isPaid, memberId);
+            paymentDTOList = customPaymentRepository.findPaymentByCriteria(paidCheck, memberId, startDate, endDate);
         } else if (role.equals(Role.STOREADMIN)) {
             log.info("스토어 어드민은 자신이 속한 매장의 메뉴 매출 조회");
-            paymentDTOList = customPaymentRepository.findPaymentByCriteria(priceMonth, storeId, isPaid, memberId);
+            paymentDTOList = customPaymentRepository.findPaymentByCriteria(paidCheck, memberId, startDate, endDate);
         } else {
             log.info("알 수 없는 권한 : {}", role);
             throw new IllegalArgumentException("잘못된 권한입니다.");
@@ -133,12 +137,6 @@ public class PaymentServiceImpl implements PaymentService{
             return data;
         }).collect(Collectors.toList());  // 결과 리스트 반환
     }
-
-
-
-
-
-
 
 
 

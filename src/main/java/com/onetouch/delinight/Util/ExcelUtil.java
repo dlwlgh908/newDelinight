@@ -33,7 +33,6 @@ public class ExcelUtil {
                 row.createCell(0).setCellValue(dto.getTotalId());
                 row.createCell(1).setCellValue(dto.getCheckPaid().toString());
                 row.createCell(2).setCellValue(dto.getRegTime());
-                row.createCell(3).setCellValue(dto.getUpdateTime());
                 row.createCell(4).setCellValue(dto.getTotalPrice());                // 합계 금액
                 row.createCell(5).setCellValue(dto.getVat());                       // 부가세
                 row.createCell(6).setCellValue(dto.getUnpaid());                    // 미결제 금액
