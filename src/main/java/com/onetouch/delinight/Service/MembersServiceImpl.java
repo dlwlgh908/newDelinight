@@ -16,6 +16,7 @@ import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.CenterRepository;
 import com.onetouch.delinight.Repository.HotelRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
+import com.onetouch.delinight.Repository.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

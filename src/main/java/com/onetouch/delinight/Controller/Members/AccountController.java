@@ -123,36 +123,34 @@ public class AccountController {
     }
 
     @GetMapping("/centerhub")
-    public String centerhub(Principal principal, Model model){
+    public String centerhub(Principal principal, Model model) {
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
         model.addAttribute("role", role);
 
         //수퍼 어드민
-        if(role.equals(Role.SUPERADMIN)){
+        if (role.equals(Role.SUPERADMIN)) {
             return "redirect:/members/center/read";
-        }
-        else{ // 시스템 어드민일 경우
+        } else { // 시스템 어드민일 경우
             return "redirect:/members/center/list";
         }
     }
 
     @GetMapping("/paymenthub")
-    public String paymenthub(Principal principal){
+    public String paymenthub(Principal principal) {
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
 
         //수퍼 어드민
-        if(role.equals(Role.SUPERADMIN)){
+        if (role.equals(Role.SUPERADMIN)) {
             return "redirect:/members/account/";
         }
         //호텔 어드민
-        else if(role.equals(Role.ADMIN)){
-            return "redirect:/members/account/" ;
-        }
-        //스토어 어드민
-        else  if(role.equals(Role.STOREADMIN)) {
+        else if (role.equals(Role.ADMIN)) {
             return "redirect:/members/account/";
         }
-        else{ // 시스템 어드민일 경우
+        //스토어 어드민
+        else if (role.equals(Role.STOREADMIN)) {
+            return "redirect:/members/account/";
+        } else { // 시스템 어드민일 경우
             return "redirect:/members/account/";
         }
     }
@@ -163,13 +161,13 @@ public class AccountController {
     }
 
     @GetMapping("/mypage")
-    public String adminMyPage(Principal principal, Model model){
+    public String adminMyPage(Principal principal, Model model) {
 
         return "/members/account/common/mypage";
     }
 
     @GetMapping("/update")
-    public String adminUpdate(Principal principal, Model model){
+    public String adminUpdate(Principal principal, Model model) {
 
         return "/members/account/common/update";
     }
@@ -199,11 +197,11 @@ public class AccountController {
 
     @PostMapping("/update")
     public String updateProc(Principal principal,
-            @ModelAttribute MembersDTO membersDTO, Model model) {
+                             @ModelAttribute MembersDTO membersDTO, Model model) {
 
-        log.info("update post 페이지"+membersDTO);
-        log.info("update post 페이지"+membersDTO);
-        log.info("update post 페이지"+membersDTO);
+        log.info("update post 페이지" + membersDTO);
+        log.info("update post 페이지" + membersDTO);
+        log.info("update post 페이지" + membersDTO);
 
         MembersEntity membersEntity = membersRepository.findByEmail(principal.getName());
 
@@ -230,7 +228,7 @@ public class AccountController {
         if (status != null && !status.isEmpty()) {
             if (status.equals("WAIT")) {
                 status1 = Status.WAIT;
-                paging =membersService.getListBystatus(status1, page);
+                paging = membersService.getListBystatus(status1, page);
             } else if (status.equals("VALID")) {
                 status1 = Status.VALID;
                 paging = membersService.getListBystatus(status1, page);
@@ -255,7 +253,6 @@ public class AccountController {
 
         Status status1;
         Long parentId = centerService.findCenter(principal.getName());
-
 
 
         Page<MembersEntity> paging = null;
