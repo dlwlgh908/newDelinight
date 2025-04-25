@@ -93,16 +93,14 @@ public class InquireServiceImpl implements InquireService {
 
     @Override
     public List<InquireDTO> inquireList(Long hotelId) {
-        //특정 호텔에 등록된 QnA들을 DB에서 가져오고 그걸 DTO로 변환해서
 
-        List<InquireEntity> inquireEntityList = inquireRepository.findByHotelEntity_Id(hotelId);
-        //DB에 저장된 Inquire정보를 가져오고 hotelId에 해당하는 Inquire들만 골라서 가져와
+
+        List<InquireEntity> inquireEntityList = inquireRepository.findAllByHotelId(hotelId);
+
 
         List<InquireDTO> inquireDTOList = inquireEntityList.stream().map(data -> modelMapper.map(data, InquireDTO.class)
                 .setHotelDTO(modelMapper.map(data.getHotelEntity(),HotelDTO.class))).toList();
-        //QnA Entity 하나하나를 돌면서 (.stream().map(...)), modelMapper라는 도구를 써서 InquireDTO로 바꿔줘.
-        //data.getHotelEntity()를 HotelDTO로 바꿔서 .sethotelDTO(...)로 넣어주는 거야.
-        //이걸 리스트로 만들어서 inquireDTOList에 저장하는 거지.
+        
 
         return inquireDTOList;
     }
@@ -144,5 +142,26 @@ public class InquireServiceImpl implements InquireService {
         inquireRepository.deleteById(id);
 
     }
+
+
+
+    @Override
+    public Page<InquireDTO> inquireListTEST(Pageable pageable,String email) {
+
+        CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+        //이메일로 체크인 정보를 찾는다
+        if (checkInEntity == null){
+            // null이면 Qna가 없다는 뜻이니 빈 페이지 반환 (에러 안 나게!)
+
+            return Page.empty();
+        }
+
+        Page<InquireEntity> pageList = inquireRepository.findInquireEntitiesByCheckInEntity_Id(checkInEntity.getId(),pageable);
+        //방금 찾은 체크인 기록의 id로 문의글을 찾고, 한페이지씩 잘라서 가져와
+
+        return pageList.map(data -> modelMapper.map(data, InquireDTO.class));
+
+    }
+
 
 }

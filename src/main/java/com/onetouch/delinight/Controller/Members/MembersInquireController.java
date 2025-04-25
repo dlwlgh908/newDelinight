@@ -52,7 +52,7 @@ public class MembersInquireController {
     public String list(Model model,@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, Principal principal){ //usersId 파라미터로 받아서 해당 유저의 문의글만 조회
 
 
-        Page<InquireDTO> inquireDTOList = inquireService.inquireList(pageable,principal.getName());
+        Page<InquireDTO> inquireDTOList = inquireService.inquireListTEST(pageable,principal.getName());
 
 
         log.info("list 읽어옴? : " + inquireDTOList);
