@@ -37,6 +37,15 @@ public class StoreServiceImpl implements StoreService {
     private final ImageRepository imageRepository;
     private final CheckInRepository checkInRepository;
 
+
+    @Override
+    public void addMembers(Long memberId, Long storeId) {
+        StoreEntity storeEntity = storeRepository.findById(storeId).get();
+        storeEntity.setMembersEntity(membersRepository.findById(memberId).get());
+        log.info(storeEntity);
+        storeRepository.save(storeEntity);
+    }
+
     @Override
     public Integer awaitingCountCheck(Long storeId) {
         Integer awaitingCount = ordersRepository.countByStoreEntityIdAndOrdersStatus(storeId, OrdersStatus.AWAITING);
@@ -131,5 +140,17 @@ public class StoreServiceImpl implements StoreService {
             log.info("현재 등록 되어 있는 가맹점이 없습니다.");
             return null;
         }
+    }
+
+    @Override
+    public List<StoreDTO> storeList(String email) {
+        List<StoreEntity> storeEntityList =
+            storeRepository.selectallByHotelAdmin(email);
+        List<StoreDTO> storeDTOList =
+                storeEntityList.stream().toList().stream().map(
+                        storeEntity -> modelMapper.map(storeEntity, StoreDTO.class)
+                ).collect(Collectors.toList());
+
+        return storeDTOList;
     }
 }

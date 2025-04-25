@@ -32,4 +32,6 @@ public interface HotelRepository extends JpaRepository<HotelEntity, Long> {
 
 
 
+
+
 }

@@ -24,6 +24,12 @@ public class HotelDTO {
     private String content;
 
     private BranchDTO branchDTO;
+    private MembersDTO membersDTO;
+
+    public HotelDTO setMembersDTO(MembersDTO membersDTO){
+        this.membersDTO = membersDTO;
+        return this;
+    }
 
     public HotelDTO setBranchDTO(BranchDTO branchDTO){
         this.branchDTO = branchDTO;

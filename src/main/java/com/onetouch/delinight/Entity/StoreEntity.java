@@ -31,7 +31,6 @@ public class StoreEntity {
     @Column(unique = true, nullable = false, length = 50)
     private String content;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")
     private HotelEntity hotelEntity;
@@ -39,4 +38,6 @@ public class StoreEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "members_id")
     private MembersEntity membersEntity;
+
+
 }

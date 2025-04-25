@@ -8,6 +8,7 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.UsersDTO;
+import com.onetouch.delinight.Entity.UsersEntity;
 
 public interface UsersService {
 
@@ -20,6 +21,8 @@ public interface UsersService {
     public void userUpdate(String email , UsersDTO usersDTO);
 
     public void userDelete(String email);
+
+    public UsersDTO findUsersByEmail(String email);
 
 
 

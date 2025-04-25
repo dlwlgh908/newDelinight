@@ -43,6 +43,6 @@ public class RoomController {
         List<RoomDTO> roomDTOList =
             roomService.list();
         model.addAttribute("roomDTOList", roomDTOList);
-        return "room/listB";
+        return "members/room/listB";
     }
 }

@@ -9,6 +9,7 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.BranchDTO;
 import com.onetouch.delinight.DTO.HotelDTO;
+import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.BranchEntity;
 import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
@@ -35,6 +36,16 @@ public class HotelServiceImpl implements HotelService{
     private final BranchRepository branchRepository;
     private final ModelMapper modelMapper;
     private final MembersRepository membersRepository;
+
+    @Override
+    public void addMembers(Long memberId, Long hotelId) {
+
+        HotelEntity hotelEntity = hotelRepository.findById(hotelId).get();
+        hotelEntity.setMembersEntity(membersRepository.findById(memberId).get());
+        log.info(hotelEntity);
+        hotelRepository.save(hotelEntity);
+    }
+
     @Override
     public void create(HotelDTO hotelDTO, String email) {
         HotelEntity hotelEntity =
@@ -73,9 +84,18 @@ public class HotelServiceImpl implements HotelService{
         List<HotelEntity> hotelEntityList =
             hotelRepository.findAll();
         List<HotelDTO> hotelDTOList =
-        hotelEntityList.stream().toList().stream().map(
-                hotelEntity -> modelMapper.map(hotelEntity, HotelDTO.class)
-        ).collect(Collectors.toList());
+        hotelEntityList.stream().toList().stream().map(hotelEntity -> {
+                    HotelDTO hotelDTO = modelMapper.map(hotelEntity, HotelDTO.class);
+                    if (hotelEntity.getMembersEntity() != null) {
+                        MembersDTO membersDTO = modelMapper.map(hotelEntity.getMembersEntity(), MembersDTO.class);
+                        hotelDTO.setMembersDTO(membersDTO);
+                    } else {
+                        hotelDTO.setMembersDTO(null);
+                    }
+
+                    return hotelDTO;
+                })
+                .collect(Collectors.toList());
         return hotelDTOList;
     }
 
