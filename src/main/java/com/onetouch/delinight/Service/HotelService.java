@@ -14,6 +14,7 @@ import java.util.List;
 
 public interface HotelService {
 
+    public void addMembers(Long memberId, Long hotelId);
     public void create(HotelDTO hotelDTO, String email);
 
     public void update(HotelDTO hotelDTO);
@@ -21,6 +22,8 @@ public interface HotelService {
     public List<HotelDTO> list();
 
     public Long findHotelByEmail(String email);
+
+
 
     public void del(Long id);
 

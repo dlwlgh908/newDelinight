@@ -14,6 +14,8 @@ import java.util.List;
 
 public interface StoreService {
 
+    public void addMembers(Long memberId, Long storeId);
+
     public Long findStoreByEmail(String email);
     public void create(StoreDTO storeDTO);
 
@@ -27,6 +29,9 @@ public interface StoreService {
     public StoreDTO read(Long id);
 
     public void update(StoreDTO storeDTO);
+
+    public List<StoreDTO> storeList(String email);
+
 
 
 

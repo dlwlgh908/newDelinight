@@ -56,15 +56,15 @@
                                 <td th:text="${list.email}"></td>
                                 <td th:text="${list.role}"></td>
                                 <td>
-                                    <th:block th:if="${list.hotelName != null}">
-                                        <span th:text="${list.hotelName}"></span>
+                                    <th:block th:if="${list.hotelEntity != null}">
+                                        <span th:text="${list.hotelEntity.name}"></span>
                                     </th:block>
-                                    <th:block th:if="${list.hotelName == null}">
+                                    <th:block th:if="${list.hotelEntity == null}">
                                         <!--호텔 리스트 반복-->
                                         <select class="hotelSelect" name="hotelId">
                                             <!-- 호텔 리스트 반복 -->
                                             <th:block th:each="hotel : ${hotelEntityList}">
-                                                <option id="op" th:value="${hotel.id}" th:text="${hotel.name}"></option>
+                                                <option id="hotelNames" th:value="${hotel.id}" th:text="${hotel.name}"></option>
                                             </th:block>
                                         </select>
                                         <button class="btn btn-primary" id="plusBtn"  th:value="${list.id}">+</button>
@@ -73,7 +73,7 @@
 
 
                                 <td>
-                                        <button class="btn btn-primary" id="delBtn"  th:value="${list.id}">삭제</button>
+                                    <button class="btn btn-primary" id="delBtn"  th:value="${list.id}">삭제</button>
                                 </td>
 
 
@@ -99,25 +99,13 @@
     <script>
         $(function (){
             $(document).on("click", "#plusBtn", function () {
-                // let id = this.getAttribute("value")
-                // let selectedOption = $(".hotelSelect").closest("td").find("option:selected");
-                // let hotelId = selectedOption.val();
-                // let hotelName = selectedOption.text();
-                // alert(id)
-                // alert(hotelId);
-                // alert(hotelName)
-                let selectBox = $(this).closest("td").find(".hotelSelect");
-
-                // Find the selected option
-                let selectedOption = selectBox.find("option:selected");
-
-                // Get hotel ID and hotel Name
-                let hotelId = selectedOption.val();    // Gets the value attribute
-                let hotelName = selectedOption.text(); // Gets the visible text
-
-                // Display the values
-                alert("Selected Hotel ID: " + hotelId);
-                alert("Selected Hotel Name: " + hotelName);
+                let id = this.getAttribute("value")
+                let selectedOption = $("#hotelSelect").find("option:selected");
+                let hotelId = selectedOption.val();
+                let hotelName = selectedOption.text();
+                alert(id)
+                alert(hotelId);
+                alert(hotelName)
 
                 $.ajax({
                     url: "/hotel/rest/modify",

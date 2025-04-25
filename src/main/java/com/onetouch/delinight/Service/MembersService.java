@@ -20,6 +20,10 @@ import java.util.Map;
 
 public interface MembersService {
 
+    public List<MembersDTO> findMembersListByCenterEmail(String email);
+
+    public List<MembersDTO> findMembersListByHotelEmail(String email);
+
     public void create(MembersDTO membersDTO);
     public void update(MembersDTO membersDTO);
     //public MembersDTO update(MembersDTO membersDTO, String currentPasswordInput, String newPasswordInput, String confirmPasswordInput);

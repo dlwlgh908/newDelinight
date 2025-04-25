@@ -48,6 +48,8 @@ public class MembersServiceImpl implements MembersService{
     private final HotelRepository hotelRepository;
     private final CenterService centerService;
 
+
+
     @Override
     public MembersDTO findByEmail(String email) {
 
@@ -62,6 +64,24 @@ public class MembersServiceImpl implements MembersService{
             return membersDTO;
         }
 
+    }
+
+    @Override
+    public List<MembersDTO> findMembersListByCenterEmail(String email) {
+        Long id = centerService.findCenter(email);
+        List<MembersEntity> resultEntities = membersRepository.findByCenterEntity_Id(id);
+        List<MembersDTO> resultDTOS = resultEntities.stream().map(resultEntity->
+                modelMapper.map(resultEntity, MembersDTO.class)).toList();
+        return resultDTOS;
+    }
+
+    @Override
+    public List<MembersDTO> findMembersListByHotelEmail(String email) {
+        Long id = hotelService.findHotelByEmail(email);
+        List<MembersEntity> resultEntities = membersRepository.selectHotelIdandstoreAd(id);
+        List<MembersDTO> resultDTOS = resultEntities.stream().map(resultEntity ->
+                modelMapper.map(resultEntity, MembersDTO.class)).toList();
+        return resultDTOS;
     }
 
     @Override
@@ -242,7 +262,8 @@ public class MembersServiceImpl implements MembersService{
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("id"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.membersRepository.selectHotelAd(pageable,id);
+        Page<MembersEntity> membersEntities = membersRepository.selectHotelAd(pageable,id);
+        return membersEntities;
     }
 
     @Override
