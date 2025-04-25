@@ -14,6 +14,8 @@ import java.util.List;
 
 public interface StoreService {
 
+    public void addMembers(Long memberId, Long storeId);
+
     public Long findStoreByEmail(String email);
     public void create(StoreDTO storeDTO);
 

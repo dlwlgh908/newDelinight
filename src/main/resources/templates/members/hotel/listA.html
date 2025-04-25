@@ -40,7 +40,7 @@
             <div class="card custom-shadow mb-4">
                 <div class="card-body">
                     <!--<pre> 코드는 <>를 문자 그대로 쓸 수 있게 해준다-->
-                    <table class="table">
+                    <table class="table table-hover align-middle">
 
                         <thead>
                         <th scope="col">#</th>
@@ -97,14 +97,14 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <table>
+                                    <table class="table table-hover align-middle">
                                         <thead>
                                         <th>#</th>
                                         <th>이름</th>
                                         <th>이메일</th>
                                         <th>추가하기</th>
                                         </thead>
-                                        <tbody class="resultSpace">
+                                        <tbody class="resultSpace" style="margin-bottom: 500px;">
 
                                         </tbody>
                                     </table>
@@ -135,6 +135,7 @@
                 data: {"membersId":memberId, "hotelId":hotelId},
                 success:function (){
                     alert("멤버가 추가되었습니다.")
+                    location.reload();
                 },
                 error:function (err) {
                     console.log(err)
@@ -149,20 +150,34 @@
 
 
         $(document).on("click",".addMembers",function () {
+
             let hotelId = $(this).data("hotelid")
+
 
             $.ajax({
                 url: "/hotel/rest/membersList",
                 type: "get",
                 success:function (result) {
                     $(".resultSpace").empty();
-                    let str = ""
                     result.forEach(function (resultItem) {
-                        console.log(resultItem.name)
-                        str+="<tr><td>"+resultItem.id+"</td><td>"+resultItem.name+"</td><td>"+resultItem.email+"</td><td><button class='btn-primary btn addMembers2' data-memberid='"+resultItem.id+"'>추가하기</button></td></tr>"
-                        $(".resultSpace").append(str)
+                        let tr = $("<tr></tr>").css({
+                            "background-color": "#f9f9f9", /* 하이라이트 */
+                            "border": "1px solid #ddd",   /* 테두리 */
+                            "margin-bottom": "20px",      /* 행 아래의 간격 */
+                            "padding": "30px",/* 행 안쪽 간격 */
+                            "margin-right": "40px"
+                        });
+
+                        tr.append("<td>" + resultItem.id + "</td>");
+                        tr.append("<td>" + resultItem.name + "</td>");
+                        tr.append("<td>" + resultItem.email + "</td>");
+                        tr.append("<td><button class='btn-primary btn addMembers2' data-memberid='" + resultItem.id + "'>추가하기</button></td>");
+
+                        $(".resultSpace").append(tr);
                         $(".resultSpace").attr("data-hotelid",hotelId);
-                    })
+
+                    });
+
 
 
                 }

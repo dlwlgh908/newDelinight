@@ -21,6 +21,11 @@ import java.util.Optional;
 public interface MembersRepository extends JpaRepository<MembersEntity, Long> {
 
     List<MembersEntity> findByCenterEntity_Id(Long id);
+
+    List<MembersEntity> findByHotelEntity_Id(Long id);
+
+    @Query("select m from MembersEntity m where m.hotelEntity.id = :id and m.role = 'STOREADMIN'")
+    List<MembersEntity> selectHotelIdandstoreAd(Long id);
     @Query("select m from MembersEntity m where m.role = 'SUPERADMIN'")
     Page<MembersEntity> selectSuperAd(Pageable pageable);
 

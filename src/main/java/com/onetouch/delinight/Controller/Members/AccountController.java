@@ -104,7 +104,7 @@ public class AccountController {
             return "redirect:/members/store/orders/list" ;
         }
         else{ // 시스템 어드민일 경우
-            return "redirect:/members/account/listB";
+            return "redirect:/members/account/superAdmin/list";
         }
     }
 

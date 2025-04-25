@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +36,12 @@ public class HotelRestController {
     public ResponseEntity<List<MembersDTO>> membersList(Principal principal){
         List<MembersDTO> membersDTOList = membersService.findMembersListByCenterEmail(principal.getName());
         log.info(membersDTOList);
+
+//        /*hotelId null인 멤버 필터링*/
+//        List<MembersDTO> filteredMembers = membersDTOList.stream()
+//                .filter(membersDTO -> membersDTO. == null)
+//                .collect(Collectors.toList());
+
         return ResponseEntity.ok(membersDTOList);
 
     }

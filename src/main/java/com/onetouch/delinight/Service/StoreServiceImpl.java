@@ -37,6 +37,15 @@ public class StoreServiceImpl implements StoreService {
     private final ImageRepository imageRepository;
     private final CheckInRepository checkInRepository;
 
+
+    @Override
+    public void addMembers(Long memberId, Long storeId) {
+        StoreEntity storeEntity = storeRepository.findById(storeId).get();
+        storeEntity.setMembersEntity(membersRepository.findById(memberId).get());
+        log.info(storeEntity);
+        storeRepository.save(storeEntity);
+    }
+
     @Override
     public Integer awaitingCountCheck(Long storeId) {
         Integer awaitingCount = ordersRepository.countByStoreEntityIdAndOrdersStatus(storeId, OrdersStatus.AWAITING);

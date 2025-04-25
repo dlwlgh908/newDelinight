@@ -57,9 +57,7 @@ public class OrdersEntity {
     private LocalDateTime deliveringTime;
     private LocalDateTime deliveredTime;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "log_id")
-    private CheckOutLogEntity checkOutLogEntity;
+
 
     private Long totalPrice;
 

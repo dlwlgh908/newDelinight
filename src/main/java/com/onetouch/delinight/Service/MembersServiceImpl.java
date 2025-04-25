@@ -76,6 +76,15 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
+    public List<MembersDTO> findMembersListByHotelEmail(String email) {
+        Long id = hotelService.findHotelByEmail(email);
+        List<MembersEntity> resultEntities = membersRepository.selectHotelIdandstoreAd(id);
+        List<MembersDTO> resultDTOS = resultEntities.stream().map(resultEntity ->
+                modelMapper.map(resultEntity, MembersDTO.class)).toList();
+        return resultDTOS;
+    }
+
+    @Override
     public void create(MembersDTO membersDTO) {
 
         MembersEntity membersEntity =
