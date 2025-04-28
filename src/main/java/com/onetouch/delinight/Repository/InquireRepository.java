@@ -22,6 +22,7 @@ import java.util.List;
 
 public interface InquireRepository extends JpaRepository<InquireEntity, Long> {
 
+    public Integer countByCheckInEntity_RoomEntity_HotelEntity_Id(Long id);
 
     //inquire에 속한 호텔 id를 기준으로 찾는다
     public Page<InquireEntity> findByHotelEntity_Id(Long hotelId, Pageable pageable);

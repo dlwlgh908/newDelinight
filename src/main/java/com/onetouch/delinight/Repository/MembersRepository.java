@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Repository;
 
+import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.Entity.MembersEntity;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,13 @@ import java.util.Optional;
 
 public interface MembersRepository extends JpaRepository<MembersEntity, Long> {
 
+    Integer countByCenterEntity_IdAndRole(Long id, Status status);
+    List<MembersEntity> findByCenterEntity_Id(Long id);
 
+    List<MembersEntity> findByHotelEntity_Id(Long id);
+
+    @Query("select m from MembersEntity m where m.hotelEntity.id = :id and m.role = 'STOREADMIN'")
+    List<MembersEntity> selectHotelIdandstoreAd(Long id);
     @Query("select m from MembersEntity m where m.role = 'SUPERADMIN'")
     Page<MembersEntity> selectSuperAd(Pageable pageable);
 

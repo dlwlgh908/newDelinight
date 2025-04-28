@@ -54,6 +54,15 @@ public class RoomServiceController {
         return "redirect:/users/order/list";
     }
 
+    @GetMapping("/read")
+    public String read(Long orderId, Model model){
+        OrdersDTO ordersDTO = ordersService.readOne(orderId);
+        log.info(ordersDTO);
+        model.addAttribute("ordersDTO", ordersDTO);
+        return "users/order/read";
+
+    }
+
     @GetMapping("/request")
     public String request(Long paymentId, Model model){
         List<OrdersDTO> ordersDTOList = ordersService.read(paymentId);

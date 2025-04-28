@@ -50,45 +50,14 @@ public class InquireServiceImpl implements InquireService {
     private final HotelRepository hotelRepository;
     private final UsersRepository usersRepository;
     private final CheckInService checkInService;
-
-//    @Override
-//    public InquireDTO register(InquireDTO inquireDTO, String email) {
-//
-//        //modelMapper를 사용해서 dto를 엔티티로 변환
-//        InquireEntity inquireEntity = modelMapper.map(inquireDTO, InquireEntity.class);
-//
-//        //email로 체크인 정보를 조희
-//        CheckInDTO checkInDTO = checkInService.findCheckInByEmail(email);
-//
-//        //checkInDTO에서 id를 꺼내서 엔티티객체로 가져와
-//        CheckInEntity checkInEntity = checkInRepository.findById(checkInDTO.getId()).get();
-//
-//        //문의엔티티에 체크인 정보를 연결(어떤 체크인에 대한 문의인지)
-//        inquireEntity.setCheckInEntity(checkInEntity);
-//
-//        //모든 정보를 채운 inquireEntity를 DB에 저장
-//        inquireEntity = inquireRepository.save(inquireEntity);
-//
-//        //저장된 엔티티를 다시 dto로 변환
-//        inquireDTO = modelMapper.map(inquireEntity, InquireDTO.class);
-//
-//        return inquireDTO;
-//
-//    }
-
-
-
+    private final SseService sseService;
 
     @Override
     public InquireDTO register(InquireDTO inquireDTO, String email) {
-
-        //modelMapper를 사용해서 dto를 엔티티로 변환
         InquireEntity inquireEntity = modelMapper.map(inquireDTO, InquireEntity.class);
+        //체크인 id을 찾아와서
 
-        //email로 체크인 정보를 조희
         CheckInDTO checkInDTO = checkInService.findCheckInByEmail(email);
-
-        //checkInEntity 조회
         CheckInEntity checkInEntity = checkInRepository.findById(checkInDTO.getId()).get();
 
         //체크인에서 호텔 ㅈ어보 추출
@@ -100,9 +69,8 @@ public class InquireServiceImpl implements InquireService {
 
         //모든 정보를 채운 inquireEntity를 DB에 저장
         inquireEntity = inquireRepository.save(inquireEntity);
-
-        //저장된 엔티티를 다시 dto로 변환
         inquireDTO = modelMapper.map(inquireEntity, InquireDTO.class);
+        sseService.sendToHAdmin("H"+inquireEntity.getCheckInEntity().getRoomEntity().getHotelEntity().getId(),"new-inquire",inquireEntity.getCheckInEntity().getRoomEntity().getName()+"방으로 부터 새로운 문의가 들어왔습니다.");
 
         return inquireDTO;
 
@@ -159,6 +127,7 @@ public class InquireServiceImpl implements InquireService {
         inquireRepository.deleteById(id);
 
     }
+
 
 
 

@@ -43,6 +43,22 @@ public class OrdersServiceImpl implements OrdersService{
     private final SseService sseService;
 
     @Override
+    public OrdersDTO readOne(Long ordersId) {
+
+        Optional<OrdersEntity> optionalOrdersEntity = ordersRepository.findById(ordersId);
+        if(optionalOrdersEntity.isPresent()){
+            OrdersEntity ordersEntity = optionalOrdersEntity.get();
+            OrdersDTO ordersDTO = modelMapper.map(ordersEntity, OrdersDTO.class).setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(), StoreDTO.class)).setOrdersItemDTOList(ordersEntity.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class).setImgUrl(imageRepository.findByMenuEntity_Id(ordersItemEntity.getMenuEntity().getId()).get().getFullUrl()))).toList());
+            return ordersDTO;
+
+        }
+        else {
+            return null;
+
+        }
+    }
+
+    @Override
     public Page<OrdersDTO> processList(Pageable pageable, String email) {
         Page<OrdersEntity> processEntityList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(email, OrdersStatus.DELIVERED, OrdersStatus.PENDING, pageable);
         Page<OrdersDTO> processDTOList =  processEntityList.map(data->modelMapper.map(data, OrdersDTO.class)
@@ -146,12 +162,49 @@ public class OrdersServiceImpl implements OrdersService{
             orders.setDeliveredTime(LocalDateTime.now());
         }
         ordersRepository.save(orders);
+        if(orders.getCheckInEntity().getUsersEntity()!=null){
+            if(ordersStatus.equals("preparing")){
+                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문이 승인되어 조리를 시작하였습니다.");
+
+            }
+            else if(ordersStatus.equals("delivering")){
+                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문의 조리가 완료되어 배달을 시작합니다.");
+
+            }
+            else {
+                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문 배달이 완료되었습니다.");
+            }
+
+        }
+        else {
+            if(ordersStatus.equals("preparing")){
+                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문이 승인되어 조리를 시작하였습니다.");
+
+            }
+            else if(ordersStatus.equals("delivering")){
+                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문의 조리가 완료되어 배달을 시작합니다.");
+
+            }
+            else {
+                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문 배달이 완료되었습니다.");
+            }
+
+        }
+
     }
 
     @Override
     public List<OrdersDTO> ordersListByEmail(String email) {
 
-        List<OrdersEntity> ordersEntityList = ordersRepository.findByCheckInEntity_UsersEntityEmail(email);
+        List<OrdersEntity> ordersEntityList = null;
+        if(email.contains("@")){
+            ordersEntityList = ordersRepository.findByCheckInEntity_UsersEntityEmail(email);
+
+        }
+        else {
+            ordersEntityList = ordersRepository.findByCheckInEntity_GuestEntityPhone(email);
+        }
+
         List<OrdersDTO> ordersDTOList = ordersEntityList.stream().map(ordersEntity-> modelMapper.map(ordersEntity, OrdersDTO.class).setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(), StoreDTO.class)
                 .setImgUrl(imageRepository.findByStoreEntity_Id(ordersEntity.getStoreEntity().getId()).get().getFullUrl())).setOrdersItemDTOList(ordersEntity.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class))).toList())).toList();
 

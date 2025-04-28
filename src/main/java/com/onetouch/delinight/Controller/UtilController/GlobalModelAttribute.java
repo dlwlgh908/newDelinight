@@ -1,6 +1,8 @@
 package com.onetouch.delinight.Controller.UtilController;
 
 import com.onetouch.delinight.Constant.Role;
+import com.onetouch.delinight.Service.HotelService;
+import com.onetouch.delinight.Service.MembersService;
 import com.onetouch.delinight.Service.StoreService;
 import com.onetouch.delinight.Util.CustomGuestDetails;
 import com.onetouch.delinight.Util.CustomUserDetails;
@@ -21,6 +23,8 @@ import javax.naming.Name;
 public class GlobalModelAttribute {
 
     private final StoreService storeService;
+    private final MembersService membersService;
+    private final HotelService hotelService;
 
     @ModelAttribute
     public void setGlobalAttributes(HttpServletRequest request, Model model) {
@@ -41,12 +45,12 @@ public class GlobalModelAttribute {
                     model.addAttribute("alertCount", alertCount);
                     // 스토어 어드민일때
                 } else if (memberDetails.getMembersEntity().getRole() == Role.ADMIN) {
-                    Integer alertCount = 0;
+                    Integer alertCount = hotelService.unansweredCheck(hotelService.findHotelByEmail(memberDetails.getUsername()));
                     model.addAttribute("alertCount", alertCount);
                     // 호텔 어드민일때(수정 해야함)
                 } else {
-                    Integer alertCount = 0;
-                    model.addAttribute("alertCount", alertCount);
+                    Integer alertCount = membersService.countOfRequestAccount(memberDetails.getUsername());
+                    model.addAttribute("alertCount", 0L);
                     // 아무것도 아닐때(0으로 리턴)
                 }
                 model.addAttribute("member", memberDetails.getMembersEntity());
@@ -67,14 +71,10 @@ public class GlobalModelAttribute {
             else if (principal instanceof CustomUserDetails customUserDetails) {
                 String name = customUserDetails.getUsersEntity().getName();
                 model.addAttribute("data", name);
-                Integer alertCount = 0;//수정할 예정
-                model.addAttribute("alertCount", alertCount);
             }
             else if (principal instanceof CustomGuestDetails customGuestDetails){
                 String phone = customGuestDetails.getUsername();
                 model.addAttribute("data", phone);
-                Integer alertCount = 0;
-                model.addAttribute("alertCount", alertCount);
             }
             }
             catch (Exception e){

@@ -7,7 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Repository;
 
-import com.onetouch.delinight.Entity.*;
+import com.onetouch.delinight.Entity.PaymentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,7 +21,6 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long>, C
 
     @Query("select p from PaymentEntity p JOIN p.ordersEntityList o where o.checkInEntity.usersEntity.email =:email")
     List<PaymentEntity> findPaymentEntitiesByUsersEmail(@Param("email") String email);
-
 
 
 

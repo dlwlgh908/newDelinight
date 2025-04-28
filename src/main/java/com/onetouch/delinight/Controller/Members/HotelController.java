@@ -101,7 +101,7 @@ public class HotelController {
         return "redirect:/members/hotel/read";
     }
 
-    @GetMapping("/memberslist")
+    @GetMapping("/memberlist")
     public String memberlist(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
                              Principal principal) {
 //        List<MembersEntity> membersEntityList =

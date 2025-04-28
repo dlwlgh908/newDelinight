@@ -1,6 +1,7 @@
 package com.onetouch.delinight.Controller.Users;
 
 import com.onetouch.delinight.DTO.CartItemDTO;
+import com.onetouch.delinight.Entity.CartEntity;
 import com.onetouch.delinight.Repository.CartRepository;
 import com.onetouch.delinight.Service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +64,15 @@ public class CartRestController {
 
     @PostMapping("/cartToOrder")
     public String  cartToOrder(Principal principal) {
-        Long cartId = cartRepository.findByUsersEntity_Email(principal.getName()).getId();
+        Long cartId = 0L;
+        CartEntity cartEntity = cartRepository.findByUsersEntity_Email(principal.getName());
+        CartEntity cartEntity1 = cartRepository.findByGuestEntity_Phone(principal.getName());
+        if(cartEntity!=null){
+            cartId = cartEntity.getId();
+        }
+        else {
+            cartId = cartEntity1.getId();
+        }
         log.info("진입여부");
         Long paymentId = cartService.cartToOrder(cartId);
         return String.valueOf(paymentId);
