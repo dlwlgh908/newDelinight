@@ -97,7 +97,7 @@ public class UsersInquireController {
         model.addAttribute("inquireDTOList",inquireDTOList);
         log.info("inquireDTOList 읽어옴??? : " + inquireDTOList);
 
-        return "/users/inquire/list";
+        return "users/inquire/list";
     }
 
 

@@ -29,7 +29,7 @@ public class InquireEntity extends BaseTimeEntity {
     @Column(length = 2000, nullable = true)
     private String content;
 
-    @CreatedDate
+    @Column(nullable = true) //null을 허용하여 답변 시간이 없을 때 null로 유지
     private LocalDateTime responseTime; //답변시간
 
 

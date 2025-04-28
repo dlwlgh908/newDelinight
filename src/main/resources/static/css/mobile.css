@@ -442,6 +442,51 @@ button i {
 }
 /* userHome-page-end */
 
+/* QnaRegister-page-start */
+body {
+    font-size: 16px;
+}
+h2 {
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+textarea, input[type="text"] {
+    font-size: 16px;
+}
+button, a.btn {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .table {
+        font-size: 12px;
+    }
+    h2 {
+        font-size: 20px;
+    }
+    .btn {
+        font-size: 16px;
+    }
+}
+.form-control, .form-select {
+    font-size: 16px;
+    padding: 12px;
+}
+textarea.form-control {
+    min-height: 150px;
+}
+label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+.card {
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+/* QnaRegister-page-end */
 
 
 

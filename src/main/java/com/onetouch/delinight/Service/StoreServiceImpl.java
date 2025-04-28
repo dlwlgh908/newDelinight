@@ -134,7 +134,14 @@ public class StoreServiceImpl implements StoreService {
         Optional<StoreEntity> optionalStoreEntity = storeRepository.findById(id);
         if (optionalStoreEntity.isPresent()) {
             StoreEntity storeEntity = optionalStoreEntity.get();
-            StoreDTO storeDTO = modelMapper.map(storeEntity, StoreDTO.class).setImgUrl(imageRepository.findByStoreEntity_Id(id).get().getFullUrl());
+            StoreDTO storeDTO = modelMapper.map(storeEntity, StoreDTO.class);
+            Optional<ImageEntity> imageEntity = imageRepository.findByStoreEntity_Id(id);
+            if(imageEntity.isPresent()){
+                storeDTO.setImgUrl(imageEntity.get().getFullUrl());
+            }
+            else {
+                storeDTO.setImgUrl("/img/defaultImg.png");
+            }
             return storeDTO;
         } else {
             log.info("현재 등록 되어 있는 가맹점이 없습니다.");

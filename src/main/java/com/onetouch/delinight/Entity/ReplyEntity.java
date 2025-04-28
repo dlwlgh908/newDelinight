@@ -25,7 +25,9 @@ public class ReplyEntity extends BaseTimeEntity{
     private String replyText;
 
     private String replyer;
+
     @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime responseTime; //답변시간
 
 

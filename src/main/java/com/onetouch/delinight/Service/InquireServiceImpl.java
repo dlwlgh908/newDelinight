@@ -60,16 +60,20 @@ public class InquireServiceImpl implements InquireService {
         CheckInDTO checkInDTO = checkInService.findCheckInByEmail(email);
         CheckInEntity checkInEntity = checkInRepository.findById(checkInDTO.getId()).get();
 
-        //체크인에서 호텔 ㅈ어보 추출
+        //체크인에서 호텔 정보 추출
         HotelEntity hotelEntity = checkInEntity.getRoomEntity().getHotelEntity();
 
         //문의엔티티에 체크인, 호텔 정보 연결
         inquireEntity.setCheckInEntity(checkInEntity);
         inquireEntity.setHotelEntity(hotelEntity);
 
+        //문의글 작성시에는 초기에는 null로 설정
+        inquireEntity.setResponseTime(null);
+
         //모든 정보를 채운 inquireEntity를 DB에 저장
         inquireEntity = inquireRepository.save(inquireEntity);
         inquireDTO = modelMapper.map(inquireEntity, InquireDTO.class);
+
         sseService.sendToHAdmin("H"+inquireEntity.getCheckInEntity().getRoomEntity().getHotelEntity().getId(),"new-inquire",inquireEntity.getCheckInEntity().getRoomEntity().getName()+"방으로 부터 새로운 문의가 들어왔습니다.");
 
         return inquireDTO;

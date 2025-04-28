@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/mobile/layout}"
+>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,106 +14,56 @@
     <title>등록</title>
     <link rel="stylesheet" href="/css/mobile.css">
 
-    <style>
-        body {
-            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 400px;
-            max-height: 700px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        button.submit, input.submit {
-            width: 100%;
-            background-color: var(--jin-gray);
-            color: white;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-
-        button.submit:hover, input.submit:hover {
-            background-color: #333;
-        }
-        textarea {
-            height: 120px;
-            resize: vertical;
-        }
-        .file-upload {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
-        .file-upload div {
-            width: 30%;
-            height: 80px;
-            background-color: #eee;
-            border: 1px dashed #aaa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 5px;
-            font-size: 24px;
-            color: #999;
-        }
-        .footer-text {
-            font-size: 12px;
-            color: #888;
-            margin-top: 10px;
-            text-align: center;
-        }
-    </style>
 
 </head>
 <body>
+<div class="container-fluid px-3" layout:fragment="content">
 
-<div class="container">
 
-    <h2>1:1 문의하기</h2>
-    <form action="/users/inquire/register" th:object="${inquireDTO}" method="post" class="formWrap" enctype="multipart/form-data">
 
-        <input type="hidden" name="id" id="id">
+        <h2>1:1 문의하기</h2>
+        <form action="/users/inquire/register" th:object="${inquireDTO}" method="post" class="formWrap" enctype="multipart/form-data">
 
-        <label for="title">제목 *</label>
-        <input type="text" id="title" name="title" required>
+            <div>
+                <input type="hidden" name="id" id="id">
+            </div>
 
-        <label for="content">문의내용 *</label>
-        <textarea id="content" name="content" required></textarea>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <select name="category" class="form-select" required>
+                        <option value="">문의유형 선택</option>
+                        <option>룸서비스 문의</option>
+                        <option>룸케어 문의</option>
+                        <option>기타문의</option>
+                    </select>
+                </div>
+            </div>
 
-        <button type="submit" class="btn-DeliNight-white">등록</button>
-        <a href="/users/inquire/list" class="md-3 mt-3 btn-DeliNight-white">이전</a>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label for="title">제목 *</label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
+            </div>
 
-    </form>
+            <div class="row mb-4">
+                <div class="col-12">
+                    <label for="content">문의내용 *</label>
+                    <textarea id="content" name="content" class="form-control" required></textarea>
+                </div>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary w-100 mb-2" style="height: 50px;">등록</button>
+            <a href="/users/inquire/list" class="btn btn-secondary w-100" style="height: 50px;">이전</a>
+
+
+        </form>
+
+
 
 </div>
+
 
 </body>
 </html>

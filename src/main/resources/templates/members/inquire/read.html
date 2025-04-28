@@ -17,7 +17,7 @@
             <!--반드시 이 안에서만 작업-->
 
             <!--페이지 제목 명명-->
-            <h3 class="mt-5">1:1 문의하기</h3>
+            <h3 class="mt-5">1:1 문의답변</h3>
             <ol class="breadcrumb mb-4">
                 <!--페이지 소제목 명명-->
                 <li class="breadcrumb-item active"></li>
@@ -43,22 +43,23 @@
                         </div>
 
                         <div>
-
                             <div class="col mt-3">
                                 <label>답변내용</label><br>
 <!--                                <textarea class="replyText" name="replyText"></textarea><br>-->
                                 <textarea name="replyText" class="form-control replyText" rows="1" oninput="autoResize(this)"
                                           style="overflow:hidden; resize: none; min-height: 1rem">
                                     </textarea>
-                                <button type="submit" class="md-3 mt-3 btn-DeliNight-whiter insertBtn" style="width: 80px; height: 60px">저장</button>
-                                <a href="/members/inquire/list" class="md-3 mt-3 btn-DeliNight-white" style="width: 90px; height: 30px">이전</a>
+                                <button type="submit" class="md-3 mt-3 btn-DeliNight-black insertBtn" style="width: 60px; height: 40px">저장</button>
+                                <a href="/members/inquire/list" class="md-3 mt-3 btn-DeliNight-black" style="width: 90px; height: 30px">이전</a>
+                            </div>
+
+                            <div class="col mt-3">
+                                <label>댓글내용</label><br>
+                                <div class="form-control-plaintext replyWrap" style="border: 1px solid black"></div>
 
                             </div>
 
-
                         </div>
-
-                        <div class="form-control-plaintext replyWrap" style="border: 1px solid black"></div>
 
                     </div>
                 </div>
