@@ -52,13 +52,13 @@ public class HotelRestController {
     }
 
     @PostMapping("/modify")
-    public ResponseEntity<String> modify(@RequestParam Long id, @RequestParam Long hotelId) {
+    public ResponseEntity<String> modify(Long memberId,Long hotelId) {
 
-        log.info(id);
+        log.info(memberId);
         log.info(hotelId);
 
 
-        hotelService.modify(id, hotelId);
+        hotelService.modify(memberId, hotelId);
 
 
         return ResponseEntity.ok("성공");

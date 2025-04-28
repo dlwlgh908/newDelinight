@@ -27,7 +27,7 @@ public interface HotelService {
 
     public void del(Long id);
 
-    public void modify(Long id, Long hotelId);
+    public void modify(Long memberId, Long hotelId);
 
 
 

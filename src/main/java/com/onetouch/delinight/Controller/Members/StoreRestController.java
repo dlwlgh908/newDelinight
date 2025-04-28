@@ -81,4 +81,17 @@ public class StoreRestController {
 
         return ResponseEntity.ok(membersDTOList);
     }
+
+    @PostMapping("/rest/modify")
+    public ResponseEntity<String> modify(Long memberId, Long storeId) {
+        log.info("modify 진입");
+        log.info("memberid" + memberId);
+        log.info("memberid" + memberId);
+        log.info("memberid" + storeId);
+        log.info("memberid" + storeId);
+//        storeService.addMembers(memberId, storeId);
+        storeService.modiMembers(memberId, storeId);
+
+        return ResponseEntity.ok("정상 추가");
+    }
 }

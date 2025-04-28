@@ -16,6 +16,8 @@ public interface StoreService {
 
     public void addMembers(Long memberId, Long storeId);
 
+    public void modiMembers(Long memberId, Long storeId);
+
     public Long findStoreByEmail(String email);
     public void create(StoreDTO storeDTO);
 

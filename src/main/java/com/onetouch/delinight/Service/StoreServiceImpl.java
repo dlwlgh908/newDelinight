@@ -9,6 +9,7 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.OrdersStatus;
 import com.onetouch.delinight.DTO.HotelDTO;
+import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.*;
 import com.onetouch.delinight.Repository.*;
@@ -41,6 +42,16 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public void addMembers(Long memberId, Long storeId) {
         StoreEntity storeEntity = storeRepository.findById(storeId).get();
+        storeEntity.setMembersEntity(membersRepository.findById(memberId).get());
+        log.info(storeEntity);
+        storeRepository.save(storeEntity);
+    }
+
+    @Override
+    public void modiMembers(Long memberId, Long storeId) {
+        StoreEntity storeEntity =
+            storeRepository.findById(storeId).get();
+
         storeEntity.setMembersEntity(membersRepository.findById(memberId).get());
         log.info(storeEntity);
         storeRepository.save(storeEntity);
@@ -100,12 +111,21 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public List<StoreDTO> list() {
-        List<StoreEntity> storeEntityList =
-                storeRepository.findAll();
-        List<StoreDTO> storeDTOList =
-                storeEntityList.stream().toList().stream().map(
-                        storeEntity -> modelMapper.map(storeEntity, StoreDTO.class)
-                ).collect(Collectors.toList());
+        List<StoreEntity> storeEntityList = storeRepository.findAll();
+
+        List<StoreDTO> storeDTOList = storeEntityList.stream()
+                .map(storeEntity -> {
+                    StoreDTO storeDTO = modelMapper.map(storeEntity, StoreDTO.class);
+                    if (storeEntity.getMembersEntity() != null) {
+                        MembersDTO membersDTO = modelMapper.map(storeEntity.getMembersEntity(), MembersDTO.class);
+                        storeDTO.setMemberDTO(membersDTO);
+                    } else {
+                        storeDTO.setMemberDTO(null); // 명시적으로 null 값을 설정
+                    }
+                    return storeDTO;
+                })
+                .collect(Collectors.toList());
+
         return storeDTOList;
     }
 

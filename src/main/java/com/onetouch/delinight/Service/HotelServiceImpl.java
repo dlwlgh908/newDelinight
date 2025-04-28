@@ -84,7 +84,8 @@ public class HotelServiceImpl implements HotelService{
         List<HotelEntity> hotelEntityList =
             hotelRepository.findAll();
         List<HotelDTO> hotelDTOList =
-        hotelEntityList.stream().toList().stream().map(hotelEntity -> {
+        hotelEntityList.stream().toList().stream().map(
+                hotelEntity -> {
                     HotelDTO hotelDTO = modelMapper.map(hotelEntity, HotelDTO.class);
                     if (hotelEntity.getMembersEntity() != null) {
                         MembersDTO membersDTO = modelMapper.map(hotelEntity.getMembersEntity(), MembersDTO.class);
@@ -92,7 +93,6 @@ public class HotelServiceImpl implements HotelService{
                     } else {
                         hotelDTO.setMembersDTO(null);
                     }
-
                     return hotelDTO;
                 })
                 .collect(Collectors.toList());
@@ -112,9 +112,9 @@ public class HotelServiceImpl implements HotelService{
     }
 
     @Override
-    public void modify(Long id, Long hotelId) {
+    public void modify(Long memberId, Long hotelId) {
         MembersEntity membersEntity =
-                membersRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+                membersRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
         HotelEntity hotelEntity =
                 hotelRepository.findById(hotelId).orElseThrow(EntityNotFoundException::new);
 
