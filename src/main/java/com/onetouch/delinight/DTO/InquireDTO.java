@@ -28,7 +28,9 @@ public class InquireDTO {
     @Size(min = 2, max = 2000, message = "2~2000글자로 작성헤주세요.")
     private String content;
     private LocalDateTime regTime; //등록시간
-    private LocalDateTime updateTime; //답변시간(response time)
+    private LocalDateTime updateTime; //수정시간
+    private LocalDateTime responseTime; //답변시간
+
 
 
 

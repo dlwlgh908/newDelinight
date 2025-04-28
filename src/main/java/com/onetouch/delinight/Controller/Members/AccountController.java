@@ -97,7 +97,7 @@ public class AccountController {
         }
         //호텔 어드민
         else if(role.equals(Role.ADMIN)){
-            return "redirect:/members/account/storeadlist" ;
+            return "redirect:/members/account/home" ;
         }
         //스토어 어드민
         else if(role.equals(Role.STOREADMIN)){

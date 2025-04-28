@@ -9,6 +9,7 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.InquireDTO;
+import com.onetouch.delinight.Entity.InquireEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.method.P;
@@ -20,12 +21,8 @@ public interface InquireService{
     public InquireDTO register(InquireDTO inquireDTO,String email);
 
     //목록
+    public Page<InquireDTO> inquireList(Pageable pageable,Long hotelId);
     public Page<InquireDTO> inquireList(Pageable pageable,String email);
-    public List<InquireDTO> inquireList(Long hotelId);
-    public List<InquireDTO> inquireListByUsers (Long usersId);
-
-
-    public Page<InquireDTO> inquireListTEST(Pageable pageable,String email);
 
 
 
@@ -35,7 +32,5 @@ public interface InquireService{
     public InquireDTO update(InquireDTO inquireDTO);
     //삭제
     public void delete(Long id);
-
-
 
 }
