@@ -25,9 +25,16 @@ public class HotelDTO {
 
     private BranchDTO branchDTO;
     private MembersDTO membersDTO;
+    private Long imgNum;
+
 
     public HotelDTO setMembersDTO(MembersDTO membersDTO){
         this.membersDTO = membersDTO;
+        return this;
+    }
+
+    public HotelDTO setImgNum(Long imgNum){
+        this.imgNum = imgNum;
         return this;
     }
 

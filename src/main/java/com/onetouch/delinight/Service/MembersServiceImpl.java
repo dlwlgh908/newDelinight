@@ -296,7 +296,8 @@ public class MembersServiceImpl implements MembersService{
     @Override
     public Integer countOfRequestAccount(String email) {
         Long centerId = centerService.findCenter(email);
-        Integer result = membersRepository.countByCenterEntity_IdAndRole(centerId, Status.WAIT);
+        log.info(centerId);
+        Integer result = membersRepository.countByCenterEntity_IdAndStatus(centerId, Status.WAIT);
         return result;
     }
 

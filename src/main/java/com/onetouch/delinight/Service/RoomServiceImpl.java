@@ -35,6 +35,8 @@ public class RoomServiceImpl implements RoomService{
     private final HotelRepository hotelRepository;
     private final UsersRepository usersRepository;
     private final CheckInService checkInService;
+    private final HotelService hotelService;
+
     @Override
     public RoomDTO create(RoomDTO roomDTO) {
 
@@ -73,9 +75,12 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public List<RoomDTO> list() {
+    public List<RoomDTO> list(String email) {
+
+        Long id = hotelService.findHotelByEmail(email);
+
         List<RoomEntity> roomEntityList =
-            roomRepository.findAll();
+            roomRepository.findByHotelEntity_Id(id);
         List<RoomDTO> roomDTOList =
                 roomEntityList.stream().map(
                         roomEntity -> modelMapper.map(roomEntity, RoomDTO.class)

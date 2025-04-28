@@ -56,7 +56,7 @@ public class MenuController {
 
     //등록get
     @GetMapping("/register")
-    public String registerView(Principal principal, Model model){
+    public String registerView(MenuDTO menuDTO, Principal principal, Model model){
         boolean storeImgExistence = imageService.ExistStoreImgByEmail(principal.getName());
         if(storeImgExistence) {
             return "/members/menu/registerIndex";

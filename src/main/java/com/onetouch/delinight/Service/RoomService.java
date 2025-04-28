@@ -17,7 +17,7 @@ public interface RoomService {
 
     public void update(RoomDTO roomDTO);
 
-    public List<RoomDTO> list();
+    public List<RoomDTO> list(String email);
 
 
 

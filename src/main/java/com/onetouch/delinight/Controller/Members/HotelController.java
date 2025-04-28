@@ -9,11 +9,13 @@ package com.onetouch.delinight.Controller.Members;
 
 import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.DTO.MenuDTO;
 import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.HotelRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.HotelService;
+import com.onetouch.delinight.Service.ImageService;
 import com.onetouch.delinight.Service.MembersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -35,6 +37,7 @@ public class HotelController {
     private final HotelService hotelService;
     private final HotelRepository hotelRepository;
     private final MembersService membersService;
+    private final ImageService imageService;
 
     @GetMapping("/create")
     public String createView() {
@@ -42,6 +45,7 @@ public class HotelController {
 
         return "members/hotel/create";
     }
+
 
     @PostMapping("/create")
     public String createProc(HotelDTO hotelDTO, String email) {
@@ -83,6 +87,8 @@ public class HotelController {
                 hotelRepository.findByMembersEntity_Email(principal.getName());
 
         model.addAttribute("hotel", hotelEntity);
+        String imgUrl = imageService.readHotel(hotelEntity.getId());
+        model.addAttribute("imgUrl", imgUrl);
         return "members/hotel/update";
     }
 

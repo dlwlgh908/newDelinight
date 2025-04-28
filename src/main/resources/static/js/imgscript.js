@@ -36,6 +36,13 @@ $(function () {
                     var imgNums = key;
                     $(".hiddenImgNum").html('<input type="hidden" class="imgNum" name="imgNum" value="' + key + '"/>')
                     var imgFullUrl = value;
+                    if(currentUrl.includes("/members/hotel")){
+                        if($(".hotelImg").attr("th:src")){
+                            $(".hotelImg").removeAttr("th:src")
+                        }
+                        $(".hotelImg").attr("src", imgFullUrl)
+                        return
+                    }
                     if($(".menuImg").attr("th:src")){
                         $(".menuImg").removeAttr("th:src")
                     }

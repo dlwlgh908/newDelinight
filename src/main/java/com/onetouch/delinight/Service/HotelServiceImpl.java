@@ -12,11 +12,9 @@ import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.BranchEntity;
 import com.onetouch.delinight.Entity.HotelEntity;
+import com.onetouch.delinight.Entity.ImageEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
-import com.onetouch.delinight.Repository.BranchRepository;
-import com.onetouch.delinight.Repository.HotelRepository;
-import com.onetouch.delinight.Repository.InquireRepository;
-import com.onetouch.delinight.Repository.MembersRepository;
+import com.onetouch.delinight.Repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -38,6 +36,7 @@ public class HotelServiceImpl implements HotelService {
     private final ModelMapper modelMapper;
     private final MembersRepository membersRepository;
     private final InquireRepository inquireRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     public int assignCheck(String email) {
@@ -79,7 +78,16 @@ public class HotelServiceImpl implements HotelService {
 
 
         hotelEntity.setBranchEntity(branchEntity);
-        hotelRepository.save(hotelEntity);
+        HotelEntity hotelEntity1 = hotelRepository.save(hotelEntity);
+        Long imgNum = hotelDTO.getImgNum(); //imgNum이 null인지 확인하였으나 null값이라 오류
+        if (imgNum == null) {
+            throw new IllegalArgumentException("이미지 ID(imgNum)가 null입니다.");
+        }
+        ImageEntity imageEntity = imageRepository.findById(imgNum)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 이미지가 존재하지 않습니다: " + imgNum));
+
+        imageEntity.setHotelEntity(hotelEntity1);
+        imageRepository.save(imageEntity);
 
     }
 
@@ -94,6 +102,13 @@ public class HotelServiceImpl implements HotelService {
 
         hotel.setName(hotelEntity.getName());
         hotel.setContent(hotelEntity.getContent());
+        if (hotelDTO.getImgNum() != null) {
+            ImageEntity imageEntity = imageRepository.findById(hotelDTO.getImgNum()).get();
+            imageRepository.deleteByHotelEntity_Id(hotelEntity.getId());
+            imageEntity.setHotelEntity(hotelEntity);
+            imageRepository.save(imageEntity);
+        }
+        hotelRepository.save(hotel);
 
     }
 

@@ -27,6 +27,17 @@ public class ImageServiceImpl implements ImageService {
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
     private final StoreService storeService;
+    private final HotelService hotelService;
+
+    @Override
+    public String readHotel(Long id) {
+        Optional<ImageEntity> imageEntity = imageRepository.findByHotelEntity_Id(id);
+        if(imageEntity.isPresent()){
+            return imageEntity.get().getFullUrl();
+        }else {
+            return "/img/defaultImg.png";
+        }
+    }
 
     @Override
     public String readStore(Long id) {
@@ -113,6 +124,12 @@ public class ImageServiceImpl implements ImageService {
     public boolean ExistStoreImgByEmail(String email) {
         Long id = storeService.findStoreByEmail(email);
         boolean result = imageRepository.existsByStoreEntity_Id(id);
+        return result;
+    }
+    @Override
+    public boolean ExistHotelImgByEmail(String email) {
+        Long id = hotelService.findHotelByEmail(email);
+        boolean result = imageRepository.existsByHotelEntity_Id(id);
         return result;
     }
 

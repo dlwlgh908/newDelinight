@@ -31,11 +31,15 @@
                 alert("메뉴 생성 전 가맹점 대표 사진 등록이 필수 입니다.")
                 window.location.href="/members/store/register"
             }
+            if(sep==="hotel"){
+                alert("방 생성 전 호텔 대표 배너 사진 등록이 필수 입니다.")
+                window.location.href="/members/hotel/update"
+            }
 
         })
 
     </script>
-    <div th:replace="~{fragmentes/desktop/adminfooter::adminFooter}"></div>
+    <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
 </div>
 
 </body>
