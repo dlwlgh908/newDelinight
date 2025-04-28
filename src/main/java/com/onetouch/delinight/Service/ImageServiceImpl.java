@@ -26,6 +26,7 @@ public class ImageServiceImpl implements ImageService {
     private final S3Service s3Service;
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
+    private final StoreService storeService;
 
     @Override
     public String readStore(Long id) {
@@ -106,6 +107,13 @@ public class ImageServiceImpl implements ImageService {
 
             log.info("해당 아이디로 조회되는 이미지가 없습니다.");
         }
+    }
+
+    @Override
+    public boolean ExistStoreImgByEmail(String email) {
+        Long id = storeService.findStoreByEmail(email);
+        boolean result = imageRepository.existsByStoreEntity_Id(id);
+        return result;
     }
 
     @Override

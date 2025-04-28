@@ -44,7 +44,7 @@
                                            </a>
                                        </td>
                                        <td th:text="${menuDTO.name}"></td>
-                                       <td th:text="${menuDTO.price}"></td>
+                                       <td th:text="${#numbers.formatInteger(menuDTO.price, 3, 'COMMA') + '원'}"></td>
                                        <td th:text="${menuDTO.menuStatus}"></td>
                                    </tr>
                                </th:block>
