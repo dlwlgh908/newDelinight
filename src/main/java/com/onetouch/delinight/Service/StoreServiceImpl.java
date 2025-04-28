@@ -64,6 +64,16 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public int assignCheck(String email) {
+
+        StoreEntity store = storeRepository.findByMembersEntity_Email(email);
+        if(store == null){
+            return 1;
+        }
+        else return 0;
+    }
+
+    @Override
     public Long findStoreByEmail(String email) {
 
         StoreEntity storeEntity = storeRepository.findByMembersEntity_Email(email);
@@ -77,11 +87,8 @@ public class StoreServiceImpl implements StoreService {
                 modelMapper.map(storeDTO, StoreEntity.class);
         HotelEntity hotelEntity =
                 hotelRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-        MembersEntity membersEntity =
-                membersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
 
         storeEntity.setHotelEntity(hotelEntity);
-        storeEntity.setMembersEntity(membersEntity);
 
         storeRepository.save(storeEntity);
 

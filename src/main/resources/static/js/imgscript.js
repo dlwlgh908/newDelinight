@@ -34,7 +34,7 @@ $(function () {
 
                 $.each(result, function(key,value){
                     var imgNums = key;
-                    $(".hiddenImgNum").html('<input type="hidden" name="imgNum" value="' + key + '"/>')
+                    $(".hiddenImgNum").html('<input type="hidden" class="imgNum" name="imgNum" value="' + key + '"/>')
                     var imgFullUrl = value;
                     if($(".menuImg").attr("th:src")){
                         $(".menuImg").removeAttr("th:src")

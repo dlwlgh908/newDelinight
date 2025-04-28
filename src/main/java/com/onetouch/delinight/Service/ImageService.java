@@ -16,6 +16,7 @@ public interface ImageService {
 
     public void update(MultipartFile multipartFile, Long num, String imgType) throws IOException, InterruptedException;
     public void dummyImgDelete();
+    public boolean ExistStoreImgByEmail(String email);
 
 
 }

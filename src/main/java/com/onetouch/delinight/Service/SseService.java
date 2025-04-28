@@ -22,9 +22,12 @@ public class SseService {
     // 푸쉬하는 쪽 메소드에 이미터s에서 해당 이미터가 존재하면 거기에 데이터 보내는 로직을 구현 하기
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
     private final StoreService storeService;
+    private final HotelService hotelService;
+    private final UsersService usersService;
 
     public SseEmitter connect(String response) {
         SseEmitter emitter = new SseEmitter(60 * 60 * 1000L); // 1시간 유효하게
+        log.info("sse 연결 시도함222");
 
             emitters.put(response, emitter);
 
@@ -35,6 +38,7 @@ public class SseService {
         emitter.onError((e) -> emitters.remove(response));
 
         try {
+            log.info("sse 연결 시도함");
             emitter.send(SseEmitter.event().name("connect").data(response+"nice, connected"));
         }
         catch (IOException e){
@@ -60,6 +64,41 @@ public class SseService {
             catch (IOException e){
                 log.info("error from sendToAdmin");
                 emitters.remove(storeId);
+            }
+        }
+    }
+    public void sendToHAdmin(String hotelId, String eventName, Object data){
+        SseEmitter emitter = emitters.get(hotelId);
+        Long id = Long.parseLong(hotelId.substring(1));
+        Integer alertCount = hotelService.unansweredCheck(id);
+        if(emitter != null){
+            try {
+                Map<String, Object> payload = new HashMap<>();
+                payload.put("data", data);
+                payload.put("alertCount", alertCount);
+                emitter.send(SseEmitter.event()
+                        .name(eventName)
+                        .data(payload));
+            }
+            catch (IOException e){
+                log.info("error from sendToHotelAdmin");
+                emitters.remove(hotelId);
+            }
+        }
+    }
+    public void sendToUsers(String usersId, String eventName, Object data){
+        SseEmitter emitter = emitters.get(usersId);
+        if(emitter != null){
+            try {
+                Map<String, Object> payload = new HashMap<>();
+                payload.put("data", data);
+                emitter.send(SseEmitter.event()
+                        .name(eventName)
+                        .data(payload));
+            }
+            catch (IOException e){
+                log.info("error from sendToUsers");
+                emitters.remove(usersId);
             }
         }
     }

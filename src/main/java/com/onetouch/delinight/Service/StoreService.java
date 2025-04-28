@@ -18,6 +18,7 @@ public interface StoreService {
 
     public void modiMembers(Long memberId, Long storeId);
 
+    public int assignCheck(String email);
     public Long findStoreByEmail(String email);
     public void create(StoreDTO storeDTO);
 

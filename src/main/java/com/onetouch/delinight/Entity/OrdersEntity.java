@@ -67,10 +67,10 @@ public class OrdersEntity {
     @Enumerated(EnumType.STRING)
     OrdersStatus ordersStatus; // 현 주문 상태
 
-//    public OrdersEntity setCheckOutLogEntity(CheckOutLogEntity checkOutLogEntity) {
-//        this.checkOutLogEntity = checkOutLogEntity;
-//        return this;
-//    }
+    public OrdersEntity setCheckOutLogEntity(CheckOutLogEntity checkOutLogEntity) {
+        this.checkOutLogEntity = checkOutLogEntity;
+        return this;
+    }
 
 
 

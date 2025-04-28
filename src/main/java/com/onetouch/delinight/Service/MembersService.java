@@ -24,6 +24,7 @@ public interface MembersService {
 
     public List<MembersDTO> findMembersListByHotelEmail(String email);
 
+    public boolean assignCheck(String email, int sep);
     public void create(MembersDTO membersDTO);
     public void update(MembersDTO membersDTO);
     //public MembersDTO update(MembersDTO membersDTO, String currentPasswordInput, String newPasswordInput, String confirmPasswordInput);
@@ -39,10 +40,7 @@ public interface MembersService {
     Page<MembersEntity> findAccount(Status status, int page, String email, String sep);
 
 
-    //public List<MembersDTO> findSuper();
-    public List<MembersDTO> findHotelAd();
-    public List<MembersDTO> findStoreAd();
-
+    public Integer countOfRequestAccount(String email);
 
     public MembersDTO approve(Long id);
     public MembersDTO Disapprove(Long id);

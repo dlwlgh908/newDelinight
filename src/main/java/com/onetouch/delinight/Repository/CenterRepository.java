@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CenterRepository extends JpaRepository<CenterEntity, Long> {
 
+    public boolean existsByMembersEntity_Email(String email);
     public CenterEntity findByMembersEntity_Email(String email);
 
 

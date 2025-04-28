@@ -23,10 +23,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +50,7 @@ public class InquireServiceImpl implements InquireService {
     private final HotelRepository hotelRepository;
     private final UsersRepository usersRepository;
     private final CheckInService checkInService;
+    private final SseService sseService;
 
     @Override
     public InquireDTO register(InquireDTO inquireDTO, String email) {
@@ -61,11 +59,19 @@ public class InquireServiceImpl implements InquireService {
 
         CheckInDTO checkInDTO = checkInService.findCheckInByEmail(email);
         CheckInEntity checkInEntity = checkInRepository.findById(checkInDTO.getId()).get();
+
+        //체크인에서 호텔 ㅈ어보 추출
+        HotelEntity hotelEntity = checkInEntity.getRoomEntity().getHotelEntity();
+
+        //문의엔티티에 체크인, 호텔 정보 연결
         inquireEntity.setCheckInEntity(checkInEntity);
+        inquireEntity.setHotelEntity(hotelEntity);
 
-
+        //모든 정보를 채운 inquireEntity를 DB에 저장
         inquireEntity = inquireRepository.save(inquireEntity);
         inquireDTO = modelMapper.map(inquireEntity, InquireDTO.class);
+        sseService.sendToHAdmin("H"+inquireEntity.getCheckInEntity().getRoomEntity().getHotelEntity().getId(),"new-inquire",inquireEntity.getCheckInEntity().getRoomEntity().getName()+"방으로 부터 새로운 문의가 들어왔습니다.");
+
         return inquireDTO;
 
     }
@@ -73,51 +79,30 @@ public class InquireServiceImpl implements InquireService {
     @Override
     public Page<InquireDTO> inquireList(Pageable pageable,String email) {
 
-        CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+        log.info("히히"+email);
+        UsersEntity usersEntity = checkInRepository.findByUsersEntity_Email(email).getUsersEntity();
+        log.info("히히 엔티티" + usersEntity);
         //이메일로 체크인 정보를 찾는다
-        if (checkInEntity == null){
+        if (usersEntity == null){
             // null이면 Qna가 없다는 뜻이니 빈 페이지 반환 (에러 안 나게!)
 
             return Page.empty();
         }
-
-        Page<InquireEntity> pageList = inquireRepository.findByCheckInEntity_Id(checkInEntity.getId(),pageable);
+        Page<InquireEntity> pageList = inquireRepository.findByCheckInEntity_UsersEntity_Id(usersEntity.getId(),pageable);
         //방금 찾은 체크인 기록의 id로 문의글을 찾고, 한페이지씩 잘라서 가져와
 
         return pageList.map(data -> modelMapper.map(data, InquireDTO.class));
 
     }
-
-
-
-
     @Override
-    public List<InquireDTO> inquireList(Long hotelId) {
+    public Page<InquireDTO> inquireList(Pageable pageable,Long hotelId) {
 
+        Page<InquireEntity> pageList = inquireRepository.findByHotelEntity_Id(hotelId,pageable);
+        //방금 찾은 체크인 기록의 id로 문의글을 찾고, 한페이지씩 잘라서 가져와
 
-        List<InquireEntity> inquireEntityList = inquireRepository.findAllByHotelId(hotelId);
+        return pageList.map(data -> modelMapper.map(data, InquireDTO.class));
 
-
-        List<InquireDTO> inquireDTOList = inquireEntityList.stream().map(data -> modelMapper.map(data, InquireDTO.class)
-                .setHotelDTO(modelMapper.map(data.getHotelEntity(),HotelDTO.class))).toList();
-        
-
-        return inquireDTOList;
     }
-
-    @Override
-    public List<InquireDTO> inquireListByUsers(Long usersId) {
-
-        //로그인한 유저의 Id로 문의글 엔티티 조회
-        List<InquireEntity> inquireEntityList = inquireRepository.findByCheckInEntity_UsersEntity_Id(usersId);
-
-        //엔티티를 DTO로 변환하고, 사용자 정보도 함께 매핑
-        List<InquireDTO> inquireDTOList = inquireEntityList.stream().filter(Objects::isNull).map(inquire -> modelMapper.map(inquire, InquireDTO.class)
-                .setUsersDTO(modelMapper.map(inquire.getUsersEntity(), UsersDTO.class))).toList();
-
-        return inquireDTOList;
-    }
-
 
     @Override
     public InquireDTO read(Long id) {
@@ -145,23 +130,7 @@ public class InquireServiceImpl implements InquireService {
 
 
 
-    @Override
-    public Page<InquireDTO> inquireListTEST(Pageable pageable,String email) {
 
-        CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
-        //이메일로 체크인 정보를 찾는다
-        if (checkInEntity == null){
-            // null이면 Qna가 없다는 뜻이니 빈 페이지 반환 (에러 안 나게!)
-
-            return Page.empty();
-        }
-
-        Page<InquireEntity> pageList = inquireRepository.findInquireEntitiesByCheckInEntity_Id(checkInEntity.getId(),pageable);
-        //방금 찾은 체크인 기록의 id로 문의글을 찾고, 한페이지씩 잘라서 가져와
-
-        return pageList.map(data -> modelMapper.map(data, InquireDTO.class));
-
-    }
 
 
 }

@@ -15,6 +15,7 @@ import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.BranchRepository;
 import com.onetouch.delinight.Repository.HotelRepository;
+import com.onetouch.delinight.Repository.InquireRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +31,29 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 @Log4j2
-public class HotelServiceImpl implements HotelService{
+public class HotelServiceImpl implements HotelService {
 
     private final HotelRepository hotelRepository;
     private final BranchRepository branchRepository;
     private final ModelMapper modelMapper;
     private final MembersRepository membersRepository;
+    private final InquireRepository inquireRepository;
+
+    @Override
+    public int assignCheck(String email) {
+        HotelEntity hotelEntity = hotelRepository.findByMembersEntity_Email(email);
+        if (hotelEntity == null) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public Integer unansweredCheck(Long hotelId) {
+        Integer id = inquireRepository.countByCheckInEntity_RoomEntity_HotelEntity_Id(hotelId);
+        return id;
+    }
 
     @Override
     public void addMembers(Long memberId, Long hotelId) {
@@ -49,12 +67,12 @@ public class HotelServiceImpl implements HotelService{
     @Override
     public void create(HotelDTO hotelDTO, String email) {
         HotelEntity hotelEntity =
-            modelMapper.map(hotelDTO, HotelEntity.class);
+                modelMapper.map(hotelDTO, HotelEntity.class);
         BranchEntity branchEntity =
                 branchRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
 
         MembersEntity membersEntity =
-            membersRepository.findByEmail(email);
+                membersRepository.findByEmail(email);
 
         hotelEntity.setMembersEntity(membersEntity);
 
@@ -70,7 +88,7 @@ public class HotelServiceImpl implements HotelService{
 
 
         HotelEntity hotelEntity =
-            modelMapper.map(hotelDTO, HotelEntity.class);
+                modelMapper.map(hotelDTO, HotelEntity.class);
         HotelEntity hotel =
                 hotelRepository.findById(hotelEntity.getId()).orElseThrow(EntityNotFoundException::new);
 
@@ -82,7 +100,7 @@ public class HotelServiceImpl implements HotelService{
     @Override
     public List<HotelDTO> list() {
         List<HotelEntity> hotelEntityList =
-            hotelRepository.findAll();
+                hotelRepository.findAll();
         List<HotelDTO> hotelDTOList =
         hotelEntityList.stream().toList().stream().map(
                 hotelEntity -> {
@@ -105,7 +123,7 @@ public class HotelServiceImpl implements HotelService{
 
         return hotelEntity.getId();
     }
-  
+
     @Override
     public void del(Long id) {
         hotelRepository.deleteById(id);

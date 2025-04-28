@@ -96,7 +96,7 @@
 
     <div class="card md-4">
         <div class="card-body">
-            <form action="/inquire/update" method="post" enctype="multipart/form-data" th:object="${inquireDTO}">
+            <form action="/users/inquire/update" method="post" enctype="multipart/form-data" th:object="${inquireDTO}">
                 <div class="card">
                     <div class="card-header">수정</div>
                     <div class="card-body">
@@ -119,8 +119,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <button type="submit" class="md-3 mt-3 btn-DeliNight-Dark" style="width: 80px; height: 60px">수정</button>
-                            <button type="button" class="md-3 mt-3 btn-DeliNight-white" style="width: 80px; height: 60px" onclick="document.getElementById('inquire-delete-form').submit();">삭제</button>
+                            <button type="submit" class="md-3 mt-3 btn-DeliNight-black">수정</button>
+                            <a href="/users/inquire/list" class="md-3 mt-3 btn-DeliNight-white" style="text-align: center ">이전</a>
+
                         </div>
 
                     </div>
@@ -128,9 +129,6 @@
 
             </form>
 
-            <form action="/inquire/delete" method="post" id="inquire-delete-form">
-                <input hidden readonly name="id" th:value="${inquireDTO.id}">
-            </form>
 
         </div>
 

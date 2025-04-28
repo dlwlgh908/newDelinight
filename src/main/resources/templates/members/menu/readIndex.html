@@ -4,75 +4,65 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/desktop/layout}"
 >
-    <head>
-        <title>델리나잇</title>
+<head>
+    <title>델리나잇</title>
 
-        <!--별도 css 필요할 시 아래로 추가-->
-        <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
-        styles.css에 작성할것-->
-    </head>
+    <!--별도 css 필요할 시 아래로 추가-->
+    <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
+    styles.css에 작성할것-->
+</head>
 
-    <body>
-        <div layout:fragment="adminContent" id="layoutSidenav_content">
-            <main>
-                <!--내용 넣는 곳-->
-                <div class="container-fluid px-4">
-                    <!--페이지 이름-->
-                    <h1 class="mt-4">상세보기</h1>
-                    <!--텍스트 박스-->
-                    <div class="card mb-4">
-                       <div class="card-body">
-                           <div class="container">
-                               <div class="row mt-5">
-                                   <div class="col-2"></div>
-                                   <div class="col-6">
-                                       <div class="card">
-                                           <div class="card-header">상세보기</div>
-                                           <div class="card-body">
-                                               <a th:href="@{|/members/menu/update/${menuDTO.id}|}" class="btn btn-success">수정</a>
-                                               <div class="row md-3">
-                                                   <div class="col-4">메뉴번호</div>
-                                                   <div class="col" th:text="${menuDTO.id}"></div>
-                                               </div>
-                                               <div class="row md-3">
-                                                   <div class="col-4">메뉴</div>
-                                                   <div class="col" th:text="${menuDTO.name}"></div>
-                                               </div>
-                                               <div class="row md-3">
-                                                   <div class="col-4">메뉴정보</div>
-                                                   <div class="col" th:text="${menuDTO.content}"></div>
-                                               </div>
-                                               <div class="row md-3">
-                                                   <div class="col-4">가격</div>
-                                                   <div class="col" th:text="${menuDTO.price}"></div>
-                                               </div>
-                                               <div class="row md-3">
-                                                   <div class="col-4">판매상태</div>
-                                                   <div class="col" th:text="${menuDTO.menuStatus}"></div>
-                                               </div>
-                                               <div class="row md-3">
-                                                   <div class="col-4">메뉴종류</div>
-                                                   <div class="col" th:text="${menuDTO.menu}"></div>
-                                               </div>
+<body>
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+    <main>
+        <!--내용 넣는 곳-->
+        <div class="container-fluid px-4">
+            <!--페이지 이름-->
+            <h1 class="mt-4">상세보기</h1>
+            <!--텍스트 박스-->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <a th:href="@{|/members/menu/update/${menuDTO.id}|}" class="btn btn-success">수정</a>
+                    <div class="row md-3">
+                        <div class="col-4">메뉴번호</div>
+                        <div class="col" th:text="${menuDTO.id}"></div>
+                    </div>
+                    <div class="row md-3">
+                        <div class="col-4">메뉴</div>
+                        <div class="col" th:text="${menuDTO.name}"></div>
+                    </div>
+                    <div class="row md-3">
+                        <div class="col-4">메뉴정보</div>
+                        <div class="col" th:text="${menuDTO.content}"></div>
+                    </div>
+                    <div class="row md-3">
+                        <div class="col-4">가격</div>
+                        <div class="col" th:text="${menuDTO.price}"></div>
+                    </div>
+                    <div class="row md-3">
+                        <div class="col-4">판매상태</div>
+                        <div class="col" th:text="${menuDTO.menuStatus}"></div>
+                    </div>
+                    <div class="row md-3">
+                        <div class="col-4">메뉴종류</div>
+                        <div class="col" th:text="${menuDTO.menu}"></div>
+                    </div>
 
-                                               <div class="row md-3">
-                                                   <div class="col col-4">이미지</div>
-                                                   <div th:if="${menuDTO.imgUrl}"><img width="100%" th:src="${menuDTO.imgUrl}"></div>
-                                               </div>
-                                           </div>
-                                       </div>
-                                   </div>
-                               </div>
-                           </div>
-                           <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-                       </div>
+                    <div class="row md-3">
+                        <div class="col col-4">이미지</div>
+                        <div th:if="${menuDTO.imgUrl}"><img width="100%" th:src="${menuDTO.imgUrl}"></div>
                     </div>
                 </div>
-            </main>
-
-            <!--푸터 절대 수정 금지!!!!-->
-            <!--푸터-->
-            <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
+            </div>
         </div>
-    </body>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</div>
+
+<!--푸터 절대 수정 금지!!!!-->
+<!--푸터-->
+<div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
+</div>
+</body>
 </html>

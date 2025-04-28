@@ -17,4 +17,6 @@ public interface ImageRepository extends JpaRepository<ImageEntity, Long> {
     public void deleteByMenuEntity_Id(Long menuEntityId);
     public void deleteByStoreEntity_Id(Long storeEntityId);
 
+    public boolean existsByStoreEntity_Id(Long id);
+
 }

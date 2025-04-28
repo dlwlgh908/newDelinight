@@ -53,6 +53,7 @@ public class CartServiceImpl implements CartService{
     @Override
     public Long cartToOrder(Long cartNum) {
         PaymentEntity paymentEntity = new PaymentEntity();
+        CheckInEntity checkInEntity = null;
         paymentEntity.setPaidCheck(PaidCheck.none);
         List<OrdersEntity> ordersEntityList = new ArrayList<>();
 
@@ -81,8 +82,17 @@ public class CartServiceImpl implements CartService{
                         .build();
                 ordersItemRepository.save(ordersItemEntity);
             }
-            String email = cartRepository.findById(cartNum).get().getUsersEntity().getEmail();
-            CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+            Optional<CartEntity> cartEntity = cartRepository.findById(cartNum);
+            String email = null;
+            if(cartEntity.get().getUsersEntity()!=null){
+                email = cartEntity.get().getUsersEntity().getEmail();
+                checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+            }
+            else {
+                email = cartEntity.get().getGuestEntity().getPhone();
+                checkInEntity = checkInRepository.findByGuestEntity_Phone(email);
+            }
+
             savedOrder.setCheckInEntity(checkInEntity);
             savedOrder.setOrdersStatus(OrdersStatus.PENDING);
             savedOrder.setTotalPrice(totalPrice);
