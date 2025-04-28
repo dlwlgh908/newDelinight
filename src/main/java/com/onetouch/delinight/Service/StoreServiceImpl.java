@@ -17,6 +17,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,21 +41,53 @@ public class StoreServiceImpl implements StoreService {
 
 
     @Override
-    public void addMembers(Long memberId, Long storeId) {
+    public void addMembers(Long memberId, Long storeId) throws DataIntegrityViolationException {
         StoreEntity storeEntity = storeRepository.findById(storeId).get();
-        storeEntity.setMembersEntity(membersRepository.findById(memberId).get());
-        log.info(storeEntity);
-        storeRepository.save(storeEntity);
+
+        MembersEntity membersEntity =
+                membersRepository.findById(memberId).get();
+
+        if (storeEntity.getMembersEntity() == null) {
+
+            try {
+                storeEntity.setMembersEntity(membersEntity);
+                storeRepository.save(storeEntity);
+            }
+
+            catch(DataIntegrityViolationException e){
+                throw new DataIntegrityViolationException("이미 관리자가 배정된 스토어입니다.");
+            }
+        } else {
+
+        }
+
     }
 
     @Override
-    public void modiMembers(Long memberId, Long storeId) {
+    public void modiMembers(Long memberId, Long storeId )throws DataIntegrityViolationException {
         StoreEntity storeEntity =
-            storeRepository.findById(storeId).get();
+                storeRepository.findById(storeId).get();
 
-        storeEntity.setMembersEntity(membersRepository.findById(memberId).get());
-        log.info(storeEntity);
-        storeRepository.save(storeEntity);
+        MembersEntity membersEntity =
+                membersRepository.findById(memberId).get();
+
+        if (storeEntity.getMembersEntity() != null) {
+
+            try {
+                storeEntity.setMembersEntity(membersEntity);
+
+                log.info(storeEntity);
+                storeRepository.save(storeEntity);
+            }
+
+            catch(DataIntegrityViolationException e){
+                throw new DataIntegrityViolationException("이미 관리자가 배정된 스토어입니다.");
+            }
+        } else {
+
+        }
+
+
     }
 
     @Override
