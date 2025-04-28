@@ -1,7 +1,6 @@
 
 $(document).ready(function () {
 
-
     const eventSource = new EventSource("/sse/connect");
 
     eventSource.onopen = function (e) {
@@ -28,6 +27,12 @@ $(document).ready(function () {
         newInquire(inquireInfo, alertCount)
     })
 
+    eventSource.addEventListener("new-changeStatus",function (e) {
+        const parsedMap = JSON.parse(e.data);
+        const chageStatus = parsedMap.data;
+        newChangeStatus(chageStatus)
+    })
+
 
 
     function newOrder(ordersInfo, alertCount){
@@ -47,6 +52,14 @@ $(document).ready(function () {
         });
 
         $(".notification-badge").text(alertCount)
+    }
+    function newChangeStatus(changeStatus){
+        Swal.fire({
+            icon: 'info',
+            title: '새로운 문의가 들어왔습니다.',
+            text: changeStatus,
+        });
+
     }
 
     $("#alertStart").click(function () {

@@ -30,7 +30,7 @@
             <div class="user-welcome col-4" style="text-align: center">
                 <div class="userHeaderMsg">
                     <p style="margin-bottom: -0.5em" th:if="${#authentication.name.contains('@')}">[[${data}]]님</p>
-                    <p style="margin-bottom: -0.5em" >게스트님</p>
+                    <p style="margin-bottom: -0.5em" th:if="!${#authentication.name.contains('@')}">게스트님</p>
                     <p style="margin-bottom: -0.5em">환영합니다</p>
                 </div>
             </div>

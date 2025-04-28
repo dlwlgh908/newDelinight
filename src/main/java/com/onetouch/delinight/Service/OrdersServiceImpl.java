@@ -162,6 +162,35 @@ public class OrdersServiceImpl implements OrdersService{
             orders.setDeliveredTime(LocalDateTime.now());
         }
         ordersRepository.save(orders);
+        if(orders.getCheckInEntity().getUsersEntity()!=null){
+            if(ordersStatus.equals("preparing")){
+                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문이 승인되어 조리를 시작하였습니다.");
+
+            }
+            else if(ordersStatus.equals("delivering")){
+                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문의 조리가 완료되어 배달을 시작합니다.");
+
+            }
+            else {
+                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문 배달이 완료되었습니다.");
+            }
+
+        }
+        else {
+            if(ordersStatus.equals("preparing")){
+                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문이 승인되어 조리를 시작하였습니다.");
+
+            }
+            else if(ordersStatus.equals("delivering")){
+                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문의 조리가 완료되어 배달을 시작합니다.");
+
+            }
+            else {
+                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문 배달이 완료되었습니다.");
+            }
+
+        }
+
     }
 
     @Override

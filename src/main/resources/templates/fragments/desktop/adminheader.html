@@ -29,7 +29,7 @@
                                 <div class="user-info-title">
 
                                     <strong th:text="${member.name}"></strong>
-                                    <div class="user-info-role" th:text="${member.role}">SuperADMIN</div>
+                                    <div class="user-info-role" th:text="${member.role}"></div>
                                 </div>
                                 <div th:text="${member.email}">guide@mysupereasy.co.kr</div>
 
@@ -39,8 +39,10 @@
                         <ul class="menu-list">
                             <li><a href="/members/account/mypage"><i class="fas fa-circle-user"></i>마이페이지</a></li>
                             <div class="icon-wrap">
-                                <li><a><i class="fas fa-bell"></i>알림함</a></li>
-                                <span class="notification-badge custom-shadow">7</span>
+
+                                <li th:if="${member.role.name == 'STOREADMIN'}"><a href="/members/store/orders/list"><i class="fas fa-bell"></i>알림함</a></li>
+                                <li th:if="${member.role.name == 'ADMIN'}"><a href="/members/inquire/list"><i class="fas fa-bell"></i>알림함</a></li>
+                                <span class="notification-badge custom-shadow" th:if="${alertCount} != 0" th:text="${alertCount}"></span>
                             </div>
                         </ul>
                         <form id="logoutForm" action="/members/account/logout" method="post" style="display: none;"></form>

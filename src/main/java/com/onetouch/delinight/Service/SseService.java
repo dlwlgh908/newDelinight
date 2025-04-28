@@ -23,6 +23,7 @@ public class SseService {
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
     private final StoreService storeService;
     private final HotelService hotelService;
+    private final UsersService usersService;
 
     public SseEmitter connect(String response) {
         SseEmitter emitter = new SseEmitter(60 * 60 * 1000L); // 1시간 유효하게
@@ -82,6 +83,22 @@ public class SseService {
             catch (IOException e){
                 log.info("error from sendToHotelAdmin");
                 emitters.remove(hotelId);
+            }
+        }
+    }
+    public void sendToUsers(String usersId, String eventName, Object data){
+        SseEmitter emitter = emitters.get(usersId);
+        if(emitter != null){
+            try {
+                Map<String, Object> payload = new HashMap<>();
+                payload.put("data", data);
+                emitter.send(SseEmitter.event()
+                        .name(eventName)
+                        .data(payload));
+            }
+            catch (IOException e){
+                log.info("error from sendToUsers");
+                emitters.remove(usersId);
             }
         }
     }

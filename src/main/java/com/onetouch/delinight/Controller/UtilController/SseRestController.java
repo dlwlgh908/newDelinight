@@ -41,7 +41,7 @@ public class SseRestController {
 
     @CrossOrigin(origins = "*")
     @GetMapping(value = "/connect", produces = "text/event-stream")
-    public SseEmitter connect(HttpServletRequest request) {
+    public SseEmitter connect() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof MemberDetails memberDetails) {
