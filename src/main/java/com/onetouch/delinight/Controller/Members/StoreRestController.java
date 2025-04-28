@@ -65,13 +65,14 @@ public class StoreRestController {
 
     @PostMapping("/rest/addMember")
     public ResponseEntity<String> addMember(Long memberId, Long storeId) {
-        log.info("addmember 진입");
-        log.info("memberid" + memberId);
-        log.info("memberid" + memberId);
-        log.info("memberid" + storeId);
-        log.info("memberid" + storeId);
-        storeService.addMembers(memberId, storeId);
-        return ResponseEntity.ok("정상 추가");
+
+        try {
+            storeService.addMembers(memberId, storeId);
+            return ResponseEntity.ok("정상 추가");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/rest/membersList")
@@ -80,5 +81,21 @@ public class StoreRestController {
         log.info(membersDTOList);
 
         return ResponseEntity.ok(membersDTOList);
+    }
+
+    @PostMapping("/rest/modify")
+    public ResponseEntity<String> modify(Long memberId, Long storeId) {
+        log.info("modify 진입");
+        log.info("memberid" + memberId);
+        log.info("memberid" + storeId);
+
+
+        try {
+            storeService.modiMembers(memberId, storeId);
+            return ResponseEntity.ok("정상 수정");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 }

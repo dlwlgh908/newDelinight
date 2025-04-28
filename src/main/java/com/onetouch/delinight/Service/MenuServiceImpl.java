@@ -59,7 +59,6 @@ public class MenuServiceImpl implements MenuService {
 
         imageEntity.setMenuEntity(menuEntity);
         imageRepository.save(imageEntity);
-        menuDTO = modelMapper.map(menuEntity, MenuDTO.class);
     }
 
     @Override

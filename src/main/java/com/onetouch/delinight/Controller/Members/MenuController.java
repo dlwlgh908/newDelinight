@@ -56,11 +56,15 @@ public class MenuController {
 
     //등록get
     @GetMapping("/register")
-    public String registerView(MenuDTO menuDTO){
-
-
-
-        return "/members/menu/registerIndex";
+    public String registerView(MenuDTO menuDTO, Principal principal, Model model){
+        boolean storeImgExistence = imageService.ExistStoreImgByEmail(principal.getName());
+        if(storeImgExistence) {
+            return "/members/menu/registerIndex";
+        }
+        else {
+            model.addAttribute("sep", "store");
+            return "/members/account/common/imgRedirect";
+        }
     }
 
     @PostMapping("/register")
@@ -77,8 +81,7 @@ public class MenuController {
 
         log.info("imgNum 값: " + menuDTO.getImgNum());
 
-        String email = "hansin@a.a";
-
+        String email = principal.getName();
 
         menuService.register(menuDTO, email);
         log.info("저장된 데이터 : " + menuDTO);

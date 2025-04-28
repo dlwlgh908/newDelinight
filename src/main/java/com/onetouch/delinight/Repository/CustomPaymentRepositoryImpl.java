@@ -59,7 +59,7 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
         }
 
 
-        // 4. 정산 상태 필터링
+        // 3. 정산 상태 필터링
         if (paidCheck != null) {
             switch (paidCheck){
                 case paid : builder.and(paymentEntity.paidCheck.eq(paidCheck));
@@ -71,7 +71,7 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
             }
         }
 
-        //5. 날짜로 필터링
+        // 4. 날짜로 필터링
         if (startDate != null && endDate != null) {
             LocalDateTime startDate1 = startDate.atTime(LocalTime.MIDNIGHT);
             LocalDateTime endDate1 = endDate.atTime(LocalTime.MIDNIGHT);
@@ -82,12 +82,10 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
 
         query.where(builder);
 
-
-
-        // 6. 쿼리 실행
+        // 5. 쿼리 실행
         List<PaymentEntity> paymentEntities = query.fetch();
 
-        // 7. PaymentEntity → PaymentDTO 변환
+        // 6. PaymentEntity → PaymentDTO 변환
         List<PaymentDTO> paymentDTOList = paymentEntities.stream().map(payment -> {
             // OrdersDTO 변환
             List<OrdersDTO> ordersDTOList = payment.getOrdersEntityList().stream().map(order -> {

@@ -14,6 +14,7 @@ import java.util.List;
 
 public interface HotelService {
 
+    public int assignCheck(String email);
     public Integer unansweredCheck(Long id);
     public void addMembers(Long memberId, Long hotelId);
     public void create(HotelDTO hotelDTO, String email);
@@ -28,7 +29,7 @@ public interface HotelService {
 
     public void del(Long id);
 
-    public void modify(Long id, Long hotelId);
+    public void modify(Long memberId, Long hotelId);
 
 
 

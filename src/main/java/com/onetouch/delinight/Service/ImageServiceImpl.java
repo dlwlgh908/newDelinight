@@ -26,6 +26,18 @@ public class ImageServiceImpl implements ImageService {
     private final S3Service s3Service;
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
+    private final StoreService storeService;
+    private final HotelService hotelService;
+
+    @Override
+    public String readHotel(Long id) {
+        Optional<ImageEntity> imageEntity = imageRepository.findByHotelEntity_Id(id);
+        if(imageEntity.isPresent()){
+            return imageEntity.get().getFullUrl();
+        }else {
+            return "/img/defaultImg.png";
+        }
+    }
 
     @Override
     public String readStore(Long id) {
@@ -106,6 +118,19 @@ public class ImageServiceImpl implements ImageService {
 
             log.info("해당 아이디로 조회되는 이미지가 없습니다.");
         }
+    }
+
+    @Override
+    public boolean ExistStoreImgByEmail(String email) {
+        Long id = storeService.findStoreByEmail(email);
+        boolean result = imageRepository.existsByStoreEntity_Id(id);
+        return result;
+    }
+    @Override
+    public boolean ExistHotelImgByEmail(String email) {
+        Long id = hotelService.findHotelByEmail(email);
+        boolean result = imageRepository.existsByHotelEntity_Id(id);
+        return result;
     }
 
     @Override

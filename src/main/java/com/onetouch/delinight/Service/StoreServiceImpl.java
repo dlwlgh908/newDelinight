@@ -9,6 +9,7 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.OrdersStatus;
 import com.onetouch.delinight.DTO.HotelDTO;
+import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.*;
 import com.onetouch.delinight.Repository.*;
@@ -16,6 +17,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,17 +41,69 @@ public class StoreServiceImpl implements StoreService {
 
 
     @Override
-    public void addMembers(Long memberId, Long storeId) {
+    public void addMembers(Long memberId, Long storeId) throws DataIntegrityViolationException {
         StoreEntity storeEntity = storeRepository.findById(storeId).get();
-        storeEntity.setMembersEntity(membersRepository.findById(memberId).get());
-        log.info(storeEntity);
-        storeRepository.save(storeEntity);
+
+        MembersEntity membersEntity =
+                membersRepository.findById(memberId).get();
+
+        if (storeEntity.getMembersEntity() == null) {
+
+            try {
+                storeEntity.setMembersEntity(membersEntity);
+                storeRepository.save(storeEntity);
+            }
+
+            catch(DataIntegrityViolationException e){
+                throw new DataIntegrityViolationException("이미 관리자가 배정된 스토어입니다.");
+            }
+        } else {
+
+        }
+
+    }
+
+    @Override
+    public void modiMembers(Long memberId, Long storeId )throws DataIntegrityViolationException {
+        StoreEntity storeEntity =
+                storeRepository.findById(storeId).get();
+
+        MembersEntity membersEntity =
+                membersRepository.findById(memberId).get();
+
+        if (storeEntity.getMembersEntity() != null) {
+
+            try {
+                storeEntity.setMembersEntity(membersEntity);
+
+                log.info(storeEntity);
+                storeRepository.save(storeEntity);
+            }
+
+            catch(DataIntegrityViolationException e){
+                throw new DataIntegrityViolationException("이미 관리자가 배정된 스토어입니다.");
+            }
+        } else {
+
+        }
+
+
     }
 
     @Override
     public Integer awaitingCountCheck(Long storeId) {
         Integer awaitingCount = ordersRepository.countByStoreEntityIdAndOrdersStatus(storeId, OrdersStatus.AWAITING);
         return awaitingCount;
+    }
+
+    @Override
+    public int assignCheck(String email) {
+
+        StoreEntity store = storeRepository.findByMembersEntity_Email(email);
+        if(store == null){
+            return 1;
+        }
+        else return 0;
     }
 
     @Override
@@ -66,11 +120,8 @@ public class StoreServiceImpl implements StoreService {
                 modelMapper.map(storeDTO, StoreEntity.class);
         HotelEntity hotelEntity =
                 hotelRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-        MembersEntity membersEntity =
-                membersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
 
         storeEntity.setHotelEntity(hotelEntity);
-        storeEntity.setMembersEntity(membersEntity);
 
         storeRepository.save(storeEntity);
 
@@ -100,12 +151,21 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public List<StoreDTO> list() {
-        List<StoreEntity> storeEntityList =
-                storeRepository.findAll();
-        List<StoreDTO> storeDTOList =
-                storeEntityList.stream().toList().stream().map(
-                        storeEntity -> modelMapper.map(storeEntity, StoreDTO.class)
-                ).collect(Collectors.toList());
+        List<StoreEntity> storeEntityList = storeRepository.findAll();
+
+        List<StoreDTO> storeDTOList = storeEntityList.stream()
+                .map(storeEntity -> {
+                    StoreDTO storeDTO = modelMapper.map(storeEntity, StoreDTO.class);
+                    if (storeEntity.getMembersEntity() != null) {
+                        MembersDTO membersDTO = modelMapper.map(storeEntity.getMembersEntity(), MembersDTO.class);
+                        storeDTO.setMemberDTO(membersDTO);
+                    } else {
+                        storeDTO.setMemberDTO(null); // 명시적으로 null 값을 설정
+                    }
+                    return storeDTO;
+                })
+                .collect(Collectors.toList());
+
         return storeDTOList;
     }
 
