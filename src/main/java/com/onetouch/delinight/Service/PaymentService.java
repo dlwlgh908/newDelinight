@@ -18,10 +18,10 @@ public interface PaymentService {
 
     public List<OrdersDTO> readOrders(Long paymentId);
 
-
     public List<PaymentDTO> paymentByCriteria(PaidCheck paidCheck, Long memberId, LocalDate startDate, LocalDate endDate);
 
     // 계산 메소드
     List<PaymentDTO> processPayments(List<PaymentDTO> paymentDTOList);
+
 
 }

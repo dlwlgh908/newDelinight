@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.ByteArrayInputStream;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Log4j2
@@ -30,16 +29,6 @@ public class PaymentRestController {
     private final PaymentService paymentService;
     private final MembersService membersService;
 
-//    @GetMapping("/criteria")
-//    public List<PaymentDTO> paymentCriteria(
-//            @RequestParam(required = false) PaidCheck paidCheck,
-//            @RequestParam Long memberId) {
-//            // 1. 서비스 메서드 호출후 결제 내역을 조회
-//            List<PaymentDTO> paymentDTOList = paymentService.paymentByCriteria(paidCheck, memberId, loc);
-//            // 2. 조회된 결제 내역을 반환
-//            return paymentDTOList;
-//    }
-
     @PostMapping("/process")
     public List<PaymentDTO> processPayments(@RequestBody List<PaymentDTO> paymentDTOList) {
         // 1. 서비스 호출 후 결제처리 된 결제 내역처리
@@ -49,8 +38,12 @@ public class PaymentRestController {
     }
 
     @GetMapping("/totalPrice")
-    public ResponseEntity<?> paymentTotalPrice(@RequestParam(value = "paidCheck") PaidCheck paidCheck, @RequestParam(value = "startDate") String startDate1, @RequestParam(value = "endDate") String endDate1, @RequestParam(value = "download", required = false, defaultValue = "false") Boolean download,
-                                               Principal principal){
+    public ResponseEntity<?> paymentTotalPrice(
+            @RequestParam(value = "paidCheck") PaidCheck paidCheck,
+            @RequestParam(value = "startDate") String startDate1,
+            @RequestParam(value = "endDate") String endDate1,
+            @RequestParam(value = "download", required = false, defaultValue = "false") Boolean download,
+            Principal principal){
 
 
 
@@ -95,6 +88,5 @@ public class PaymentRestController {
          }
 
     }
-
 
 }
