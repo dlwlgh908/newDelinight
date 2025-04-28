@@ -19,7 +19,7 @@
             <div class="navbar-hover">
                 <div class="icon-wrap">
                     <div class="nav-link"><i class="fas fa-user"></i></div>
-                    <span class="notification-badge custom-shadow">7</span>
+                    <span class="notification-badge custom-shadow" th:if="${alertCount} != 0" th:text="${alertCount}"></span>
                 </div>
                 <div class="profile-tooltip-wrap">
                     <div class="profile-tooltip custom-shadow">

@@ -40,10 +40,7 @@ public interface MembersService {
     Page<MembersEntity> findAccount(Status status, int page, String email, String sep);
 
 
-    //public List<MembersDTO> findSuper();
-    public List<MembersDTO> findHotelAd();
-    public List<MembersDTO> findStoreAd();
-
+    public Integer countOfRequestAccount(String email);
 
     public MembersDTO approve(Long id);
     public MembersDTO Disapprove(Long id);

@@ -2,7 +2,16 @@
 $(document).ready(function () {
 
 
-    const eventSource = new EventSource("/sse/connectAdmin");
+    const eventSource = new EventSource("/sse/connect");
+
+    eventSource.onopen = function (e) {
+        console.log("SSE 연결 성공!", e);
+    };
+
+    eventSource.onerror = function (e) {
+        console.error("SSE 연결 실패", e);
+    };
+
     eventSource.addEventListener("new-order",function (e) {
         const parsedMap = JSON.parse(e.data);
         const ordersInfo = parsedMap.data;
@@ -12,13 +21,11 @@ $(document).ready(function () {
 
     })
 
-
-    $(".testBtn").on("click",function () {
-        alert("테스트 버튼 클릭")
-        $.ajax({
-            url:"/sse/test",
-            type:"post"
-        })
+    eventSource.addEventListener("new-inquire",function (e) {
+        const parsedMap = JSON.parse(e.data);
+        const inquireInfo = parsedMap.data;
+        const alertCount = parsedMap.alertCount;
+        newInquire(inquireInfo, alertCount)
     })
 
 
@@ -28,6 +35,15 @@ $(document).ready(function () {
             icon: 'info',
             title: '주문이 들어왔습니다.',
             text: ordersInfo,
+        });
+
+        $(".notification-badge").text(alertCount)
+    }
+    function newInquire(inquireInfo, alertCount){
+        Swal.fire({
+            icon: 'info',
+            title: '새로운 문의가 들어왔습니다.',
+            text: inquireInfo,
         });
 
         $(".notification-badge").text(alertCount)

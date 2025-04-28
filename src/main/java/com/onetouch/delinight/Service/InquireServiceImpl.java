@@ -53,6 +53,7 @@ public class InquireServiceImpl implements InquireService {
     private final HotelRepository hotelRepository;
     private final UsersRepository usersRepository;
     private final CheckInService checkInService;
+    private final SseService sseService;
 
     @Override
     public InquireDTO register(InquireDTO inquireDTO, String email) {
@@ -66,6 +67,8 @@ public class InquireServiceImpl implements InquireService {
 
         inquireEntity = inquireRepository.save(inquireEntity);
         inquireDTO = modelMapper.map(inquireEntity, InquireDTO.class);
+        sseService.sendToHAdmin("H"+inquireEntity.getCheckInEntity().getRoomEntity().getHotelEntity().getId(),"new-inquire",inquireEntity.getCheckInEntity().getRoomEntity().getName()+"방으로 부터 새로운 문의가 들어왔습니다.");
+
         return inquireDTO;
 
     }

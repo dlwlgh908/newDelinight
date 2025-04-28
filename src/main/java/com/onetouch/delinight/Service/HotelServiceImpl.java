@@ -15,6 +15,7 @@ import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.BranchRepository;
 import com.onetouch.delinight.Repository.HotelRepository;
+import com.onetouch.delinight.Repository.InquireRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,13 @@ public class HotelServiceImpl implements HotelService{
     private final BranchRepository branchRepository;
     private final ModelMapper modelMapper;
     private final MembersRepository membersRepository;
+    private final InquireRepository inquireRepository;
+
+    @Override
+    public Integer unansweredCheck(Long hotelId) {
+        Integer id = inquireRepository.countByCheckInEntity_RoomEntity_HotelEntity_Id(hotelId);
+        return id;
+    }
 
     @Override
     public void addMembers(Long memberId, Long hotelId) {
