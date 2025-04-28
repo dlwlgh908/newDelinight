@@ -143,6 +143,8 @@
 
 
     <script>
+
+
         $(document).ready(function () {
 
             // 데이터를 저장할 변수
@@ -151,14 +153,39 @@
             let menuData = []
             let chartInstance = null
 
+            createChart('payment')
+            setPeriodAndLoad()
+
+            function showTable(tableType) {
+                console.log(`테이블 표시 : ${tableType}`)
+
+                $('#payInfo').hide()
+                $('#menuInfo').hide()
+
+                switch (tableType){
+
+                    case 'payment':
+                    case 'order':
+                        $('#payInfo').show()
+                        break
+                    case 'menu':
+                        $('#menuInfo').show()
+                        break
+                    default:
+                        console.log("알 수 없는 테이블 타입입니다.", tableType)
+                        break
+
+                }
+
+            }
+
             // 차트 데이터를 가져오는 함수
             function getChartData(chartType) {
-                console.log(`차트 데이터 가져오기: ${chartType}`);  // 디버깅용 로그
+                console.log(`차트 데이터 가져오기: ${chartType}`)
 
                 let labels = []
                 let data = []
 
-                // chartType에 따라 데이터를 처리
                 switch (chartType) {
 
                     case 'payment':
@@ -177,22 +204,23 @@
 
                     case 'menu':
                         menuData.forEach(function (item) {
-                            labels.push(item.menuName)
-                            data.push(item.price)
+                            labels.push(item.menuName)  // 메뉴 이름
+                            data.push(item.totalPrice)  // 총 가격
                         })
                         break
 
                     default:
                         break
+
                 }
 
-                console.log('차트 데이터:', { labels: labels, data: data }); // 디버깅용 로그
+                console.log('차트 데이터:', { labels: labels, data: data })
                 return { labels: labels, data: data }
             }
 
             // 차트 업데이트 함수
             function updateChart(chartType) {
-                console.log(`차트 업데이트: ${chartType}`);  // 디버깅용 로그
+                console.log(`차트 업데이트: ${chartType}`)
 
                 let chartData = getChartData(chartType)
 
@@ -201,13 +229,13 @@
                     chartInstance.data.labels = chartData.labels
                     chartInstance.data.datasets[0].data = chartData.data
                     chartInstance.update()
-                    console.log('차트 업데이트 완료');  // 디버깅용 로그
+                    console.log('차트 업데이트 완료');
                 }
             }
 
             // 차트 생성 함수
             function createChart(chartType) {
-                console.log(`차트 생성: ${chartType}`);  // 디버깅용 로그
+                console.log(`차트 생성: ${chartType}`)
                 let chartData = getChartData(chartType)
 
                 let ctx = document.getElementById('dynamicChart').getContext('2d')
@@ -235,11 +263,6 @@
                 })
             }
 
-            // 기본적으로 'payment' 차트 생성
-            createChart('payment')
-
-            setPeriodAndLoad()
-
             function handleDateAndLoadData(chartType) {
                 let startDateStr = $('#startDate').val()
                 let endDateStr = $('#endDate').val()
@@ -260,7 +283,7 @@
                 startDateStr = formatDate(startDate)
                 endDateStr = formatDate(endDate)
 
-                console.log(`차트 타입: ${chartType}, 시작일: ${startDateStr}, 종료일: ${endDateStr}`); // 디버깅용 로그
+                console.log(`차트 타입: ${chartType}, 시작일: ${startDateStr}, 종료일: ${endDateStr}`)
 
                 switch (chartType) {
                     case 'payment':
@@ -280,20 +303,25 @@
                 showChart(chartType)
             }
 
+
+
             $('#dateBtn').on('click', function () {
                 handleDateAndLoadData('payment')
+                showTable('payment')
             })
 
             $('#orderBtn').on('click', function () {
                 handleDateAndLoadData('order')
+                showTable('order')
             })
 
             $('#menuBtn').on('click', function () {
                 handleDateAndLoadData('menu')
+                showTable('menu')
             })
 
             function showChart(chartId) {
-                console.log(`차트 표시: ${chartId}`);  // 디버깅용 로그
+                console.log(`차트 표시: ${chartId}`)
                 $('#paymentChart').hide()
                 $('#orderChart').hide()
                 $('#menuChart').hide()
@@ -301,13 +329,13 @@
             }
 
             function downloadExcel(data) {
-                console.log('엑셀 다운로드 시작');  // 디버깅용 로그
+                console.log('엑셀 다운로드 시작')
                 let wb = XLSX.utils.book_new()
                 let ws = XLSX.utils.json_to_sheet(data)
 
                 XLSX.utils.book_append_sheet(wb, ws, '정산내역')
                 XLSX.writeFile(wb, '정산_내역.xlsx')
-                console.log('엑셀 다운로드 완료');  // 디버깅용 로그
+                console.log('엑셀 다운로드 완료')
             }
 
             $('#downloadBtn').on('click', function () {
@@ -331,10 +359,11 @@
                 $('#endDate').val(format(endDate))
 
                 loadPaymentData(format(startDate), format(endDate))
+                showTable('payment')
             }
 
             function loadPaymentData(startDateStr, endDateStr) {
-                console.log('결제 데이터 로드 시작');  // 디버깅용 로그
+                console.log('결제 데이터 로드 시작')
                 let storeId = $('#storeId').val()
                 if (storeId === "") storeId = null
 
@@ -346,6 +375,7 @@
                     download: false
                 }
 
+
                 $.ajax({
                     url: '/api/payment/totalPrice',
                     method: 'get',
@@ -353,9 +383,9 @@
                     success: function (response) {
                         if(response===undefined){
                             alert("해당 날짜 및 조건에 존재하는 주문건이 없습니다.")
-                            return;
+                            return
                         }
-                        console.log('결제 데이터 로드 성공', response);  // 디버깅용 로그
+                        console.log('결제 데이터 로드 성공', response)
                         paymentData = response
                         orderData = response
                         menuData = response
@@ -363,6 +393,7 @@
                         handleFetchedData(response)
                         updatePaymentTables(response)
                         updateChart('payment')
+                        showTable('order')
                     },
                     error: function (xhr, status, error) {
                         console.error("조회 실패:", status, error, xhr.responseText)
@@ -375,53 +406,104 @@
             }
 
             function loadMenuData(startDateStr, endDateStr) {
-                loadPaymentData(startDateStr, endDateStr)
+                console.log('메뉴 데이터 로드 시작')
+                let storeId = $('#storeId').val()
+                if (storeId === "") storeId = null
+
+                let data = {
+                    startDate: startDateStr,
+                    endDate: endDateStr,
+                    storeId: storeId,
+                    paidCheck: $('#paidCheck').val(),
+                    download: false
+                }
+
+                $.ajax({
+                    url: '/api/payment/totalPrice',  // 메뉴 관련 API로 수정
+                    method: 'get',
+                    data: data,
+                    success: function (response) {
+                        if(response === undefined){
+                            alert("해당 날짜 및 조건에 존재하는 메뉴 데이터가 없습니다.")
+                            return
+                        }
+                        console.log('메뉴 데이터 로드 성공', response)
+                        menuData = response  // 메뉴 데이터만 업데이트
+
+                        handleFetchedData(response)  // 메뉴 데이터를 테이블에 처리
+                        updateChart('menu')  // 메뉴 차트 업데이트
+                        showTable('menu')  // 메뉴 테이블로 전환
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("조회 실패:", status, error, xhr.responseText)
+                    }
+                })
             }
 
             function handleFetchedData(response) {
-                console.log("메뉴 데이터 로드 시작");
-                let menuList = [];
+                console.log("메뉴 데이터 로드 시작")
+                let menuList = []
 
+                // 메뉴 데이터 처리
                 response.forEach(payment => {
                     if (payment.ordersDTOList && Array.isArray(payment.ordersDTOList)) {
                         payment.ordersDTOList.forEach(order => {
                             if (order.ordersItemDTOList && Array.isArray(order.ordersItemDTOList)) {
                                 order.ordersItemDTOList.forEach(item => {
-                                    menuList.push({
-                                        menuName: item.menuDTO ? item.menuDTO.name : '-',
-                                        menuPrice: item.menuDTO ? item.menuDTO.price : 0,
-                                        quantity: item.quantity || 0,
-                                        totalPrice: (item.menuDTO ? item.menuDTO.price : 0) * (item.quantity || 0)
-                                    });
-                                });
-                            }
-                        });
-                    }
-                });
+                                    let menuName = item.menuDTO ? item.menuDTO.name : '-'
+                                    let menuPrice = item.menuDTO ? item.menuDTO.price : 0
+                                    let quantity = item.quantity || 0  // 수량을 그대로 가져오기
+                                    let totalPrice = menuPrice * quantity
 
-                console.log("menuList:", menuList);
+                                    // 이미 같은 메뉴가 있는지 확인
+                                    let existingItem = menuList.find(menu => menu.menuName === menuName)
+
+                                    if (!existingItem) {
+                                        // 기존 항목이 없으면 새 항목 추가
+                                        menuList.push({
+                                            menuName: menuName,
+                                            menuPrice: menuPrice,
+                                            quantity: quantity,     // 가져온 수량을 그대로 사용
+                                            totalPrice: totalPrice  // 총 가격
+                                        })
+                                    } else {
+                                        // 기존 항목이 있으면 수량을 더하고 총 가격 계산
+                                        existingItem.quantity += quantity
+                                        existingItem.totalPrice = existingItem.menuPrice * existingItem.quantity
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+
+                console.log("menuList:", menuList)
 
                 // 메뉴 테이블 표시
-                $('#menuInfo').show(); // 메뉴 테이블 보이기
-                let tbody = $('#menuInfoBody');
-                tbody.empty(); // 테이블 비우기
+                $('#menuInfo').show()
+                let tbody = $('#menuInfoBody')
+                tbody.empty()
 
                 // 메뉴 데이터를 테이블에 추가
                 menuList.forEach(menuItem => {
-                    let row = $('<tr>');
+                    let row = $('<tr>')
                     row.html(`
                                 <td>${menuItem.menuName}</td>
                                 <td>${menuItem.menuPrice.toLocaleString()} 원</td>
                                 <td>${menuItem.quantity}</td>
                                 <td>${menuItem.totalPrice.toLocaleString()} 원</td>
-                            `);
-                    tbody.append(row);
-                });
+                            `)
+                    tbody.append(row)
+                })
+
+                // 메뉴 데이터를 차트에 반영
+                menuData = menuList
+                updateChart('menu')  // 메뉴 차트 갱신
             }
 
 
             function updatePaymentTables(response) {
-                console.log('결제 테이블 업데이트 시작');  // 디버깅용 로그
+                console.log('결제 테이블 업데이트 시작')
                 let payInfo = $('#payInfo tbody')
                 payInfo.empty()
 
@@ -430,6 +512,7 @@
                 let totalVat = 0
 
                 response.forEach(function (payment) {
+
                     let formattedDate = new Date(payment.regTime)
                     let formattedDateString = formattedDate.getFullYear() + '.' +
                         String(formattedDate.getMonth() + 1).padStart(2, '0') + '.' +
@@ -456,26 +539,26 @@
                     }
 
                     payInfo.append(`
-                    <tr>
-                        <td>${payment.totalId}</td>
-                        <td>${itemNames || storeName}</td>
-                        <td>${checkPaidText}</td>
-                        <td>${formattedDateString}</td>
-                        <td>${formattedUnpaid}</td>
-                        <td>${formattedVat}</td>
-                        <td>${formattedTotalPrice}</td>
-                    </tr>
-                `)
+                                    <tr>
+                                        <td>${payment.totalId}</td>
+                                        <td>${itemNames || storeName}</td>
+                                        <td>${checkPaidText}</td>
+                                        <td>${formattedDateString}</td>
+                                        <td>${formattedUnpaid}</td>
+                                        <td>${formattedVat}</td>
+                                        <td>${formattedTotalPrice}</td>
+                                    </tr>
+                                 `)
 
                     totalPriceSum += payment.totalPrice
                     totalVat += payment.vat
-                    totalVatSum += (payment.totalPrice + payment.vat)
+                    totalVatSum += (totalPriceSum + totalVatSum)
                 })
 
                 $('#totalPriceSum').text(totalPriceSum.toLocaleString())
                 $('#totalVat').text(totalVat.toLocaleString())
                 $('#totalVatSum').text(totalVatSum.toLocaleString())
-                console.log('결제 테이블 업데이트 완료');  // 디버깅용 로그
+                console.log('결제 테이블 업데이트 완료')
             }
         })
     </script>
