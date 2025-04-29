@@ -9,6 +9,10 @@ package com.onetouch.delinight.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -41,10 +45,17 @@ public class HotelEntity {
     private MembersEntity membersEntity;
 
 
+
+
+
     public HotelEntity setMembersEntity(MembersEntity membersEntity) {
         this.membersEntity = membersEntity;
         return this;
     }
+
+
+
+
 
 
 

@@ -22,6 +22,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,11 +65,12 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public void create(HotelDTO hotelDTO, String email) {
+    public void create(HotelDTO hotelDTO,String email) {
         HotelEntity hotelEntity =
                 modelMapper.map(hotelDTO, HotelEntity.class);
         BranchEntity branchEntity =
                 branchRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+
 
         MembersEntity membersEntity =
                 membersRepository.findByEmail(email);

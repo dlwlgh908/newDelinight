@@ -28,6 +28,7 @@ public class HotelDTO {
     private Long imgNum;
 
 
+
     public HotelDTO setMembersDTO(MembersDTO membersDTO){
         this.membersDTO = membersDTO;
         return this;
@@ -37,6 +38,8 @@ public class HotelDTO {
         this.imgNum = imgNum;
         return this;
     }
+
+
 
     public HotelDTO setBranchDTO(BranchDTO branchDTO){
         this.branchDTO = branchDTO;

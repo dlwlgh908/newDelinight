@@ -7,8 +7,19 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.BrandDTO;
+
+import java.util.List;
+
 public interface BrandService {
 
+    public void create(BrandDTO brandDTO);
+
+    public List<BrandDTO> list();
+
+    public List<BrandDTO> listB();
+
+    public void del(Long num);
 
 
 }
