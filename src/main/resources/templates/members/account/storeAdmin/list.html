@@ -143,13 +143,11 @@
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--내용 넣는 곳-->
-            <!--반드시 이 아래에서만 작업-->
-
             <!--페이지 이름-->
-            <h3 class="mt-5">Store Admin 승인</h3>
+            <h3 class="mt-5">가맹점 관리자 계정 승인 내역</h3>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">큰페이지 〉 중간페이지 〉 작은페이지</li>
+                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                <a href="#" class="breadcrumb-item active no-click">계정 관리</a>
             </ol>
 
             <!--텍스트 박스-->
@@ -232,7 +230,7 @@
 
 
                     <!--작업 공간-->
-                    <table class="table">
+                    <table class="table align-middle">
 
                         <thead>
                         <th scope="col">#</th>
@@ -240,6 +238,7 @@
                         <th scope="col">이메일</th>
                         <th scope="col">핸드폰번호</th>
                         <th scope="col">권한</th>
+                        <th scope="col">처리여부</th>
                         <th scope="col">승인여부</th>
                         </thead>
 
@@ -247,7 +246,7 @@
                         <th:block  th:each="list:${paging}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
-                                <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                                <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
                                     [[${list.name}]]
                                 </a>
                                 </td>
@@ -257,14 +256,15 @@
 
                                 <td th:text="${list.role}"></td>
 
-                                <td th:if="${list.status.name() == 'VALID'}" class="aa" th:text="승인완료"></td>
-                                <td th:if="${list.status.name() == 'NOTVALID'}" class="aa" th:text="반려"></td>
-                                <td th:if="${list.status.name() == 'WAIT'}">
-                                    <div th:text="승인대기중"></div>
-                                    <button class="btn btn-primary" th:value="${list.id}" id="approveBtn">승인</button>
-                                    <button class="btn btn-primary" th:value="${list.id}" id="DisapproveBtn">반려</button>
+                                <td th:if="${list.status.name() == 'WAIT'}" class="text-danger fw-bold">대기중</td>
+                                <td th:if="${list.status.name() == 'VALID' or list.status.name() == 'NOTVALID'}" class="text-secondary">처리됨</td>
 
+                                <td th:if="${list.status.name() == 'WAIT'}" class="d-flex">
+                                    <button class="btn btn-primary" th:value="${list.id}" id="approveBtn">승인</button>
+                                    <button class="btn btn-gray offset-0" th:value="${list.id}" id="DisapproveBtn">반려</button>
                                 </td>
+                                <td th:if="${list.status.name() == 'VALID'}" class="text-primary" th:text="승인완료"></td>
+                                <td th:if="${list.status.name() == 'NOTVALID'}" class="text-danger" th:text="반려"></td>
 
 
 

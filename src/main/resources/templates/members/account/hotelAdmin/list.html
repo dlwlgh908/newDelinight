@@ -136,9 +136,6 @@
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--내용 넣는 곳-->
-            <!--반드시 이 아래에서만 작업-->
-
             <!--페이지 이름-->
             <h3 class="mt-5">호텔 관리자 계정 승인 내역</h3>
             <ol class="breadcrumb mb-4">
@@ -225,7 +222,7 @@
                     </div>
 
                     <!--작업 공간-->
-                    <table class="table">
+                    <table class="table align-middle">
 
                         <thead>
                         <th scope="col">#</th>
@@ -241,7 +238,7 @@
                         <th:block  th:each="list:${paging}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
-                                <td><a th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                                <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
                                     [[${list.name}]]
                                 </a>
                                 </td>
