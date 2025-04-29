@@ -63,6 +63,10 @@ public class CheckOutLogEntity extends BaseEntity {
         return  this;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "evaluation_id")
+    private NetPromoterScoreEntity netPromoterScoreEntity;
+
 
 
 

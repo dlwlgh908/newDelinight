@@ -48,7 +48,8 @@ public class HotelController {
 
 
     @PostMapping("/create")
-    public String createProc(HotelDTO hotelDTO, String email) {
+    public String createProc(HotelDTO hotelDTO, String email, Principal principal) {
+        email = principal.getName();
         hotelService.create(hotelDTO, email);
 
         return "members/hotel/create";

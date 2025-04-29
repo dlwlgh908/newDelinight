@@ -2,7 +2,7 @@
 
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/desktop/layout}"
 >
 <head>
@@ -27,7 +27,7 @@
                 </a>
                 <!--가맹점 관리-->
                 <!--스토어어드민-->
-                <a class="nav-link" href="/members/store/update" th:if="${role.name() == 'STOREADMIN'}">
+                <a class="nav-link" th:href="@{/members/store/read(id=${storeId})}" th:if="${role.name() == 'STOREADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>
                     가맹점 관리
                 </a>
@@ -42,6 +42,13 @@
                    th:if="${role.name() == 'SUPERADMIN' or role.name() == 'SYSTEMADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-hotel"></i></div>
                     본사 관리<br>
+                </a>
+                <!--본사관리-->
+                <!--시스템어드민, 수퍼어드민-->
+                <a class="nav-link" href="/members/brand/list"
+                   th:if="${role.name() == 'SUPERADMIN'}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-hotel"></i></div>
+                    브랜드 관리<br>
                 </a>
                 <!--지사관리-->
                 <!--수퍼어드민-->
@@ -75,7 +82,7 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="/members/hotel/update">호텔 관리</a>
                         <a class="nav-link" href="/members/checkin/list">체크인 관리</a>
-                        <a class="nav-link" href="/members/room/list">룸 관리</a>
+                        <a class="nav-link" href="/members/room/listB">룸 관리</a>
                     </nav>
                 </div>
                 <!--가맹점관리-->
@@ -102,9 +109,9 @@
                 </a>
                 <div class="collapse" id="collapseService" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link"  href="#">룸 케어</a>
-
-                        <a class="nav-link" href="/members/inquire/list">문의사항 관리</a>
+                      
+                        <a class="nav-link"  href="/members/roomCare/list">룸 케어</a>
+                        <a class="nav-link" href="/qna/list">문의사항 관리</a>
 
                     </nav>
                 </div>
@@ -144,7 +151,7 @@
         </div>
         <div class="sb-sidenav-footer">
             <div class="small">Logged in as:</div>
-            Deli-Night
+            <div th:text="${member.role}"></div>
         </div>
     </nav>
 </div>

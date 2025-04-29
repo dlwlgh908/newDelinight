@@ -62,9 +62,10 @@
                             <label class="col-sm-2 col-form-label form-label">전화번호</label>
                             <div class="col-sm-3">
                                 <input type="text" class="form-control" id="staticMembersPhone" name="phone" maxlength="11" th:placeholder="${member.phone}">
-                                <div class="text-sm mt-1">
+                                <div class="text-sm mt-1" th:if="${phoneError == null}">
                                     변경할 전화번호를 입력해주세요.
                                 </div>
+                                <div class="text-sm mt-1 text-danger" th:if="${phoneError != null}" th:text="${phoneError}"></div>
                             </div>
                         </div>
 
@@ -80,9 +81,10 @@
 
                         <div id="passwordChangeSection">
                             <div class="row mb-4">
-                                <label class="col-sm-2 col-form-label form-label">현재 비밀번호</label>
+                                <label class="col-sm-2 col-form-label form-label"></label>
                                 <div class="col-sm-4">
-                                    <input type="password" name="currentPassword" class="form-control" maxlength="16">
+                                    <input type="password" name="currentPassword" class="form-control" maxlength="16" placeholder="현재 비밀번호">
+                                    <div class="text-sm mt-1 text-danger" th:text="${currentPasswordError}"></div>
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -98,6 +100,7 @@
                                 <label class="col-sm-2 col-form-label form-label">새 비밀번호 확인</label>
                                 <div class="col-sm-4">
                                     <input type="password" name="confirmPassword" class="form-control" maxlength="16">
+                                    <div class="text-sm mt-1 text-danger" th:text="${confirmPasswordError}"></div>
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,8 @@
 package com.onetouch.delinight.Controller.UtilController;
 
 import com.onetouch.delinight.Constant.Role;
+import com.onetouch.delinight.DTO.RoomCareItemDTO;
+import com.onetouch.delinight.Service.RoomCareItemService;
 import com.onetouch.delinight.Entity.StoreEntity;
 import com.onetouch.delinight.Service.HotelService;
 import com.onetouch.delinight.Service.MembersService;
@@ -15,8 +17,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-
+import java.util.List;
 import javax.naming.Name;
+
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -24,8 +27,10 @@ import javax.naming.Name;
 public class GlobalModelAttribute {
 
     private final StoreService storeService;
+    private final RoomCareItemService roomCareItemService;
     private final MembersService membersService;
     private final HotelService hotelService;
+
 
     @ModelAttribute
     public void setGlobalAttributes(HttpServletRequest request, Model model) {
@@ -39,6 +44,7 @@ public class GlobalModelAttribute {
                 try {
 
                     if (memberDetails.getMembersEntity().getRole() == Role.STOREADMIN) {
+
                         int checking = storeService.assignCheck(((MemberDetails) principal).getUsername());
                         if (checking == 1) {
                             return;
@@ -57,12 +63,15 @@ public class GlobalModelAttribute {
                         // 호텔 어드민일때(수정 해야함)
                     } else {
                         Integer alertCount = membersService.countOfRequestAccount(memberDetails.getUsername());
+
                         model.addAttribute("alertCount", alertCount);
                         // 아무것도 아닐때(0으로 리턴)
                     }
                     model.addAttribute("member", memberDetails.getMembersEntity());
                     model.addAttribute("role", memberDetails.getMembersEntity().getRole());
+
                 } catch (Exception e) {
+
 
                     throw new RuntimeException("멤버 로그인 필요");
 
