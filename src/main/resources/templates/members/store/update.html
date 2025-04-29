@@ -4,52 +4,92 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/desktop/layout}"
 >
-<head>
-    <title>델리나잇</title>
+    <head>
+        <title>델리나잇</title>
+    </head>
 
-    <!--별도 css 필요할 시 아래로 추가-->
-    <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
-    styles.css에 작성할것-->
-</head>
+    <body>
+    <!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
+    <div layout:fragment="adminContent" id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-5">
+                <!--내용 넣는 곳-->
+                <!--반드시 이 아래에서만 작업-->
 
-<body>
-<!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
-<div layout:fragment="adminContent" id="layoutSidenav_content">
-    <main>
-        <div class="container-fluid px-5">
-            <!--내용 넣는 곳-->
-            <!--반드시 이 아래에서만 작업-->
-
-            <!--페이지 이름-->
-            <form action="/members/store/update" method="post">
-
+                <!--페이지 이름-->
                 <h3 class="mt-5" th:text="${storeDTO.name}"></h3>
-                <h2 class="mt-5"> 가맹점명 수정하기 </h2>
-                <input th:value="${storeDTO.name}" name="name">
-                <h2 class="mt-5"> 가맹점 소개 수정하기 </h2>
-                <input th:value="${storeDTO.content}" name="content">
-                <div class="row md-3 mt-3">
-                    <h2 class="mt-5"> 가맹점 대표 이미지 수정하기 </h2>
-                    <input hidden readonly name="id" th:value="${storeDTO.id}">
-                    <img width="20%" class="menuImg" th:src="${imgUrl}">
-                    <input type="file" class="imgInput">
-                    <div class="hiddenImgNum"></div>
-                </div>
-                <button type="submit" class="btn btn-primary">수정</button>
-            </form>
+                <ol class="breadcrumb mb-4">
+                    <a href="/members/account/adminhome" class="breadcrumb-item active">홈</a>
+                    <a href="#" class="breadcrumb-item active no-click">가맹점 관리</a>
+                </ol>
 
+                <div class="card custom-shadow mb-4">
+                    <div class="card-body">
+                        <!--카드 제목-->
+                        <h5 class="mb-4 fw-bold">기본 정보</h5>
+
+                        <!--카드 제목 구분선-->
+                        <hr class="hrMain">
+
+                        <form action="/members/store/update" method="post">
+
+                            <div class="row mb-4">
+                                <label class="col-sm-2 col-form-label form-label">가맹점명</label>
+                                <div class="col-sm-3">
+                                    <input name="name" type="text" class="form-control" th:placeholder="${storeDTO.name}">
+                                    <div class="text-sm mt-1 text-danger" th:text="${nameError}"></div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <label class="col-sm-2 col-form-label form-label">가맹점 소개</label>
+                                <div class="col-sm-4">
+                                    <textarea name="content" class="form-control" rows="1" oninput="autoResize(this)"
+                                              th:text="${storeDTO.content}"
+                                              style="overflow:hidden; resize: none; min-height: 1rem">
+                                    </textarea>
+                                    <div class="text-sm mt-1 text-danger" th:text="${contentError}"></div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <label class="col-sm-2 col-form-label form-label">대표 이미지 수정</label>
+                                <div class="col-sm-4">
+                                    <input hidden readonly name="id" th:value="${storeDTO.id}">
+                                    <input type="file" accept="image/*" class="imgInput form-control">
+                                    <div class="text-sm mt-1" th:text="${imgError}"></div>
+                                    <div class="hiddenImgNum"></div>
+                                    <img width="50%" class="menuImg img-thumbnail" th:src="${imgUrl}">
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-5">
+                                <button type="submit" class="btn btn-primary me-2 px-4">저장</button>
+                                <a th:href="@{/members/store/read(id=${storeId})}" class="btn btn-gray px-4">취소</a>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        
+        <script>
+            function autoResize(a) {
+                a.style.height = 'auto'; // 높이 초기화
+                a.style.height = a.scrollHeight + 'px'; // 글자 수에 맞게 높이 조정
+            }
+        </script>
+        
+        <div th:fragment="pagescript">
+            <script th:src="@{/js/imgscript.js}" type="text/javascript"></script>
         </div>
 
-    </main>
-    <div th:fragment="pagescript">
-        <script th:src="@{/js/imgscript.js}" type="text/javascript"></script>
+        <!--푸터 절대 수정 금지!!!!-->
+        <!--푸터-->
+        <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
     </div>
 
-    <!--푸터 절대 수정 금지!!!!-->
-    <!--푸터-->
-    <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
-</div>
-
-
-</body>
+    </body>
 </html>

@@ -21,9 +21,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.s3.endpoints.internal.FatScope;
 import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.security.Principal;
@@ -39,6 +41,7 @@ public class AccountController {
     private final MembersRepository membersRepository;
     private final CenterService centerService;
     private final HotelService hotelService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/redirectPage")
     public  String redirectPage(){
@@ -89,6 +92,7 @@ public class AccountController {
     @GetMapping("/accounthub")
     public String accounthub(Principal principal){
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
+        log.info("허브진입"+role);
 
         //로그인한 사람 롤 찾기
         //수퍼 어드민
@@ -101,6 +105,7 @@ public class AccountController {
         }
         //스토어 어드민
         else if(role.equals(Role.STOREADMIN)){
+            log.info("스스");
             return "redirect:/members/store/orders/list" ;
         }
         else{ // 시스템 어드민일 경우
@@ -156,42 +161,56 @@ public class AccountController {
 
     @GetMapping("/update")
     public String adminUpdate(Principal principal, Model model){
+        MembersEntity members = membersRepository.findByEmail(principal.getName());
+        model.addAttribute("member", members);
 
         return "/members/account/common/update";
     }
 
-    //@PostMapping("/update-password")
-    //public ResponseEntity<String> updatePassword(
-    //        Principal principal,
-    //        @RequestParam("currentPassword") String currentPasswordInput,
-    //        @RequestParam("newPassword") String newPasswordInput,
-    //        @RequestParam("confirmPassword") String confirmPasswordInput
-    //) {
-    //    String email = principal.getName();
-    //    MembersEntity membersEntity = membersRepository.findByEmail(email);
-    //
-    //    MembersDTO membersDTO = new MembersDTO();
-    //    membersDTO.setId(membersEntity.getId());
-    //    membersDTO.setPhone(membersEntity.getPhone());
-    //    membersDTO.setPassword(newPasswordInput);
-    //
-    //    try {
-    //        membersService.update(membersDTO, currentPasswordInput, newPasswordInput, confirmPasswordInput);
-    //        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
-    //    } catch (IllegalArgumentException e) {
-    //        return ResponseEntity.badRequest().body(e.getMessage());
-    //    }
-    //}
-
     @PostMapping("/update")
     public String updateProc(Principal principal,
-            @ModelAttribute MembersDTO membersDTO, Model model) {
-
-        log.info("update post 페이지"+membersDTO);
-        log.info("update post 페이지"+membersDTO);
-        log.info("update post 페이지"+membersDTO);
+            @ModelAttribute MembersDTO membersDTO, Model model,
+            @RequestParam(value = "currentPassword", required = false) String currentPassword,
+            @RequestParam(value = "newPassword", required = false) String newPassword,
+            @RequestParam(value = "confirmPassword", required = false) String confirmPassword) {
 
         MembersEntity membersEntity = membersRepository.findByEmail(principal.getName());
+        boolean hasError = false;
+
+        //전화번호 변경
+        if (membersDTO.getPhone() == null || membersDTO.getPhone().trim().isEmpty()){
+            model.addAttribute("phoneError", "전화번호를 입력해주세요.");
+            hasError = true;
+        }
+
+        //비밀번호 변경
+        //현재 비밀번호에 입력된 값이 있을 때 실행됨
+        if (currentPassword != null && !currentPassword.trim().isEmpty()){
+
+            //현재 비밀번호 검증
+            if (!passwordEncoder.matches(currentPassword, membersEntity.getPassword())){
+                model.addAttribute("currentPasswordError", "비밀번호가 일치하지 않습니다.");
+                hasError = true;
+            }
+
+            //새 비밀번호, 새 비밀번호 확인 검증
+            if (!newPassword.equals(confirmPassword)){
+                model.addAttribute("confirmPasswordError", "새 비밀번호 확인이 일치하지 않습니다.");
+                hasError = true;
+            }
+
+            //모두 통과 후 비밀번호 업데이트 진행
+            if (!hasError) {
+                String encodedNewPassword = passwordEncoder.encode(confirmPassword);
+                membersDTO.setPassword(encodedNewPassword);
+            }
+        }
+
+        //통과 후 업데이트 진행
+        if(hasError){
+            model.addAttribute("member", membersEntity);
+            return "/members/account/common/update";
+        }
 
         membersDTO.setId(membersEntity.getId());
         membersService.update(membersDTO);
@@ -199,7 +218,7 @@ public class AccountController {
         MembersEntity members = membersRepository.findByEmail(principal.getName());
         model.addAttribute("member", members);
 
-        return "/members/account/mypage";
+        return "/members/account/common/mypage";
     }
 
 

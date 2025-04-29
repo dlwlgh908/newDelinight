@@ -95,67 +95,9 @@ public class MembersServiceImpl implements MembersService{
         MembersEntity members =
                 membersRepository.findById(membersEntity.getId()).orElseThrow(EntityNotFoundException::new);
 
-
-        log.info("update 진입함!!");
-        log.info("update 진입함!!");
-        log.info("update 진입함!!");
-
         members.setPhone(membersEntity.getPhone());
-
-        log.info("정상적으로 저장됨!!");
-        log.info("정상적으로 저장됨!!");
-        log.info("정상적으로 저장됨!!");
+        members.setPassword(membersEntity.getPassword());
     }
-
-    //@Override
-    //public MembersDTO update(MembersDTO membersDTO,
-    //                         String currentPasswordInput,
-    //                         String newPasswordInput,
-    //                         String confirmPasswordInput) {
-    //
-    //    Optional<MembersEntity> optionalMembersEntity
-    //            = membersRepository.findById(membersDTO.getId());
-    //
-    //    MembersEntity membersEntity = optionalMembersEntity.get();
-    //
-    //    log.info("update 진입함!!");
-    //    log.info("update 진입함!!");
-    //    log.info("update 진입함!!");
-    //
-    //    // 인풋값 null 체크
-    //    if (currentPasswordInput == null || newPasswordInput == null || confirmPasswordInput == null) {
-    //        throw new IllegalArgumentException("비밀번호를 입력해주세요.");
-    //    }
-    //    // 현재 비밀번호 확인
-    //    if (!membersEntity.getPassword().equals(currentPasswordInput)) {
-    //        throw new IllegalArgumentException("비밀번호가 틀립니다.");
-    //    }
-    //    // 비밀번호, 새 비밀번호 대조
-    //    if (!newPasswordInput.equals(confirmPasswordInput)) {
-    //        throw new IllegalArgumentException("비밀번호 확인이 틀립니다.");
-    //    }
-    //    log.info("비밀번호 유효성 검사 끝남");
-    //    log.info("비밀번호 유효성 검사 끝남");
-    //    log.info("비밀번호 유효성 검사 끝남");
-    //
-    //
-    //    membersEntity.setPhone(membersDTO.getPhone());
-    //    membersEntity.setPassword(membersDTO.getPassword());
-    //
-    //    log.info("폰번호랑 패스워드 가져옴");
-    //    log.info("폰번호랑 패스워드 가져옴");
-    //    log.info("폰번호랑 패스워드 가져옴");
-    //
-    //
-    //    // 다 되면 저장
-    //    membersEntity.setPassword(newPasswordInput);
-    //
-    //    membersRepository.save(membersEntity);
-    //    log.info("정상적으로 저장됨!!");
-    //    log.info("정상적으로 저장됨!!");
-    //    log.info("정상적으로 저장됨!!");
-    //    return null;
-    //}
 
     @Override
     public List<MembersDTO> findAll() {
