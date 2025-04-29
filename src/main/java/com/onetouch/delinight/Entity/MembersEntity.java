@@ -52,5 +52,9 @@ public class MembersEntity {
 
     @JoinColumn(name = "hotel_id")
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private HotelEntity hotelEntity;
+
+
+
 }

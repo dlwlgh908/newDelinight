@@ -43,6 +43,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // Excel
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+
     // email
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
@@ -78,7 +82,7 @@ sourceSets {
 
     main {
         java {
-            srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
+            srcDirs += ["$projectDir/src/main/java", "$projectDir/build/generated"]
         }
     }
 }

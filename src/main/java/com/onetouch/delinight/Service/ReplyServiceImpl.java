@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,6 +42,8 @@ public class ReplyServiceImpl implements ReplyService{
                 modelMapper.map(replyDTO,ReplyEntity.class);
 
         replyEntity.setInquireEntity(inquireEntity);
+
+        inquireEntity.setResponseTime(LocalDateTime.now());//답변이 달리면 실시간으로 추가
 
         ReplyEntity result = replyRepository.save(replyEntity);
 

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +24,14 @@ import java.util.stream.Collectors;
 public class CheckInServiceImpl implements CheckInService{
 
     private final CheckInRepository checkInRepository;
+    private  final OrdersService ordersService;
+    private final RoomRepository roomRepository;
     private final UsersRepository usersRepository;
     private final ModelMapper modelMapper;
     private final GuestRepository guestRepository;
     private final CheckOutLogRepository checkOutLogRepository;
     private final PasswordEncoder passwordEncoder;
-    private final OrdersRepository ordersRepository;
-
+    private final CartService cartService;
 
     @Override
     public void create(RoomEntity roomEntity) {
@@ -73,7 +73,6 @@ public class CheckInServiceImpl implements CheckInService{
     public List<CheckInDTO> list2() {
         List<CheckInEntity> checkInEntityList =
                 checkInRepository.findAll();
-
         List<CheckInDTO> checkInDTOList =
                 checkInEntityList.stream().map(checkInEntity -> {
                     CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class);
@@ -97,10 +96,6 @@ public class CheckInServiceImpl implements CheckInService{
                     }
                     // setRoomDTO는 항상 호출
                     checkInDTO.setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class));
-
-//                    Long totalOrderPrice = ordersRepository.selectPriceByCheckinId(checkInEntity.getId());
-//                    checkInDTO.setOrderPrice(totalOrderPrice);
-
                     return checkInDTO;
                 }).collect(Collectors.toList());
         return checkInDTOList;
@@ -150,6 +145,8 @@ public class CheckInServiceImpl implements CheckInService{
                 modelMapper.map(checkInDTO, CheckInEntity.class);
 
 
+
+
         log.info("checkin service"+checkInEntity);
         if(checkInDTO.getUserId()==null) {
             int certNum = (int) (Math.random() * 8999) + 1000;
@@ -179,11 +176,14 @@ public class CheckInServiceImpl implements CheckInService{
             guestEntity.setReservationNum(reservationNum);
             checkInRepository.save(check);
             guestRepository.save(guestEntity);
+            cartService.makeCart(2, guestEntity.getId());
 
-        } else if (checkInDTO.getUserId() != null) {
+
+        } else {
             UsersEntity usersEntity =
                     usersRepository.findById(checkInDTO.getUserId()).orElseThrow(EntityNotFoundException::new);
             check.setUsersEntity(usersEntity);
+            cartService.makeCart(1, usersEntity.getId());
 
             checkInRepository.save(check);
 
@@ -193,27 +193,29 @@ public class CheckInServiceImpl implements CheckInService{
     }
 
     @Override
-    public void checkout(@Param("id") Long id) {
+    public void checkout(Long id) {
         CheckInEntity checkInEntity =
                 checkInRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
-        log.info("checkout 받은 id 값 : " +id);
-        log.info("checkout 받은 id 값 : " +id);
-        log.info("checkout 받은 id 값 : " +id);
-
-
+        if(checkInEntity.getGuestEntity()!=null){
+            cartService.deleteCart(2,checkInEntity.getGuestEntity().getId());
+        }
+        else {
+            cartService.deleteCart(1,checkInEntity.getUsersEntity().getId());
+        }
 
         CheckOutLogEntity checkOutLogEntity = new CheckOutLogEntity();
+
+        ordersService.checkInToCheckOut(checkInEntity.getId(), checkOutLogEntity.getId());
 
         checkOutLogEntity.setRoomEntity(checkInEntity.getRoomEntity());
         checkOutLogEntity.setCheckinDate(checkInEntity.getCheckinDate());
         checkOutLogEntity.setCheckoutDate(checkInEntity.getCheckoutDate());
         checkOutLogEntity.setPhone(checkInEntity.getPhone());
         checkOutLogEntity.setPrice(checkInEntity.getPrice());
-
+        checkOutLogEntity.setUsersEntity(checkInEntity.getUsersEntity());
+        checkOutLogEntity.setGuestEntity(checkInEntity.getGuestEntity());
 
         checkOutLogRepository.save(checkOutLogEntity);
-
 
         checkInEntity.setCheckInStatus(CheckInStatus.VACANCY);
         checkInEntity.setCheckinDate(null);
@@ -239,6 +241,13 @@ public class CheckInServiceImpl implements CheckInService{
 
         return usersDTO;
 
+    }
+
+    @Override
+    public CheckInDTO findCheckInByEmail(String email) {
+        CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+        CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity.getRoomEntity().getHotelEntity(),HotelDTO.class)));
+        return checkInDTO;
     }
 
     @Override

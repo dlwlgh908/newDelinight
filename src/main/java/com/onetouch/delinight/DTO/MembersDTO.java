@@ -35,6 +35,9 @@ public class MembersDTO {
     private Role role;
     private Status status;
 
+
+
+
     public MembersDTO(MembersEntity entity) {
         this.id = entity.getId();
         this.name = entity.getName();

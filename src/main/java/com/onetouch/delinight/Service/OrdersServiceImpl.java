@@ -11,13 +11,11 @@ import com.onetouch.delinight.Constant.OrderType;
 import com.onetouch.delinight.Constant.OrdersStatus;
 import com.onetouch.delinight.Constant.PaidCheck;
 import com.onetouch.delinight.DTO.*;
+import com.onetouch.delinight.Entity.CheckOutLogEntity;
 import com.onetouch.delinight.Entity.OrdersEntity;
 import com.onetouch.delinight.Entity.PaymentEntity;
 import com.onetouch.delinight.Entity.StoreEntity;
-import com.onetouch.delinight.Repository.ImageRepository;
-import com.onetouch.delinight.Repository.OrdersRepository;
-import com.onetouch.delinight.Repository.PaymentRepository;
-import com.onetouch.delinight.Repository.StoreRepository;
+import com.onetouch.delinight.Repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -28,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Log4j2
@@ -35,12 +34,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrdersServiceImpl implements OrdersService{
     private final ImageRepository imageRepository;
-
+    private final CheckInRepository checkInRepository;
+    private final CheckOutLogRepository checkOutLogRepository;
     private final StoreRepository storeRepository;
     private final OrdersRepository ordersRepository;
     private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
     private final SseService sseService;
+
+    @Override
+    public OrdersDTO readOne(Long ordersId) {
+
+        Optional<OrdersEntity> optionalOrdersEntity = ordersRepository.findById(ordersId);
+        if(optionalOrdersEntity.isPresent()){
+            OrdersEntity ordersEntity = optionalOrdersEntity.get();
+            OrdersDTO ordersDTO = modelMapper.map(ordersEntity, OrdersDTO.class).setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(), StoreDTO.class)).setOrdersItemDTOList(ordersEntity.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class).setImgUrl(imageRepository.findByMenuEntity_Id(ordersItemEntity.getMenuEntity().getId()).get().getFullUrl()))).toList());
+            return ordersDTO;
+
+        }
+        else {
+            return null;
+
+        }
+    }
 
     @Override
     public Page<OrdersDTO> processList(Pageable pageable, String email) {
@@ -62,6 +78,19 @@ public class OrdersServiceImpl implements OrdersService{
                 .setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(ordersItemEntity->modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(),MenuDTO.class))).toList()));
 
         return completeDTOList;
+    }
+
+    @Override
+    public void checkInToCheckOut(Long checkInId, Long checkOutId) {
+        OrdersEntity ordersEntity = ordersRepository.findByCheckInEntity_Id(checkInId);
+        ordersEntity.setCheckInEntity(null);
+        Optional<CheckOutLogEntity> optionalCheckOutLogEntity = checkOutLogRepository.findById(checkInId);
+        if(optionalCheckOutLogEntity.isPresent()){
+            CheckOutLogEntity checkOutLogEntity = optionalCheckOutLogEntity.get();
+            ordersEntity.setCheckOutLogEntity(checkOutLogEntity);
+            ordersRepository.save(ordersEntity);
+        }
+        else throw new RuntimeException("checkOut 로그 부재");
     }
 
     @Override
@@ -133,12 +162,49 @@ public class OrdersServiceImpl implements OrdersService{
             orders.setDeliveredTime(LocalDateTime.now());
         }
         ordersRepository.save(orders);
+        if(orders.getCheckInEntity().getUsersEntity()!=null){
+            if(ordersStatus.equals("preparing")){
+                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문이 승인되어 조리를 시작하였습니다.");
+
+            }
+            else if(ordersStatus.equals("delivering")){
+                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문의 조리가 완료되어 배달을 시작합니다.");
+
+            }
+            else {
+                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문 배달이 완료되었습니다.");
+            }
+
+        }
+        else {
+            if(ordersStatus.equals("preparing")){
+                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문이 승인되어 조리를 시작하였습니다.");
+
+            }
+            else if(ordersStatus.equals("delivering")){
+                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문의 조리가 완료되어 배달을 시작합니다.");
+
+            }
+            else {
+                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문 배달이 완료되었습니다.");
+            }
+
+        }
+
     }
 
     @Override
     public List<OrdersDTO> ordersListByEmail(String email) {
 
-        List<OrdersEntity> ordersEntityList = ordersRepository.findByCheckInEntity_UsersEntityEmail(email);
+        List<OrdersEntity> ordersEntityList = null;
+        if(email.contains("@")){
+            ordersEntityList = ordersRepository.findByCheckInEntity_UsersEntityEmail(email);
+
+        }
+        else {
+            ordersEntityList = ordersRepository.findByCheckInEntity_GuestEntityPhone(email);
+        }
+
         List<OrdersDTO> ordersDTOList = ordersEntityList.stream().map(ordersEntity-> modelMapper.map(ordersEntity, OrdersDTO.class).setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(), StoreDTO.class)
                 .setImgUrl(imageRepository.findByStoreEntity_Id(ordersEntity.getStoreEntity().getId()).get().getFullUrl())).setOrdersItemDTOList(ordersEntity.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class))).toList())).toList();
 

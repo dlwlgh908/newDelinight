@@ -1,8 +1,16 @@
 
 $(document).ready(function () {
 
+    const eventSource = new EventSource("/sse/connect");
 
-    const eventSource = new EventSource("/sse/connectAdmin");
+    eventSource.onopen = function (e) {
+        console.log("SSE 연결 성공!", e);
+    };
+
+    eventSource.onerror = function (e) {
+        console.error("SSE 연결 실패", e);
+    };
+
     eventSource.addEventListener("new-order",function (e) {
         const parsedMap = JSON.parse(e.data);
         const ordersInfo = parsedMap.data;
@@ -12,13 +20,17 @@ $(document).ready(function () {
 
     })
 
+    eventSource.addEventListener("new-inquire",function (e) {
+        const parsedMap = JSON.parse(e.data);
+        const inquireInfo = parsedMap.data;
+        const alertCount = parsedMap.alertCount;
+        newInquire(inquireInfo, alertCount)
+    })
 
-    $(".testBtn").on("click",function () {
-        alert("테스트 버튼 클릭")
-        $.ajax({
-            url:"/sse/test",
-            type:"post"
-        })
+    eventSource.addEventListener("new-changeStatus",function (e) {
+        const parsedMap = JSON.parse(e.data);
+        const chageStatus = parsedMap.data;
+        newChangeStatus(chageStatus)
     })
 
 
@@ -31,6 +43,23 @@ $(document).ready(function () {
         });
 
         $(".notification-badge").text(alertCount)
+    }
+    function newInquire(inquireInfo, alertCount){
+        Swal.fire({
+            icon: 'info',
+            title: '새로운 문의가 들어왔습니다.',
+            text: inquireInfo,
+        });
+
+        $(".notification-badge").text(alertCount)
+    }
+    function newChangeStatus(changeStatus){
+        Swal.fire({
+            icon: 'info',
+            title: '새로운 문의가 들어왔습니다.',
+            text: changeStatus,
+        });
+
     }
 
     $("#alertStart").click(function () {

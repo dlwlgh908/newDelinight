@@ -25,13 +25,17 @@ public class PaymentDTO {
 
 
     private Long totalId;               // 정산 ID
-    private String type;                // 정산타입
     private PaidCheck checkPaid;        // 정산상태
     private LocalDateTime regTime;      // 등록일
-    private LocalDateTime updateTime;   // 수정일
+
+    // Excel → 계산식
+    private int vat;         // 부가세
+    private int totalPrice;  // 합계 금액
+    private int unpaid;      // 미결제 금액
 
 
     private List<OrdersDTO> ordersDTOList;
+    private List<MenuDTO> menuDTOList;
 
     public PaymentDTO setOrdersDTOList(List<OrdersDTO> ordersDTOList) {
         this.ordersDTOList = ordersDTOList;
@@ -39,6 +43,10 @@ public class PaymentDTO {
 
     }
 
+    public PaymentDTO setMenuDTOList(List<MenuDTO> menuDTOList) {
+        this.menuDTOList = menuDTOList;
+        return this;
+    }
 
 
 }

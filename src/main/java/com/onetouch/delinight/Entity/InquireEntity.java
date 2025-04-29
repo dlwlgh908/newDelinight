@@ -4,6 +4,10 @@ package com.onetouch.delinight.Entity;
 import com.onetouch.delinight.Entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,6 +28,10 @@ public class InquireEntity extends BaseTimeEntity {
     private String title;
     @Column(length = 2000, nullable = true)
     private String content;
+
+    @Column(nullable = true) //null을 허용하여 답변 시간이 없을 때 null로 유지
+    private LocalDateTime responseTime; //답변시간
+
 
 
 

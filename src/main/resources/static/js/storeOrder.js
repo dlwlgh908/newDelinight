@@ -35,7 +35,7 @@ $(function(){
         let memo = $(this).data("memo")
         Swal.fire({
             title: '요청사항',
-            html: '<div style="height: 200px;display: flex;justify-content: center;align-items: center;">'+(memo!==null?memo:memoIsNull)+'</div>',
+            html: '<div style="height: 200px;display: flex;justify-content: center;align-items: center;">'+(memo!==""?memo:memoIsNull)+'</div>',
             width: '650px',
 
         });

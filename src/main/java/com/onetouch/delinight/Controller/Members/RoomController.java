@@ -7,7 +7,9 @@
  *********************************************************************/
 package com.onetouch.delinight.Controller.Members;
 
+import com.onetouch.delinight.DTO.MenuDTO;
 import com.onetouch.delinight.DTO.RoomDTO;
+import com.onetouch.delinight.Service.ImageService;
 import com.onetouch.delinight.Service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -23,26 +26,19 @@ import java.util.List;
 @RequestMapping("/members/room")
 public class RoomController {
 
+    private final ImageService imageService;
     private final RoomService roomService;
 
-    @GetMapping("/create")
-    public String createView() {
-
-        return "members/room/create";
-    }
-
-    @PostMapping("/create")
-    public String createProc(RoomDTO roomDTO) {
-
-        roomService.create(roomDTO);
-        return "redirect:/members/room/list";
-    }
-
     @GetMapping("/list")
-    public String listView(Model model) {
-        List<RoomDTO> roomDTOList =
-            roomService.list();
-        model.addAttribute("roomDTOList", roomDTOList);
-        return "room/listB";
+    public String listView(Model model, Principal principal) {
+        boolean storeImgExistence = imageService.ExistHotelImgByEmail(principal.getName());
+        if (storeImgExistence) {
+            List<RoomDTO> roomDTOList = roomService.list(principal.getName());
+            model.addAttribute("roomDTOList", roomDTOList);
+            return "members/room/listB";
+        } else {
+            model.addAttribute("sep", "hotel");
+            return "/members/account/common/imgRedirect";
+        }
     }
 }

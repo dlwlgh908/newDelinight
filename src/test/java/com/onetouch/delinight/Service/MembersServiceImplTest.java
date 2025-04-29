@@ -1,7 +1,12 @@
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.Entity.CenterEntity;
+import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
+import com.onetouch.delinight.Repository.CenterRepository;
+import com.onetouch.delinight.Repository.HotelRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -26,7 +31,48 @@ class MembersServiceImplTest {
     MembersRepository membersRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    CenterRepository centerRepository;
+    @Autowired
+    HotelRepository hotelRepository;
 
+
+    @Test
+    public void listTest(){
+        List<MembersEntity> membersEntityList =
+            membersRepository.selectHotelAd();
+
+        log.info(membersEntityList.size());
+    }
+    @Test
+    public void createTest(){
+
+        CenterEntity centerEntity =
+            centerRepository.findById(1L).get();
+
+
+
+            MembersEntity membersEntity = new MembersEntity();
+
+            membersEntity.setRole(Role.ADMIN);
+            membersEntity.setName("admin 테스트계정");
+            membersEntity.setPassword("1234");
+            membersEntity.setPhone("01023342090");
+            membersEntity.setEmail("test@test.aaa");
+            membersEntity.setCenterEntity(centerEntity);
+            membersRepository.save(membersEntity);
+
+    }
+
+    @Test
+    public void listTtest(){
+        String email = "super@test.com";
+        List<HotelEntity> hotelEntityList =
+            hotelRepository.selectallBySuper(email);
+
+        log.info(hotelEntityList);
+
+    }
 
     @Test
     @Commit

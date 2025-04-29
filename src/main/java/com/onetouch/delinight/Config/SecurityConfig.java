@@ -65,7 +65,7 @@ public class SecurityConfig {
         http.securityMatcher("/members/**")
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/members/adminhome", "/members/account/adminlogin", "/members//account/adminlogout-success", "/**").permitAll()
+                                .requestMatchers("/members/adminhome", "/members/account/adminlogin", "/members/account/adminlogout-success", "/**").permitAll()
                                 .anyRequest().permitAll()
                 ).csrf((csrf) -> csrf.disable())
 
@@ -98,10 +98,10 @@ public class SecurityConfig {
 
                 .formLogin(formLogin -> formLogin
                         .loginPage("/users/login")
-                        .loginProcessingUrl("/guest/login")
+                        .loginProcessingUrl("/guests/login")
                         .defaultSuccessUrl("/users/home")
                         .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
-                        .usernameParameter("reservationNum")
+                        .usernameParameter("phone")
                 )
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

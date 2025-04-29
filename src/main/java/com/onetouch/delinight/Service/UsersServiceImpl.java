@@ -12,12 +12,10 @@ import com.onetouch.delinight.Entity.GuestEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.CheckInRepository;
+import com.onetouch.delinight.Repository.GuestRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Repository.UsersRepository;
-import com.onetouch.delinight.Util.CustomUserDetails;
-import com.onetouch.delinight.Util.EmailService;
-import com.onetouch.delinight.Util.MemberDetails;
-import com.onetouch.delinight.Util.PasswordUtil;
+import com.onetouch.delinight.Util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -30,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -38,6 +37,7 @@ import java.util.Map;
 public class UsersServiceImpl implements UsersService , UserDetailsService {
 
     private final UsersRepository usersRepository;
+    private final GuestRepository guestRepository;
     private final MembersRepository membersRepository;
     private final CheckInRepository checkInRepository;
     private final EmailService emailService;
@@ -71,8 +71,9 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         log.info(email);
         UsersEntity usersEntity = usersRepository.selectEmail(email);
 
-
         if (usersEntity == null) {
+
+
             MembersEntity membersEntity = membersRepository.findByEmail(email);
 
 
@@ -83,10 +84,7 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
             GuestEntity guestEntity = checkInRepository.findByGuestEntity_Phone(email).getGuestEntity();
 
             if(guestEntity != null){
-                return User.builder()
-                        .username(guestEntity.getPhone())
-                        .password(guestEntity.getPassword())
-                        .build();
+                return new CustomGuestDetails(guestEntity);
             }
 
             log.info("member, user 어디에서도 찾을 수 없음");
@@ -179,6 +177,13 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         );
 
         return "임시 비밀번호가 이메일로 발송되었습니다.";
+    }
+
+    @Override
+    public UsersDTO findUsersByEmail(String email) {
+        UsersEntity usersEntity = usersRepository.findByEmail(email);
+        UsersDTO usersDTO = modelMapper.map(usersEntity,UsersDTO.class);
+        return usersDTO;
     }
 
     @Override

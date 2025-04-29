@@ -27,8 +27,10 @@ public class InquireDTO {
     @NotBlank(message = "내용을 작성해주세요.")
     @Size(min = 2, max = 2000, message = "2~2000글자로 작성헤주세요.")
     private String content;
-    private LocalDateTime regtime; //등록시간
-    private LocalDateTime updatetime; //답변시간(response time)
+    private LocalDateTime regTime; //등록시간
+    private LocalDateTime updateTime; //수정시간
+    private LocalDateTime responseTime; //답변시간
+
 
 
 
@@ -38,13 +40,17 @@ public class InquireDTO {
     private HotelDTO hotelDTO;
     private UsersDTO usersDTO;
 
-    public InquireDTO setcheckInDTO(CheckInDTO checkInDTO){
+    public InquireDTO setCheckInDTO(CheckInDTO checkInDTO){
         this.checkInDTO =checkInDTO;
         return this;
     }
 
-    public InquireDTO sethotelDTO(HotelDTO hotelDTO){
+    public InquireDTO setHotelDTO(HotelDTO hotelDTO){
         this.hotelDTO = hotelDTO;
+        return this;
+    }
+    public InquireDTO setUsersDTO(UsersDTO usersDTO){
+        this.usersDTO = usersDTO;
         return this;
     }
 

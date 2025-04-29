@@ -27,7 +27,7 @@
             <div class="card mb-4">
                 <div class="card-body">
 
-                    <form action="/menu/register" th:object="${menuDTO}" method="post" class="formWrap"
+                    <form action="/members/menu/register" th:object="${menuDTO}" method="post" class="formWrap"
                           enctype="multipart/form-data">
 
                         <div class="container">
@@ -37,9 +37,6 @@
                                     <input type="hidden" name="id" id="id">
 
                                     <div>
-                                        <label for="formFileLg">이미지등록</label>
-                                        <input name="image" class="form-control form-control image imgInput"
-                                               id="formFileLg" type="file">
                                     </div>
 
                                     <div class="md-3 mt-3">
@@ -58,7 +55,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="md-3 mt-3">
+                                    <div class="md-3 mt-3 mb-3">
                                         <div class="input-group md-3">
                                             <label class="input-group-text" for="inputGroupSelect01">판매상태</label>
                                             <select th:field="*{menuStatus}" class="form-select" id="inputGroupSelect01"
@@ -69,19 +66,19 @@
                                         </div>
                                     </div>
 
-                                    <div class="md-3">
+                                    <div class="md-3 mb-3">
                                         <label for="name" class="form-label">메뉴</label>
                                         <input type="text" class="form-control" id="name" name="name">
                                     </div>
 
-                                    <div class="md-3">
+                                    <div class="md-3 mb-3">
 
                                         <label for="content" class="form-label">메뉴정보</label>
                                         <textarea type="text" class="form-control" id="content"
                                                   name="content"></textarea>
                                     </div>
 
-                                    <div class="md-3">
+                                    <div class="md-3 mb-3">
                                         <label for="price" class="form-label">가격</label>
                                         <input type="text" class="form-control" id="price" name="price">
                                     </div>
@@ -92,8 +89,11 @@
                                 <div class="col-6">
                                     <div class="mb-3 mt-3">
                                         <img width="600" height="600" class="menuImg img-thumbnail"
-                                             src="/img/defaultImg.png" alt="미리보기 이미지">
+                                             src="/img/defaultFood.jpeg" alt="미리보기 이미지">
                                     </div>
+                                    <label for="formFileLg">
+                                        <input name="image" class="form-control form-control image imgInput"
+                                               id="formFileLg" type="file"></label>
                                 </div>
                             </div><!--메뉴등록 위치-->
                         </div>
@@ -101,7 +101,7 @@
 
                 </div>
                 <div class="text-center mt-1 mb-3">
-                    <button type="submit" class="btn btn-primary">등록</button>
+                    <button type="button" class="btn submitBtn btn-primary">등록</button>
                     <a href="/members/menu/list" class="btn btn-gray">취소</a>
                 </div>
             </div>
@@ -112,6 +112,24 @@
 
         </div>
     </main>
+    <script text="javascript">
+
+        $(".submitBtn").on("click", function () {
+            let hiddenImgNum = $(".imgNum").val()
+            if(hiddenImgNum===""){
+                Swal.fire({
+                    icon: 'error',
+                    title: '메뉴 등록 시 이미지가 필수 입니다.',
+                    text: '메뉴를 대표할 이미지를 등록해주세요.',
+                });
+            }
+            else {
+                $(".formWrap").submit()
+
+            }
+        })
+
+    </script>
 
 
     <!--푸터 절대 수정 금지!!!!-->

@@ -7,19 +7,21 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.Constant.PaidCheck;
 import com.onetouch.delinight.DTO.OrdersDTO;
 import com.onetouch.delinight.DTO.PaymentDTO;
-import com.onetouch.delinight.Entity.MembersEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PaymentService {
 
     public List<OrdersDTO> readOrders(Long paymentId);
 
+    public List<PaymentDTO> paymentByCriteria(PaidCheck paidCheck, Long memberId, LocalDate startDate, LocalDate endDate);
 
-    public List<PaymentDTO> paymentByCriteria(String priceMonth, String type, Long storeId, Boolean isPaid, MembersEntity member);
-
+    // 계산 메소드
+    List<PaymentDTO> processPayments(List<PaymentDTO> paymentDTOList);
 
 
 }

@@ -3,7 +3,11 @@ package com.onetouch.delinight.Controller.UtilController;
 import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.DTO.RoomCareItemDTO;
 import com.onetouch.delinight.Service.RoomCareItemService;
+import com.onetouch.delinight.Entity.StoreEntity;
+import com.onetouch.delinight.Service.HotelService;
+import com.onetouch.delinight.Service.MembersService;
 import com.onetouch.delinight.Service.StoreService;
+import com.onetouch.delinight.Util.CustomGuestDetails;
 import com.onetouch.delinight.Util.CustomUserDetails;
 import com.onetouch.delinight.Util.MemberDetails;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,8 +17,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-
 import java.util.List;
+import javax.naming.Name;
+
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -23,13 +28,14 @@ public class GlobalModelAttribute {
 
     private final StoreService storeService;
     private final RoomCareItemService roomCareItemService;
+    private final MembersService membersService;
+    private final HotelService hotelService;
 
 
     @ModelAttribute
     public void setGlobalAttributes(HttpServletRequest request, Model model) {
         String uri = request.getRequestURI();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
 
 
         if (uri.startsWith("/members")) {
@@ -39,52 +45,55 @@ public class GlobalModelAttribute {
 
                     if (memberDetails.getMembersEntity().getRole() == Role.STOREADMIN) {
 
-
-                        Long storeId = storeService.findStoreByEmail(memberDetails.getUsername());
-                        if (storeId!=null) {
-                            log.info("스토어 아이디: {}", storeId);
-
-                            Integer alertCount = storeService.awaitingCountCheck(storeService.findStoreByEmail(memberDetails.getUsername()));
-                            model.addAttribute("alertCount", alertCount);
-                            model.addAttribute("storeId", storeId);
+                        int checking = storeService.assignCheck(((MemberDetails) principal).getUsername());
+                        if (checking == 1) {
+                            return;
                         }
-                        else {
-
-                        }
+                        log.info(memberDetails);
+                        Integer alertCount = storeService.awaitingCountCheck(storeService.findStoreByEmail(memberDetails.getUsername()));
+                        model.addAttribute("alertCount", alertCount);
                         // 스토어 어드민일때
                     } else if (memberDetails.getMembersEntity().getRole() == Role.ADMIN) {
-                        Integer alertCount = 0;
+                        int checking = hotelService.assignCheck(((MemberDetails) principal).getUsername());
+                        if (checking == 1) {
+                            return;
+                        }
+                        Integer alertCount = hotelService.unansweredCheck(hotelService.findHotelByEmail(memberDetails.getUsername()));
                         model.addAttribute("alertCount", alertCount);
                         // 호텔 어드민일때(수정 해야함)
                     } else {
-                        Integer alertCount = 0;
+                        Integer alertCount = membersService.countOfRequestAccount(memberDetails.getUsername());
+
                         model.addAttribute("alertCount", alertCount);
                         // 아무것도 아닐때(0으로 리턴)
                     }
                     model.addAttribute("member", memberDetails.getMembersEntity());
                     model.addAttribute("role", memberDetails.getMembersEntity().getRole());
 
-                    if (uri.startsWith("/members/roomCareItem")) {
-                        List<RoomCareItemDTO> roomCareItemDTOList = roomCareItemService.list();
-                        model.addAttribute("roomCareItemDTOList", roomCareItemDTOList);
-                    }
-                }
-                catch (Exception e){
+                } catch (Exception e) {
 
-                    throw new RuntimeException("로그인 필요");
+
+                    throw new RuntimeException("멤버 로그인 필요");
 
 
                 }
             }
         } else if (uri.startsWith("/users")) {
-            if(uri.startsWith("/users/login")){}
-            if(uri.startsWith("/users/logout")){}
-            if(uri.startsWith("/users/welcome")){}
-            else if (principal instanceof CustomUserDetails customUserDetails) {
-                String name = customUserDetails.getUsersEntity().getName();
-                model.addAttribute("data", name);
-                Integer alertCount = 0;//수정할 예정
-                model.addAttribute("alertCount", alertCount);
+            try {
+                if (uri.startsWith("/users/login")) {
+                }
+                if (uri.startsWith("/users/logout")) {
+                }
+                if (uri.startsWith("/users/welcome")) {
+                } else if (principal instanceof CustomUserDetails customUserDetails) {
+                    String name = customUserDetails.getUsersEntity().getName();
+                    model.addAttribute("data", name);
+                } else if (principal instanceof CustomGuestDetails customGuestDetails) {
+                    String phone = customGuestDetails.getUsername();
+                    model.addAttribute("data", phone);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("게스트 로그인 필요");
             }
         }
 
