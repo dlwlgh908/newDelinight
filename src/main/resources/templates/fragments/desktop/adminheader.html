@@ -19,7 +19,7 @@
             <div class="navbar-hover">
                 <div class="icon-wrap">
                     <div class="nav-link"><i class="fas fa-user"></i></div>
-                    <span class="notification-badge custom-shadow" th:if="${alertCount} != 0" th:text="${alertCount}"></span>
+                    <span class="notification-badge custom-shadow" th:if="${alertCount != 0 and member.role.name != 'SUPERADMIN'}" th:text="${alertCount}"></span>
                 </div>
                 <div class="profile-tooltip-wrap">
                     <div class="profile-tooltip custom-shadow">
@@ -42,7 +42,9 @@
 
                                 <li th:if="${member.role.name == 'STOREADMIN'}"><a href="/members/store/orders/list"><i class="fas fa-bell"></i>알림함</a></li>
                                 <li th:if="${member.role.name == 'ADMIN'}"><a href="/members/inquire/list"><i class="fas fa-bell"></i>알림함</a></li>
-                                <span class="notification-badge custom-shadow" th:if="${alertCount} != 0" th:text="${alertCount}"></span>
+                                <span class="notification-badge custom-shadow"
+                                      th:if="${alertCount != 0 and member.role.name != 'SUPERADMIN'}"
+                                      th:text="${alertCount}"></span>
                             </div>
                         </ul>
                         <form id="logoutForm" action="/members/account/logout" method="post" style="display: none;"></form>
