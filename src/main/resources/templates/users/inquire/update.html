@@ -25,11 +25,11 @@
 
         <!-- 글번호 -->
         <div class="row">
-            <div class="col-6">
+            <div class="col-6 mt-5">
                 <label for="id" class="form-label fw-bold">글번호</label>
-                <input type="text" readonly class="form-control-plaintext" id="id" th:field="*{id}">
+                <input type="text" readonly class="form-control-plaintext fw-bold" id="id" th:field="*{id}">
             </div>
-            <div class="col-6">
+            <div class="col-6 mt-5">
                 <label>문의유형</label>
                 <select th:field="*{inquire}" class="form-select" required>
                     <option value="ROOMSERVICE" selected>룸서비스 문의</option>
@@ -41,13 +41,13 @@
 
 
         <!-- 제목 -->
-        <div class="mb-3">
+        <div class="mb-5">
             <label for="title" class="form-label fw-bold">제목</label>
             <input type="text" class="form-control" id="title" th:field="*{title}" placeholder="제목을 입력하세요">
         </div>
 
         <!-- 내용 -->
-        <div class="mb-3">
+        <div class="mb-5">
             <label for="content" class="form-label fw-bold">내용</label>
             <textarea class="form-control" id="content" th:field="*{content}" rows="4" placeholder="내용을 입력하세요" style="resize:none;"></textarea>
         </div>

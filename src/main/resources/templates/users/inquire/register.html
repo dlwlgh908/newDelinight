@@ -23,11 +23,11 @@
 
         <form action="/users/inquire/register" th:object="${inquireDTO}" method="post" class="formWrap" enctype="multipart/form-data">
 
-            <div>
+            <div class="row mb-5">
                 <input type="hidden" name="id" id="id">
             </div>
 
-            <div class="row mb-3">
+            <div class="row mb-5">
                 <div class="col-12">
                     <label>문의유형*</label>
                     <select th:field="*{inquire}" class="form-select" required>
@@ -38,14 +38,14 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row mb-5">
                 <div class="col-12">
                     <label for="title">제목 *</label>
                     <input type="text" id="title" name="title" class="form-control" required>
                 </div>
             </div>
 
-            <div class="row mb-4">
+            <div class="row mb-5">
                 <div class="col-12">
                     <label for="content">문의내용 *</label>
                     <textarea id="content" name="content" class="form-control" required></textarea>

@@ -17,82 +17,84 @@
             <!--작업 영역-->
             <!--반드시 이 안에서만 작업-->
 
-            <!--페이지 제목 명명-->
-            <h3 class="mt-5">문의사항</h3>
-            <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active"></li>
-            </ol>
+
+            <div class="card custom-shadow mb-4 mt-5">
+                <div class="card-body">
+
+                    <!--페이지 제목 명명-->
+                    <h3>문의사항 목록</h3>
+                    <ol class="breadcrumb mb-5">
+                        <a href="/members/account/common/hotelAdHome" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">고객 서비스 관리</a>
+                    </ol>
 
 
-            <div class="card custom-shadow mb-4">
-                <div class="card mb-4">
-                    <div class="card-body">
-
-                        <table class="table table-striped">
-                            <thead>
+                    <table class="table align-middle mb-5">
+                        <thead>
+                        <tr>
+                            <th>글번호</th>
+                            <th>제목</th>
+                            <th>내용</th>
+                            <th>요청시간</th>
+                            <th>답변시간</th>
+                        </tr>
+                        </thead>
+                        <th:block th:each="inquireDTO: ${inquireDTOList}">
                             <tr>
-                                <th>글번호</th>
-                                <th>제목</th>
-                                <th>내용</th>
-                                <th>요청시간</th>
-                                <th>답변시간</th>
+                                <td th:text="${inquireDTO.id}"></td>
+                                <td>
+                                    <a class="alink-title" th:href="@{/members/inquire/read(id=${inquireDTO.id})}">
+                                        [[${inquireDTO.title}]]
+                                    </a>
+                                </td>
+                                <td th:text="${inquireDTO.content}"></td>
+                                <td th:text="${#temporals.format(inquireDTO.regTime,'yy/MM/dd/ HH:mm')}"></td>
+                                <td th:text="${#temporals.format(inquireDTO.responseTime,'yy/MM/dd/ HH:mm')}"></td>
                             </tr>
-                            </thead>
-                            <th:block th:each="inquireDTO: ${inquireDTOList}">
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/members/inquire/read(id=${inquireDTO.id})}">
-                                            [[${inquireDTO.id}]]
-                                        </a>
-                                    </td>
-                                    <td th:text="${inquireDTO.title}"></td>
-                                    <td th:text="${inquireDTO.content}"></td>
-                                    <td th:text="${#temporals.format(inquireDTO.regTime,'yy/MM/dd/ HH:mm')}"></td>
-                                    <td th:text="${#temporals.format(inquireDTO.responseTime,'yy/MM/dd/ HH:mm')}"></td>
-                                </tr>
-                            </th:block>
+                        </th:block>
 
 
-                        </table>
+                    </table>
 
 
-                        <ul class="pagination justify-content-center">
-                            <!-- 처음 페이지 버튼 -->
-                            <li class="page-menu" th:classappend="${inquireDTOList.number == 0} ? 'disabled'">
-                                <a class="page-link" th:href="@{/members/inquire/list?page=0}">처음</a>
-                            </li>
+                    <ul class="pagination justify-content-center">
+                        <!-- 처음 페이지 버튼 -->
+                        <li class="page-menu" th:classappend="${inquireDTOList.number == 0} ? 'disabled'">
+                            <a class="page-link" th:href="@{/members/inquire/list?page=0}">처음</a>
+                        </li>
 
-                            <!-- 이전 페이지 버튼 -->
-                            <li class="page-menu" th:classappend="${!inquireDTOList.hasPrevious()} ? 'disabled'">
-                                <a class="page-link" th:href="@{/members/inquire/list?page={prev}(prev=${inquireDTOList.number - 1})}">이전</a>
-                            </li>
+                        <!-- 이전 페이지 버튼 -->
+                        <li class="page-menu" th:classappend="${!inquireDTOList.hasPrevious()} ? 'disabled'">
+                            <a class="page-link" th:href="@{/members/inquire/list?page={prev}(prev=${inquireDTOList.number - 1})}">이전</a>
+                        </li>
 
-                            <!-- 현재 페이지 기준 앞 4개, 뒤 5개 -->
-                            <li class="page-menu"
-                                th:each="pageNum : ${#numbers.sequence(
+                        <!-- 현재 페이지 기준 앞 4개, 뒤 5개 -->
+                        <li class="page-menu"
+                            th:each="pageNum : ${#numbers.sequence(
                                 (inquireDTOList.number - 4 > 0 ? inquireDTOList.number - 4 : 0),
                                 (inquireDTOList.number + 5 < inquireDTOList.totalPages - 1 ? inquireDTOList.number + 5 : inquireDTOList.totalPages - 1)
                                 )}"
-                                th:classappend="${pageNum == inquireDTOList.number} ? 'active'">
-                                <a class="page-link" th:href="@{/members/inquire/list?page={p}(p=${pageNum})}" th:text="${pageNum + 1}"></a>
-                            </li>
+                            th:classappend="${pageNum == inquireDTOList.number} ? 'active'">
+                            <a class="page-link" th:href="@{/members/inquire/list?page={p}(p=${pageNum})}" th:text="${pageNum + 1}"></a>
+                        </li>
 
-                            <!-- 다음 페이지 버튼 -->
-                            <li class="page-menu" th:classappend="${!inquireDTOList.hasNext()} ? 'disabled'">
-                                <a class="page-link" th:href="@{/members/inquire/list?page={next}(next=${inquireDTOList.number + 1})}">다음</a>
-                            </li>
+                        <!-- 다음 페이지 버튼 -->
+                        <li class="page-menu" th:classappend="${!inquireDTOList.hasNext()} ? 'disabled'">
+                            <a class="page-link" th:href="@{/members/inquire/list?page={next}(next=${inquireDTOList.number + 1})}">다음</a>
+                        </li>
 
-                            <!-- 마지막 페이지 버튼 -->
-                            <li class="page-menu" th:classappend="${inquireDTOList.number == inquireDTOList.totalPages - 1} ? 'disabled'">
-                                <a class="page-link" th:href="@{/members/inquire/list?page={last}(last=${inquireDTOList.totalPages - 1})}">마지막</a>
-                            </li>
-                        </ul>
+                        <!-- 마지막 페이지 버튼 -->
+                        <li class="page-menu" th:classappend="${inquireDTOList.number == inquireDTOList.totalPages - 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/members/inquire/list?page={last}(last=${inquireDTOList.totalPages - 1})}">마지막</a>
+                        </li>
+                    </ul>
 
 
-                        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+                    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
-                    </div>
                 </div>
+
+
 
             </div>
 

@@ -156,9 +156,9 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/home")
+    @GetMapping("/hotelAdHome")
     public String home() {
-        return "hotelAdHome";
+        return "/members/account/common/hotelAdHome";
     }
 
     @GetMapping("/mypage")
