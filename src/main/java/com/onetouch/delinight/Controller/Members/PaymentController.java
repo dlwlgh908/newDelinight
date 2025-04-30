@@ -15,9 +15,8 @@ public class PaymentController {
 
     @GetMapping("/list")
     public String paymentListPage() {
-        return "/payment/list";
+        return "members/payment/list";
     }
-
 
 
 }

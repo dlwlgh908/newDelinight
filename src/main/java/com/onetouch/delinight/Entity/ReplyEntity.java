@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -23,9 +26,14 @@ public class ReplyEntity extends BaseTimeEntity{
 
     private String replyer;
 
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime responseTime; //답변시간
+
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "qnaEntity_id")
-    private QnaEntity qnaEntity;
+    @JoinColumn(name = "inquireEntity_id")
+    private InquireEntity inquireEntity;
 
 
 

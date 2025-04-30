@@ -68,7 +68,7 @@ public class UserController {
 
 
 
-                return "users/home";
+                return "/users/home";
         }
 
         @GetMapping("/store/read")
@@ -83,7 +83,7 @@ public class UserController {
 
         @GetMapping("/signUp")
         public String singUp() {
-                return "/users/signUp";
+                return "/users/account/signUp";
         }
 
         @PostMapping("/signUp")
@@ -93,7 +93,7 @@ public class UserController {
                         // 오류 메시지를 모델에 담기
                         model.addAttribute("error" , bindingResult.getAllErrors());
                         log.info("여기 실행함??????????????????????????????????????????????");
-                        return "redirect:/users/signUp";
+                        return "redirect:/users/account/signUp";
                 }
 
                 try {
@@ -102,10 +102,10 @@ public class UserController {
                 }catch (Exception e) {
                         model.addAttribute("errorMessage" , "회원가입 처리 중 오류가 발생했습니다.");
                         log.info("회원가입 중 예외 발생");
-                        return "/users/signUp";
+                        return "/users/account/signUp";
                 }
 
-                return "/users/login";
+                return "/users/account/login";
         }
 
         @GetMapping("/login")
@@ -113,7 +113,7 @@ public class UserController {
 
                 model.addAttribute("sep", sep);
 
-                return "/users/login";
+                return "/users/account/login";
         }
 
 
@@ -121,7 +121,7 @@ public class UserController {
         @GetMapping("/passwordChange")
         public String passwordChangeGET() {
                 log.info("passwordChange");
-                return "/users/passwordChange";
+                return "/users/account/passwordChange";
         }
 
         @PostMapping("/passwordChange")
@@ -146,7 +146,7 @@ public class UserController {
         @GetMapping("/sendPassword")
         public String sendPasswordGET() {
                 log.info("sendPassword진입완료!!!!!!!!!!!!!!");
-                return "/users/sendPassword";
+                return "/users/account/sendPassword";
         }
 
         @PostMapping("/sendPassword")
@@ -157,11 +157,11 @@ public class UserController {
                         String resultMessage = usersService.sendTemporaryPassword(usersDTO);
                         model.addAttribute("message" , resultMessage); // 성공 메시지
                         log.info("으아아아아아아아악 성공함?????????");
-                        return "/users/login";                                     // 성공 시 이동할 URL
+                        return "redirect:/users/login";                                     // 실패 시 이동할 URL
                 }catch (IllegalStateException e){
                         model.addAttribute("error" , e.getMessage());  // 오류 메시지
                         log.info("으아아아아아아아악 실패함?????????");
-                        return "/users/login";                                     // 실패 시 이동할 URL
+                        return "redirect:/users/login";                                     // 실패 시 이동할 URL
                 }
         }
 
@@ -175,7 +175,7 @@ public class UserController {
                         log.info("updateGET 진입 - 로그인되지 않은 사용자");
                         return "redirect:/users/login"; // 비로그인 사용자는 로그인 페이지로 리다이렉트
                 }
-                return "users/update";
+                return "users/account/update";
         }
 
         @PostMapping("/update")
@@ -220,15 +220,10 @@ public class UserController {
                 return "/users/userCheck";
         }
 
-        @GetMapping("/userServiceCheck")
-        public String userServiceCheckGET() {
-                return "/users/userServiceCheck";
-        }
-
         // 사용자 주문 View Mapping →→→→→→→→ RestFullController
         @GetMapping("welcome")
         public String WelcomeUserGET() {
-                return "/users/welcome";
+                return "/users/account/welcome";
         }
 
 

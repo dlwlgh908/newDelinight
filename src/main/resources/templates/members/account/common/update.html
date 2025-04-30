@@ -4,6 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/desktop/layout}"
 >
+
     <head>
         <title>델리나잇</title>
 
@@ -148,5 +149,37 @@
             <div th:replace="~{fragmentes/desktop/adminfooter::adminFooter}"></div>
         </div>
 
-    </body>
+
+        </div>
+    </main>
+
+    <!--전화번호 입력창 하이폰-->
+    <script>
+        document.getElementById("staticMembersPhone").addEventListener("input", function (e) {
+            let value = e.target.value.replace(/\D/g, ""); // 숫자만 남김
+            e.target.value = value;
+        });
+    </script>
+
+    <!--비밀번호 변경창 토글-->
+    <script>
+        $('#togglePasswordChange').on('click', function () {
+            $('#passwordChangeSection').slideDown(200);
+            $('.iconX').addClass('open');
+        });
+
+        $('.iconX').on('click', function () {
+            $('#passwordChangeSection').slideUp(200);
+            $('.iconX').removeClass('open');
+        });
+    </script>
+
+
+
+    <!--푸터 절대 수정 금지!!!!-->
+    <!--푸터-->
+    <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
+</div>
+
+</body>
 </html>

@@ -59,14 +59,15 @@
     </form>
 
     <!-- 비회원 로그인 폼 -->
-    <form action="/guest/login" method="post" id="guestForm" style="display: none;">
+    <form action="/guests/login" method="post" id="guestForm" style="display: none;">
+
 
         <div class="login-id-input">
             <input type="text" id="guestPhone" name="phone" placeholder="전화번호" required>
         </div>
 
         <div class="login-id-input">
-            <input type="text" id="guestNumber" name="reservationNum" placeholder="예약번호" required>
+            <input type="text" id="guestNumber" name="password" placeholder="예약번호 뒷 네자리" required>
         </div>
 
         <div id="guestError" class="error"></div>
@@ -171,6 +172,7 @@
             guestError.textContent = "전화번호와 예약번호를 모두 입력해주세요.";
             return;
         }
+        document.getElementById("guestForm").submit();
 
     }
 

@@ -11,7 +11,6 @@ package com.onetouch.delinight.DTO;
 import com.onetouch.delinight.Constant.PaidCheck;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,19 +23,19 @@ import java.util.List;
 @NoArgsConstructor
 public class PaymentDTO {
 
-    private Long id;
-    private String orderType;
-    private PaidCheck paidCheck;
-    private BigDecimal amount;          // 결제 금액
-    private LocalDateTime payDateTime;  // 결제 날짜
-    private String storeName;           // 가맹점명
-    private String hotelName;           // 호텔명
-    private String branchName;          // 지점
-    private String centerName;          // 본사
-    private String checkInRoomNumber;   // 객실 번호(룸서비스일 경우 체크인 정보에서 가져옴)
-    private PaidCheck paidCheckType;    // 정산 여부
+
+    private Long totalId;               // 정산 ID
+    private PaidCheck checkPaid;        // 정산상태
+    private LocalDateTime regTime;      // 등록일
+
+    // Excel → 계산식
+    private int vat;         // 부가세
+    private int totalPrice;  // 합계 금액
+    private int unpaid;      // 미결제 금액
+
 
     private List<OrdersDTO> ordersDTOList;
+    private List<MenuDTO> menuDTOList;
 
     public PaymentDTO setOrdersDTOList(List<OrdersDTO> ordersDTOList) {
         this.ordersDTOList = ordersDTOList;
@@ -44,17 +43,9 @@ public class PaymentDTO {
 
     }
 
-    public PaymentDTO (Long id, BigDecimal amount, LocalDateTime payDateTime, String orderType, String storeName, String hotelName, String branchName, String centerName, String checkInRoomNumber, PaidCheck paidCheckType) {
-        this.id = id;
-        this.amount = amount;
-        this.payDateTime = payDateTime;
-        this.orderType = orderType;
-        this.storeName = storeName;
-        this.hotelName = hotelName;
-        this.branchName = branchName;
-        this.centerName = centerName;
-        this.checkInRoomNumber = checkInRoomNumber;
-        this.paidCheckType = paidCheckType;
+    public PaymentDTO setMenuDTOList(List<MenuDTO> menuDTOList) {
+        this.menuDTOList = menuDTOList;
+        return this;
     }
 
 

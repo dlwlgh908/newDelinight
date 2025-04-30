@@ -1,8 +1,10 @@
 package com.onetouch.delinight.Controller.Members;
 
 
+import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.DTO.MenuDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
+import com.onetouch.delinight.Service.MembersService;
 import com.onetouch.delinight.Service.OrdersService;
 
 import com.onetouch.delinight.Util.MemberDetails;
@@ -21,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,9 +33,10 @@ public class StoreRestController {
 
     private final OrdersService ordersService;
     private final StoreService storeService;
+    private final MembersService membersService;
 
     @GetMapping("/orders/processingList")
-    public ResponseEntity<Page<OrdersDTO>> processingList(@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails){
+    public ResponseEntity<Page<OrdersDTO>> processingList(@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails) {
 
 
         String email = memberDetails.getUsername();
@@ -58,5 +62,40 @@ public class StoreRestController {
     public void del(Long id) {
         storeService.del(id);
     }
-  
+
+    @PostMapping("/rest/addMember")
+    public ResponseEntity<String> addMember(Long memberId, Long storeId) {
+
+        try {
+            storeService.addMembers(memberId, storeId);
+            return ResponseEntity.ok("정상 추가");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
+    @GetMapping("/rest/membersList")
+    public ResponseEntity<List<MembersDTO>> membersList(Principal principal) {
+        List<MembersDTO> membersDTOList = membersService.findMembersListByHotelEmail(principal.getName());
+        log.info(membersDTOList);
+
+        return ResponseEntity.ok(membersDTOList);
+    }
+
+    @PostMapping("/rest/modify")
+    public ResponseEntity<String> modify(Long memberId, Long storeId) {
+        log.info("modify 진입");
+        log.info("memberid" + memberId);
+        log.info("memberid" + storeId);
+
+
+        try {
+            storeService.modiMembers(memberId, storeId);
+            return ResponseEntity.ok("정상 수정");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
 }

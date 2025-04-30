@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/desktop/layout}"
+>
+<head>
+    <title>델리나잇</title>
+
+    <!--css, link, -->
+</head>
+<body>
+
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-5">
+            <!--작업 영역-->
+            <!--반드시 이 안에서만 작업-->
+
+            <!--페이지 제목 명명-->
+            <h3 class="mt-5">문의사항</h3>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active"></li>
+            </ol>
+
+
+            <div class="card custom-shadow mb-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>글번호</th>
+                                <th>제목</th>
+                                <th>내용</th>
+                                <th>요청시간</th>
+                                <th>답변시간</th>
+                            </tr>
+                            </thead>
+                            <th:block th:each="inquireDTO: ${inquireDTOList}">
+                                <tr>
+                                    <td>
+                                        <a th:href="@{/members/inquire/read(id=${inquireDTO.id})}">
+                                            [[${inquireDTO.id}]]
+                                        </a>
+                                    </td>
+                                    <td th:text="${inquireDTO.title}"></td>
+                                    <td th:text="${inquireDTO.content}"></td>
+                                    <td th:text="${#temporals.format(inquireDTO.regTime,'yy/MM/dd/ HH:mm')}"></td>
+                                    <td th:text="${#temporals.format(inquireDTO.responseTime,'yy/MM/dd/ HH:mm')}"></td>
+                                </tr>
+                            </th:block>
+
+
+                        </table>
+
+
+                        <ul class="pagination justify-content-center">
+                            <!-- 처음 페이지 버튼 -->
+                            <li class="page-menu" th:classappend="${inquireDTOList.number == 0} ? 'disabled'">
+                                <a class="page-link" th:href="@{/members/inquire/list?page=0}">처음</a>
+                            </li>
+
+                            <!-- 이전 페이지 버튼 -->
+                            <li class="page-menu" th:classappend="${!inquireDTOList.hasPrevious()} ? 'disabled'">
+                                <a class="page-link" th:href="@{/members/inquire/list?page={prev}(prev=${inquireDTOList.number - 1})}">이전</a>
+                            </li>
+
+                            <!-- 현재 페이지 기준 앞 4개, 뒤 5개 -->
+                            <li class="page-menu"
+                                th:each="pageNum : ${#numbers.sequence(
+                                (inquireDTOList.number - 4 > 0 ? inquireDTOList.number - 4 : 0),
+                                (inquireDTOList.number + 5 < inquireDTOList.totalPages - 1 ? inquireDTOList.number + 5 : inquireDTOList.totalPages - 1)
+                                )}"
+                                th:classappend="${pageNum == inquireDTOList.number} ? 'active'">
+                                <a class="page-link" th:href="@{/members/inquire/list?page={p}(p=${pageNum})}" th:text="${pageNum + 1}"></a>
+                            </li>
+
+                            <!-- 다음 페이지 버튼 -->
+                            <li class="page-menu" th:classappend="${!inquireDTOList.hasNext()} ? 'disabled'">
+                                <a class="page-link" th:href="@{/members/inquire/list?page={next}(next=${inquireDTOList.number + 1})}">다음</a>
+                            </li>
+
+                            <!-- 마지막 페이지 버튼 -->
+                            <li class="page-menu" th:classappend="${inquireDTOList.number == inquireDTOList.totalPages - 1} ? 'disabled'">
+                                <a class="page-link" th:href="@{/members/inquire/list?page={last}(last=${inquireDTOList.totalPages - 1})}">마지막</a>
+                            </li>
+                        </ul>
+
+
+                        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </main>
+
+    <!--스크립트 영역-->
+    <!--추가할 스크립트가 있다면 이곳에서 <script>태그 열고 작업-->
+    <!--기존 config 파일과 겹칠 수 있으므로 class나 id는 직접 작명해주세요-->
+
+
+    <!--푸터-->
+    <!--콘텐츠 내부에 포함된 형식이므로 첨삭 엄금!!!-->
+    <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
+</div>
+
+</body>
+</html>

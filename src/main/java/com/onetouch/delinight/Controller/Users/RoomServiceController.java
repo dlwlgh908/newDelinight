@@ -7,8 +7,10 @@
  *********************************************************************/
 package com.onetouch.delinight.Controller.Users;
 
+import com.onetouch.delinight.DTO.CheckInDTO;
 import com.onetouch.delinight.DTO.MenuDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
+import com.onetouch.delinight.Service.CheckInService;
 import com.onetouch.delinight.Service.MenuService;
 import com.onetouch.delinight.Service.OrdersService;
 import lombok.RequiredArgsConstructor;
@@ -29,26 +31,36 @@ import java.util.List;
 public class RoomServiceController {
     private final MenuService menuService;
     private final OrdersService ordersService;
+    private final CheckInService checkInService;
 
     @GetMapping("/main")
-    public String main(Model model){
-        Long hotelNum = 1L;// 체크인 서비스에서 findHotelNum 메소드 만들어서 findbyCheckInNum로 룸찾고 룸에서 호텔 찾아서 넘겨줄 예정
-        List<MenuDTO> menuDTOList = menuService.menuListByHotel(1L);
+    public String main(Model model, Principal principal){
+        CheckInDTO checkInDTO = checkInService.findCheckInByEmail(principal.getName());
+        List<MenuDTO> menuDTOList = menuService.menuListByHotel(checkInDTO.getRoomDTO().getHotelDTO().getId());
         model.addAttribute("menuDTOList", menuDTOList);
         log.info(menuDTOList);
-        return "roomService/order/main";
+        return "users/order/main";
     }
 
     @GetMapping("/list")
     public String list(Principal principal, Model model){
         List<OrdersDTO> ordersDTOList = ordersService.ordersListByEmail(principal.getName());
         model.addAttribute("ordersDTOList", ordersDTOList);
-        return "roomService/order/list";
+        return "users/order/list";
     }
 
     @GetMapping("/hub")
     public String hub(){
         return "redirect:/users/order/list";
+    }
+
+    @GetMapping("/read")
+    public String read(Long orderId, Model model){
+        OrdersDTO ordersDTO = ordersService.readOne(orderId);
+        log.info(ordersDTO);
+        model.addAttribute("ordersDTO", ordersDTO);
+        return "users/order/read";
+
     }
 
     @GetMapping("/request")
@@ -63,7 +75,7 @@ public class RoomServiceController {
         log.info(ordersDTOList);
      model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("ordersDTOList", ordersDTOList);
-        return "roomService/order/request";
+        return "users/order/request";
     }
 
 

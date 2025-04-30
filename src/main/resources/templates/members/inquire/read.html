@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/desktop/layout}"
+>
+<head>
+    <title>델리나잇</title>
+
+    <!--css, link, -->
+</head>
+<body>
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-5">
+            <!--작업 영역-->
+            <!--반드시 이 안에서만 작업-->
+
+            <!--페이지 제목 명명-->
+            <h3 class="mt-5">1:1 문의답변</h3>
+            <ol class="breadcrumb mb-4">
+                <!--페이지 소제목 명명-->
+                <li class="breadcrumb-item active"></li>
+            </ol>
+            <div class="card custom-shadow mb-4">
+                <div class="card">
+                    <div class="card-body">
+
+
+                        <div class="row md-3">
+                            <div class="col-4">글번호</div>
+                            <div class="col" th:text="${inquireDTO.id}"></div>
+                        </div>
+
+                        <div class="row md-3">
+                            <div class="col-4">제목</div>
+                            <div class="col" th:text="${inquireDTO.title}"></div>
+                        </div>
+
+                        <div class="row md-3">
+                            <div class="col-4">내용</div>
+                            <div class="col" th:text="${inquireDTO.content}"></div>
+                        </div>
+
+                        <div>
+                            <div class="col mt-3">
+                                <label>답변내용</label><br>
+<!--                                <textarea class="replyText" name="replyText"></textarea><br>-->
+                                <textarea name="replyText" class="form-control replyText" rows="1" oninput="autoResize(this)"
+                                          style="overflow:hidden; resize: none; min-height: 1rem">
+                                    </textarea>
+                                <button type="submit" class="md-3 mt-3 btn-DeliNight-black insertBtn" style="width: 60px; height: 40px">저장</button>
+                                <a href="/members/inquire/list" class="md-3 mt-3 btn-DeliNight-black" style="width: 90px; height: 30px">이전</a>
+                            </div>
+
+                            <div class="col mt-3">
+                                <label>댓글내용</label><br>
+                                <div class="form-control-plaintext replyWrap" style="border: 1px solid black"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <script th:inline="javascript">
+        $(function () {
+            select()
+
+
+            $(".insertBtn").on("click", function () {
+                const replyTextVal = $(".replyText").val().trim(); //클래스가 붙은 입력창에서 값을 가져옴
+                //trim()은 공백을 제거 (양쪽 끝에있는 스페이스, 탭같은거)
+                const inquireId = [[${inquireDTO.id}]]; //서버에 넘겨주는 InquireId
+
+                if (!replyTextVal) {
+                    alert("댓글 내용을 입력해주세요.")
+                    return;
+                }
+
+                const insertD = {
+                    replyText: replyTextVal,
+                    inquireId: inquireId
+                };//서버로 보낼 데이터 묶음 내용 + 글번호
+
+                $.ajax({
+                    url: "/reply/register",
+                    type: "post",
+                    data: $.param(insertD),//객체를 replyText=내용&inquireId=숫자 이런 식의 문자열로 바꿈
+                    success: function (response) {
+                        alert(response); //예) "3번글이 저장되었습니다.
+                        $(".replyText").val(""); //입력창 초기화
+                        select();//댓글 목록 다시 불러오기
+
+                    },
+                    error: function (xhr) {
+                        if (xhr.status === 400) {//실패 이유가 400이면 유효성 검사 실패로 판단
+                            let errors;
+                            try {//서버에서 에러 정보를 문자열(JSON)로 보내줬을때
+                                //그걸 자바스크립트 객체로 변환하려고 함
+                                errors = JSON.parse(xhr.responseText);
+                            } catch (e) {
+                                alert("유효성 오류 응답을 파싱할 수 없습니다.")
+                                return;
+                            }//실패하면 "응답을 파싱할 수 없다"는 메세지
+                            let msg = "입력 오류:\n";
+                            errors.forEach(e => {
+                                msg += "_ " + e.defaultMessage + "\n";
+                            });//여러 개의 유효성 오류가 있을 수 있으니
+                            //하나씩 돌면서 메세지를 쌓아서 보여줌
+                            alert(msg);
+                        } else {
+                            alert("서버 오류가 발생했습니다.");
+                        }
+
+                    }
+                });
+
+
+            })
+            function select() {
+                var inquireId = [[${inquireDTO.id}]]
+
+
+                $.ajax({
+
+                    url: "/reply/list/" + inquireId,
+                    type: "get",
+                    success: function (data) {
+                        console.log(data)
+                        let str = "";
+                        for (let i = 0; i < data.length; i++) {
+                            str += `
+                                    <span>${data[i].replyText}</span>`
+                        }
+                        $(".replyWrap").html(str)
+                    }
+
+                })
+            }
+
+        });
+
+
+    </script>
+    <script>
+        function autoResize(a) {
+            a.style.height = 'auto'; // 높이 초기화
+            a.style.height = a.scrollHeight + 'px'; // 글자 수에 맞게 높이 조정
+        }
+    </script>
+
+    <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
+</div>
+
+
+
+
+</body>
+</html>

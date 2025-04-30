@@ -46,11 +46,15 @@ public class MembersEntity {
     private Role role;
 
     @JoinColumn(name = "center_id")
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private CenterEntity centerEntity;
 
 
     @JoinColumn(name = "hotel_id")
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private HotelEntity hotelEntity;
+
+
+
 }

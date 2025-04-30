@@ -23,10 +23,10 @@ public class ReplyRestController {
 
     private final ReplyService replyService;
 
-    @GetMapping("/list/{qnaId}")
-    public ResponseEntity<List<ReplyDTO>> list(@PathVariable("qnaId") Long qnaId){
+    @GetMapping("/list/{inquireId}")
+    public ResponseEntity<List<ReplyDTO>> list(@PathVariable("inquireId") Long inquireId){
         log.info("페이지 진입");
-        List<ReplyDTO> replyDTOList = replyService.list(qnaId);
+        List<ReplyDTO> replyDTOList = replyService.list(inquireId);
         return new ResponseEntity<List<ReplyDTO>>(replyDTOList , HttpStatus.OK);
     }
 //    @PostMapping("/register")

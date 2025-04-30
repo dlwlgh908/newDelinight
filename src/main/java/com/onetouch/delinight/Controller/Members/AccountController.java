@@ -9,19 +9,25 @@ package com.onetouch.delinight.Controller.Members;
 
 import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
+import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.CenterService;
 import com.onetouch.delinight.Service.HotelService;
 import com.onetouch.delinight.Service.MembersService;
+import com.onetouch.delinight.Service.StoreService;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.s3.endpoints.internal.FatScope;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.security.Principal;
 import java.util.Objects;
@@ -36,25 +42,30 @@ public class AccountController {
     private final MembersRepository membersRepository;
     private final CenterService centerService;
     private final HotelService hotelService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/redirectPage")
-    public  String redirectPage(){
+    public String redirectPage() {
 
         return "members/account/common/redirectPage";
     }
 
-    @GetMapping("/accountRequest")
-    public String accountRequest(String role, Long id, Model model){
+    @GetMapping("/waitRedirectPage")
+    public String waitRedirectPage() {
 
-        if(role.equals("super")){
+        return "members/account/common/waitRedirectPage";
+    }
+
+    @GetMapping("/accountRequest")
+    public String accountRequest(String role, Long id, Model model) {
+
+        if (role.equals("super")) {
             model.addAttribute("role", "본사 관리자");
-            model.addAttribute("parentId",id);
-        }
-        else if(role.equals("hotel")){
+            model.addAttribute("parentId", id);
+        } else if (role.equals("hotel")) {
             model.addAttribute("role", "호텔 관리자");
             model.addAttribute("parentId", id);
-        }
-        else {
+        } else {
             model.addAttribute("role", "가맹점 관리자");
             model.addAttribute("parentId", id);
         }
@@ -63,18 +74,16 @@ public class AccountController {
     }
 
     @PostMapping("/accountRequest")
-    public String accountRequestPost(MembersDTO membersDTO){
+    public String accountRequestPost(MembersDTO membersDTO) {
         String roleStr = membersDTO.getRoleStr();
 
-        if(roleStr.equals("super")){
+        if (roleStr.equals("super")) {
             membersDTO.setRole(Role.SUPERADMIN);
             membersService.create(membersDTO);
-        }
-        else if(roleStr.equals("hotel")){
+        } else if (roleStr.equals("hotel")) {
             membersDTO.setRole(Role.ADMIN);
             membersService.create(membersDTO);
-        }
-        else {
+        } else {
             membersDTO.setRole(Role.STOREADMIN);
             membersService.create(membersDTO);
         }
@@ -84,58 +93,70 @@ public class AccountController {
     }
 
     @GetMapping("/accounthub")
-    public String accounthub(Principal principal){
+    public String accounthub(Principal principal) {
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
+        log.info("허브진입"+role);
 
         //로그인한 사람 롤 찾기
         //수퍼 어드민
-        if(role.equals(Role.SUPERADMIN)){
-            return "redirect:/members/account/hoteladlist";
+        if (role.equals(Role.SUPERADMIN)) {
+            if (membersService.assignCheck(principal.getName(), 1)) {
+                return "redirect:/members/account/hotelAdmin/list";
+            } else {
+                return "redirect:/members/account/waitRedirectPage";
+            }
         }
         //호텔 어드민
-        else if(role.equals(Role.ADMIN)){
-            return "redirect:/members/account/storeadlist" ;
+        else if (role.equals(Role.ADMIN)) {
+            if (membersService.assignCheck(principal.getName(), 2)) {
+                return "redirect:/members/account/storeAdmin/list";
+            } else {
+                return "redirect:/members/account/waitRedirectPage";
+            }
         }
         //스토어 어드민
-        else if(role.equals(Role.STOREADMIN)){
-            return "redirect:/members/store/orders/list" ;
-        }
-        else{ // 시스템 어드민일 경우
-            return "redirect:/members/account/listB";
+
+        else if (role.equals(Role.STOREADMIN)) {
+            if (membersService.assignCheck(principal.getName(), 3)) {
+                return "redirect:/members/store/orders/list";
+            } else {
+                return "redirect:/members/account/waitRedirectPage";
+            }
+        } else { // 시스템 어드민일 경우
+            return "redirect:/members/account/superAdmin/list";
+
         }
     }
 
     @GetMapping("/centerhub")
-    public String centerhub(Principal principal, Model model){
+    public String centerhub(Principal principal, Model model) {
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
         model.addAttribute("role", role);
 
         //수퍼 어드민
-        if(role.equals(Role.SUPERADMIN)){
+        if (role.equals(Role.SUPERADMIN)) {
             return "redirect:/members/center/read";
-        }
-        else{ // 시스템 어드민일 경우
+        } else { // 시스템 어드민일 경우
             return "redirect:/members/center/list";
         }
     }
 
     @GetMapping("/paymenthub")
-    public String paymenthub(Principal principal){
+    public String paymenthub(Principal principal) {
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
 
         //수퍼 어드민
-        if(role.equals(Role.SUPERADMIN)){
+        if (role.equals(Role.SUPERADMIN)) {
             return "redirect:/members/account/";
         }
         //호텔 어드민
-        else if(role.equals(Role.ADMIN)){
-            return "redirect:/members/account/" ;
-        }
-        //스토어 어드민
-        else  if(role.equals(Role.STOREADMIN)) {
+        else if (role.equals(Role.ADMIN)) {
             return "redirect:/members/account/";
         }
-        else{ // 시스템 어드민일 경우
+        //스토어 어드민
+        else if (role.equals(Role.STOREADMIN)) {
+            return "redirect:/members/account/";
+        } else { // 시스템 어드민일 경우
             return "redirect:/members/account/";
         }
     }
@@ -146,14 +167,16 @@ public class AccountController {
     }
 
     @GetMapping("/mypage")
-    public String adminMyPage(Principal principal, Model model){
+    public String adminMyPage(Principal principal, Model model) {
 
         return "/members/account/common/mypage";
     }
 
     @GetMapping("/update")
-    public String adminUpdate(Principal principal, Model model){
 
+    public String adminUpdate(Principal principal, Model model){
+        MembersEntity members = membersRepository.findByEmail(principal.getName());
+        model.addAttribute("member", members);
         return "/members/account/common/update";
     }
 
@@ -178,12 +201,67 @@ public class AccountController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+
+    @PostMapping("/update")
+    public String updateProc(Principal principal,
+            @ModelAttribute MembersDTO membersDTO, Model model,
+            @RequestParam(value = "currentPassword", required = false) String currentPassword,
+            @RequestParam(value = "newPassword", required = false) String newPassword,
+            @RequestParam(value = "confirmPassword", required = false) String confirmPassword) {
+
+
+        MembersEntity membersEntity = membersRepository.findByEmail(principal.getName());
+        boolean hasError = false;
+
+        //전화번호 변경
+        if (membersDTO.getPhone() == null || membersDTO.getPhone().trim().isEmpty()){
+            model.addAttribute("phoneError", "전화번호를 입력해주세요.");
+            hasError = true;
+        }
+
+        //비밀번호 변경
+        //현재 비밀번호에 입력된 값이 있을 때 실행됨
+        if (currentPassword != null && !currentPassword.trim().isEmpty()){
+
+            //현재 비밀번호 검증
+            if (!passwordEncoder.matches(currentPassword, membersEntity.getPassword())){
+                model.addAttribute("currentPasswordError", "비밀번호가 일치하지 않습니다.");
+                hasError = true;
+            }
+
+            //새 비밀번호, 새 비밀번호 확인 검증
+            if (!newPassword.equals(confirmPassword)){
+                model.addAttribute("confirmPasswordError", "새 비밀번호 확인이 일치하지 않습니다.");
+                hasError = true;
+            }
+
+            //모두 통과 후 비밀번호 업데이트 진행
+            if (!hasError) {
+                String encodedNewPassword = passwordEncoder.encode(confirmPassword);
+                membersDTO.setPassword(encodedNewPassword);
+            }
+        }
+
+        //통과 후 업데이트 진행
+        if(hasError){
+            model.addAttribute("member", membersEntity);
+            return "/members/account/common/update";
+        }
+
+        membersDTO.setId(membersEntity.getId());
+        membersService.update(membersDTO);
+
+        MembersEntity members = membersRepository.findByEmail(principal.getName());
+        model.addAttribute("member", members);
+
+        return "/members/account/common/mypage";
+
     }
 
 
     @GetMapping("/superAdmin/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-                                    @RequestParam(value = "status", required = false) String status, Principal principal) {
+                       @RequestParam(value = "status", required = false) String status, Principal principal) {
         log.info("list페이지 진입");
 
         Status status1;
@@ -194,7 +272,7 @@ public class AccountController {
         if (status != null && !status.isEmpty()) {
             if (status.equals("WAIT")) {
                 status1 = Status.WAIT;
-                paging =membersService.getListBystatus(status1, page);
+                paging = membersService.getListBystatus(status1, page);
             } else if (status.equals("VALID")) {
                 status1 = Status.VALID;
                 paging = membersService.getListBystatus(status1, page);
@@ -221,13 +299,12 @@ public class AccountController {
         Long parentId = centerService.findCenter(principal.getName());
 
 
-
         Page<MembersEntity> paging = null;
 
         if (status != null && !status.isEmpty()) {
             if (status.equals("WAIT")) {
                 status1 = Status.WAIT;
-                paging =membersService.findAccount(status1, page, principal.getName(), "hotel");
+                paging = membersService.findAccount(status1, page, principal.getName(), "hotel");
             } else if (status.equals("VALID")) {
 
                 status1 = Status.VALID;
@@ -240,7 +317,7 @@ public class AccountController {
             paging = membersService.getListHotel(page, principal.getName());
 
         }
-         model.addAttribute("parentId", parentId);
+        model.addAttribute("parentId", parentId);
         model.addAttribute("paging", paging);
         model.addAttribute("status", status);
 
@@ -255,7 +332,7 @@ public class AccountController {
 
         Status status1;
 
-        Long parentId = hotelService.findHotelByEmail( principal.getName());
+        Long parentId = hotelService.findHotelByEmail(principal.getName());
 
 
         Page<MembersEntity> paging = null;
@@ -263,7 +340,7 @@ public class AccountController {
         if (status != null && !status.isEmpty()) {
             if (status.equals("WAIT")) {
                 status1 = Status.WAIT;
-                paging =membersService.findAccount(status1, page, principal.getName(), "store");
+                paging = membersService.findAccount(status1, page, principal.getName(), "store");
             } else if (status.equals("VALID")) {
                 status1 = Status.VALID;
                 paging = membersService.findAccount(status1, page, principal.getName(), "store");
@@ -296,7 +373,7 @@ public class AccountController {
     }
 
     @GetMapping("/logout-success")
-    public String logout(){
+    public String logout() {
         return "/members/account/common/logout";
     }
 

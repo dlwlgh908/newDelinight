@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layoutMobile/layout}"
+      layout:decorate="~{layout/mobile/layout}"
 >
 <head>
     <meta charset="UTF-8">
@@ -67,7 +67,7 @@
 
         <div class="orderList">
 
-            <div class="row itemWrap" th:each="ordersDTO : ${ordersDTOList}">
+            <div class="row itemWrap" th:each="ordersDTO : ${ordersDTOList}" th:data-ordersid="${ordersDTO.id}">
                 <p class="row mb-2">
                 <p style="display: flex; justify-content: space-between">
                     <span>주문 번호([[${ordersDTO.id}]])</span>
@@ -107,6 +107,10 @@
         <script th:inline="javascript">
             $(function () {
                 $(".userHeaderMsg").html("주문 목록").css("font-weight", "bold").css("font-size","20px")
+            })
+
+            $(document).on("click",".itemWrap",function () {
+                window.location.href = "/users/order/read?orderId="+$(this).data("ordersid");
             })
         </script>
 

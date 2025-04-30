@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layoutMobile/layout}"
+      layout:decorate="~{layout/mobile/layout}"
 >
 <head>
     <meta charset="UTF-8">
@@ -234,6 +234,10 @@
                             url: "/roomService/order/payLater",
                             type: "post",
                             data:{"ordersId":ordersId, "memo":memoObject.val()},
+
+                            success:function(){
+                                window.location.href = "/users/order/list";
+                            },
                             error:function (){
                                 alert("후결제로 바꾸면서 오류 ")
                             }

@@ -1,8 +1,10 @@
 package com.onetouch.delinight.Controller.Users;
 
 import com.onetouch.delinight.DTO.CartItemDTO;
+import com.onetouch.delinight.DTO.CheckInDTO;
 import com.onetouch.delinight.DTO.MenuDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
+import com.onetouch.delinight.Service.CheckInService;
 import com.onetouch.delinight.Service.MenuService;
 import com.onetouch.delinight.Service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +24,14 @@ import java.util.List;
 @Log4j2
 public class RoomServiceRestController {
 
+    private final CheckInService checkInService;
     private final RoomService roomService;
     private final MenuService menuService;
 
     @GetMapping("/order/showMainList")
     public ResponseEntity<List<MenuDTO>> showList(Principal principal) {
-        Long cartNum = 1L;
-        List<MenuDTO> menuDTOList = menuService.menuListByHotel(1L);
+        CheckInDTO checkInDTO = checkInService.findCheckInByEmail(principal.getName());
+        List<MenuDTO> menuDTOList = menuService.menuListByHotel(checkInDTO.getRoomDTO().getHotelDTO().getId());
         log.info(menuDTOList);
         return ResponseEntity.ok(menuDTOList);
     }

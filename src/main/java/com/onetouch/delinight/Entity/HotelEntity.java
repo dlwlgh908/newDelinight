@@ -9,6 +9,10 @@ package com.onetouch.delinight.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,7 +32,7 @@ public class HotelEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(unique = true, nullable = false, length = 50)
+    @Column(unique = false, nullable = false, length = 50)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,7 +41,22 @@ public class HotelEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="members_id")
+    @ToString.Exclude
     private MembersEntity membersEntity;
+
+
+
+
+
+    public HotelEntity setMembersEntity(MembersEntity membersEntity) {
+        this.membersEntity = membersEntity;
+        return this;
+    }
+
+
+
+
+
 
 
 

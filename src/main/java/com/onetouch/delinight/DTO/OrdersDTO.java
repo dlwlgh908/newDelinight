@@ -9,7 +9,7 @@ package com.onetouch.delinight.DTO;
 
 import com.onetouch.delinight.Constant.OrderType;
 import com.onetouch.delinight.Constant.OrdersStatus;
-import com.onetouch.delinight.Entity.StoreEntity;
+import com.onetouch.delinight.Constant.PaidCheck;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -32,6 +32,9 @@ public class OrdersDTO {
     private Long totalPrice;
     private List<OrdersItemDTO> ordersItemDTOList;
     private OrdersStatus ordersStatus;
+    private PaidCheck paid;
+    private CheckOutLogDTO checkOutLogDTO;
+
 
     private LocalDateTime pendingTime;
     private LocalDateTime awaitingTime;
@@ -49,9 +52,23 @@ public class OrdersDTO {
         return this;
     }
 
+//    public OrdersDTO setCheckOutLogDTO(CheckOutLogDTO checkOutLogDTO) {
+//        this.checkOutLogDTO = checkOutLogDTO;
+//        return this;
+//    }
+
     public OrdersDTO setOrdersItemDTOList(List<OrdersItemDTO> ordersItemDTOList){
         this.ordersItemDTOList = ordersItemDTOList;
         return this;
+    }
+
+    public OrderType orderType(){
+        return orderType;
+    }
+
+    // 결제 여부를 반환하는 메서드
+    public boolean isPaid() {
+        return paid == PaidCheck.paid;
     }
 
 }

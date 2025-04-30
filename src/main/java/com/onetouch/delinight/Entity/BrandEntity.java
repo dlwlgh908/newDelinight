@@ -32,9 +32,7 @@ public class BrandEntity {
     private String content;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id")
-    private HotelEntity hotelEntity;
+
 
 
 

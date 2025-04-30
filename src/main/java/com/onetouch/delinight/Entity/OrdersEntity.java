@@ -8,6 +8,7 @@
 package com.onetouch.delinight.Entity;
 
 
+import com.onetouch.delinight.Constant.OrderType;
 import com.onetouch.delinight.Constant.OrdersStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -46,16 +47,36 @@ public class OrdersEntity {
     @JoinColumn(name = "checkin_id")
     private CheckInEntity checkInEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "log_id")
+    private CheckOutLogEntity checkOutLogEntity;
+
     private LocalDateTime pendingTime;
     private LocalDateTime awaitingTime;
     private LocalDateTime preparingTime;
     private LocalDateTime deliveringTime;
     private LocalDateTime deliveredTime;
 
+
+
     private Long totalPrice;
 
     @Enumerated(EnumType.STRING)
+    private OrderType orderType;
+
+    @Enumerated(EnumType.STRING)
     OrdersStatus ordersStatus; // 현 주문 상태
+
+    public OrdersEntity setCheckOutLogEntity(CheckOutLogEntity checkOutLogEntity) {
+        this.checkOutLogEntity = checkOutLogEntity;
+        return this;
+    }
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id")
+    private PaymentEntity paymentEntity;
 
 
 

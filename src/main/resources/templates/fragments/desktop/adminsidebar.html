@@ -2,7 +2,7 @@
 
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/desktop/layout}"
 >
 <head>
@@ -21,13 +21,13 @@
                 <!--계정관리-->
                 <!--시스템어드민, 수퍼어드민, 호텔어드민-->
                 <a class="nav-link" href="/members/account/accounthub"
-                th:if="${role.name() == 'SUPERADMIN' or role.name() == 'SYSTEMADMIN' or role.name() == 'ADMIN'}">
+                   th:if="${role.name() == 'SUPERADMIN' or role.name() == 'SYSTEMADMIN' or role.name() == 'ADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-circle-user"></i></div>
                     계정 관리
                 </a>
                 <!--가맹점 관리-->
                 <!--스토어어드민-->
-                <a class="nav-link" href="/members/store/update" th:if="${role.name() == 'STOREADMIN'}">
+                <a class="nav-link" th:href="@{/members/store/read(id=${storeId})}" th:if="${role.name() == 'STOREADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>
                     가맹점 관리
                 </a>
@@ -42,6 +42,13 @@
                    th:if="${role.name() == 'SUPERADMIN' or role.name() == 'SYSTEMADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-hotel"></i></div>
                     본사 관리<br>
+                </a>
+                <!--본사관리-->
+                <!--시스템어드민, 수퍼어드민-->
+                <a class="nav-link" href="/members/brand/list"
+                   th:if="${role.name() == 'SUPERADMIN'}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-hotel"></i></div>
+                    브랜드 관리<br>
                 </a>
                 <!--지사관리-->
                 <!--수퍼어드민-->
@@ -60,7 +67,9 @@
                 <div class="collapse" id="collapseSuperHotel" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="/members/hotel/list">호텔 목록</a>
-                        <a class="nav-link" href="#">직원 관리</a>
+
+                        <a class="nav-link" href="/members/hotel/memberlist">직원 관리</a>
+
                     </nav>
                 </div>
                 <!--호텔관리-->
@@ -73,15 +82,15 @@
                 </a>
                 <div class="collapse" id="collapseHotel" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="#">호텔 정보</a>
+                        <a class="nav-link" href="/members/hotel/update">호텔 관리</a>
                         <a class="nav-link" href="/members/checkin/list">체크인 관리</a>
-                        <a class="nav-link" href="/members/room/list">룸 관리</a>
+                        <a class="nav-link" href="/members/room/listB">룸 관리</a>
                     </nav>
                 </div>
                 <!--가맹점관리-->
                 <!--호텔어드민-->
                 <a class="nav-link collapsed" href="#" th:if="${role.name() == 'ADMIN'}"
-                data-bs-toggle="collapse" data-bs-target="#collapseStore" aria-expanded="false" aria-controls="collapseStore">
+                   data-bs-toggle="collapse" data-bs-target="#collapseStore" aria-expanded="false" aria-controls="collapseStore">
                     <div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>
                     가맹점 관리
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -89,21 +98,23 @@
                 <div class="collapse" id="collapseStore" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link"  href="/members/store/list">가맹점 관리</a>
-                        <a class="nav-link" href="#">가맹주 관리</a>
+                        <a class="nav-link" href="/members/store/memberlist">가맹주 관리</a>
                     </nav>
                 </div>
                 <!--고객서비스-->
                 <!--호텔어드민-->
                 <a class="nav-link collapsed" href="#" th:if="${role.name() == 'ADMIN'}"
-                data-bs-toggle="collapse" data-bs-target="#collapseService" aria-expanded="false" aria-controls="collapseService">
+                   data-bs-toggle="collapse" data-bs-target="#collapseService" aria-expanded="false" aria-controls="collapseService">
                     <div class="sb-nav-link-icon"><i class="fas fa-headset"></i></div>
                     고객 서비스
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
                 <div class="collapse" id="collapseService" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link"  href="#">룸 케어</a>
+                      
+                        <a class="nav-link"  href="/members/roomCare/list">룸 케어</a>
                         <a class="nav-link" href="/qna/list">문의사항 관리</a>
+
                     </nav>
                 </div>
                 <!--오더관리-->
@@ -142,7 +153,7 @@
         </div>
         <div class="sb-sidenav-footer">
             <div class="small">Logged in as:</div>
-            Deli-Night
+            <div th:text="${member.role}"></div>
         </div>
     </nav>
 </div>

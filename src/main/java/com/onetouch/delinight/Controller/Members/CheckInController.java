@@ -58,10 +58,6 @@ public class CheckInController {
     @GetMapping("/list")
     public String listA(Model model, @RequestParam(value = "checkinstatus", required = false) String checkinstatus) {
 
-        List<RoomDTO> roomDTOList =
-                roomService.list();
-
-
 
         CheckInStatus checkInStatus;
         List<CheckInDTO> checkInDTOList = null;
@@ -82,7 +78,10 @@ public class CheckInController {
 
         }
 
-        model.addAttribute("roomDTOList", roomDTOList);
+        log.info("list2 진입인데 checkin entity 가 나오나?" + checkInDTOList);
+        log.info("list2 진입인데 checkin entity 가 나오나?" + checkInDTOList);
+        log.info("list2 진입인데 checkin entity 가 나오나?" + checkInDTOList);
+
         model.addAttribute("checkInDTOList", checkInDTOList);
         model.addAttribute("checkinstatus", checkinstatus);
 
