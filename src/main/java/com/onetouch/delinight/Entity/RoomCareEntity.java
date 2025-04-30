@@ -1,3 +1,5 @@
+
+package com.onetouch.delinight.Entity;
 /*********************************************************************
  * 클래스명 : RoomCareEntity
  * 기능 : 유저가 주문한 룸케어아이템들을 모아서 보낸다.
@@ -13,10 +15,8 @@ import com.onetouch.delinight.Constant.RoomCareStatus;
 import com.onetouch.delinight.Entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -30,7 +30,6 @@ public class RoomCareEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_care_id")
     private Long id;
-
 
     @ToString.Exclude
     @OneToMany(mappedBy = "roomCareEntity",cascade = CascadeType.ALL, orphanRemoval = true)

@@ -180,6 +180,28 @@ public class AccountController {
         return "/members/account/common/update";
     }
 
+    @PostMapping("/update-password")
+    public ResponseEntity<String> updatePassword(
+            Principal principal,
+            @RequestParam("currentPassword") String currentPasswordInput,
+            @RequestParam("newPassword") String newPasswordInput,
+            @RequestParam("confirmPassword") String confirmPasswordInput
+    ) {
+        String email = principal.getName();
+        MembersEntity membersEntity = membersRepository.findByEmail(email);
+
+        MembersDTO membersDTO = new MembersDTO();
+        membersDTO.setId(membersEntity.getId());
+        membersDTO.setPhone(membersEntity.getPhone()); // 폰 번호도 유지하려면 같이 넣어줘야 함
+        membersDTO.setPassword(newPasswordInput); // 비밀번호 업데이트할 내용
+
+        try {
+            membersService.update(membersDTO, currentPasswordInput, newPasswordInput, confirmPasswordInput);
+            return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     @PostMapping("/update")
     public String updateProc(Principal principal,
             @ModelAttribute MembersDTO membersDTO, Model model,
@@ -233,6 +255,7 @@ public class AccountController {
         model.addAttribute("member", members);
 
         return "/members/account/common/mypage";
+
     }
 
 
