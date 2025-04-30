@@ -159,7 +159,7 @@
                     <!--네비게이션-->
                     <ul class="nav nav-pills mb-4">
                         <li class="nav-item">
-                            <a class="nav-link" th:classappend="${status == null or status == ''} ? 'active'" aria-current="page" th:href="@{/members/account/storeadlist(status=null)}">전체</a>
+                            <a class="nav-link" th:classappend="${status == null or status == ''} ? 'active'" aria-current="page" th:href="@{/members/account/storeAdmin/list(status=null)}">전체</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" th:classappend="${status == 'WAIT'} ? 'active'" th:href="@{/members/account/storeAdmin/list(status='WAIT')}">승인대기목록</a>
@@ -247,6 +247,7 @@
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
                                 <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+
                                     [[${list.name}]]
                                 </a>
                                 </td>
@@ -266,13 +267,10 @@
                                 <td th:if="${list.status.name() == 'VALID'}" class="text-primary" th:text="승인완료"></td>
                                 <td th:if="${list.status.name() == 'NOTVALID'}" class="text-danger" th:text="반려"></td>
 
-
-
+                                <td th:if="${list.status.name() == 'VALID'}" class="text-primary" th:text="승인완료"></td>
+                                <td th:if="${list.status.name() == 'NOTVALID'}" class="text-danger" th:text="반려"></td>
                             </tr>
-
                         </th:block>
-
-
 
                         </tbody>
 

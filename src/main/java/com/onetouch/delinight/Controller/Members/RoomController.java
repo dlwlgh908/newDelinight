@@ -41,4 +41,11 @@ public class RoomController {
             return "/members/account/common/imgRedirect";
         }
     }
+
+    @GetMapping("/listB")
+    public String listView2(Model model, Principal principal) {
+        List<RoomDTO> roomDTOList = roomService.list(principal.getName());
+        model.addAttribute("roomDTOList", roomDTOList);
+        return "members/room/listB";
+    }
 }
