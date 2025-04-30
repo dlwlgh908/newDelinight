@@ -11,6 +11,7 @@ import com.onetouch.delinight.DTO.BrandDTO;
 import com.onetouch.delinight.Entity.BrandEntity;
 import com.onetouch.delinight.Repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Log4j2
 public class BrandServiceImpl implements BrandService{
     private final BrandRepository brandRepository;
     private final ModelMapper modelMapper;
@@ -55,6 +57,7 @@ public class BrandServiceImpl implements BrandService{
 
     @Override
     public void del(Long num) {
+        log.info("service 단에 들어오는 num : "+num);
         brandRepository.deleteById(num);
     }
 }

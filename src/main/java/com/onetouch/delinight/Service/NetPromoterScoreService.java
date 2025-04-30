@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface NetPromoterScoreService {
 
-    public void npsInsert(NetPromoterScoreDTO netPromoterScoreDTO);
+    public void npsInsert(NetPromoterScoreDTO npsDTO);
 
     public List<NetPromoterScoreDTO> npsList();
 
