@@ -56,4 +56,33 @@ public class EmailService {
 
     }
 
+    public void sendNpsEmail(String email, String name, String surveyLink){
+
+        try{
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
+
+            Context context = new Context();
+            context.setVariable("email", email);
+            context.setVariable("name", name);
+            context.setVariable("surveyLink", surveyLink);
+
+            String html = templateEngine.process("users/nps/npsmail", context);
+
+            helper.setTo(email);
+            helper.setSubject("NPS 설문 참여 요청");
+            helper.setText(html, true);
+
+            javaMailSender.send(message);
+
+        }catch (MessagingException e){
+
+            throw new RuntimeException("이메일 전송 중 오류 발생");
+
+        }
+
+    }
+
+
 }

@@ -22,40 +22,39 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
     private final ModelMapper modelMapper;
 
 
-    @Override
-    public void npsInsert(NetPromoterScoreDTO npsDTO) {
-
-        Long checkOutId = npsDTO.getId();
-        List<NetPromoterScoreEntity> npsEntityList = netPromoterScoreRepository.findByCheckOutLogEntities_Id(checkOutId);
-
-        if (npsEntityList.isEmpty()) {
-
-            throw new EntityNotFoundException("해당 체크아웃 로그와 연결된 NPS가 존재하지 않습니다. ID: " + checkOutId);
-
-        }
-
-        NetPromoterScoreEntity npsEntity = npsEntityList.get(0);
-
-        if (npsEntity.getHotelEntity() != null && npsEntity.getStoreEntity() == null) {
-            log.info("호텔 설문만 등록");
-            npsDTO.HotelSurveyTo(npsEntity);
-
-        } else if (npsEntity.getHotelEntity() != null && npsEntity.getStoreEntity() != null) {
-
-            log.info("호텔 및 스토어 설문 등록");
-            npsDTO.HotelSurveyTo(npsEntity);
-            npsDTO.StoreSurveyTo(npsEntity);
-            npsDTO.totalScore(); // 총점 계산
-            npsEntity.setTotalScore(npsDTO.getTotalScore());
-
-        } else {
-
-            throw new EntityNotFoundException("호텔과 스토어 모두 존재하지 않는 경우");
-
-        }
-
-        netPromoterScoreRepository.save(npsEntity);
-    }
+//    @Override
+//    public void npsInsert(NetPromoterScoreDTO npsDTO, Long checkOutId) {
+//
+//        List<NetPromoterScoreEntity> npsEntityList = netPromoterScoreRepository.findByCheckOutLogEntities_Id(checkOutId);
+//
+//        if (npsEntityList.isEmpty()) {
+//
+//            throw new EntityNotFoundException("해당 체크아웃 로그와 연결된 NPS가 존재하지 않습니다. ID: " + checkOutId);
+//
+//        }
+//
+//        NetPromoterScoreEntity npsEntity = npsEntityList.get(0);
+//
+//        if (npsEntity.getHotelEntity() != null && npsEntity.getStoreEntity() == null) {
+//            log.info("호텔 설문만 등록");
+//            npsDTO.HotelSurveyTo(npsEntity);
+//
+//        } else if (npsEntity.getHotelEntity() != null && npsEntity.getStoreEntity() != null) {
+//
+//            log.info("호텔 및 스토어 설문 등록");
+//            npsDTO.HotelSurveyTo(npsEntity);
+//            npsDTO.StoreSurveyTo(npsEntity);
+//            npsDTO.totalScore(); // 총점 계산
+//            npsEntity.setTotalScore(npsDTO.getTotalScore());
+//
+//        } else {
+//
+//            throw new EntityNotFoundException("호텔과 스토어 모두 존재하지 않는 경우");
+//
+//        }
+//
+//        netPromoterScoreRepository.save(npsEntity);
+//    }
 
 
     @Override

@@ -38,6 +38,7 @@ public class CheckOutLogEntity extends BaseEntity {
     private String phone;
 
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private UsersEntity usersEntity;
