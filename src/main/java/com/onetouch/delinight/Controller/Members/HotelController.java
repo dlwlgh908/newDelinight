@@ -118,9 +118,10 @@ public class HotelController {
         Page<MembersEntity> membersEntityList =
             membersService.getListHotel(page, principal.getName());
 
+        log.info(membersEntityList);
         List<HotelEntity> hotelEntityList =
             hotelRepository.selectallBySuper(principal.getName());
-
+        log.info(hotelEntityList);
 
         model.addAttribute("membersEntityList", membersEntityList);
         model.addAttribute("hotelEntityList", hotelEntityList);

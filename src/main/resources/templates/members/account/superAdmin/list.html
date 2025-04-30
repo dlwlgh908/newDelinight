@@ -249,7 +249,8 @@
                         <th:block th:each="list:${paging}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
-                                <td><a class="readbtn" style="text-decoration: none" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                                <td><a th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+
                                     [[${list.name}]]
                                 </a>
                                 </td>

@@ -6,10 +6,6 @@
 >
     <head>
         <title>델리나잇</title>
-
-        <!--별도 css 필요할 시 아래로 추가-->
-        <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
-        styles.css에 작성할것-->
     </head>
 
     <body>
@@ -20,37 +16,42 @@
                     <!--페이지 이름-->
                     <h3 class="mt-5">등록된 메뉴 목록</h3>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">큰페이지 〉 중간페이지 〉 작은페이지</li>
+                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">메뉴 관리</a>
                     </ol>
+
                     <!--텍스트 박스-->
                     <div class="card mb-4">
                        <div class="card-body">
-                           <div class="row" style="justify-content: end">
-                           <a href="/members/menu/register" class="btn btn-primary" style="margin-bottom: -35px; width: 90px; height:40px; margin-right: 10px">추가하기</a>
+                           <div class="d-flex">
+                               <div>
+                                   <table class="table align-middle">
+                                       <thead>
+                                       <th>#</th>
+                                       <th>메뉴명</th>
+                                       <th>가격</th>
+                                       <th>판매여부</th>
+
+                                       </thead>
+                                       <th:block th:each="menuDTO : ${menuDTOList.content}">
+                                           <tr>
+                                               <td th:text="${menuDTO.id}"></td>
+                                               <td>
+                                                   <a class="alink-title" th:href="@{/members/menu/read(id=${menuDTO.id})}">
+                                                       [[${menuDTO.name}]]
+                                                   </a>
+                                               </td>
+                                               <td th:text="${#numbers.formatInteger(menuDTO.price, 3, 'COMMA') + '원'}"></td>
+                                               <td th:text="${menuDTO.menuStatus}"></td>
+                                           </tr>
+                                       </th:block>
+                                   </table>
+                               </div>
+                               <div style="justify-content: end">
+                                   <a href="/members/menu/register" class="btn btn-primary" style="margin-bottom: -35px; width: 90px; height:40px; margin-right: 10px">추가하기 +</a>
+                               </div>
                            </div>
-                           <table class="table table-striped">
-                               <thead>
-                               <th>메뉴번호</th>
-                               <th>메뉴</th>
-                               <th>가격</th>
-                               <th>판매여부</th>
 
-                               </thead>
-                               <th:block th:each="menuDTO : ${menuDTOList.content}">
-                                   <tr>
-                                       <td>
-                                           <a th:href="@{/members/menu/read(id=${menuDTO.id})}">
-                                               [[${menuDTO.id}]]
-                                           </a>
-                                       </td>
-                                       <td th:text="${menuDTO.name}"></td>
-                                       <td th:text="${#numbers.formatInteger(menuDTO.price, 3, 'COMMA') + '원'}"></td>
-                                       <td th:text="${menuDTO.menuStatus}"></td>
-                                   </tr>
-                               </th:block>
-
-
-                           </table>
                            <script type="text/javascript" src="/js/imgscript.js"></script>
 
 
