@@ -22,7 +22,7 @@ public class NetPromoterScoreEntity extends BaseEntity {
     private Long id;
 
     @OneToMany(mappedBy = "netPromoterScoreEntity", fetch = FetchType.LAZY)
-    private List<CheckOutLogEntity> checkOutLogEntities = new ArrayList<>();
+    private List<CheckOutLogEntity> checkOutLogEntity = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
@@ -56,6 +56,10 @@ public class NetPromoterScoreEntity extends BaseEntity {
     // 호텔 + 스토어 설문의 총점
     @Column(name = "total_score")
     private int totalScore;
+
+    // 설문 완료 여부
+    private boolean completed;
+
 
 
 

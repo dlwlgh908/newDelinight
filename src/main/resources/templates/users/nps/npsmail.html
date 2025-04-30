@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>NPS 설문 요청</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
+<div style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+  <h2 style="color: #333;">안녕하세요 <span th:text="${userName}">고객님</span>!</h2>
+  <p style="font-size: 16px;">고객님의 소중한 피드백을 듣고 싶습니다.</p>
+  <p style="font-size: 16px;">설문에 참여하시면 더 나은 서비스를 제공하는 데 큰 도움이 됩니다.</p>
+  <div style="margin: 30px 0; text-align: center;">
+    <a th:href="${surveyLink}"
+       style="background-color: #4CAF50; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+      설문 참여하기
+    </a>
+  </div>
+  <p style="font-size: 14px; color: #777;">※ 본 메일은 발신 전용입니다.</p>
+</div>
+</body>
+</html>
