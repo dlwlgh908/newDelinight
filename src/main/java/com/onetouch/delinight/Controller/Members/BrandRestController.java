@@ -5,10 +5,7 @@ import com.onetouch.delinight.Service.BrandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,9 +23,9 @@ public class BrandRestController {
         return ResponseEntity.ok("성공");
     }
 
-    @DeleteMapping("/del")
-    public ResponseEntity<String> del(Long num) {
-        log.info(num);
+    @PostMapping("/del")
+    public ResponseEntity<String> del(@RequestParam("num") Long num) {
+        log.info("controller에 들어오는것"+num);
         brandService.del(num);
         return ResponseEntity.ok("성공");
     }

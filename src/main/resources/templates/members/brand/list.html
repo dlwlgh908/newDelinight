@@ -86,7 +86,7 @@
                                 <td th:text="${list.name}"></td>
                                 <td>
                                     <button type="button" class="btn btn-primary brand_dbtn" th:value="${list.id}">삭제</button>
-                                    <button class="btn btn-primary brand_ubtn" th:data-num="${list.id}">수정</button>
+<!--                                    <button class="btn btn-primary brand_ubtn" th:data-num="${list.id}">수정</button>-->
                                 </td>
                             </tr>
                         </th:block>
@@ -117,8 +117,8 @@
             alert(num);
             $.ajax({
                 url: "/brand/rest/del",
-                method: "delete",
-                data: num,
+                method: "post",
+                data: {num : num},
                 success: function () {
                     alert("성공")
                     location.reload();
