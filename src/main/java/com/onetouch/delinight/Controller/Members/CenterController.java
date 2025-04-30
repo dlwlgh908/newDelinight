@@ -37,10 +37,24 @@ public class CenterController {
     }
 
     @PostMapping("/create")
-    public String createProc(CenterDTO centerDTO, Principal principal) {
+    public String createProc(CenterDTO centerDTO, Principal principal, Model model) {
+
         log.info("center create 진입");
         log.info("center create 진입");
         log.info("center create 진입");
+        boolean hasError = false;
+
+        if (centerDTO.getName() == null || centerDTO.getName().trim().isEmpty()) {
+            model.addAttribute("nameError", "본사명을 입력해주세요");
+            hasError = true;
+        }
+        if (centerDTO.getContent() == null || centerDTO.getContent().trim().isEmpty()) {
+            model.addAttribute("contentError", "설명을 입력해주세요");
+            hasError = true;
+        }
+        if (hasError) {
+            return "members/center/create";
+        }
 
         String email =
                 principal.getName();
