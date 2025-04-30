@@ -33,28 +33,27 @@ public class NetPromoterScoreEntity extends BaseEntity {
     private HotelEntity hotelEntity;
 
     // 호텔 설문 1 ~ 5 문항
-    @Column(name = "hqt_one")
     private int hotelQuestionOne;
-    @Column(name = "hqt_two")
     private int hotelQuestionTwo;
-    @Column(name = "hqt_three")
     private int hotelQuestionThree;
-    @Column(name = "hqt_four")
     private int hotelQuestionFour;
-    @Column(name = "hqt_five")
     private int hotelQuestionFive;
+
     // 스토어 설문 1 ~ 5 문항
-    @Column(name = "sqt_one")
     private int storeQuestionOne;
-    @Column(name = "sqt_two")
     private int storeQuestionTwo;
-    @Column(name = "sqt_three")
     private int storeQuestionThree;
-    @Column(name = "sqt_four")
     private int storeQuestionFour;
-    @Column(name = "sqt_five")
     private int storeQuestionFive;
-    // 호텔 + 스토어 토탈 스코어
+
+    // 기타 문의사항
+    private String etcQuestion;
+
+    // 호텔 설문만의 총점
+    @Column(name = "hotel_total_score")
+    private int hotelTotalScore;
+
+    // 호텔 + 스토어 설문의 총점
     @Column(name = "total_score")
     private int totalScore;
 

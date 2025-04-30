@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface NetPromoterScoreRepository extends JpaRepository<NetPromoterScoreEntity , Long> {
 
-    public List<NetPromoterScoreEntity> findByCheckOutLogEntities_id(Long checkOutLogId);
+    public List<NetPromoterScoreEntity> findByCheckOutLogEntities_Id(Long checkOutLogId);
 
 }
