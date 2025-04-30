@@ -57,13 +57,7 @@
         }
     </style>
 
-
     <title>델리나잇</title>
-
-
-    <!--별도 css 필요할 시 아래로 추가-->
-    <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
-    styles.css에 작성할것-->
 </head>
 
 <body>
@@ -76,7 +70,7 @@
             <!--페이지 이름-->
             <h3 id="test" class="mt-5">새 본사 등록</h3>
             <ol class="breadcrumb mb-4">
-                <!--페이지 소제목 명명-->
+
                 <a href="/members/account/home" class="breadcrumb-item active">홈</a>
                 <a href="#" class="breadcrumb-item active no-click">본사 관리</a>
             </ol>
@@ -84,7 +78,7 @@
             <div class="card custom-shadow mb-4">
                 <div class="card-body">
 
-                    <form action="/members/center/create" method="post"
+                    <form action="/members/center/create" th:field="${centerDTO}" method="post"
                           enctype="multipart/form-data">
                         <div class="centerFormData"></div>
                         <div class="container">
@@ -96,6 +90,7 @@
                                     <div class="md-3  mb-3">
                                         <label for="name" class="form-label">본사명</label>
                                         <input type="text" class="form-control" id="name" name="name">
+                                        <div class="text-sm mt-1 text-danger" th:if="${nameError != null}" th:text="${nameError}"></div>
                                     </div>
 
                                     <div class="md-3  mb-3">
@@ -103,6 +98,8 @@
                                         <label for="content" class="form-label">본사 설명</label>
                                         <textarea type="text" class="form-control" id="content"
                                                   name="content"></textarea>
+                                        <div class="text-sm mt-1 text-danger" th:if="${contentError != null}" th:text="${contentError}"></div>
+
                                     </div>
 
 
@@ -141,7 +138,7 @@
                         </div>
                         <div class="text-center mt-3 mb-3">
                             <button type="submit" class="btn btn-primary">등록</button>
-                            <a href="/members/menu/list" class="btn btn-gray">취소</a>
+                            <a href="/members/account/home" class="btn btn-gray">취소</a>
                         </div>
                     </form>
 

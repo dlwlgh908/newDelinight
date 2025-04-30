@@ -19,7 +19,7 @@
             <!--반드시 이 안에서만 작업-->
 
             <!--페이지 제목 명명-->
-            <h3 class="mt-5">페이지명</h3>
+            <h3 class="mt-5">Room 관리</h3>
             <ol class="breadcrumb mb-4">
                 <!--페이지 소제목 명명-->
                 <li class="breadcrumb-item active">큰페이지 〉 중간페이지 〉 작은페이지</li>
@@ -50,7 +50,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title fs-5" id="exampleModalLabel">방 등록</h1>
-                                                <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close">X</button>
+                                                <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <!--부트스트랩에서 끌어옴-->
@@ -89,8 +89,8 @@
                                 <td th:text="${list.content}"></td>
                                 <td th:text="${list.hotelDTO.name}"></td>
                                 <td>
-                                    <button class="btn btn-primary">삭제</button>
-                                    <button class="btn btn-primary">수정</button>
+                                   <a href="#"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
+                                   <a href="#"><i class="fa-solid fa-pen" style="color: #198754"></i></a>
                                 </td>
 
 

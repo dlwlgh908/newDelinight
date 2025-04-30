@@ -1,6 +1,7 @@
 package com.onetouch.delinight.Entity;
 
 
+import com.onetouch.delinight.Constant.Inquire;
 import com.onetouch.delinight.Entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,9 @@ public class InquireEntity extends BaseTimeEntity {
 
     @Column(nullable = true) //null을 허용하여 답변 시간이 없을 때 null로 유지
     private LocalDateTime responseTime; //답변시간
+
+    @Enumerated(EnumType.STRING)
+    private Inquire inquire;
 
 
 
