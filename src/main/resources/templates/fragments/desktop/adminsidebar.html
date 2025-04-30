@@ -43,13 +43,6 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-hotel"></i></div>
                     본사 관리<br>
                 </a>
-                <!--본사관리-->
-                <!--시스템어드민, 수퍼어드민-->
-                <a class="nav-link" href="/members/brand/list"
-                   th:if="${role.name() == 'SUPERADMIN'}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-hotel"></i></div>
-                    브랜드 관리<br>
-                </a>
                 <!--지사관리-->
                 <!--수퍼어드민-->
                 <a class="nav-link" href="/members/branch/list" th:if="${role.name() == 'SUPERADMIN'}">
@@ -67,9 +60,7 @@
                 <div class="collapse" id="collapseSuperHotel" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="/members/hotel/list">호텔 목록</a>
-
                         <a class="nav-link" href="/members/hotel/memberlist">직원 관리</a>
-
                     </nav>
                 </div>
                 <!--호텔관리-->
@@ -84,7 +75,7 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="/members/hotel/update">호텔 관리</a>
                         <a class="nav-link" href="/members/checkin/list">체크인 관리</a>
-                        <a class="nav-link" href="/members/room/listB">룸 관리</a>
+                        <a class="nav-link" href="/members/room/list">룸 관리</a>
                     </nav>
                 </div>
                 <!--가맹점관리-->
@@ -111,7 +102,7 @@
                 </a>
                 <div class="collapse" id="collapseService" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                      
+
                         <a class="nav-link"  href="/members/roomCare/list">룸 케어</a>
                         <a class="nav-link" href="/qna/list">문의사항 관리</a>
 

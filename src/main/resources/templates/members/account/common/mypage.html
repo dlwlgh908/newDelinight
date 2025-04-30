@@ -4,59 +4,43 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/desktop/layout}"
 >
-    <head>
-        <title>델리나잇</title>
+<head>
+    <title>델리나잇</title>
 
-        <!--별도 css 필요할 시 아래로 추가-->
-        <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
-        styles.css에 작성할것-->
-    </head>
+    <!--별도 css 필요할 시 아래로 추가-->
+    <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
+    styles.css에 작성할것-->
+</head>
 
-    <body>
-        <!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
-        <div layout:fragment="adminContent" id="layoutSidenav_content">
-            <main>
-                <div class="container-fluid px-5">
-                    <!--내용 넣는 곳-->
-                    <!--반드시 이 아래에서만 작업-->
+<body>
+<!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-5">
+            <!--내용 넣는 곳-->
+            <!--반드시 이 아래에서만 작업-->
 
-                    <!--페이지 이름-->
-                    <h3 class="mt-5">내 정보</h3>
-                    <ol class="breadcrumb mb-4">
-                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                        <a href="#" class="breadcrumb-item active no-click">마이페이지</a>
-                    </ol>
+            <!--페이지 이름-->
+            <h3 class="mt-5">내 정보</h3>
+            <ol class="breadcrumb mb-4">
+                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                <a href="#" class="breadcrumb-item active no-click">마이페이지</a>
+            </ol>
 
-                    <!--텍스트 박스-->
-                    <div class="card mb-4 custom-shadow">
-                       <div class="card-body">
+            <!--텍스트 박스-->
+            <div class="card mb-4 custom-shadow">
+                <div class="card-body">
 
-                           <h5 class="mb-4 fw-bold">기본 정보</h5>
+                    <h5 class="mb-4 fw-bold">기본 정보</h5>
 
-                           <hr class="hrMain">
+                    <hr class="hrMain">
 
-                           <div class="row mb-1">
-                               <label class="col-sm-2 col-form-label form-label">관리자 이름</label>
-                               <div class="col-sm-4">
-                                   <input type="text" readonly class="form-control-plaintext" th:value="${member.name}">
-                               </div>
-                           </div>
-
-                           <div class="row mb-1">
-                               <label class="col-sm-2 col-form-label form-label">관리자 등급</label>
-                               <div class="col-sm-4">
-                                   <input type="text" readonly class="form-control-plaintext" th:value="${member.role}">
-                               </div>
-                           </div>
-
-                           <hr>
-
-                           <div class="row mb-1">
-                               <label class="col-sm-2 col-form-label form-label">이메일</label>
-                               <div class="col-sm-6">
-                                   <input type="email" readonly class="form-control-plaintext" th:value="${member.email}">
-                               </div>
-                           </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-2 col-form-label form-label">관리자 이름</label>
+                        <div class="col-sm-4">
+                            <input type="text" readonly class="form-control-plaintext" th:value="${member.name}">
+                        </div>
+                    </div>
 
                     <div class="row mb-1">
                         <label class="col-sm-2 col-form-label form-label">관리자 등급</label>
@@ -65,13 +49,20 @@
                         </div>
                     </div>
 
+                    <hr>
 
-                           <div class="text-center mt-5">
-                               <a href="/members/account/update" class="btn btn-primary me-2 px-4" id="delbtn">수정</a>
-                               <a href="/members/account/home" class="btn btn-gray px-4">취소</a>
-                           </div>
-                       </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-2 col-form-label form-label">이메일</label>
+                        <div class="col-sm-6">
+                            <input type="email" readonly class="form-control-plaintext" th:value="${member.email}">
+                        </div>
+                    </div>
 
+                    <div class="row mb-4">
+                        <label class="col-sm-2 col-form-label form-label">전화번호</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control-plaintext" th:value="${member.phone}" readonly>
+                        </div>
                     </div>
 
                     <div class="text-center mt-5">
