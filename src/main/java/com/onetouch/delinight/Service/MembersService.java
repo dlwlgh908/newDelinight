@@ -26,8 +26,7 @@ public interface MembersService {
 
     public boolean assignCheck(String email, int sep);
     public void create(MembersDTO membersDTO);
-
-    public MembersDTO update(MembersDTO membersDTO, String currentPasswordInput, String newPasswordInput, String confirmPasswordInput);
+    public void update(MembersDTO membersDTO);
 
     public Page<MembersEntity> getList(int page);
     public Page<MembersEntity> getListHotel(int page, String email);
