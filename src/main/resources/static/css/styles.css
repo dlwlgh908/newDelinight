@@ -3703,7 +3703,8 @@ textarea.form-control-lg {
   background: #ff1500;
   color: white;
   font-size: 10px;
-  padding: 2px 6px;
+  text-align: center;
+  padding: 2px 4px;
   border-radius: 999px;
   line-height: 1;
   min-width: 18px;
@@ -3893,6 +3894,14 @@ textarea.form-control-lg {
   font-weight: bold;
   color: #D50000;
   text-decoration-line: underline;
+}
+
+.alink-title {
+  text-decoration: none;
+}
+.alink-update {
+  font-size: 0.8rem;
+  margin-left: 10px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4567,6 +4576,11 @@ textarea.form-control-lg {
   .card-group > .card {
     flex: 1 0 0%;
     margin-bottom: 0;
+  }
+
+  .card-flex-50 {
+    flex: 1 1 0%;
+    min-width: 0;
   }
   .card-group > .card + .card {
     margin-left: 0;

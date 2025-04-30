@@ -23,7 +23,9 @@
             <!--페이지 이름-->
             <h3 class="mt-5">정보수정</h3>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">홈 〉 마이페이지 〉 정보수정</li>
+                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                <a href="#" class="breadcrumb-item active no-click">마이페이지</a>
+                <a href="/members/account/mypage" class="breadcrumb-item active">내 정보</a>
             </ol>
 
             <!--텍스트 박스-->
@@ -110,39 +112,41 @@
                             <a href="/members/account/mypage" class="btn btn-gray px-4">취소</a>
                         </div>
                     </form>
+
                 </div>
-            </div>
+            </main>
 
-        </div>
-    </main>
+            <!--전화번호 입력창 하이폰-->
+            <script>
+                document.getElementById("staticMembersPhone").addEventListener("input", function (e) {
+                    let value = e.target.value.replace(/\D/g, ""); // 숫자만 남김
 
-    <!--전화번호 입력창 하이폰-->
-    <script>
-        document.getElementById("staticMembersPhone").addEventListener("input", function (e) {
-            let value = e.target.value.replace(/\D/g, ""); // 숫자만 남김
-            e.target.value = value;
-        });
-    </script>
+                    if (value.length > 3 && value.length <= 7) {
+                        value = value.replace(/(\d{3})(\d+)/, "$1-$2");
+                    } else if (value.length > 7) {
+                        value = value.replace(/(\d{3})(\d{4})(\d+)/, "$1-$2-$3");
+                    }
 
-    <!--비밀번호 변경창 토글-->
-    <script>
-        $('#togglePasswordChange').on('click', function () {
-            $('#passwordChangeSection').slideDown(200);
-            $('.iconX').addClass('open');
-        });
+                    e.target.value = value;
+                });
+            </script>
 
-        $('.iconX').on('click', function () {
-            $('#passwordChangeSection').slideUp(200);
-            $('.iconX').removeClass('open');
-        });
-    </script>
-
-
+            <!--비밀번호 변경창 토글-->
+            <script>
+                $('#togglePasswordChange').on('click', function () {
+                    $('#passwordChangeSection').slideDown(200);
+                    $('.iconX').addClass('open');
+                });
 
     <!--푸터 절대 수정 금지!!!!-->
     <!--푸터-->
     <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
 </div>
 
+
+            <!--푸터 절대 수정 금지!!!!-->
+            <!--푸터-->
+            <div th:replace="~{fragmentes/desktop/adminfooter::adminFooter}"></div>
+        </div>
 </body>
 </html>

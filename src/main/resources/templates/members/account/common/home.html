@@ -21,75 +21,72 @@
             <!--반드시 이 안에서만 작업-->
 
             <!--페이지 제목 명명-->
-            <h3 class="mt-5">어드민 홈</h3>
+            <h3 class="mt-5">관리자 홈</h3>
             <ol class="breadcrumb mb-4">
                 <!--페이지 소제목 명명-->
-                <li class="breadcrumb-item active" th:text="'환영합니다, '+${member.name}+' 님'"></li>
+                <a href="#" class="breadcrumb-item active no-click" th:text="'환영합니다, '+${member.name}+' 님'"></a>
             </ol>
 
             <!--기본 카드 양식-->
+            <div class="d-flex gap-3">
+                <div class="card custom-shadow mb-4 card-flex-50" >
+                    <div class="card-body">
+                        <!--카드 제목-->
+                        <h5 class="mb-4 fw-bold">문의사항 목록</h5>
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>글번호</th>
+                                <th>제목</th>
+                                <th>내용</th>
+                                <th>요청시간</th>
+                                <th>답변시간</th>
+                            </tr>
+                            </thead>
+                            <th:block th:each="inquireDTO: ${inquireDTOList}">
+                                <tr>
+                                    <td>
+                                        <a th:href="@{/members/inquire/read(id=${inquireDTO.id})}">
+                                            [[${inquireDTO.id}]]
+                                        </a>
+                                    </td>
+                                    <td th:text="${inquireDTO.title}"></td>
+                                    <td th:text="${inquireDTO.content}"></td>
+                                    <td th:text="${#temporals.format(inquireDTO.regTime,'yy/MM/dd/ HH:mm')}"></td>
+                                    <td th:text="${#temporals.format(inquireDTO.responseTime,'yy/MM/dd/ HH:mm')}"></td>
+                                </tr>
+                            </th:block>
+
+
+                        </table>
+
+
+
+                    </div>
+                </div>
+                <div class="card custom-shadow mb-4 card-flex-50">
+                    <div class="card-body">
+                        <!--카드 제목-->
+                        <h5 class="mb-4 fw-bold">기본 정보</h5>
+
+
+
+                    </div>
+                </div>
+            </div>
+
             <div class="card custom-shadow mb-4">
                 <div class="card-body">
                     <!--카드 제목-->
                     <h5 class="mb-4 fw-bold">기본 정보</h5>
 
-                    <!--카드 제목 구분선-->
-                    <hr class="hrMain">
-
-                    <!--기본 row 양식-->
-                    <!--양식처럼 요소를 깔끔하게 배치하고 싶다면 이 div를 그대로 복붙한 뒤 내용을 수정하세요-->
-                    <!--이때, row는 행이므로 이 클래스를 삭제하면 요소에 col이 먹지 않습니다-->
-                    <!--이때, col-sm-숫자 는 row에서 요소가 차지하는 자리비율이므로 col이 여러개일 시 +-가 필요합니다(하나를 높이면 하나를 줄여야함)-->
-                    <div class="row mb-1">
-                        <!--row 제목 (기본 col-sm-2)-->
-                        <label class="col-sm-2 col-form-label form-label">리드온리 인풋창</label>
-                        <!--row 콘텐츠 (기본 col-sm-4-->
-                        <div class="col-sm-4">
-                            <input type="text" readonly class="form-control-plaintext" id="staticMembersName" value="홍길동">
-                        </div>
-                    </div>
-
-                    <!--기본 구분선-->
-                    <hr>
-
-                    <div class="row mb-4">
-                        <label class="col-sm-2 col-form-label form-label">일반 인풋창</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <label class="col-sm-2 col-form-label form-label">플레이스홀더&작은글</label>
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control" id="staticMembersPhone" maxlength="13" placeholder="원래있던번호">
-                            <div class="text-sm mt-1">
-                                전화번호를 입력하면 자동으로 하이폰이 들어갑니다. (01012345678 > 010-1234-5678)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <label class="col-sm-2 col-form-label form-label">파일첨부</label>
-                        <div class="col-sm-10">
-                            <div class="d-flex">
-                                <input type="file" class="form-control w-50 me-2">
-                                <button class="btn btn-gray">파일 선택</button>
-                            </div>
-                            <div class="text-sm mt-1">
-                                accept=""으로 첨부 가능한 파일 형식 지정 가능
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-center mt-5">
-                        <button class="btn btn-primary me-2 px-4">확인</button>
-                        <button class="btn btn-gray px-4">취소</button>
-                    </div>
                 </div>
             </div>
         </div>
     </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!--푸터 절대 수정 금지!!!!-->
     <!--푸터-->

@@ -184,10 +184,10 @@ public class AccountController {
 
     @PostMapping("/update")
     public String updateProc(Principal principal,
-            @ModelAttribute MembersDTO membersDTO, Model model,
-            @RequestParam(value = "currentPassword", required = false) String currentPassword,
-            @RequestParam(value = "newPassword", required = false) String newPassword,
-            @RequestParam(value = "confirmPassword", required = false) String confirmPassword) {
+                             @ModelAttribute MembersDTO membersDTO, Model model,
+                             @RequestParam(value = "currentPassword", required = false) String currentPassword,
+                             @RequestParam(value = "newPassword", required = false) String newPassword,
+                             @RequestParam(value = "confirmPassword", required = false) String confirmPassword) {
 
 
         MembersEntity membersEntity = membersRepository.findByEmail(principal.getName());
