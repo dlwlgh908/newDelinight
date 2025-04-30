@@ -26,10 +26,10 @@ public class NpsSurveyScheduler {
             for (CheckOutLogEntity checkOutAddEmail : checkOutLogs) {
                 String email = checkOutAddEmail.getUsersEntity().getEmail();
                 String name = checkOutAddEmail.getUsersEntity().getName();
-                Long checkOutId = checkOutAddEmail.getId(); // 또는 적절한 ID
+                Long checkOutId = checkOutAddEmail.getId();
 
                 String surveyLink = "http://localhost:8080/users/nps/survey/" + checkOutId;
-                emailService.sendNpsEmail(email, name, surveyLink);
+                emailService.sendNpsEmail(email, name, surveyLink, checkOutId);
             }
 
     }
