@@ -11,12 +11,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +44,7 @@ public class EmailService {
             String htmlTemplate = templateEngine.process(templateName, context);
 
             // 이메일 설정
+            helper.setFrom("linkon9277@gmail.com");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(htmlTemplate, true);
@@ -56,7 +59,8 @@ public class EmailService {
 
     }
 
-    public void sendNpsEmail(String email, String name, String surveyLink){
+    @Async
+    public CompletableFuture<Object> sendNpsEmail(String email, String name, String surveyLink, Long checkOutId){
 
         try{
 
@@ -67,19 +71,20 @@ public class EmailService {
             context.setVariable("email", email);
             context.setVariable("name", name);
             context.setVariable("surveyLink", surveyLink);
+            context.setVariable("checkOutId", checkOutId);
 
             String html = templateEngine.process("users/nps/npsmail", context);
 
+            helper.setFrom("linkon9277@gmail.com");
             helper.setTo(email);
             helper.setSubject("NPS 설문 참여 요청");
             helper.setText(html, true);
 
             javaMailSender.send(message);
-
-        }catch (MessagingException e){
-
-            throw new RuntimeException("이메일 전송 중 오류 발생");
-
+            return CompletableFuture.completedFuture(null);
+        }catch (MessagingException e) {
+            log.error("이메일 전송 중 오류 발생 - email: {}, name: {}, link: {}", email, name, surveyLink, e);
+            throw new RuntimeException("이메일 전송 중 오류 발생", e); // 원래 예외를 함께 던짐
         }
 
     }
