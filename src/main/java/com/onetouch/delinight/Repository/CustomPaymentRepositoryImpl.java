@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Repository
@@ -88,28 +89,26 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
         // 6. PaymentEntity → PaymentDTO 변환
         List<PaymentDTO> paymentDTOList = paymentEntities.stream().map(payment -> {
             // OrdersDTO 변환
-            List<OrdersDTO> ordersDTOList = payment.getOrdersEntityList().stream().map(order -> {
-                return OrdersDTO.builder()
-                        .id(order.getId())
-                        .totalPrice(order.getTotalPrice())
-                        .ordersStatus(order.getOrdersStatus())
-                        .pendingTime(order.getPendingTime())
-                        .deliveredTime(order.getDeliveredTime())
-                        .storeDTO(modelMapper.map(order.getStoreEntity(), StoreDTO.class)
-                        .setHotelDTO(modelMapper.map(order.getStoreEntity().getHotelEntity(), HotelDTO.class)
-                        .setBranchDTO(modelMapper.map(order.getStoreEntity().getHotelEntity().getBranchEntity(), BranchDTO.class)
-                        .setCenterDTO(modelMapper.map(order.getStoreEntity().getHotelEntity().getBranchEntity().getCenterEntity(), CenterDTO.class)))))
-                        // OrderItemDTO 변환 추가
-                        .ordersItemDTOList(order.getOrdersItemEntities().stream().map(orderItem -> {
-                            // OrderItemDTO에 MenuDTO 포함
-                            return OrdersItemDTO.builder()
+            List<OrdersDTO> ordersDTOList = payment.getOrdersEntityList().stream()
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .map(order -> OrdersDTO.builder()
+                            .id(order.getId())
+                            .totalPrice(order.getTotalPrice())
+                            .ordersStatus(order.getOrdersStatus())
+                            .pendingTime(order.getPendingTime())
+                            .deliveredTime(order.getDeliveredTime())
+                            .ordersItemDTOList(order.getOrdersItemEntities().stream().map(orderItem -> OrdersItemDTO.builder()
                                     .id(orderItem.getId())
                                     .quantity(orderItem.getQuantity())
-                                    .menuDTO(modelMapper.map(orderItem.getMenuEntity(), MenuDTO.class))  // MenuDTO 추가
-                                    .build();
-                        }).collect(Collectors.toList()))  // 추가된 orderItemDTOList
-                        .build();
-            }).collect(Collectors.toList());
+                                    .menuDTO(modelMapper.map(orderItem.getMenuEntity(), MenuDTO.class))
+                                    .build()
+                            ).collect(Collectors.toList()))
+                            .storeDTO(modelMapper.map(order.getStoreEntity(), StoreDTO.class)
+                                    .setHotelDTO(modelMapper.map(order.getStoreEntity().getHotelEntity(), HotelDTO.class)
+                                            .setBranchDTO(modelMapper.map(order.getStoreEntity().getHotelEntity().getBranchEntity(), BranchDTO.class)
+                                                    .setCenterDTO(modelMapper.map(order.getStoreEntity().getHotelEntity().getBranchEntity().getCenterEntity(), CenterDTO.class)))))
+                            .build()).toList();
 
             // PaymentDTO 변환
             return PaymentDTO.builder()
