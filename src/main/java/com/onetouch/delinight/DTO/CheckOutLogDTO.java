@@ -18,6 +18,5 @@ import lombok.*;
 public class CheckOutLogDTO {
 
     private Long id;                    // checkOutLogId
-    private Long userId;                // UsersEntity에서 추출한 userId
 
 }
