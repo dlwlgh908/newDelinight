@@ -4,8 +4,7 @@ import com.onetouch.delinight.Entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,8 +20,9 @@ public class NetPromoterScoreEntity extends BaseEntity {
     @Column(name = "netpromoterscore_id")
     private Long id;
 
-    @OneToMany(mappedBy = "netPromoterScoreEntity", fetch = FetchType.LAZY)
-    private List<CheckOutLogEntity> checkOutLogEntity = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "log_id")
+    private CheckOutLogEntity checkOutLogEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orders_id")
@@ -32,33 +32,26 @@ public class NetPromoterScoreEntity extends BaseEntity {
     @JoinColumn(name = "hotel_id")
     private HotelEntity hotelEntity;
 
-    // 호텔 설문 1 ~ 5 문항
-    private int hotelQuestionOne;
-    private int hotelQuestionTwo;
-    private int hotelQuestionThree;
-    private int hotelQuestionFour;
-    private int hotelQuestionFive;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private StoreEntity storeEntity;
 
-    // 스토어 설문 1 ~ 5 문항
-    private int storeQuestionOne;
-    private int storeQuestionTwo;
-    private int storeQuestionThree;
-    private int storeQuestionFour;
-    private int storeQuestionFive;
+    // 설문 1 ~ 5 문항
+    private int QuestionOne;
+    private int QuestionTwo;
+    private int QuestionThree;
+    private int QuestionFour;
+    private int QuestionFive;
+
+    private LocalDateTime insertTime;
 
     // 기타 문의사항
     private String etcQuestion;
-
-    // 호텔 설문만의 총점
-    @Column(name = "hotel_total_score")
-    private int hotelTotalScore;
 
     // 호텔 + 스토어 설문의 총점
     @Column(name = "total_score")
     private int totalScore;
 
-    // 설문 완료 여부
-    private boolean completed;
 
 
 

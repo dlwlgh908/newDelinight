@@ -1,16 +1,12 @@
 package com.onetouch.delinight.Service;
 
-import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.NetPromoterScoreDTO;
-import com.onetouch.delinight.DTO.NpsFormDataDTO;
+import com.onetouch.delinight.DTO.OrdersDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.CheckOutLogEntity;
-import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.NetPromoterScoreEntity;
 import com.onetouch.delinight.Entity.OrdersEntity;
-import com.onetouch.delinight.Repository.CheckOutLogRepository;
-import com.onetouch.delinight.Repository.NetPromoterScoreRepository;
-import com.onetouch.delinight.Repository.OrdersRepository;
+import com.onetouch.delinight.Repository.*;
 import com.onetouch.delinight.Util.EmailService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +32,8 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
     private final OrdersRepository ordersRepository;
     private final EmailService emailService;
     private final ModelMapper modelMapper;
+    private final HotelRepository hotelRepository;
+    private final StoreRepository storeRepository;
 
 
     @Override
@@ -67,118 +65,46 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
     }
 
     @Override
-    public NetPromoterScoreDTO npsSelect(Long checkOutId) {
+    public List<OrdersDTO> npsSelect(Long checkOutId) {
         log.info("npsSelect 들어온 ID = {}" ,checkOutId);
         CheckOutLogEntity checkOut = checkOutLogRepository.findById(checkOutId).orElseThrow(EntityNotFoundException::new);
-
-        NetPromoterScoreDTO npsDTO = new NetPromoterScoreDTO();
-        HotelEntity hotel = checkOut.getRoomEntity().getHotelEntity();
-        npsDTO.setHotelDTO(modelMapper.map(hotel, HotelDTO.class));
-
-        List<OrdersEntity> order = ordersRepository.findByCheckOutLogEntity_Id(checkOutId);
-
-        List<StoreDTO> store = order.stream().map(orderEntity -> modelMapper.map(orderEntity.getStoreEntity(), StoreDTO.class)).distinct().toList();
-        npsDTO.setStoreDTOS(store);
-
-        return npsDTO;
+        // 해당 체크아웃 ID에 속한 주문 목록 조회
+        List<OrdersEntity> ordersEntityList = ordersRepository.findByCheckOutLogEntity_Id(checkOutId);
+        // OrdersEntity → OrdersDTO 변환 및 필요한 정보(호텔명, 호텔ID, StoreDTO) 추가 매핑
+        List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
+                        .map(ordersEntity -> modelMapper.map(ordersEntity, OrdersDTO.class)
+                        .setHotelName(checkOut.getRoomEntity().getHotelEntity().getName())                      // 호텔 이름
+                        .setHotelId(checkOut.getRoomEntity().getHotelEntity().getId())                          // 호텔 ID
+                        .setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(),StoreDTO.class))).toList();  // 매장
+        return ordersDTOList;
     }
 
     @Override
-    public NpsFormDataDTO npsInsert(Long checkOutId) {
+    public void npsInsert(List<NetPromoterScoreDTO> npsDTOList, Long checkOutId) {
 
-        log.info("npsInsert 들어온 ID = {}", checkOutId);
-        CheckOutLogEntity checkOut = checkOutLogRepository.findById(checkOutId).orElseThrow(EntityNotFoundException::new);
+        for (NetPromoterScoreDTO netPromoterScoreDTO : npsDTOList) {
 
-        NetPromoterScoreEntity nps = checkOut.getNetPromoterScoreEntity();
+            // NetPromoterScoreEntity 빌더 패턴으로 생성
+            NetPromoterScoreEntity netPromoterScoreEntity = NetPromoterScoreEntity.builder()
+                    .checkOutLogEntity(checkOutLogRepository.findById(checkOutId).get())    // 체크아웃 ID
+                    .QuestionOne(netPromoterScoreDTO.getQuestionOne())                      // 설문1
+                    .QuestionTwo(netPromoterScoreDTO.getQuestionTwo())                      // 설문2
+                    .QuestionThree(netPromoterScoreDTO.getQuestionThree())                  // 설문3
+                    .QuestionFour(netPromoterScoreDTO.getQuestionFour())                    // 설문4
+                    .QuestionFive(netPromoterScoreDTO.getQuestionFive())                    // 설문5
+                    .insertTime(LocalDateTime.now())                                        // 설문 응답 시간 기록
+                    .build();
 
-        NpsFormDataDTO form = new NpsFormDataDTO();
-        form.setCheckOutId(checkOutId);
-
-        // 기존 설문 응답이 있다면 그 데이터를 DTO에 매핑
-        if (nps != null) {
-
-            List<Integer> hotelQuestions = List.of(
-                    nps.getHotelQuestionOne(),
-                    nps.getHotelQuestionTwo(),
-                    nps.getHotelQuestionThree(),
-                    nps.getHotelQuestionFour(),
-                    nps.getHotelQuestionFive()
-            );
-
-            form.setHotelQuestions(hotelQuestions);
-
-            List<Integer> storeQuestions = new ArrayList<>();
-
-            // 스토어 설문 응답 처리 (스토어가 여러 개인 경우 각 5문항)
-            if(nps.getStoreQuestionOne() != 0) storeQuestions.add(nps.getStoreQuestionOne());
-            if(nps.getStoreQuestionTwo() != 0) storeQuestions.add(nps.getStoreQuestionTwo());
-            if(nps.getStoreQuestionThree() != 0) storeQuestions.add(nps.getStoreQuestionThree());
-            if(nps.getStoreQuestionFour() != 0) storeQuestions.add(nps.getStoreQuestionFour());
-            if (nps.getStoreQuestionFive() != 0) storeQuestions.add(nps.getStoreQuestionFive());
-
-            form.setStoreQuestions(storeQuestions);
-            form.setEtcQuestion(nps.getEtcQuestion());
-            form.setCompleted(nps.isCompleted());
-
-        }else {
-
-            // 새로운 설문이라면 빈 응답 세팅
-            form.setHotelQuestions(new ArrayList<>(List.of(0, 0, 0, 0, 0)));
-            form.setStoreQuestions(new ArrayList<>());
-            form.setCompleted(false);
-
-        }
-
-        // 호텔 설문은 반드시 5문항 작성 해야함
-        if (form.getHotelQuestions().size() != 5){
-            throw new IllegalStateException("호텔 설문은 5문항을 반드시 작성해야 합니다.");
-        }
-
-        // 호텔 투숙 시에 주문을 통해 스토어를 이용했다면 각 스토어에 대해 설문을 작성할 수 있도록 조건 추가
-        List<OrdersEntity> order = ordersRepository.findByCheckOutLogEntity_Id(checkOutId);
-        if (!order.isEmpty()){
-            List<Integer> storeQuestions = new ArrayList<>();
-            for (OrdersEntity orders : order){
-                storeQuestions.addAll(List.of(0, 0, 0, 0, 0));
+            // 설문 대상이 호텔인지 매장인지 구분하여 설정
+            if(netPromoterScoreDTO.getHotelOrStore().equals("hotel")){
+                netPromoterScoreEntity.setHotelEntity(hotelRepository.findById(netPromoterScoreDTO.getHotelId()).get());
+            } else {
+                netPromoterScoreEntity.setStoreEntity(storeRepository.findById(netPromoterScoreDTO.getStoreId()).get());
             }
-            form.setStoreQuestions(storeQuestions);
+
+            netPromoterScoreRepository.save(netPromoterScoreEntity);
+
         }
-
-        // 설문 데이터를 바로 저장
-        if (nps == null) {
-            nps = new NetPromoterScoreEntity();
-        }
-
-        // 호텔 설문 응답 저장
-        List<Integer> hotelQuestions = form.getHotelQuestions();
-        if (hotelQuestions.size() == 5) {
-            nps.setHotelQuestionOne(hotelQuestions.get(0));
-            nps.setHotelQuestionTwo(hotelQuestions.get(1));
-            nps.setHotelQuestionThree(hotelQuestions.get(2));
-            nps.setHotelQuestionFour(hotelQuestions.get(3));
-            nps.setHotelQuestionFive(hotelQuestions.get(4));
-        }
-
-        // 스토어 설문 응답 저장
-        List<Integer> storeQuestions = form.getStoreQuestions();
-        if (storeQuestions != null && !storeQuestions.isEmpty()) {
-            nps.setStoreQuestionOne(storeQuestions.get(0));
-            nps.setStoreQuestionTwo(storeQuestions.get(1));
-            nps.setStoreQuestionThree(storeQuestions.get(2));
-            nps.setStoreQuestionFour(storeQuestions.get(3));
-            nps.setStoreQuestionFive(storeQuestions.get(4));
-        }
-
-        // 기타 설문 응답 저장
-        nps.setEtcQuestion(form.getEtcQuestion());
-
-        // 설문 완료 여부 설정
-        nps.setCompleted(true);
-
-        // NPS 데이터 저장
-        netPromoterScoreRepository.save(nps);
-
-        return form;
     }
 
 

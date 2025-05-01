@@ -3,162 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>고객 만족도 평가</title>
+    <title>NPS 설문</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+        label {
+            margin-top: 10px;
         }
-        .container {
-            width: 50%;
-            margin: 50px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            text-align: center;
-            color: #4CAF50;
-        }
-        .question {
-            margin-bottom: 20px;
-        }
-        .question p {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        .rating {
-            display: flex;
-            justify-content: space-between;
-        }
-        .rating label {
-            margin-right: 10px;
-            font-size: 16px;
-        }
-        .rating input {
-            margin-right: 5px;
+        input[type="radio"] {
+            margin-left: 5px;
         }
         button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
+<h1>NPS 설문</h1>
 
-<div class="container">
-    <h2>고객 만족도 평가</h2>
-[[${npsDTO}]]
-    <form action="/submitNpsForm" method="POST">
+<form id="npsForm">
+    <!-- 호텔 설문 항목 -->
+    <div id="hotelQuestions">
+        <h3>호텔 설문</h3>
+        <label>호텔에 대한 질문 1:</label>
+        <input type="radio" name="hotelQuestions[0]" value="1"> 1
+        <input type="radio" name="hotelQuestions[0]" value="2"> 2
+        <input type="radio" name="hotelQuestions[0]" value="3"> 3
+        <input type="radio" name="hotelQuestions[0]" value="4"> 4
+        <input type="radio" name="hotelQuestions[0]" value="5"> 5
 
-        <!-- 전체 만족도 질문 -->
-        <div class="question">
-            <p>1. 전반적인 서비스 만족도는 어떠셨나요?</p>
-            <div class="rating">
-                <label for="q1-1">1점</label>
-                <input type="radio" id="q1-1" name="hotelQuestions[0]" value="1">
-                <label for="q1-2">2점</label>
-                <input type="radio" id="q1-2" name="hotelQuestions[0]" value="2">
-                <label for="q1-3">3점</label>
-                <input type="radio" id="q1-3" name="hotelQuestions[0]" value="3">
-                <label for="q1-4">4점</label>
-                <input type="radio" id="q1-4" name="hotelQuestions[0]" value="4">
-                <label for="q1-5">5점</label>
-                <input type="radio" id="q1-5" name="hotelQuestions[0]" value="5">
-            </div>
-        </div>
+        <label>호텔에 대한 질문 2:</label>
+        <input type="radio" name="hotelQuestions[1]" value="1"> 1
+        <input type="radio" name="hotelQuestions[1]" value="2"> 2
+        <input type="radio" name="hotelQuestions[1]" value="3"> 3
+        <input type="radio" name="hotelQuestions[1]" value="4"> 4
+        <input type="radio" name="hotelQuestions[1]" value="5"> 5
 
-        <!-- 직원 친절도 질문 -->
-        <div class="question">
-            <p>2. 직원들의 친절도는 어떠셨나요?</p>
-            <div class="rating">
-                <label for="q2-1">1점</label>
-                <input type="radio" id="q2-1" name="hotelQuestions[1]" value="1">
-                <label for="q2-2">2점</label>
-                <input type="radio" id="q2-2" name="hotelQuestions[1]" value="2">
-                <label for="q2-3">3점</label>
-                <input type="radio" id="q2-3" name="hotelQuestions[1]" value="3">
-                <label for="q2-4">4점</label>
-                <input type="radio" id="q2-4" name="hotelQuestions[1]" value="4">
-                <label for="q2-5">5점</label>
-                <input type="radio" id="q2-5" name="hotelQuestions[1]" value="5">
-            </div>
-        </div>
+        <label>호텔에 대한 질문 3:</label>
+        <input type="radio" name="hotelQuestions[2]" value="1"> 1
+        <input type="radio" name="hotelQuestions[2]" value="2"> 2
+        <input type="radio" name="hotelQuestions[2]" value="3"> 3
+        <input type="radio" name="hotelQuestions[2]" value="4"> 4
+        <input type="radio" name="hotelQuestions[2]" value="5"> 5
 
-        <!-- 청결도 질문 -->
-        <div class="question">
-            <p>3. 청결 상태는 어떠셨나요?</p>
-            <div class="rating">
-                <label for="q3-1">1점</label>
-                <input type="radio" id="q3-1" name="hotelQuestions[2]" value="1">
-                <label for="q3-2">2점</label>
-                <input type="radio" id="q3-2" name="hotelQuestions[2]" value="2">
-                <label for="q3-3">3점</label>
-                <input type="radio" id="q3-3" name="hotelQuestions[2]" value="3">
-                <label for="q3-4">4점</label>
-                <input type="radio" id="q3-4" name="hotelQuestions[2]" value="4">
-                <label for="q3-5">5점</label>
-                <input type="radio" id="q3-5" name="hotelQuestions[2]" value="5">
-            </div>
-        </div>
+        <label>호텔에 대한 질문 4:</label>
+        <input type="radio" name="hotelQuestions[3]" value="1"> 1
+        <input type="radio" name="hotelQuestions[3]" value="2"> 2
+        <input type="radio" name="hotelQuestions[3]" value="3"> 3
+        <input type="radio" name="hotelQuestions[3]" value="4"> 4
+        <input type="radio" name="hotelQuestions[3]" value="5"> 5
 
-        <!-- 가격 만족도 질문 -->
-        <div class="question">
-            <p>4. 가격 대비 만족도는 어떠셨나요?</p>
-            <div class="rating">
-                <label for="q4-1">1점</label>
-                <input type="radio" id="q4-1" name="hotelQuestions[3]" value="1">
-                <label for="q4-2">2점</label>
-                <input type="radio" id="q4-2" name="hotelQuestions[3]" value="2">
-                <label for="q4-3">3점</label>
-                <input type="radio" id="q4-3" name="hotelQuestions[3]" value="3">
-                <label for="q4-4">4점</label>
-                <input type="radio" id="q4-4" name="hotelQuestions[3]" value="4">
-                <label for="q4-5">5점</label>
-                <input type="radio" id="q4-5" name="hotelQuestions[3]" value="5">
-            </div>
-        </div>
+        <label>호텔에 대한 질문 5:</label>
+        <input type="radio" name="hotelQuestions[4]" value="1"> 1
+        <input type="radio" name="hotelQuestions[4]" value="2"> 2
+        <input type="radio" name="hotelQuestions[4]" value="3"> 3
+        <input type="radio" name="hotelQuestions[4]" value="4"> 4
+        <input type="radio" name="hotelQuestions[4]" value="5"> 5
+    </div>
 
-        <!-- 재방문 의사 질문 -->
-        <div class="question">
-            <p>5. 재방문 의향은 어떠셨나요?</p>
-            <div class="rating">
-                <label for="q5-1">1점</label>
-                <input type="radio" id="q5-1" name="hotelQuestions[4]" value="1">
-                <label for="q5-2">2점</label>
-                <input type="radio" id="q5-2" name="hotelQuestions[4]" value="2">
-                <label for="q5-3">3점</label>
-                <input type="radio" id="q5-3" name="hotelQuestions[4]" value="3">
-                <label for="q5-4">4점</label>
-                <input type="radio" id="q5-4" name="hotelQuestions[4]" value="4">
-                <label for="q5-5">5점</label>
-                <input type="radio" id="q5-5" name="hotelQuestions[4]" value="5">
-            </div>
-        </div>
+    <!-- 스토어 설문 항목 -->
+    <div class="storeNPSWrap"></div>
 
-        <!-- 기타 의견 -->
-        <div class="question">
-            <p>6. 기타 의견이나 요청 사항이 있으시면 작성해 주세요:</p>
-            <textarea name="etcQuestion" rows="4" style="width: 100%;"></textarea>
-        </div>
+    <!-- 제출 버튼 -->
+    <button type="button" id="saveSurveyBtn">설문 제출</button>
+</form>
 
-        <!-- 제출 버튼 -->
-        <button type="submit">설문 제출</button>
-    </form>
-</div>
+<script th:inline="javascript">
 
+    $(document).ready(function() {
+
+        let data = [[${storeDTOList}]]
+        let str = ""
+
+        data.forEach(storeDTO=>
+        {
+            str += "<div id=\"storeQuestions\" data-storeid='"+storeDTO.id+"'>\n" +
+                "        <h3>"+storeDTO.name+" 설문</h3>\n" +
+                "        <label>스토어에 대한 질문 1:</label>\n" +
+                "        <input type=\"radio\" name='storeQuestions[0]"+storeDTO.id+"' value=\"1\"> 1\n" +
+                "        <input type=\"radio\" name='storeQuestions[0]"+storeDTO.id+"'  value=\"2\"> 2\n" +
+                "        <input type=\"radio\" name='storeQuestions[0]"+storeDTO.id+"'  value=\"3\"> 3\n" +
+                "        <input type=\"radio\" name='storeQuestions[0]"+storeDTO.id+"'  value=\"4\"> 4\n" +
+                "        <input type=\"radio\" name='storeQuestions[0]"+storeDTO.id+"'  value=\"5\"> 5\n" +
+                "\n" +
+                "        <label>스토어에 대한 질문 2:</label>\n" +
+                "        <input type=\"radio\" name='storeQuestions[1]"+storeDTO.id+"'  value=\"1\"> 1\n" +
+                "        <input type=\"radio\" name='storeQuestions[1]"+storeDTO.id+"'  value=\"2\"> 2\n" +
+                "        <input type=\"radio\" name='storeQuestions[1]"+storeDTO.id+"'  value=\"3\"> 3\n" +
+                "        <input type=\"radio\" name='storeQuestions[1]"+storeDTO.id+"'  value=\"4\"> 4\n" +
+                "        <input type=\"radio\" name='storeQuestions[1]"+storeDTO.id+"'  value=\"5\"> 5\n" +
+                "\n" +
+                "        <label>스토어에 대한 질문 3:</label>\n" +
+                "        <input type=\"radio\" name='storeQuestions[2]"+storeDTO.id+"'  value=\"1\"> 1\n" +
+                "        <input type=\"radio\" name='storeQuestions[2]"+storeDTO.id+"'  value=\"2\"> 2\n" +
+                "        <input type=\"radio\" name='storeQuestions[2]"+storeDTO.id+"'  value=\"3\"> 3\n" +
+                "        <input type=\"radio\" name='storeQuestions[2]"+storeDTO.id+"'  value=\"4\"> 4\n" +
+                "        <input type=\"radio\" name='storeQuestions[2]"+storeDTO.id+"'  value=\"5\"> 5\n" +
+                "\n" +
+                "        <label>스토어에 대한 질문 4:</label>\n" +
+                "        <input type=\"radio\" name='storeQuestions[3]"+storeDTO.id+"'  value=\"1\"> 1\n" +
+                "        <input type=\"radio\" name='storeQuestions[3]"+storeDTO.id+"'  value=\"2\"> 2\n" +
+                "        <input type=\"radio\" name='storeQuestions[3]"+storeDTO.id+"'  value=\"3\"> 3\n" +
+                "        <input type=\"radio\" name='storeQuestions[3]"+storeDTO.id+"'  value=\"4\"> 4\n" +
+                "        <input type=\"radio\" name='storeQuestions[3]"+storeDTO.id+"'  value=\"5\"> 5\n" +
+                "\n" +
+                "        <label>스토어에 대한 질문 5:</label>\n" +
+                "        <input type=\"radio\" name='storeQuestions[4]"+storeDTO.id+"'  value=\"1\"> 1\n" +
+                "        <input type=\"radio\" name='storeQuestions[4]"+storeDTO.id+"'  value=\"2\"> 2\n" +
+                "        <input type=\"radio\" name='storeQuestions[4]"+storeDTO.id+"'  value=\"3\"> 3\n" +
+                "        <input type=\"radio\" name='storeQuestions[4]"+storeDTO.id+"'  value=\"4\"> 4\n" +
+                "        <input type=\"radio\" name='storeQuestions[4]"+storeDTO.id+"'  value=\"5\"> 5\n" +
+                "    </div>"
+
+        })
+
+        $(".storeNPSWrap").html(str)
+        console.log(data)
+
+        $('#saveSurveyBtn').click(function() {
+
+            let npsList = []
+
+            // 호텔 질문 수집
+            let hotelDTO = {
+                checkOutId:[[${checkOutId}]],
+                hotelOrStore: "hotel",
+                hotelId: [[${hotelId}]],
+                QuestionOne: parseInt($('input[name="hotelQuestions[0]"]:checked').val()) || 0,
+                QuestionTwo: parseInt($('input[name="hotelQuestions[1]"]:checked').val()) || 0,
+                QuestionThree: parseInt($('input[name="hotelQuestions[2]"]:checked').val()) || 0,
+                QuestionFour: parseInt($('input[name="hotelQuestions[3]"]:checked').val()) || 0,
+                QuestionFive: parseInt($('input[name="hotelQuestions[4]"]:checked').val()) || 0
+            }
+            npsList.push(hotelDTO)
+
+            // 각 스토어 질문 수집
+            $('.storeNPSWrap > div').each(function() {
+
+                let storeId = $(this).data('storeid')
+                let storeDTO = {
+                    hotelOrStore: "store",
+                    storeId: storeId,
+                    QuestionOne: parseInt($(this).find('input[name="storeQuestions[0]' + storeId + '"]:checked').val()) || 0,
+                    QuestionTwo: parseInt($(this).find('input[name="storeQuestions[1]' + storeId + '"]:checked').val()) || 0,
+                    QuestionThree: parseInt($(this).find('input[name="storeQuestions[2]' + storeId + '"]:checked').val()) || 0,
+                    QuestionFour: parseInt($(this).find('input[name="storeQuestions[3]' + storeId + '"]:checked').val()) || 0,
+                    QuestionFive: parseInt($(this).find('input[name="storeQuestions[4]' + storeId + '"]:checked').val()) || 0
+                };
+                npsList.push(storeDTO)
+            })
+
+            console.log(npsList); // 확인용 콘솔 출력
+
+            // AJAX 전송
+            $.ajax({
+                url: '/api/nps/saveSurvey',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(npsList),
+                success: function(response) {
+                    alert('설문 저장 성공: ' + response)
+                },
+                error: function(xhr) {
+                    alert('설문 저장 실패: ' + xhr.responseText)
+                }
+            })
+        })
+    })
+</script>
 </body>
 </html>
