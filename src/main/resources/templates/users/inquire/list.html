@@ -19,6 +19,7 @@
 <body>
 <div class="container-fluid px-3" layout:fragment="content">
 
+
     <div style="display: flex; justify-content: flex-end; align-items: center; height: 40px;">
         <a href="/users/inquire/register" class="btn" style="justify-content:center; display: flex; align-items: center; height: 40px; font-size:0.8em; background-color: black; color: white; border: 1px solid black; border-radius: 0; margin-bottom: 0px">
             문의하러가기 &nbsp<i class="bi bi-chat-left-dots"></i>
@@ -26,15 +27,7 @@
     </div>
 
     <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>글번호</th>
-            <th>제목</th>
-            <th>내용</th>
-            <th>요청시간</th>
-            <th>답변시간</th>
-        </tr>
-        </thead>
+
         <div class="list-group">
             <th:block th:each="inquireDTO : ${inquireDTOList}">
                 <a th:href="@{/users/inquire/read(id=${inquireDTO.id})}" class="list-group-item list-group-item-action mb-2">

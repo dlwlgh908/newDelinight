@@ -2,14 +2,163 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>NPS 설문조사</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객 만족도 평가</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .rating {
+            display: flex;
+            justify-content: space-between;
+        }
+        .rating label {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .rating input {
+            margin-right: 5px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
 
+<div class="container">
+    <h2>고객 만족도 평가</h2>
+[[${npsDTO}]]
+    <form action="/submitNpsForm" method="POST">
 
-    <h2>NPS 설문조사</h2>
+        <!-- 전체 만족도 질문 -->
+        <div class="question">
+            <p>1. 전반적인 서비스 만족도는 어떠셨나요?</p>
+            <div class="rating">
+                <label for="q1-1">1점</label>
+                <input type="radio" id="q1-1" name="hotelQuestions[0]" value="1">
+                <label for="q1-2">2점</label>
+                <input type="radio" id="q1-2" name="hotelQuestions[0]" value="2">
+                <label for="q1-3">3점</label>
+                <input type="radio" id="q1-3" name="hotelQuestions[0]" value="3">
+                <label for="q1-4">4점</label>
+                <input type="radio" id="q1-4" name="hotelQuestions[0]" value="4">
+                <label for="q1-5">5점</label>
+                <input type="radio" id="q1-5" name="hotelQuestions[0]" value="5">
+            </div>
+        </div>
 
+        <!-- 직원 친절도 질문 -->
+        <div class="question">
+            <p>2. 직원들의 친절도는 어떠셨나요?</p>
+            <div class="rating">
+                <label for="q2-1">1점</label>
+                <input type="radio" id="q2-1" name="hotelQuestions[1]" value="1">
+                <label for="q2-2">2점</label>
+                <input type="radio" id="q2-2" name="hotelQuestions[1]" value="2">
+                <label for="q2-3">3점</label>
+                <input type="radio" id="q2-3" name="hotelQuestions[1]" value="3">
+                <label for="q2-4">4점</label>
+                <input type="radio" id="q2-4" name="hotelQuestions[1]" value="4">
+                <label for="q2-5">5점</label>
+                <input type="radio" id="q2-5" name="hotelQuestions[1]" value="5">
+            </div>
+        </div>
 
+        <!-- 청결도 질문 -->
+        <div class="question">
+            <p>3. 청결 상태는 어떠셨나요?</p>
+            <div class="rating">
+                <label for="q3-1">1점</label>
+                <input type="radio" id="q3-1" name="hotelQuestions[2]" value="1">
+                <label for="q3-2">2점</label>
+                <input type="radio" id="q3-2" name="hotelQuestions[2]" value="2">
+                <label for="q3-3">3점</label>
+                <input type="radio" id="q3-3" name="hotelQuestions[2]" value="3">
+                <label for="q3-4">4점</label>
+                <input type="radio" id="q3-4" name="hotelQuestions[2]" value="4">
+                <label for="q3-5">5점</label>
+                <input type="radio" id="q3-5" name="hotelQuestions[2]" value="5">
+            </div>
+        </div>
+
+        <!-- 가격 만족도 질문 -->
+        <div class="question">
+            <p>4. 가격 대비 만족도는 어떠셨나요?</p>
+            <div class="rating">
+                <label for="q4-1">1점</label>
+                <input type="radio" id="q4-1" name="hotelQuestions[3]" value="1">
+                <label for="q4-2">2점</label>
+                <input type="radio" id="q4-2" name="hotelQuestions[3]" value="2">
+                <label for="q4-3">3점</label>
+                <input type="radio" id="q4-3" name="hotelQuestions[3]" value="3">
+                <label for="q4-4">4점</label>
+                <input type="radio" id="q4-4" name="hotelQuestions[3]" value="4">
+                <label for="q4-5">5점</label>
+                <input type="radio" id="q4-5" name="hotelQuestions[3]" value="5">
+            </div>
+        </div>
+
+        <!-- 재방문 의사 질문 -->
+        <div class="question">
+            <p>5. 재방문 의향은 어떠셨나요?</p>
+            <div class="rating">
+                <label for="q5-1">1점</label>
+                <input type="radio" id="q5-1" name="hotelQuestions[4]" value="1">
+                <label for="q5-2">2점</label>
+                <input type="radio" id="q5-2" name="hotelQuestions[4]" value="2">
+                <label for="q5-3">3점</label>
+                <input type="radio" id="q5-3" name="hotelQuestions[4]" value="3">
+                <label for="q5-4">4점</label>
+                <input type="radio" id="q5-4" name="hotelQuestions[4]" value="4">
+                <label for="q5-5">5점</label>
+                <input type="radio" id="q5-5" name="hotelQuestions[4]" value="5">
+            </div>
+        </div>
+
+        <!-- 기타 의견 -->
+        <div class="question">
+            <p>6. 기타 의견이나 요청 사항이 있으시면 작성해 주세요:</p>
+            <textarea name="etcQuestion" rows="4" style="width: 100%;"></textarea>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <button type="submit">설문 제출</button>
+    </form>
+</div>
 
 </body>
 </html>

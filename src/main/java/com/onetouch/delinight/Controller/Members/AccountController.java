@@ -9,28 +9,21 @@ package com.onetouch.delinight.Controller.Members;
 
 import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
-import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.CenterService;
 import com.onetouch.delinight.Service.HotelService;
 import com.onetouch.delinight.Service.MembersService;
-import com.onetouch.delinight.Service.StoreService;
-import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import software.amazon.awssdk.services.s3.endpoints.internal.FatScope;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.security.Principal;
-import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -163,9 +156,9 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/home")
+    @GetMapping("/hotelAdHome")
     public String home() {
-        return "/members/account/common/home";
+        return "/members/account/common/hotelAdHome";
     }
 
     @GetMapping("/mypage")

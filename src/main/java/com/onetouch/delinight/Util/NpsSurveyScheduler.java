@@ -17,7 +17,7 @@ public class NpsSurveyScheduler {
     private final EmailService emailService;
 
     // 매일 오전 9시에 실행 될 스케줄러
-    @Scheduled(cron = "0 0 9 * * ?")
+    @Scheduled(cron = "0 40 14 * * ?")
     public void sendNpsSurvey(){
         // 어제 체크아웃한 고객들 찾기
         LocalDate yesterday = LocalDate.now().minusDays(1);
@@ -26,10 +26,10 @@ public class NpsSurveyScheduler {
             for (CheckOutLogEntity checkOutAddEmail : checkOutLogs) {
                 String email = checkOutAddEmail.getUsersEntity().getEmail();
                 String name = checkOutAddEmail.getUsersEntity().getName();
-                Long checkOutId = checkOutAddEmail.getId(); // 또는 적절한 ID
+                Long checkOutId = checkOutAddEmail.getId();
 
                 String surveyLink = "http://localhost:8080/users/nps/survey/" + checkOutId;
-                emailService.sendNpsEmail(email, name, surveyLink);
+                emailService.sendNpsEmail(email, name, surveyLink, checkOutId);
             }
 
     }

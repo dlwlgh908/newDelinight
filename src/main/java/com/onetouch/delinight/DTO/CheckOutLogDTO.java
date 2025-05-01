@@ -7,14 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
-import com.onetouch.delinight.Constant.CheckInStatus;
-import com.onetouch.delinight.Entity.GuestEntity;
-import com.onetouch.delinight.Entity.RoomEntity;
-import com.onetouch.delinight.Entity.UsersEntity;
-import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -24,10 +17,6 @@ import java.time.LocalDate;
 @Builder
 public class CheckOutLogDTO {
 
-    private Long id;
-
-
-
-
+    private Long id;                    // checkOutLogId
 
 }
