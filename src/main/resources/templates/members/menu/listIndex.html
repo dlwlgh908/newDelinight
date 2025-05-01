@@ -26,11 +26,12 @@
                                    </ol>
                                </div>
                                <div>
-                                   <a href="/members/menu/register" class="btn btn-primary">추가하기 +</a>
+                                   <a href="/members/menu/register" class="btn btn-primary mt-4">새 메뉴 +</a>
                                </div>
                            </div>
 
-                           <div class="mb-5">
+                           <div class="d-flex gap-5 mb-5">
+                               <!--list 테이블-->
                                <div class="w-50">
                                    <table class="table align-middle">
                                        <thead>
@@ -44,7 +45,7 @@
                                            <tr>
                                                <td th:text="${menuDTO.id}"></td>
                                                <td>
-                                                   <a class="alink-title" th:href="@{/members/menu/read(id=${menuDTO.id})}">
+                                                   <a th:href="@{/members/menu/list(id=${menuDTO.id})}" class="alink-title">
                                                        [[${menuDTO.name}]]
                                                    </a>
                                                </td>
@@ -53,6 +54,52 @@
                                            </tr>
                                        </th:block>
                                    </table>
+                               </div>
+
+                               <!--read 카드-->
+                               <div class="w-50" th:if="${selectedMenu != null}">
+                                   <div class="card mb-4">
+                                       <div class="card-body">
+                                           <div class="row mb-1 mb-4">
+                                               <div class="d-flex align-items-end">
+                                                   <h5 class="form-label mb-0" th:text="${selectedMenu.name}"></h5>
+                                                   <a th:href="@{|/members/menu/update/${selectedMenu.id}|}" class="alink-update ms-3">수정하기</a>
+                                               </div>
+                                           </div>
+
+                                           <div class="row mb-1">
+                                               <label class="col-sm-3 form-label">메뉴 번호</label>
+                                               <div class="col" th:text="${selectedMenu.id}"></div>
+                                           </div>
+
+                                           <div class="row mb-1">
+                                               <label class="col-sm-3 form-label">정보</label>
+                                               <div class="col" th:text="${selectedMenu.content}"></div>
+                                           </div>
+
+                                           <div class="row mb-1">
+                                               <label class="col-sm-3 form-label">가격</label>
+                                               <div class="col" th:text="${selectedMenu.price + '원'}"></div>
+                                           </div>
+
+                                           <div class="row mb-1">
+                                               <label class="col-sm-3 form-label">판매상태</label>
+                                               <div class="col" th:text="${selectedMenu.menuStatus}"></div>
+                                           </div>
+                                           <div class="row mb-1">
+                                               <label class="col-sm-3 form-label">카테고리</label>
+                                               <div class="col" th:text="${selectedMenu.menu}"></div>
+                                           </div>
+
+                                           <div class="row mt-3">
+                                               <div th:if="${selectedMenu.imgUrl}">
+                                                   <img class="rounded-2" width="70%" th:src="${selectedMenu.imgUrl}">
+                                               </div>
+                                           </div>
+
+
+                                       </div>
+                                   </div>
                                </div>
 
                            </div>
