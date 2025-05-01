@@ -120,11 +120,11 @@ $(function(){
     function checkStatusChangeButton(status, id){
         switch (status){
             case "AWAITING" :
-                return "<button class='btn btn-outline-dark changeBtn'  data-current='awaiting' data-orderid='"+id+"'>승인 하기</button>"
+                return "<button class='btn btn-outline-primary changeBtn'  data-current='awaiting' data-orderid='"+id+"'>승인 하기</button>"
             case "PREPARING" :
-                return "<button class='btn btn-outline-dark changeBtn' data-current='preparing' data-orderid='"+id+"'>배달 시작</button>"
+                return "<button class='btn btn-outline-success changeBtn' data-current='preparing' data-orderid='"+id+"'>배달 시작</button>"
             case "DELIVERING" :
-                return "<button class='btn btn-outline-dark changeBtn' data-current='delivering' data-orderid='"+id+"'>배달 완료</button>"
+                return "<button class='btn btn-outline-success changeBtn' data-current='delivering' data-orderid='"+id+"'>배달 완료</button>"
             case "DELIVERED" :
                 return "배달 완료"
         }
