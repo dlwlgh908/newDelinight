@@ -1,60 +1,77 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.NetPromoterScoreDTO;
+import com.onetouch.delinight.Entity.CheckOutLogEntity;
 import com.onetouch.delinight.Entity.NetPromoterScoreEntity;
+import com.onetouch.delinight.Repository.CheckOutLogRepository;
 import com.onetouch.delinight.Repository.NetPromoterScoreRepository;
+import com.onetouch.delinight.Util.EmailService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Log4j2
 @Transactional
 @RequiredArgsConstructor
+@EnableAsync
 public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
 
     private final NetPromoterScoreRepository netPromoterScoreRepository;
+    private final CheckOutLogRepository checkOutLogRepository;
+    private final EmailService emailService;
     private final ModelMapper modelMapper;
 
 
-//    @Override
-//    public void npsInsert(NetPromoterScoreDTO npsDTO, Long checkOutId) {
-//
-//        List<NetPromoterScoreEntity> npsEntityList = netPromoterScoreRepository.findByCheckOutLogEntities_Id(checkOutId);
-//
-//        if (npsEntityList.isEmpty()) {
-//
-//            throw new EntityNotFoundException("해당 체크아웃 로그와 연결된 NPS가 존재하지 않습니다. ID: " + checkOutId);
-//
-//        }
-//
-//        NetPromoterScoreEntity npsEntity = npsEntityList.get(0);
-//
-//        if (npsEntity.getHotelEntity() != null && npsEntity.getStoreEntity() == null) {
-//            log.info("호텔 설문만 등록");
-//            npsDTO.HotelSurveyTo(npsEntity);
-//
-//        } else if (npsEntity.getHotelEntity() != null && npsEntity.getStoreEntity() != null) {
-//
-//            log.info("호텔 및 스토어 설문 등록");
-//            npsDTO.HotelSurveyTo(npsEntity);
-//            npsDTO.StoreSurveyTo(npsEntity);
-//            npsDTO.totalScore(); // 총점 계산
-//            npsEntity.setTotalScore(npsDTO.getTotalScore());
-//
-//        } else {
-//
-//            throw new EntityNotFoundException("호텔과 스토어 모두 존재하지 않는 경우");
-//
-//        }
-//
-//        netPromoterScoreRepository.save(npsEntity);
-//    }
+    @Override
+    public String sendNpsTemporary(Long checkOutId) {
+        log.info("들어온 체크아웃 ID = {}" ,checkOutId);
+        // 1. 사용자 검증
+        CheckOutLogEntity checkOut = checkOutLogRepository.findById(checkOutId).orElseThrow(EntityNotFoundException::new);
+        log.info("실핸한 쿼리 = {}", checkOut);
+
+        String email = checkOut.getUsersEntity().getEmail();
+        String name = checkOut.getUsersEntity().getName();
+
+        String surveyLink = "http://localhost:8080/users/nps/survey/" + checkOutId;
+
+        log.info("email = {}| name = {} | surveyLink = {}", email, name, surveyLink);
+        Map<String, Object> variables = Map.of(
+                "email", checkOut.getUsersEntity().getEmail(),
+                "name", checkOut.getUsersEntity().getName(),
+                "surveyLink", surveyLink
+        );
+
+        emailService.sendNpsEmail(
+                email,
+                name,
+                surveyLink,
+                checkOutId
+        );
+
+        return "NPS 설문 이메일이 전송되었습니다.";
+    }
+
+    @Override
+    public NetPromoterScoreDTO npsInsert(Long checkOutId) {
+
+        CheckOutLogEntity checkOut = checkOutLogRepository.findById(checkOutId).orElseThrow(EntityNotFoundException::new);
+
+        NetPromoterScoreEntity nps = new NetPromoterScoreEntity();
+
+        checkOut.setNetPromoterScoreEntity(nps);
+        nps.setCheckOutLogEntity(List.of(checkOut));
+
+
+        return null;
+    }
 
 
     @Override

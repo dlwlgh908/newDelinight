@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface NetPromoterScoreService {
 
-//    public void npsInsert(NetPromoterScoreDTO npsDTO, Long checkOutId);
+    public String sendNpsTemporary(Long checkOutId);
+
+    public NetPromoterScoreDTO npsInsert(Long checkOutId);
 
     public List<NetPromoterScoreDTO> npsList();
 
