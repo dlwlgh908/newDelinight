@@ -49,7 +49,7 @@
                                                        [[${menuDTO.name}]]
                                                    </a>
                                                </td>
-                                               <td th:text="${#numbers.formatInteger(menuDTO.price, 3, 'COMMA') + '원'}"></td>
+                                               <td th:text="${#numbers.formatInteger(menuDTO.price, 3, 'COMMA') + ' 원'}"></td>
                                                <td th:text="${menuDTO.menuStatus}"></td>
                                            </tr>
                                        </th:block>
@@ -60,7 +60,7 @@
                                <div class="w-50" th:if="${selectedMenu != null}">
                                    <div class="card mb-4">
                                        <div class="card-body">
-                                           <div class="row mb-1 mb-4">
+                                           <div class="row mb-4">
                                                <div class="d-flex align-items-end">
                                                    <h5 class="form-label mb-0" th:text="${selectedMenu.name}"></h5>
                                                    <a th:href="@{|/members/menu/update/${selectedMenu.id}|}" class="alink-update ms-3">수정하기</a>
@@ -96,8 +96,6 @@
                                                    <img class="rounded-2" width="70%" th:src="${selectedMenu.imgUrl}">
                                                </div>
                                            </div>
-
-
                                        </div>
                                    </div>
                                </div>

@@ -76,6 +76,8 @@ public class HotelController {
         HotelEntity hotelEntity =
                 hotelRepository.findByMembersEntity_Email(principal.getName());
 
+        String imgUrl = imageService.readHotel(hotelEntity.getId());
+        model.addAttribute("imgUrl", imgUrl);
         model.addAttribute("hotel", hotelEntity);
 
         return "members/hotel/read";

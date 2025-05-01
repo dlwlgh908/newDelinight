@@ -13,72 +13,14 @@
     <div layout:fragment="adminContent" id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-5">
-                <!--내용 넣는 곳-->
-                <!--반드시 이 아래에서만 작업-->
-
-                <!--페이지 이름-->
-                <h3 class="mt-5" th:text="${storeDTO.name}"></h3>
-                <ol class="breadcrumb mb-4">
-                    <a href="/members/account/adminhome" class="breadcrumb-item active">홈</a>
-                    <a href="#" class="breadcrumb-item active no-click">가맹점 관리</a>
-                </ol>
-
-            <!--페이지 이름-->
-            <h3 class="mt-5" th:text="${storeDTO.name}"></h3>
-            <ol class="breadcrumb mb-4">
-                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                <a href="#" class="breadcrumb-item active no-click">가맹점 관리</a>
-            </ol>
-            <div class="card custom-shadow mb-4">
-                <div class="card-body">
-                    <!--카드 제목-->
-                    <h5 class="mb-4 fw-bold">기본 정보</h5>
-
-                    <!--카드 제목 구분선-->
-                    <hr class="hrMain">
-
-                    <form action="/members/store/update" method="post">
-
-                        <div class="row mb-4">
-                            <label class="col-sm-2 col-form-label form-label">가맹점명</label>
-                            <div class="col-sm-3">
-                                <input name="name" type="text" class="form-control" th:placeholder="${storeDTO.name}">
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label class="col-sm-2 col-form-label form-label">가맹점 소개</label>
-                            <div class="col-sm-4">
-                                <textarea name="content" class="form-control" rows="1" style="height: 8rem; overflow:hidden;" th:text="${storeDTO.content}"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <label class="col-sm-2 col-form-label form-label">대표 이미지</label>
-                            <div class="col-sm-4">
-                                <input type="file" accept="image/*" class="imgInput form-control ">
-                                <input hidden readonly name="id" th:value="${storeDTO.id}">
-                                <img width="40%" class="menuImg mt-3" th:src="${imgUrl}">
-                                <div class="hiddenImgNum"></div>
-                            </div>
-                        </div>
-
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary me-2 px-4">저장</button>
-                            <a href="/members/account/home" class="btn btn-gray px-4">취소</a>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-
-                <div class="card custom-shadow mb-4">
+                <div class="card custom-shadow mb-4 mt-5">
                     <div class="card-body">
-                        <!--카드 제목-->
-                        <h5 class="mb-4 fw-bold">기본 정보</h5>
-
-                        <!--카드 제목 구분선-->
-                        <hr class="hrMain">
+                        <!--페이지 이름-->
+                        <h3 th:text="${storeDTO.name}"></h3>
+                        <ol class="breadcrumb mb-5">
+                            <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                            <a href="#" class="breadcrumb-item active no-click">가맹점 관리</a>
+                        </ol>
 
                         <form action="/members/store/update" method="post">
 
@@ -86,42 +28,35 @@
                                 <label class="col-sm-2 col-form-label form-label">가맹점명</label>
                                 <div class="col-sm-3">
                                     <input name="name" type="text" class="form-control" th:placeholder="${storeDTO.name}">
-                                    <div class="text-sm mt-1 text-danger" th:text="${nameError}"></div>
                                 </div>
                             </div>
 
                             <div class="row mb-4">
                                 <label class="col-sm-2 col-form-label form-label">가맹점 소개</label>
                                 <div class="col-sm-4">
-                                    <textarea name="content" class="form-control" rows="1" oninput="autoResize(this)"
-                                              th:text="${storeDTO.content}"
-                                              style="overflow:hidden; resize: none; min-height: 1rem">
-                                    </textarea>
-                                    <div class="text-sm mt-1 text-danger" th:text="${contentError}"></div>
+                                    <textarea name="content" class="form-control" rows="1" style="height: 8rem; overflow:hidden;" th:text="${storeDTO.content}"></textarea>
                                 </div>
                             </div>
 
                             <div class="row mb-4">
-                                <label class="col-sm-2 col-form-label form-label">대표 이미지 수정</label>
+                                <label class="col-sm-2 col-form-label form-label">대표 이미지</label>
                                 <div class="col-sm-4">
+                                    <input type="file" accept="image/*" class="imgInput form-control ">
                                     <input hidden readonly name="id" th:value="${storeDTO.id}">
-                                    <input type="file" accept="image/*" class="imgInput form-control">
-                                    <div class="text-sm mt-1" th:text="${imgError}"></div>
+                                    <img width="40%" class="menuImg mt-3" th:src="${imgUrl}">
                                     <div class="hiddenImgNum"></div>
-                                    <img width="50%" class="menuImg img-thumbnail" th:src="${imgUrl}">
                                 </div>
                             </div>
 
-                            <div class="text-center mt-5">
+                            <div class="text-center">
                                 <button type="submit" class="btn btn-primary me-2 px-4">저장</button>
-                                <a th:href="@{/members/store/read(id=${storeId})}" class="btn btn-gray px-4">취소</a>
+                                <a href="/members/account/home" class="btn btn-gray px-4">취소</a>
                             </div>
 
                         </form>
                     </div>
                 </div>
             </div>
-
         </main>
         
         <script>
