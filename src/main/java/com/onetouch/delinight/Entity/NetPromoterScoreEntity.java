@@ -25,8 +25,8 @@ public class NetPromoterScoreEntity extends BaseEntity {
     private List<CheckOutLogEntity> checkOutLogEntity = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
-    private StoreEntity storeEntity;
+    @JoinColumn(name = "orders_id")
+    private OrdersEntity ordersEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")
