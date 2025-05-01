@@ -6,82 +6,68 @@
 >
 <head>
     <title>델리나잇</title>
-
-
-    <!--별도 css 필요할 시 아래로 추가-->
-    <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
-    styles.css에 작성할것-->
 </head>
 
 <body>
-<!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--내용 넣는 곳-->
-            <!--반드시 이 아래에서만 작업-->
+            <div class="card custom-shadow mt-5 mb-4">
+                <div class="card-body">
+                    <h3>호텔 정보 수정</h3>
+                    <ol class="breadcrumb mb-5">
+                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="/members/hotel/read" class="breadcrumb-item active">호텔 정보</a>
+                    </ol>
 
-            <!--페이지 이름-->
-            <h3 id="test" class="mt-5">호텔 정보 수정</h3>
-            <ol class="breadcrumb mb-4">
-                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                <a href="#" class="breadcrumb-item active no-click">호텔 관리</a>
-            </ol>
-            <!--텍스트 박스-->
-            <form action="/members/hotel/update" method="post">
+                    <form action="/members/hotel/update" method="post">
 
-                <div class="card custom-shadow mb-4">
-                    <div class="card-body">
-                        <!--카드 제목-->
-                        <h5 class="mb-4 fw-bold">기본 정보</h5>
-
-
-                        <!--카드 제목 구분선-->
-                        <hr class="hrMain">
-
-                        <!--기본 row 양식-->
-                        <!--양식처럼 요소를 깔끔하게 배치하고 싶다면 이 div를 그대로 복붙한 뒤 내용을 수정하세요-->
-                        <!--이때, row는 행이므로 이 클래스를 삭제하면 요소에 col이 먹지 않습니다-->
-                        <!--이때, col-sm-숫자 는 row에서 요소가 차지하는 자리비율이므로 col이 여러개일 시 +-가 필요합니다(하나를 높이면 하나를 줄여야함)-->
-                        <div class="row mb-1">
-                            <!--row 제목 (기본 col-sm-2)-->
-                            <label class="col-sm-2 col-form-label form-label">호텔명 : </label>
-                            <!--row 콘텐츠 (기본 col-sm-4-->
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" name="name" th:value="${hotel.name}">
-                            </div>
-                        </div>
-
-                        <div class="row mb-1">
-                            <!--row 제목 (기본 col-sm-2)-->
-                            <label class="col-sm-2 col-form-label form-label">상세 : </label>
-                            <!--row 콘텐츠 (기본 col-sm-4-->
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" name="content" th:value="${hotel.content}">
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <!--row 제목 (기본 col-sm-2)-->
-                            <label class="col-sm-2 col-form-label form-label">이미지 등록하기 : </label>
-                            <!--row 콘텐츠 (기본 col-sm-4-->
-                            <div class="col-sm-4">
+                        <div class="d-flex">
+                            <div class="w-50">
                                 <input hidden readonly name="id" th:value="${hotel.id}">
-                                <img style="height : 200px; width: 600px" class="hotelImg" th:src="${imgUrl}">
-                                <input type="file" class="imgInput">
                                 <div class="hiddenImgNum"></div>
+                                <input type="hidden" name="id" th:value="${hotel.id}">
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label form-label">호텔명</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" name="name" th:value="${hotel.name}">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label form-label">설명</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control" name="content" th:value="${hotel.content}"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-5">
+                                    <label class="col-sm-3 col-form-label form-label">대표이미지</label>
+                                    <div class="col-sm-8">
+                                        <label>
+                                            <input name="image" type="file" class="form-control image imgInput">
+                                        </label>
+                                        <div class="text-sm mt-1">
+                                            정사각형 이미지로 넣어주세요.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="w-50">
+                                <img class="hotelImg" th:src="${imgUrl}">
                             </div>
                         </div>
 
-
-                        <input type="hidden" name="id" th:value="${hotel.id}">
-                        <button type="submit" class="btn btn-primary">저장</button>
-                    </div>
+                        <div class="mt-5 text-center">
+                            <button type="submit" class="btn btn-primary">저장</button>
+                            <a th:href="@{/members/hotel/read(id=${hotel.id})}" class="btn btn-gray">취소</a>
+                        </div>
+                    </form>
                 </div>
-
-
-            </form>
+            </div>
         </div>
-
     </main>
     <script src="/js/imgscript.js" text="javascript"></script>
 

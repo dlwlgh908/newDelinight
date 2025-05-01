@@ -6,12 +6,6 @@
 >
 <head>
     <title>델리나잇</title>
-
-
-
-    <!--별도 css 필요할 시 아래로 추가-->
-    <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
-    styles.css에 작성할것-->
 </head>
 
 <body>
@@ -19,22 +13,13 @@
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--내용 넣는 곳-->
-            <!--반드시 이 아래에서만 작업-->
-
-            <!--페이지 이름-->
-
-            <!--텍스트 박스-->
-
-
-
-
             <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
 
-                    <h1 id="test">Hotel Check-In</h1>
-                    <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">호텔 체크인</li>
+                    <h3 id="test">체크인 현황</h3>
+                    <ol class="breadcrumb mb-5">
+                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">체크인 관리</a>
                     </ol>
 
                     <!--네비게이션-->
@@ -71,10 +56,9 @@
                         <thead>
                         <th scope="col">#</th>
                         <th scope="col">이름</th>
-                        <th scope="col">상세</th>
                         <th scope="col">체크인</th>
                         <th scope="col">체크아웃</th>
-                        <th scope="col">핸드폰번호</th>
+                        <th scope="col">전화번호</th>
                         <th scope="col">이메일</th>
                         <th scope="col">비밀번호(PW)</th>
                         <th scope="col">결제 금액</th>
@@ -88,7 +72,6 @@
                                 <th scope="row offset-4" th:text="${list.id}" th:value="${list.id}" class="checkinId"></th>
 
                                 <td th:text="${list.roomDTO.name}"></td>
-                                <td th:text="${list.roomDTO.content}"></td>
                                 <td>
                                     <th:block th:if="${list.checkinDate != null}">
                                         <span th:text="${list.checkinDate}"></span>
@@ -174,6 +157,10 @@
                                     <button th:data-checkinid="${list.id}" class="plusBtn btn btn-primary" style="display: inline">+</button>
                                     <button th:data-checkinid="${list.id}" class="minusBtn btn btn-primary" style="display: none">-</button>
 
+                                </td>
+
+                                <td>
+                                    여기에내용넣으실거죠?
                                 </td>
 
                             </tr>
