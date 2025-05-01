@@ -17,7 +17,7 @@ public class NpsSurveyScheduler {
     private final EmailService emailService;
 
     // 매일 오전 9시에 실행 될 스케줄러
-    @Scheduled(cron = "0 0 9 * * ?")
+    @Scheduled(cron = "0 40 14 * * ?")
     public void sendNpsSurvey(){
         // 어제 체크아웃한 고객들 찾기
         LocalDate yesterday = LocalDate.now().minusDays(1);

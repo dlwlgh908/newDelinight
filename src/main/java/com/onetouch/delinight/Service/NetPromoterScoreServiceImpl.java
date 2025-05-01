@@ -71,11 +71,11 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
         log.info("npsSelect 들어온 ID = {}" ,checkOutId);
         CheckOutLogEntity checkOut = checkOutLogRepository.findById(checkOutId).orElseThrow(EntityNotFoundException::new);
 
-        NetPromoterScoreDTO npsDTO = modelMapper.map(checkOut.getNetPromoterScoreEntity(), NetPromoterScoreDTO.class);
+        NetPromoterScoreDTO npsDTO = new NetPromoterScoreDTO();
         HotelEntity hotel = checkOut.getRoomEntity().getHotelEntity();
+        npsDTO.setHotelDTO(modelMapper.map(hotel, HotelDTO.class));
 
         List<OrdersEntity> order = ordersRepository.findByCheckOutLogEntity_Id(checkOutId);
-        npsDTO.setHotelDTO(modelMapper.map(hotel, HotelDTO.class));
 
         List<StoreDTO> store = order.stream().map(orderEntity -> modelMapper.map(orderEntity.getStoreEntity(), StoreDTO.class)).distinct().toList();
         npsDTO.setStoreDTOS(store);
