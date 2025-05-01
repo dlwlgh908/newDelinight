@@ -15,37 +15,31 @@
         <div class="container-fluid px-5">
             <!--내용 넣는 곳-->
             <!--반드시 이 아래에서만 작업-->
-
-            <!--페이지 이름-->
-            <h3 class="mt-5" th:text="${storeDTO.name}"></h3>
-            <ol class="breadcrumb mb-4">
-                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                <a href="#" class="breadcrumb-item active no-click">가맹점 관리</a>
-            </ol>
-
-            <div class="card custom-shadow mb-4">
+            <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
-                    <!--카드 제목-->
-                    <h5 class="mb-4 fw-bold">기본 정보</h5>
 
-                    <!--카드 제목 구분선-->
-                    <hr class="hrMain">
+                    <!--페이지 이름-->
+                    <h3 th:text="${storeDTO.name}"></h3>
+                    <ol class="breadcrumb mb-5">
+                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">가맹점 관리</a>
+                    </ol>
 
-                        <div class="row mb-4">
+                        <div class="row mb-3">
                             <label class="col-sm-2 col-form-label form-label">가맹점명</label>
                             <div class="col-sm-3">
                                 <input name="name" type="text" readonly class="form-control-plaintext" th:value="${storeDTO.name}">
                             </div>
                         </div>
 
-                        <div class="row mb-4">
+                        <div class="row mb-3">
                             <label class="col-sm-2 col-form-label form-label">가맹점 소개</label>
                             <div class="col-sm-5">
                                 <input name="content" type="text" readonly class="form-control-plaintext" th:value="${storeDTO.content}">
                             </div>
                         </div>
 
-                        <div class="row mb-4">
+                        <div class="row mb-3">
                             <label class="col-sm-2 col-form-label form-label">대표 이미지</label>
                             <div class="col-sm-10">
                                 <div class="hiddenImgNum"></div>

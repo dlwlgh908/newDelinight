@@ -125,7 +125,7 @@ public class MenuController {
 
         menuService.update(menuDTO);
 
-        return "redirect:/members/menu/read?id="+menuDTO.getId();
+        return "redirect:/members/menu/list?id="+menuDTO.getId();
     }
 
 
