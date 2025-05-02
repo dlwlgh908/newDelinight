@@ -37,16 +37,17 @@ public class NetPromoterScoreEntity extends BaseEntity {
     private StoreEntity storeEntity;
 
     // 설문 1 ~ 5 문항
-    private int QuestionOne;
-    private int QuestionTwo;
-    private int QuestionThree;
-    private int QuestionFour;
-    private int QuestionFive;
+    private int questionOne;
+    private int questionTwo;
+    private int questionThree;
+    private int questionFour;
+    private int questionFive;
 
     private LocalDateTime insertTime;
 
     // 기타 문의사항
     private String etcQuestion;
+
 
     // 호텔 + 스토어 설문의 총점
     @Column(name = "total_score")
