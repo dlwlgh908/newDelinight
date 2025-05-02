@@ -6,8 +6,6 @@
 >
 <head>
     <title>델리나잇</title>
-
-    <!--css, link, -->
 </head>
 
 <body>
@@ -15,21 +13,16 @@
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--작업 영역-->
-            <!--반드시 이 안에서만 작업-->
-
-            <!--페이지 제목 명명-->
-            <h3 class="mt-5">브랜드 관리</h3>
-            <ol class="breadcrumb mb-4">
-                <!--페이지 소제목 명명-->
-                <li class="breadcrumb-item active">큰페이지 〉 중간페이지 〉 작은페이지</li>
-            </ol>
-
-            <!--기본 카드 양식-->
-            <div class="card custom-shadow mb-4">
+            <!--텍스트 박스-->
+            <div class="card mb-4 mt-5">
                 <div class="card-body">
-                    <!--카드 제목-->
-                    <table class="table">
+                    <h3>등록된 브랜드 목록</h3>
+                    <ol class="breadcrumb mb-5">
+                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">브랜드 관리</a>
+                    </ol>
+
+                    <table class="table align-middle">
 
                         <thead>
                         <th scope="col">#</th>
@@ -79,11 +72,11 @@
                         <th:block  th:each="list:${brandDTOList}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
-                                <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                                <td><a class="alink-title text-dark" readonly="">
                                     [[${list.name}]]
                                 </a>
                                 </td>
-                                <td th:text="${list.name}"></td>
+                                <td th:text="${list.content}"></td>
                                 <td>
                                     <button type="button" class="btn btn-primary brand_dbtn" th:value="${list.id}">삭제</button>
 <!--                                    <button class="btn btn-primary brand_ubtn" th:data-num="${list.id}">수정</button>-->
