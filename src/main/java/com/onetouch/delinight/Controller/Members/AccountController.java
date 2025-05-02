@@ -157,8 +157,18 @@ public class AccountController {
     }
 
     @GetMapping("/hotelAdHome")
-    public String home() {
+    public String hotelAdHome() {
         return "/members/account/common/hotelAdHome";
+    }
+
+    @GetMapping("/superAdHome")
+    public String superAdHome() {
+        return "/members/account/common/hotelAdHome";
+    }
+
+    @GetMapping("/storeAdHome")
+    public String storeAdHome() {
+        return "/members/account/common/storeAdHome";
     }
 
     @GetMapping("/mypage")

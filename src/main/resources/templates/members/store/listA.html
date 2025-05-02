@@ -10,17 +10,9 @@
         .modal-body{
             height: 400px;
             overflow:scroll;
-
         }
-
     </style>
     <title>델리나잇</title>
-
-
-
-    <!--별도 css 필요할 시 아래로 추가-->
-    <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
-    styles.css에 작성할것-->
 </head>
 
 <body>
@@ -67,9 +59,11 @@
                                     <button th:if="${list.membersDTO == null}" type="button" class="addMembers btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-storeid="${list.getId()}">
                                         관리자 추가하기
                                     </button>
-                                    <button th:if="${list.membersDTO != null}" class="modiMembers btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}">수정</button>
                                 </td>
-                                <td><button class="btn btn-primary" id="delBtn"  th:value="${list.id}">삭제</button></td>
+                                <td>
+                                    <a th:if="${list.membersDTO != null}" class="modiMembers me-2" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}" href="#"><i class="fa-solid fa-pen ms-2" style="color: #198754"></i></a>
+                                    <a th:value="${list.id}" href="#" id="delBtn"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
+                                </td>
                             </tr>
                         </th:block>
                         </tbody>

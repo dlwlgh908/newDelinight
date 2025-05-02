@@ -6,8 +6,6 @@
 >
 <head>
     <title>델리나잇</title>
-
-    <!--css, link, -->
 </head>
 
 <body>
@@ -36,7 +34,7 @@
                     </button>
 
                     <!--카드 제목-->
-                    <table class="table">
+                    <table class="table align-middle">
 
                         <thead>
                         <th scope="col">#</th>
@@ -69,7 +67,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                 <button type="button" class="btn btn-primary room_registerbtn">저장</button>
-                                                <button type="button" class="btn btn-primary room_dbtn">삭제!</button>
+                                                <button type="button" class="btn btn-primary room_dbtn">삭제</button>
                                             </div>
                                         </div>
                                     </div>
@@ -88,8 +86,8 @@
                                 <td th:text="${list.content}"></td>
                                 <td th:text="${list.hotelDTO.name}"></td>
                                 <td>
-                                   <a href="#"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
-                                   <a href="#"><i class="fa-solid fa-pen" style="color: #198754"></i></a>
+                                    <a href="#"><i class="fa-solid fa-pen me-2" style="color: #198754"></i></a>
+                                    <a href="#"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
                                 </td>
                             </tr>
 
