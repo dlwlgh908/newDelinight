@@ -87,4 +87,9 @@ public class RoomServiceImpl implements RoomService{
                                 .setHotelDTO(modelMapper.map(roomEntity.getHotelEntity(), HotelDTO.class))).collect(Collectors.toList());
         return roomDTOList;
     }
+
+    @Override
+    public void del(Long id) {
+        roomRepository.deleteById(id);
+    }
 }

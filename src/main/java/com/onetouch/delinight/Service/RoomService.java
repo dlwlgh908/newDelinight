@@ -19,6 +19,8 @@ public interface RoomService {
 
     public List<RoomDTO> list(String email);
 
+    public void del(Long id);
+
 
 
 
