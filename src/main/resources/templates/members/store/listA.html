@@ -42,14 +42,14 @@
             <div class="card custom-shadow mb-4">
                 <div class="card-body">
                     <!--<pre> 코드는 <>를 문자 그대로 쓸 수 있게 해준다-->
-                    <table class="table">
+                    <table class="table align-middle">
 
                         <thead>
                         <th scope="col">#</th>
                         <th scope="col">이름</th>
                         <th scope="col">설명</th>
                         <th scope="col">관리자</th>
-                        <th scope="col">가맹점삭제</th>
+                        <th scope="col">수정</th>
 
                         </thead>
 
@@ -57,7 +57,7 @@
                         <th:block  th:each="list:${storeDTOList}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
-                                <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/members/hotel/read(id=${list.id})}">
+                                <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/members/hotel/read(id=${list.id})}">
                                     [[${list.name}]]
                                 </a>
                                 </td>
