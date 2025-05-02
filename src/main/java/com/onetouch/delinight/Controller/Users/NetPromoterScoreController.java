@@ -66,10 +66,15 @@ public class NetPromoterScoreController {
 
             // 첫 번째 주문에서 호텔 ID를 추출 (모든 주문이 동일 호텔에 속한다고 가정)
             Long hotelId = ordersDTOList.getFirst().getHotelId();
+            String hotelName = ordersDTOList.getFirst().getHotelName();
+
 
             model.addAttribute("checkOutId", checkOutId);      // 체크아웃 ID
             model.addAttribute("storeDTOList", storeDTOList);  // 스토어 리스트 전달
-            model.addAttribute("hotelId", hotelId);            // 호텔 ID 전달
+            model.addAttribute("hotelId", hotelId);            // 호텔 이름 전달
+            model.addAttribute("hotelName", hotelName);        // 호텔 이름 전달
+
+            log.info(hotelId);
 
             return "/users/nps/survey";
 

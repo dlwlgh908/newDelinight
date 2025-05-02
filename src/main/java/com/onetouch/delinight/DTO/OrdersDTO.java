@@ -44,11 +44,11 @@ public class OrdersDTO {
     private LocalDateTime deliveringTime;
     private LocalDateTime deliveredTime;
 
-
-    public OrdersDTO setStoreDTO(StoreDTO storeDTO){
+    public OrdersDTO setStoreDTO(StoreDTO storeDTO) {
         this.storeDTO = storeDTO;
         return this;
     }
+    
     public OrdersDTO setHotelName(String hotelName){
         this.hotelName= hotelName;
         return this;

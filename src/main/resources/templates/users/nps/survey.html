@@ -26,157 +26,167 @@
     </style>
 </head>
 <body>
-<h1>NPS 설문</h1>
+<h2>NPS 설문</h2>
 
-<form id="npsForm">
-    <!-- 호텔 설문 항목 -->
-    <div id="hotelQuestions">
-        <h3>호텔 설문</h3>
-        <label>호텔에 대한 질문 1:</label>
-        <input type="radio" name="hotelQuestions[0]" value="1"> 1
-        <input type="radio" name="hotelQuestions[0]" value="2"> 2
-        <input type="radio" name="hotelQuestions[0]" value="3"> 3
-        <input type="radio" name="hotelQuestions[0]" value="4"> 4
-        <input type="radio" name="hotelQuestions[0]" value="5"> 5
+<!-- 호텔 설문 영역 -->
+<div class="hotelNPSWrap"></div>
 
-        <label>호텔에 대한 질문 2:</label>
-        <input type="radio" name="hotelQuestions[1]" value="1"> 1
-        <input type="radio" name="hotelQuestions[1]" value="2"> 2
-        <input type="radio" name="hotelQuestions[1]" value="3"> 3
-        <input type="radio" name="hotelQuestions[1]" value="4"> 4
-        <input type="radio" name="hotelQuestions[1]" value="5"> 5
+<!-- 스토어 설문 영역 -->
+<div class="storeNPSWrap"></div>
 
-        <label>호텔에 대한 질문 3:</label>
-        <input type="radio" name="hotelQuestions[2]" value="1"> 1
-        <input type="radio" name="hotelQuestions[2]" value="2"> 2
-        <input type="radio" name="hotelQuestions[2]" value="3"> 3
-        <input type="radio" name="hotelQuestions[2]" value="4"> 4
-        <input type="radio" name="hotelQuestions[2]" value="5"> 5
-
-        <label>호텔에 대한 질문 4:</label>
-        <input type="radio" name="hotelQuestions[3]" value="1"> 1
-        <input type="radio" name="hotelQuestions[3]" value="2"> 2
-        <input type="radio" name="hotelQuestions[3]" value="3"> 3
-        <input type="radio" name="hotelQuestions[3]" value="4"> 4
-        <input type="radio" name="hotelQuestions[3]" value="5"> 5
-
-        <label>호텔에 대한 질문 5:</label>
-        <input type="radio" name="hotelQuestions[4]" value="1"> 1
-        <input type="radio" name="hotelQuestions[4]" value="2"> 2
-        <input type="radio" name="hotelQuestions[4]" value="3"> 3
-        <input type="radio" name="hotelQuestions[4]" value="4"> 4
-        <input type="radio" name="hotelQuestions[4]" value="5"> 5
-    </div>
-
-    <!-- 스토어 설문 항목 -->
-    <div class="storeNPSWrap"></div>
-
-    <!-- 제출 버튼 -->
-    <button type="button" id="saveSurveyBtn">설문 제출</button>
-</form>
+<!-- 제출 버튼 -->
+<button class="saveSurveyBtn">제출</button>
 
 <script th:inline="javascript">
 
-    $(document).ready(function() {
+    $(document).ready(function () {
+        console.log("로딩시작")
 
-        let data = [[${storeDTOList}]]
-        let str = ""
+        let checkOutId = [[${checkOutId}]]
+        let storeDTOList = [[${storeDTOList}]]
+        let hotelId = [[${hotelId}]]
+        let hotelName = [[${hotelName}]]
 
-        data.forEach(storeDTO=>
-        {
-            str += "<div id=\"storeQuestions\" data-storeid='"+storeDTO.id+"'>\n" +
-                "        <h3>"+storeDTO.name+" 설문</h3>\n" +
-                "        <label>스토어에 대한 질문 1:</label>\n" +
-                "        <input type=\"radio\" name='storeQuestions[0]"+storeDTO.id+"' value=\"1\"> 1\n" +
-                "        <input type=\"radio\" name='storeQuestions[0]"+storeDTO.id+"'  value=\"2\"> 2\n" +
-                "        <input type=\"radio\" name='storeQuestions[0]"+storeDTO.id+"'  value=\"3\"> 3\n" +
-                "        <input type=\"radio\" name='storeQuestions[0]"+storeDTO.id+"'  value=\"4\"> 4\n" +
-                "        <input type=\"radio\" name='storeQuestions[0]"+storeDTO.id+"'  value=\"5\"> 5\n" +
-                "\n" +
-                "        <label>스토어에 대한 질문 2:</label>\n" +
-                "        <input type=\"radio\" name='storeQuestions[1]"+storeDTO.id+"'  value=\"1\"> 1\n" +
-                "        <input type=\"radio\" name='storeQuestions[1]"+storeDTO.id+"'  value=\"2\"> 2\n" +
-                "        <input type=\"radio\" name='storeQuestions[1]"+storeDTO.id+"'  value=\"3\"> 3\n" +
-                "        <input type=\"radio\" name='storeQuestions[1]"+storeDTO.id+"'  value=\"4\"> 4\n" +
-                "        <input type=\"radio\" name='storeQuestions[1]"+storeDTO.id+"'  value=\"5\"> 5\n" +
-                "\n" +
-                "        <label>스토어에 대한 질문 3:</label>\n" +
-                "        <input type=\"radio\" name='storeQuestions[2]"+storeDTO.id+"'  value=\"1\"> 1\n" +
-                "        <input type=\"radio\" name='storeQuestions[2]"+storeDTO.id+"'  value=\"2\"> 2\n" +
-                "        <input type=\"radio\" name='storeQuestions[2]"+storeDTO.id+"'  value=\"3\"> 3\n" +
-                "        <input type=\"radio\" name='storeQuestions[2]"+storeDTO.id+"'  value=\"4\"> 4\n" +
-                "        <input type=\"radio\" name='storeQuestions[2]"+storeDTO.id+"'  value=\"5\"> 5\n" +
-                "\n" +
-                "        <label>스토어에 대한 질문 4:</label>\n" +
-                "        <input type=\"radio\" name='storeQuestions[3]"+storeDTO.id+"'  value=\"1\"> 1\n" +
-                "        <input type=\"radio\" name='storeQuestions[3]"+storeDTO.id+"'  value=\"2\"> 2\n" +
-                "        <input type=\"radio\" name='storeQuestions[3]"+storeDTO.id+"'  value=\"3\"> 3\n" +
-                "        <input type=\"radio\" name='storeQuestions[3]"+storeDTO.id+"'  value=\"4\"> 4\n" +
-                "        <input type=\"radio\" name='storeQuestions[3]"+storeDTO.id+"'  value=\"5\"> 5\n" +
-                "\n" +
-                "        <label>스토어에 대한 질문 5:</label>\n" +
-                "        <input type=\"radio\" name='storeQuestions[4]"+storeDTO.id+"'  value=\"1\"> 1\n" +
-                "        <input type=\"radio\" name='storeQuestions[4]"+storeDTO.id+"'  value=\"2\"> 2\n" +
-                "        <input type=\"radio\" name='storeQuestions[4]"+storeDTO.id+"'  value=\"3\"> 3\n" +
-                "        <input type=\"radio\" name='storeQuestions[4]"+storeDTO.id+"'  value=\"4\"> 4\n" +
-                "        <input type=\"radio\" name='storeQuestions[4]"+storeDTO.id+"'  value=\"5\"> 5\n" +
-                "    </div>"
+        console.log(checkOutId)
+        console.log(storeDTOList)
+        console.log(hotelId)
+        console.log(hotelName)
 
-        })
+        // 호텔 이름을 화면에 표시
+        $(".hotelNPSWrap").prepend(`<h3>${hotelName} 설문</h3>`)
 
-        $(".storeNPSWrap").html(str)
-        console.log(data)
+        // 호텔 설문 질문
+        let hotelQuestions = [
+            '객실의 청결 상태는 어떠했나요?',
+            '직원의 친절도는 만족스러웠나요?',
+            '숙박 가격에 대해 얼마나 만족하셨나요?',
+            '시설(부대시설 포함)은 기대에 부응했나요?',
+            '전반적인 만족도는 어느 정도였나요?'
+        ]
 
-        $('#saveSurveyBtn').click(function() {
+        // 스토어 설문 질문
+        let storeQuestions = [
+            '상품의 품질은 어떠했나요?',
+            '직원의 친절도는 만족스러웠나요?',
+            '매장의 청결 상태는 어떠했나요?',
+            '상품의 가격에 대해 만족하셨나요?',
+            '전반적인 쇼핑 경험은 어떠셨나요?'
+        ]
 
-            let npsList = []
-
-            // 호텔 질문 수집
-            let hotelDTO = {
-                checkOutId:[[${checkOutId}]],
-                hotelOrStore: "hotel",
-                hotelId: [[${hotelId}]],
-                QuestionOne: parseInt($('input[name="hotelQuestions[0]"]:checked').val()) || 0,
-                QuestionTwo: parseInt($('input[name="hotelQuestions[1]"]:checked').val()) || 0,
-                QuestionThree: parseInt($('input[name="hotelQuestions[2]"]:checked').val()) || 0,
-                QuestionFour: parseInt($('input[name="hotelQuestions[3]"]:checked').val()) || 0,
-                QuestionFive: parseInt($('input[name="hotelQuestions[4]"]:checked').val()) || 0
-            }
-            npsList.push(hotelDTO)
-
-            // 각 스토어 질문 수집
-            $('.storeNPSWrap > div').each(function() {
-
-                let storeId = $(this).data('storeid')
-                let storeDTO = {
-                    hotelOrStore: "store",
-                    storeId: storeId,
-                    QuestionOne: parseInt($(this).find('input[name="storeQuestions[0]' + storeId + '"]:checked').val()) || 0,
-                    QuestionTwo: parseInt($(this).find('input[name="storeQuestions[1]' + storeId + '"]:checked').val()) || 0,
-                    QuestionThree: parseInt($(this).find('input[name="storeQuestions[2]' + storeId + '"]:checked').val()) || 0,
-                    QuestionFour: parseInt($(this).find('input[name="storeQuestions[3]' + storeId + '"]:checked').val()) || 0,
-                    QuestionFive: parseInt($(this).find('input[name="storeQuestions[4]' + storeId + '"]:checked').val()) || 0
-                };
-                npsList.push(storeDTO)
+        // 설문 공통 HTML 생성 함수
+        function generateQuestionBlock(prefix, id, labelPrefix, questionArray) {
+            let html = `<div data-id="${id}"><h3>${labelPrefix} 설문</h3>`
+            questionArray.forEach((question, i) => {
+                html += `<label>${question}</label>`
+                for (let j = 1; j <= 5; j++) {
+                    html += `<input type="radio" name="${prefix}[${i}][${id}]" value="${j}"> ${j}`
+                }
+                html += "<br/>"
             })
 
-            console.log(npsList); // 확인용 콘솔 출력
+            // 기타 문의사항 추가 부분
+            html += `<label>기타 문의사항</label><br/>`
+            html += `<textarea name="${prefix}_etc_${id}" rows="3" cols="50" placeholder="의견을 작성해주세요."></textarea><br/>`
 
-            // AJAX 전송
+            html += "</div>"
+            return html
+        }
+
+        // 호텔 설문 생성
+        let hotelHtml = generateQuestionBlock("hotel", hotelId, hotelName, hotelQuestions)
+        $(".hotelNPSWrap").html(hotelHtml)
+
+        // 스토어 설문 생성
+        let storeHtml = ""
+        storeDTOList.forEach(store => {
+            storeHtml += generateQuestionBlock("store", store.id, store.name, storeQuestions)
+        })
+        $(".storeNPSWrap").html(storeHtml)
+
+        // 응답 수집 함수
+        function collectSurveyData(prefix, id, questionArray) {
+            let dto = {
+                checkOutId: checkOutId,
+                hotelOrStore: prefix,
+                id: id
+            }
+
+            if (prefix === 'hotel') {
+                dto.hotelId = hotelId
+            } else if (prefix === 'store') {
+                dto.storeId = id
+            }
+
+            let score = 0
+            let numQuestions = questionArray.length
+
+            questionArray.forEach((label, idx) => {
+
+                let rawVal = parseInt($(`input[name="${prefix}[${idx}][${id}]"]:checked`).val()) || 0
+                let val = rawVal * 20
+
+                switch (idx) {
+                    case 0: dto.questionOne = val; break
+                    case 1: dto.questionTwo = val; break
+                    case 2: dto.questionThree = val; break
+                    case 3: dto.questionFour = val; break
+                    case 4: dto.questionFive = val; break
+                }
+                score += val
+            })
+
+            dto.totalScore = Math.round(score / numQuestions)
+
+            // 수정된 부분: textarea 값 가져오기
+            let etcVal = $(`textarea[name="${prefix}_etc_${id}"]`).val() || ''  // name 속성으로 정확히 찾기
+            dto.etcQuestion = etcVal
+
+            return { dto }
+        }
+
+        // 제출 버튼 클릭 이벤트
+        $(".saveSurveyBtn").click(function () {
+            console.log("설문 제출 버튼 클릭")
+
+            let npsList = []
+            let hasEmptyAnswer = false
+
+            // 호텔 응답 수집
+            let hotelDTO = collectSurveyData("hotel", hotelId, hotelQuestions)
+            npsList.push(hotelDTO.dto)
+
+            // 스토어 응답 수집
+            $('.storeNPSWrap > div').each(function () {
+                let storeId = $(this).data('id')
+                let storeDTO = collectSurveyData("store", storeId, storeQuestions)
+                npsList.push(storeDTO.dto)
+            })
+
+            // 빈 응답 확인
+            if (hasEmptyAnswer) {
+                alert("모든 문항에 응답해주세요.")
+                return
+            }
+
+            console.log("새롭게 만든 npsList: " + JSON.stringify(npsList))
+
             $.ajax({
                 url: '/api/nps/saveSurvey',
-                type: 'POST',
+                type: 'post',
                 contentType: 'application/json',
                 data: JSON.stringify(npsList),
-                success: function(response) {
-                    alert('설문 저장 성공: ' + response)
+                success: function (response) {
+                    alert('설문 저장 성공 : ' + response)
                 },
-                error: function(xhr) {
-                    alert('설문 저장 실패: ' + xhr.responseText)
+                error: function (xhr) {
+                    alert('설문 저장 실패 : ' + xhr.responseText)
                 }
             })
         })
+
     })
+
 </script>
+
 </body>
 </html>
