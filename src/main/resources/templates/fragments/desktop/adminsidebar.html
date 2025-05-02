@@ -18,9 +18,16 @@
                 <!--어카운트-->
                 <div class="sb-sidenav-menu-heading">account</div>
 
+                <!--대시보드-->
+                <!--수퍼어드민, 호텔어드민, 스토어어드민-->
+                <a class="nav-link" href="/members/account/dashHub"
+                   th:if="${role.name() != 'SYSTEMADMIN'}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-house"></i></div>
+                    대시보드
+                </a>
                 <!--계정관리-->
                 <!--시스템어드민, 수퍼어드민, 호텔어드민-->
-                <a class="nav-link" href="/members/account/accounthub"
+                <a class="nav-link" href="/members/account/accountHub"
                    th:if="${role.name() == 'SUPERADMIN' or role.name() == 'SYSTEMADMIN' or role.name() == 'ADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-circle-user"></i></div>
                     계정 관리
@@ -139,7 +146,7 @@
 
 
                 <!--정산-->
-                <div class="sb-sidenav-menu-heading">dashboard</div>
+                <div class="sb-sidenav-menu-heading">settlement</div>
 
                 <!--정산 페이지 미완으로 추후 수정!!!!-->
 
