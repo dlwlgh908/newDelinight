@@ -23,24 +23,27 @@
             <!--내용 넣는 곳-->
             <!--반드시 이 아래에서만 작업-->
 
-            <!--페이지 이름-->
-            <h3 id="test" class="mt-5">Store</h3>
 
-            <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">Dashboard-subheading</li>
-            </ol>
 
             <!--텍스트 박스-->
-            <div class="card custom-shadow mb-4">
+            <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
+
+                    <!--페이지 이름-->
+                    <h3 id="test" class="mb-4 ">Store</h3>
+
+                    <ol class="breadcrumb mb-5">
+                        <li class="breadcrumb-item active">Dashboard-subheading</li>
+                    </ol>
                     <!--<pre> 코드는 <>를 문자 그대로 쓸 수 있게 해준다-->
-                    <table class="table align-middle">
+                    <table class="table align-middle table-hover">
 
                         <thead>
                         <th scope="col">#</th>
                         <th scope="col">이름</th>
                         <th scope="col">설명</th>
                         <th scope="col">관리자</th>
+                        <th scope="col">관리자 등록</th>
                         <th scope="col">수정</th>
 
                         </thead>
@@ -61,8 +64,11 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <a th:if="${list.membersDTO != null}" class="modiMembers me-2" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}" href="#"><i class="fa-solid fa-pen ms-2" style="color: #198754"></i></a>
-                                    <a th:value="${list.id}" href="#" id="delBtn"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
+                                    <a th:if="${list.membersDTO != null}" class="modiMembers btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}" href="#"><i class="fa-solid fa-pen " style="color: #198754"></i></a>
+                                </td>
+                                <td>
+                                    <a th:if="${list.membersDTO != null}" class=" btn btn-outline-success modiStoreBtn" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}" ><i class="fa-solid fa-pen hoverBtn" style="color: #198754"></i></a>
+                                    <a th:value="${list.id}" id="delBtn2" class="btn btn-outline-danger delStoreBtn"><i class="fa-solid fa-trash hoverBtn" style="color: #dc3545"></i></a>
                                 </td>
                             </tr>
                         </th:block>
@@ -74,7 +80,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">관리자 추가하기</h1>
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">관리자 수정하기</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -101,29 +107,31 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel2">관리자 수정하기</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel2">방 수정</h1>
+                                    <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <table class="table table-hover align-middle">
-                                        <thead>
-                                        <th>#</th>
-                                        <th>이름</th>
-                                        <th>이메일</th>
-                                        <th>추가하기</th>
-                                        </thead>
-                                        <tbody class="resultSpace" style="margin-bottom: 500px;">
+                                    <!--부트스트랩에서 끌어옴-->
+                                    <div class="form-floating mb-3">
+                                        <div for="name" class="name">방 이름</div>
+                                        <input type="text"  class="form-control name" id="name2" placeholder="방 이름">
+                                    </div>
+                                    <div class="form-floating">
+                                        <div for="content" class="content">설명</div>
+                                        <textarea cols="20" rows="20" class="form-control content" id="content2" placeholder="설명"></textarea>
+                                    </div>
+                                    <div id="hiddenId" data-id=""></div>
 
-                                        </tbody>
-                                    </table>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                    <button type="button" class="btn btn-primary" id="room_modifybtn">저장</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -134,6 +142,12 @@
 
     <!--스크립트 시작 -->
     <script>
+
+        $(document).on("click", ".modiStoreBtn", function () {
+            alert("gddg")
+            let targetModal = $("#exampleModal2");
+            targetModal.modal("show");
+        });
 
         $(document).on("click", ".modiMembers2", function () {
             let memberId = $(this).data("memberid")

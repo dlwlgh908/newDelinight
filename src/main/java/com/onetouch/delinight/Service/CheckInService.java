@@ -30,6 +30,8 @@ public interface CheckInService {
 
     public CheckInDTO findCheckInByEmail(String email);
 
+    public void del(Long id);
+
 
 
 
