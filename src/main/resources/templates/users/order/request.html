@@ -142,6 +142,34 @@
                         th:text="${#numbers.formatInteger(totalPrice, 3, 'COMMA') + '원'}"></span></p>
             </div>
         </div>
+
+
+<!--        &lt;!&ndash;포인트&ndash;&gt;-->
+<!--        <div class="pointWrap mt-4 mb-4 p-2 border rounded">-->
+<!--            <h5 style="font-size: 1.1em; font-weight: bold;">포인트 사용</h5>-->
+
+<!--            <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">-->
+<!--                <span>보유 포인트:</span>-->
+<!--                <span id="currentPoint">[[${currentPoint}]] P</span>-->
+<!--            </div>-->
+
+<!--            <div class="input-group mb-2">-->
+<!--                <input type="number" class="form-control" id="usedPoint" placeholder="사용할 포인트 입력" min="0" step="100">-->
+<!--                <button class="btn btn-outline-secondary" type="button" onclick="useAllPoint()">전부 사용</button>-->
+<!--            </div>-->
+
+<!--            <div style="font-size: 14px; color: gray;">※ 포인트를 사용하면 적립되지 않습니다</div>-->
+<!--        </div>-->
+
+<!--        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">-->
+<!--            <span><b>최종 결제 금액</b></span>-->
+<!--            <span id="finalPrice" th:text="${#numbers.formatInteger(totalPrice, 3, 'COMMA') + '원'}"></span>-->
+<!--        </div> &lt;!&ndash;포인트 끝&ndash;&gt;-->
+
+
+
+
+
         <div style="display: flex; align-items: center; height: 40px">
             <button type="button" class="orderBtn"
                     style="justify-content:center; display: flex; align-items: center; height: 40px; font-size:0.8em; background-color: black; color: white; border: 1px solid black" onclick="payNow()">
@@ -252,6 +280,65 @@
 
 
         </script>
+
+        <!--포인트-->
+<!--        <script th:inline="javascript">-->
+<!--            // Thymeleaf에서 전달된 값-->
+<!--            let totalPrice = [[${totalPrice}]];-->
+<!--            let currentPoint = [[${currentPoint}]];-->
+
+<!--            $(document).ready(function () {-->
+<!--                $("#usedPoint").on("input", function () {-->
+<!--                    updateFinalPrice();-->
+<!--                });-->
+<!--            });-->
+
+<!--            function useAllPoint() {-->
+<!--                $("#usedPoint").val(currentPoint);-->
+<!--                updateFinalPrice();-->
+<!--            }-->
+
+<!--            function updateFinalPrice() {-->
+<!--                let usedPoint = parseInt($("#usedPoint").val()) || 0;-->
+
+<!--                // 포인트가 보유 포인트보다 많으면 보유 포인트로 설정-->
+<!--                if (usedPoint > currentPoint) {-->
+<!--                    usedPoint = currentPoint;-->
+<!--                    $("#usedPoint").val(usedPoint);-->
+<!--                }-->
+
+<!--                // 결제 금액은 0원 미만이 되지 않도록 제한-->
+<!--                let finalPrice = Math.max(totalPrice - usedPoint, 0);-->
+
+<!--                // UI에 반영-->
+<!--                $("#finalPrice").text(finalPrice.toLocaleString() + "원");-->
+<!--            }-->
+
+<!--            function payNow() {-->
+<!--                let usedPoint = parseInt($("#usedPoint").val()) || 0;-->
+
+<!--                if (usedPoint > 0) {-->
+<!--                    // 포인트 사용 API 호출-->
+<!--                    $.post("/point/use", {-->
+<!--                        userId: [[${user.id}]],-->
+<!--                        usedPoint: usedPoint-->
+<!--                    });-->
+<!--                } else {-->
+<!--                    // 포인트 적립 API 호출-->
+<!--                        paymentId: [[${paymentId}]],-->
+<!--                    $.post("/point/earn", {-->
+<!--                        userId: [[${user.id}]],-->
+<!--                        paymentId: [[${paymentId}]],-->
+<!--                        paymentAmount: totalPrice-->
+<!--                    });-->
+<!--                }-->
+
+<!--                // 결제 로직 호출-->
+<!--                requestPayment(); // Toss 등 실제 결제 함수-->
+<!--            }-->
+<!--        </script>-->
+
+
 
     </div>
 

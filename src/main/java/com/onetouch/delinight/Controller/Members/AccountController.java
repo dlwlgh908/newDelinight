@@ -87,9 +87,10 @@ public class AccountController {
 
     }
 
-    @GetMapping("/accounthub")
-    public String accounthub(Principal principal) {
+    @GetMapping("/dashHub")
+    public String dashHub(Principal principal, Model model) {
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
+        model.addAttribute("role", role);
         log.info("허브진입"+role);
 
         //로그인한 사람 롤 찾기
@@ -110,16 +111,34 @@ public class AccountController {
             }
         }
         //스토어 어드민
-
         else if (role.equals(Role.STOREADMIN)) {
             if (membersService.assignCheck(principal.getName(), 3)) {
-                return "redirect:/members/store/storeAdHome";
+                return "redirect:/members/account/storeAdHome";
             } else {
                 return "redirect:/members/account/waitRedirectPage";
             }
         } else { // 시스템 어드민일 경우
             return "redirect:/members/account/superAdmin/list";
 
+        }
+    }
+
+    @GetMapping("/accountHub")
+    public String accountHub(Principal principal, Model model) {
+        Role role = membersService.findOnlyRoleByEmail(principal.getName());
+        model.addAttribute("role", role);
+
+        //시스템 어드민
+        if (role.equals(Role.SYSTEMADMIN)) {
+            return "redirect:/members/account/superAdmin/list";
+        }
+        //수퍼 어드민
+        else if (role.equals(Role.SUPERADMIN)){
+            return "redirect:/members/account/hotelAdmin/list";
+        }
+        //호텔 어드민
+        else {
+            return "redirect:/members/account/storeAdmin/list";
         }
     }
 
@@ -156,13 +175,13 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/hotelAdHome")
-    public String hotelAdHome() {
-        return "/members/account/common/hotelAdHome";
-    }
-
     @GetMapping("/superAdHome")
     public String superAdHome() {
+        return "/members/account/common/superAdHome";
+    }
+
+    @GetMapping("/hotelAdHome")
+    public String hotelAdHome() {
         return "/members/account/common/hotelAdHome";
     }
 
