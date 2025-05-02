@@ -1,6 +1,7 @@
 package com.onetouch.delinight.Repository;
 
 import com.onetouch.delinight.Constant.PaidCheck;
+import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.*;
 import com.querydsl.core.BooleanBuilder;
@@ -27,6 +28,7 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
     @PersistenceContext
     private EntityManager entityManager;
     private final ModelMapper modelMapper;
+    private final MembersRepository membersRepository;
 
     public List<PaymentDTO> findPaymentByCriteria(PaidCheck paidCheck, Long memberId, LocalDate startDate, LocalDate endDate) {
         QMembersEntity membersEntity = QMembersEntity.membersEntity;
@@ -54,9 +56,26 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
 
         // 2. 멤버 ID 필터링 추가
         if (memberId != null) {
-            query.join(ordersEntity.storeEntity.membersEntity, membersEntity)   // PaymentEntity에 있는 membersEntity와 join
-                    .where(membersEntity.id.eq(memberId));                      // 멤버 ID로 필터링
-            log.info("멤버 ID로 필터링 : {}", memberId);
+            Role role = membersRepository.findById(memberId).get().getRole();
+            log.info(role);
+            if(role.equals(Role.STOREADMIN)){
+                query.join(ordersEntity.storeEntity, storeEntity)   // PaymentEntity에 있는 membersEntity와 join
+                        .where(storeEntity.membersEntity.id.eq(memberId));                      // 멤버 ID로 필터링
+            }
+            else if(role.equals(Role.ADMIN)){
+                log.info("이퀄스?");
+                query.join(ordersEntity.storeEntity.hotelEntity, hotelEntity).where(hotelEntity.membersEntity.id.eq(memberId));
+            }
+
+            else if(role.equals(Role.SUPERADMIN)){
+                log.info("이퀄스?2");
+
+                query.join(ordersEntity.storeEntity, storeEntity)
+                        .join(storeEntity.hotelEntity, hotelEntity)
+                        .join(hotelEntity.branchEntity, branchEntity)
+                        .join(branchEntity.centerEntity, centerEntity)
+                        .where(centerEntity.membersEntity.id.eq(memberId));            }
+
         }
 
 
