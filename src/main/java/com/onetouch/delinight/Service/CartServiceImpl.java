@@ -198,11 +198,17 @@ public class CartServiceImpl implements CartService{
 
             log.info("sep1에 접근");
             CartEntity cartEntity = cartRepository.findByUsersEntity_Id(id);
+            if(cartEntity==null){
+                return;
+            }
             cartRepository.deleteById(cartEntity.getId());
         }
         else {
             log.info("sep2에 접근");
             CartEntity cartEntity = cartRepository.findByGuestEntity_Id(id);
+            if(cartEntity==null){
+                return;
+            }
             cartRepository.deleteById(cartEntity.getId());
         }
 

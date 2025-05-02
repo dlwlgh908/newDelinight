@@ -13,6 +13,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -64,9 +66,8 @@ public class CheckOutLogEntity extends BaseEntity {
         return  this;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "evaluation_id")
-    private NetPromoterScoreEntity netPromoterScoreEntity;
+    @OneToMany(mappedBy = "checkOutLogEntity", fetch = FetchType.LAZY)
+    private List<NetPromoterScoreEntity> netPromoterScoreEntity=new ArrayList<>();
 
 
 

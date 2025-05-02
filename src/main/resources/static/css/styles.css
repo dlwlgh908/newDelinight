@@ -623,13 +623,12 @@ progress {
 }
 
 .img-thumbnail {
-  padding: 0.25rem;
+  height: 400px;
+  width: 400px;
   background-color: #fff;
   border: 1px solid var(--bs-border-color);
   border-radius: 0.375rem;
   max-width: 100%;
-  height: auto;
-  margin-top: 20px;
 }
 
 .figure {

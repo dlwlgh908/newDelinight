@@ -78,6 +78,32 @@ public class PaymentServiceImpl implements PaymentService{
 
 
     @Override
+    public List<ExcelDTO> extractData(List<PaymentDTO> paymentDTOList) {
+
+        List<ExcelDTO> result = new ArrayList<>();
+
+
+        for(PaymentDTO paymentDTO : paymentDTOList){
+            LocalDate date = paymentDTO.getRegTime().toLocalDate();
+            for(OrdersDTO ordersDTO : paymentDTO.getOrdersDTOList()){
+                for(OrdersItemDTO ordersItemDTO : ordersDTO.getOrdersItemDTOList()){
+                    MenuDTO menuDTO = ordersItemDTO.getMenuDTO();
+                    ExcelDTO row = new ExcelDTO();
+                    row.setDate(date);
+                    row.setQuantity(ordersItemDTO.getQuantity().intValue());
+                    row.setUnitPrice(menuDTO.getPrice());
+                    row.setMenuName(menuDTO.getName());
+                    row.setTotalPrice(menuDTO.getPrice()*ordersItemDTO.getQuantity().intValue());
+                    row.setHotelName(ordersDTO.getStoreDTO().getHotelDTO().getName());
+                    row.setStoreName(ordersDTO.getStoreDTO().getName());
+                    result.add(row);
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
     public List<PaymentDTO> processPayments(List<PaymentDTO> paymentDTOList) {
 
         // AtomicInteger 사용하여 최종 금액 합산 값을 변경할 수 있게 처리 (멀티스레드 환경에서 안전)

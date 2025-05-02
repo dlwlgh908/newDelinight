@@ -89,25 +89,25 @@ public class MenuController {
     }
 
     @GetMapping("/list")
-    public String listView(Model model, @PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, Principal principal){
+    public String listView(@RequestParam(value = "id", required = false) Long id, Model model,
+                           @PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC)
+                           Pageable pageable, Principal principal){
 
 
-         Page<MenuDTO> menuDTOList = menuService.menuList(pageable, principal.getName());
+        Page<MenuDTO> menuDTOList = menuService.menuList(pageable, principal.getName());
         log.info(menuDTOList.getPageable().getPageNumber());
         model.addAttribute("menuDTOList",menuDTOList);
         log.info(menuDTOList.getContent());
 
+        if (id != null){
+            MenuDTO selectedMenu = menuService.read(id);
+            model.addAttribute("selectedMenu", selectedMenu);
+            log.info("선택된 메뉴 :: ", selectedMenu);
+        }
+
         return "/members/menu/listIndex";
     }
-    @GetMapping("/read")
-    public String readView(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
-        MenuDTO menuDTO =
-                menuService.read(id);
-        model.addAttribute("menuDTO", menuDTO);
 
-            return "/members/menu/readIndex";
-
-    }
     @GetMapping("/update/{id}")
     public String updateView(@PathVariable(name = "id") Long id,Model model){
         log.info("수정" + id);
@@ -125,7 +125,7 @@ public class MenuController {
 
         menuService.update(menuDTO);
 
-        return "redirect:/members/menu/read?id="+menuDTO.getId();
+        return "redirect:/members/menu/list?id="+menuDTO.getId();
     }
 
 

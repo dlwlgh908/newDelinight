@@ -10,6 +10,7 @@ package com.onetouch.delinight.Controller.Members;
 import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
+import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.ImageService;
 import com.onetouch.delinight.Service.MembersService;
 import com.onetouch.delinight.Service.StoreService;

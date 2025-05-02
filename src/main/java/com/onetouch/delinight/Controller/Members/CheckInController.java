@@ -78,10 +78,6 @@ public class CheckInController {
 
         }
 
-        log.info("list2 진입인데 checkin entity 가 나오나?" + checkInDTOList);
-        log.info("list2 진입인데 checkin entity 가 나오나?" + checkInDTOList);
-        log.info("list2 진입인데 checkin entity 가 나오나?" + checkInDTOList);
-
         model.addAttribute("checkInDTOList", checkInDTOList);
         model.addAttribute("checkinstatus", checkinstatus);
 

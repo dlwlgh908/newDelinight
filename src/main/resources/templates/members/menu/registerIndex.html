@@ -4,12 +4,9 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/desktop/layout}"
 >
+
 <head>
     <title>델리나잇</title>
-
-    <!--별도 css 필요할 시 아래로 추가-->
-    <!--어디서 그대로 가져오는거 아니면 클래스 이름 잘 붙여주고
-    styles.css에 작성할것-->
 </head>
 
 <body>
@@ -17,93 +14,93 @@
     <main>
         <!--내용 넣는 곳-->
         <div class="container-fluid px-5">
-            <!--페이지 이름-->
-            <!--페이지 이름-->
-            <h3 class="mt-5">새 메뉴 등록</h3>
-            <ol class="breadcrumb mb-4">
-                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                <a href="#" class="breadcrumb-item active no-click">메뉴 관리</a>
-            </ol>
-
-            <div class="card mb-4">
+             <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
+                    <h3>새 메뉴 등록</h3>
+                    <ol class="breadcrumb mb-5">
+                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">메뉴 관리</a>
+                    </ol>
 
                     <form action="/members/menu/register" th:object="${menuDTO}" method="post" class="formWrap"
                           enctype="multipart/form-data">
 
-                        <div class="container">
-                            <div class="row">
+                        <div class="d-flex">
 
-                                <div class="col-6">
-                                    <input type="hidden" name="id" id="id">
+                            <div class="w-50">
+                                <input type="hidden" name="id" id="id">
+                                <div class="hiddenImgNum"></div>
 
-                                    <div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label form-label" for="inputGroupSelect02">카테고리</label>
+                                    <div class="col-sm-3">
+                                        <select th:field="*{menu}" class="form-select" id="inputGroupSelect02" name="menu">
+                                            <option value="KOREAN" selected>한식</option>
+                                            <option value="WESTERN">양식</option>
+                                            <option value="CHINESE">중식</option>
+                                            <option value="JAPANESE">일식</option>
+                                            <option value="DESSERT">카페</option>
+                                            <option value="BEVERAGE">음료</option>
+                                            <option value="ETC">기타</option>
+                                        </select>
                                     </div>
+                                </div>
 
-                                    <div class="md-3 mt-3">
-                                        <div class="input-group md-3">
-                                            <label class="input-group-text" for="inputGroupSelect02">메뉴종류</label>
-                                            <select th:field="*{menu}" class="form-select" id="inputGroupSelect02"
-                                                    name="menu">
-                                                <option value="KOREAN" selected>한식</option>
-                                                <option value="WESTERN">양식</option>
-                                                <option value="CHINESE">중식</option>
-                                                <option value="JAPANESE">일식</option>
-                                                <option value="DESSERT">카페</option>
-                                                <option value="BEVERAGE">음료</option>
-                                                <option value="ETC">기타</option>
-                                            </select>
-                                        </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label form-label" for="inputGroupSelect01">판매상태</label>
+                                    <div class="col-sm-3">
+                                        <select th:field="*{menuStatus}" class="form-select" id="inputGroupSelect01"
+                                                name="menuStatus">
+                                            <option value="SELL" selected>판매중</option>
+                                            <option value="SOLD_OUT">품절</option>
+                                        </select>
                                     </div>
+                                </div>
 
-                                    <div class="md-3 mt-3 mb-3">
-                                        <div class="input-group md-3">
-                                            <label class="input-group-text" for="inputGroupSelect01">판매상태</label>
-                                            <select th:field="*{menuStatus}" class="form-select" id="inputGroupSelect01"
-                                                    name="menustatus">
-                                                <option value="SELL" selected>판매중</option>
-                                                <option value="SOLD_OUT">품절</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="md-3 mb-3">
-                                        <label for="name" class="form-label">메뉴</label>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label form-label" for="name">메뉴명</label>
+                                    <div class="col-sm-6">
                                         <input type="text" class="form-control" id="name" name="name">
                                     </div>
+                                </div>
 
-                                    <div class="md-3 mb-3">
-
-                                        <label for="content" class="form-label">메뉴정보</label>
-                                        <textarea type="text" class="form-control" id="content"
-                                                  name="content"></textarea>
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label form-label" for="content">메뉴정보</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control" id="content" name="content"></textarea>
                                     </div>
+                                </div>
 
-                                    <div class="md-3 mb-3">
-                                        <label for="price" class="form-label">가격</label>
+                                <div class="row mt-3">
+                                    <label class="col-sm-3 col-form-label form-label" for="price">가격</label>
+                                    <div class="col-sm-6">
                                         <input type="text" class="form-control" id="price" name="price">
                                     </div>
-
-                                    <div class="hiddenImgNum"></div>
                                 </div>
 
-                                <div class="col-6">
-                                    <div class="mb-3 mt-3">
-                                        <img width="600" height="600" class="menuImg img-thumbnail"
-                                             src="/img/defaultFood.jpeg" alt="미리보기 이미지">
+                                <div class="row mt-5">
+                                    <label class="col-sm-3 col-form-label form-label">메뉴 이미지</label>
+                                    <div class="col-sm-8">
+                                        <label for="formFileLg">
+                                            <input name="image" class="form-control image imgInput" id="formFileLg" type="file">
+                                        </label>
+                                        <div class="text-sm mt-1">
+                                            정사각형 이미지로 넣어주세요.
+                                        </div>
                                     </div>
-                                    <label for="formFileLg">
-                                        <input name="image" class="form-control form-control image imgInput"
-                                               id="formFileLg" type="file"></label>
                                 </div>
-                            </div><!--메뉴등록 위치-->
+                            </div>
+
+                            <div class="w-50">
+                                <img class="menuImg img-thumbnail" src="/img/defaultFood.jpeg" alt="미리보기 이미지">
+                            </div>
                         </div>
                     </form>
 
-                </div>
-                <div class="text-center mt-1 mb-3">
-                    <button type="button" class="btn submitBtn btn-primary">등록</button>
-                    <a href="/members/menu/list" class="btn btn-gray">취소</a>
+                    <div class="text-center mt-5 mb-3">
+                        <button type="button" class="btn submitBtn btn-primary">등록</button>
+                        <a href="/members/menu/list" class="btn btn-gray">취소</a>
+                    </div>
                 </div>
             </div>
 

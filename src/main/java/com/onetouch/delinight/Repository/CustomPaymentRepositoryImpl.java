@@ -1,6 +1,7 @@
 package com.onetouch.delinight.Repository;
 
 import com.onetouch.delinight.Constant.PaidCheck;
+import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.*;
 import com.querydsl.core.BooleanBuilder;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Repository
@@ -26,6 +28,7 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
     @PersistenceContext
     private EntityManager entityManager;
     private final ModelMapper modelMapper;
+    private final MembersRepository membersRepository;
 
     public List<PaymentDTO> findPaymentByCriteria(PaidCheck paidCheck, Long memberId, LocalDate startDate, LocalDate endDate) {
         QMembersEntity membersEntity = QMembersEntity.membersEntity;
@@ -53,9 +56,26 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
 
         // 2. 멤버 ID 필터링 추가
         if (memberId != null) {
-            query.join(ordersEntity.storeEntity.membersEntity, membersEntity)   // PaymentEntity에 있는 membersEntity와 join
-                    .where(membersEntity.id.eq(memberId));                      // 멤버 ID로 필터링
-            log.info("멤버 ID로 필터링 : {}", memberId);
+            Role role = membersRepository.findById(memberId).get().getRole();
+            log.info(role);
+            if(role.equals(Role.STOREADMIN)){
+                query.join(ordersEntity.storeEntity, storeEntity)   // PaymentEntity에 있는 membersEntity와 join
+                        .where(storeEntity.membersEntity.id.eq(memberId));                      // 멤버 ID로 필터링
+            }
+            else if(role.equals(Role.ADMIN)){
+                log.info("이퀄스?");
+                query.join(ordersEntity.storeEntity.hotelEntity, hotelEntity).where(hotelEntity.membersEntity.id.eq(memberId));
+            }
+
+            else if(role.equals(Role.SUPERADMIN)){
+                log.info("이퀄스?2");
+
+                query.join(ordersEntity.storeEntity, storeEntity)
+                        .join(storeEntity.hotelEntity, hotelEntity)
+                        .join(hotelEntity.branchEntity, branchEntity)
+                        .join(branchEntity.centerEntity, centerEntity)
+                        .where(centerEntity.membersEntity.id.eq(memberId));            }
+
         }
 
 
@@ -88,28 +108,26 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
         // 6. PaymentEntity → PaymentDTO 변환
         List<PaymentDTO> paymentDTOList = paymentEntities.stream().map(payment -> {
             // OrdersDTO 변환
-            List<OrdersDTO> ordersDTOList = payment.getOrdersEntityList().stream().map(order -> {
-                return OrdersDTO.builder()
-                        .id(order.getId())
-                        .totalPrice(order.getTotalPrice())
-                        .ordersStatus(order.getOrdersStatus())
-                        .pendingTime(order.getPendingTime())
-                        .deliveredTime(order.getDeliveredTime())
-                        .storeDTO(modelMapper.map(order.getStoreEntity(), StoreDTO.class)
-                        .setHotelDTO(modelMapper.map(order.getStoreEntity().getHotelEntity(), HotelDTO.class)
-                        .setBranchDTO(modelMapper.map(order.getStoreEntity().getHotelEntity().getBranchEntity(), BranchDTO.class)
-                        .setCenterDTO(modelMapper.map(order.getStoreEntity().getHotelEntity().getBranchEntity().getCenterEntity(), CenterDTO.class)))))
-                        // OrderItemDTO 변환 추가
-                        .ordersItemDTOList(order.getOrdersItemEntities().stream().map(orderItem -> {
-                            // OrderItemDTO에 MenuDTO 포함
-                            return OrdersItemDTO.builder()
+            List<OrdersDTO> ordersDTOList = payment.getOrdersEntityList().stream()
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .map(order -> OrdersDTO.builder()
+                            .id(order.getId())
+                            .totalPrice(order.getTotalPrice())
+                            .ordersStatus(order.getOrdersStatus())
+                            .pendingTime(order.getPendingTime())
+                            .deliveredTime(order.getDeliveredTime())
+                            .ordersItemDTOList(order.getOrdersItemEntities().stream().map(orderItem -> OrdersItemDTO.builder()
                                     .id(orderItem.getId())
                                     .quantity(orderItem.getQuantity())
-                                    .menuDTO(modelMapper.map(orderItem.getMenuEntity(), MenuDTO.class))  // MenuDTO 추가
-                                    .build();
-                        }).collect(Collectors.toList()))  // 추가된 orderItemDTOList
-                        .build();
-            }).collect(Collectors.toList());
+                                    .menuDTO(modelMapper.map(orderItem.getMenuEntity(), MenuDTO.class))
+                                    .build()
+                            ).collect(Collectors.toList()))
+                            .storeDTO(modelMapper.map(order.getStoreEntity(), StoreDTO.class)
+                                    .setHotelDTO(modelMapper.map(order.getStoreEntity().getHotelEntity(), HotelDTO.class)
+                                            .setBranchDTO(modelMapper.map(order.getStoreEntity().getHotelEntity().getBranchEntity(), BranchDTO.class)
+                                                    .setCenterDTO(modelMapper.map(order.getStoreEntity().getHotelEntity().getBranchEntity().getCenterEntity(), CenterDTO.class)))))
+                            .build()).toList();
 
             // PaymentDTO 변환
             return PaymentDTO.builder()

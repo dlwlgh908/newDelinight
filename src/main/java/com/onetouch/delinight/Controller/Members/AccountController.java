@@ -96,7 +96,7 @@ public class AccountController {
         //수퍼 어드민
         if (role.equals(Role.SUPERADMIN)) {
             if (membersService.assignCheck(principal.getName(), 1)) {
-                return "redirect:/members/account/hotelAdmin/list";
+                return "redirect:/members/account/superAdHome";
             } else {
                 return "redirect:/members/account/waitRedirectPage";
             }
@@ -104,7 +104,7 @@ public class AccountController {
         //호텔 어드민
         else if (role.equals(Role.ADMIN)) {
             if (membersService.assignCheck(principal.getName(), 2)) {
-                return "redirect:/members/account/storeAdmin/list";
+                return "redirect:/members/account/hotelAdHome";
             } else {
                 return "redirect:/members/account/waitRedirectPage";
             }
@@ -113,7 +113,7 @@ public class AccountController {
 
         else if (role.equals(Role.STOREADMIN)) {
             if (membersService.assignCheck(principal.getName(), 3)) {
-                return "redirect:/members/store/orders/list";
+                return "redirect:/members/store/storeAdHome";
             } else {
                 return "redirect:/members/account/waitRedirectPage";
             }
@@ -157,8 +157,18 @@ public class AccountController {
     }
 
     @GetMapping("/hotelAdHome")
-    public String home() {
+    public String hotelAdHome() {
         return "/members/account/common/hotelAdHome";
+    }
+
+    @GetMapping("/superAdHome")
+    public String superAdHome() {
+        return "/members/account/common/hotelAdHome";
+    }
+
+    @GetMapping("/storeAdHome")
+    public String storeAdHome() {
+        return "/members/account/common/storeAdHome";
     }
 
     @GetMapping("/mypage")

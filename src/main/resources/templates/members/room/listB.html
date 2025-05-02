@@ -6,8 +6,6 @@
 >
 <head>
     <title>델리나잇</title>
-
-    <!--css, link, -->
 </head>
 
 <body>
@@ -19,31 +17,32 @@
             <!--반드시 이 안에서만 작업-->
 
             <!--페이지 제목 명명-->
-            <h3 class="mt-5">Room 관리</h3>
-            <ol class="breadcrumb mb-4">
-                <!--페이지 소제목 명명-->
-                <li class="breadcrumb-item active">큰페이지 〉 중간페이지 〉 작은페이지</li>
+            <h3 class="mt-5">룸 목록</h3>
+            <ol class="breadcrumb mb-5">
+                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                <a href="#" class="breadcrumb-item active no-click">룸 관리</a>
             </ol>
 
             <!--기본 카드 양식-->
             <div class="card custom-shadow mb-4">
                 <div class="card-body">
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary modalregister float-end mb-3"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        새 룸 +
+                    </button>
+
                     <!--카드 제목-->
-                    <table class="table">
+                    <table class="table align-middle">
 
                         <thead>
                         <th scope="col">#</th>
                         <th scope="col">이름</th>
                         <th scope="col">설명</th>
                         <th scope="col">설명</th>
-                        <th scope="col"><div class="row">
+                        <th scope="col">수정</th>
                             <div class="col offset-8">
-
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary modalregister" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    +
-                                </button>
-
                                 <!-- Modal -->
                                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -68,33 +67,28 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                 <button type="button" class="btn btn-primary room_registerbtn">저장</button>
-                                                <button type="button" class="btn btn-primary room_dbtn">삭제!</button>
+                                                <button type="button" class="btn btn-primary room_dbtn">삭제</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        </th>
                         </thead>
 
                         <tbody>
                         <th:block  th:each="list:${roomDTOList}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
-                                <td><a class="readbtn" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                                <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
                                     [[${list.name}]]
                                 </a>
                                 </td>
                                 <td th:text="${list.content}"></td>
                                 <td th:text="${list.hotelDTO.name}"></td>
                                 <td>
-                                   <a href="#"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
-                                   <a href="#"><i class="fa-solid fa-pen" style="color: #198754"></i></a>
+                                    <a href="#"><i class="fa-solid fa-pen me-2" style="color: #198754"></i></a>
+                                    <a href="#"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
                                 </td>
-
-
-
                             </tr>
 
                         </th:block>
@@ -104,25 +98,6 @@
                         </tbody>
 
                     </table>
-                </div>
-            </div>
-
-            <!--기본 알럿 양식-->
-            <!--알럿 사용 시, alert.js 파일에서 사용할 부분만 복사한 뒤 본 작업파일 하단 스크립트란에 붙여 사용-->
-            <div class="card custom-shadow mb-4">
-                <div class="card-body">
-                    <h5 class="mb-4 fw-bold">알럿창</h5>
-                    <hr class="hrMain">
-
-                    <!--알럿 버튼 양식-->
-                    <!--마음에 드는 양식을 골라 복붙하여 사용(클래스 따라 css가 자동으로 적용됨)-->
-                    <!--이때, 자신이 사용할 이름으로 반드시 id 바꿔줄것(하단 스크립트 포함)-->
-                    <!--id를 바꾸지 않으면 새 스크립트를 쓰든말든 기존의 양식과 똑같이 실행돼버림-->
-                    <button class="btn btn-primary m-2" id="alertStart">Alert 실행</button>
-                    <button class="btn btn-gray m-2" id="confirmStart">Confirm 실행</button>
-                    <button class="btn btn-success m-2" id="promptStart">Prompt 실행</button>
-                    <button class="btn btn-danger m-2" id="toastStart">Toast 실행</button>
-                    <button class="btn btn-warning m-2" id="ajaxStart">Ajax 실행 (깃헙 아이디 검색)</button>
                 </div>
             </div>
         </div>

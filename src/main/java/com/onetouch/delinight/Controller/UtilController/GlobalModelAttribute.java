@@ -49,6 +49,10 @@ public class GlobalModelAttribute {
                         if (checking == 1) {
                             return;
                         }
+
+                        Long storeId = storeService.findStoreByEmail(memberDetails.getUsername());
+                        model.addAttribute("storeId", storeId);
+
                         log.info(memberDetails);
                         Integer alertCount = storeService.awaitingCountCheck(storeService.findStoreByEmail(memberDetails.getUsername()));
                         model.addAttribute("alertCount", alertCount);

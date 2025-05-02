@@ -32,7 +32,7 @@ import java.util.Optional;
 @Log4j2
 @Transactional
 @RequiredArgsConstructor
-public class OrdersServiceImpl implements OrdersService{
+public class OrdersServiceImpl implements OrdersService {
     private final ImageRepository imageRepository;
     private final CheckInRepository checkInRepository;
     private final CheckOutLogRepository checkOutLogRepository;
@@ -46,13 +46,12 @@ public class OrdersServiceImpl implements OrdersService{
     public OrdersDTO readOne(Long ordersId) {
 
         Optional<OrdersEntity> optionalOrdersEntity = ordersRepository.findById(ordersId);
-        if(optionalOrdersEntity.isPresent()){
+        if (optionalOrdersEntity.isPresent()) {
             OrdersEntity ordersEntity = optionalOrdersEntity.get();
             OrdersDTO ordersDTO = modelMapper.map(ordersEntity, OrdersDTO.class).setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(), StoreDTO.class)).setOrdersItemDTOList(ordersEntity.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class).setImgUrl(imageRepository.findByMenuEntity_Id(ordersItemEntity.getMenuEntity().getId()).get().getFullUrl()))).toList());
             return ordersDTO;
 
-        }
-        else {
+        } else {
             return null;
 
         }
@@ -61,37 +60,42 @@ public class OrdersServiceImpl implements OrdersService{
     @Override
     public Page<OrdersDTO> processList(Pageable pageable, String email) {
         Page<OrdersEntity> processEntityList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(email, OrdersStatus.DELIVERED, OrdersStatus.PENDING, pageable);
-        Page<OrdersDTO> processDTOList =  processEntityList.map(data->modelMapper.map(data, OrdersDTO.class)
-                .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class).setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(),RoomDTO.class).setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(),HotelDTO.class))))
+        Page<OrdersDTO> processDTOList = processEntityList.map(data -> modelMapper.map(data, OrdersDTO.class)
+                .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class).setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(), HotelDTO.class))))
                 .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
-                .setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(ordersItemEntity->modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(),MenuDTO.class))).toList()));
+                .setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class))).toList()));
 
         return processDTOList;
     }
 
     @Override
     public Page<OrdersDTO> completeList(Pageable pageable, String email) {
-        Page<OrdersEntity> completeList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(email, OrdersStatus.DELIVERED,  pageable);
-        Page<OrdersDTO> completeDTOList =  completeList.map(data->modelMapper.map(data, OrdersDTO.class)
-                .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class).setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(),RoomDTO.class).setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(),HotelDTO.class))))
+        Page<OrdersEntity> completeList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(email, OrdersStatus.DELIVERED, pageable);
+        Page<OrdersDTO> completeDTOList = completeList.map(data -> modelMapper.map(data, OrdersDTO.class)
+                .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class).setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(), HotelDTO.class))))
                 .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
-                .setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(ordersItemEntity->modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(),MenuDTO.class))).toList()));
+                .setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class))).toList()));
 
         return completeDTOList;
     }
 
     @Override
     public void checkInToCheckOut(Long checkInId, Long checkOutId) {
-        OrdersEntity ordersEntity = ordersRepository.findByCheckInEntity_Id(checkInId);
-        ordersEntity.setCheckInEntity(null);
-        Optional<CheckOutLogEntity> optionalCheckOutLogEntity = checkOutLogRepository.findById(checkInId);
-        if(optionalCheckOutLogEntity.isPresent()){
+        List<OrdersEntity> ordersEntities = ordersRepository.findByCheckInEntity_Id(checkInId);
+        if (ordersEntities == null) {
+            return;
+        }
+        ordersEntities.forEach(ordersEntity -> {
+            ordersEntity.setCheckInEntity(null);
+
+            Optional<CheckOutLogEntity> optionalCheckOutLogEntity = checkOutLogRepository.findById(checkOutId);
             CheckOutLogEntity checkOutLogEntity = optionalCheckOutLogEntity.get();
             ordersEntity.setCheckOutLogEntity(checkOutLogEntity);
             ordersRepository.save(ordersEntity);
-        }
-        else throw new RuntimeException("checkOut 로그 부재");
+        });
+
     }
+
 
     @Override
     public StoreDTO findStoreByADMINEmail(String email) {
@@ -107,11 +111,11 @@ public class OrdersServiceImpl implements OrdersService{
 
         PaymentEntity paymentEntity = paymentRepository.findById(paymentNum).get();
         List<OrdersEntity> ordersEntityList = paymentEntity.getOrdersEntityList();
-        List<OrdersDTO> ordersDTOList = ordersEntityList.stream().map(data-> modelMapper.map(data, OrdersDTO.class)
-                .setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(data2->modelMapper.map(data2, OrdersItemDTO.class)
-                        .setOrdersDTO(modelMapper.map(data2.getOrdersEntity(), OrdersDTO.class)).setMenuDTO(modelMapper.map(data2.getMenuEntity(),MenuDTO.class)
-                                )).toList())
-                .setStoreDTO(modelMapper.map(data.getStoreEntity(),StoreDTO.class).setImgUrl(imageRepository.findByStoreEntity_Id(data.getStoreEntity().getId()).get().getFullUrl()))
+        List<OrdersDTO> ordersDTOList = ordersEntityList.stream().map(data -> modelMapper.map(data, OrdersDTO.class)
+                .setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(data2 -> modelMapper.map(data2, OrdersItemDTO.class)
+                        .setOrdersDTO(modelMapper.map(data2.getOrdersEntity(), OrdersDTO.class)).setMenuDTO(modelMapper.map(data2.getMenuEntity(), MenuDTO.class)
+                        )).toList())
+                .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class).setImgUrl(imageRepository.findByStoreEntity_Id(data.getStoreEntity().getId()).get().getFullUrl()))
                 .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
 
         return ordersDTOList;
@@ -128,7 +132,7 @@ public class OrdersServiceImpl implements OrdersService{
         paymentEntity.setPaidCheck(PaidCheck.paid);
         ordersRepository.save(ordersEntity);
         paymentRepository.save(paymentEntity);
-        sseService.sendToSAdmin("S"+ordersEntity.getStoreEntity().getId(),"new-order",ordersId+"번 주문이 들어왔습니다.");
+        sseService.sendToSAdmin("S" + ordersEntity.getStoreEntity().getId(), "new-order", ordersId + "번 주문이 들어왔습니다.");
 
     }
 
@@ -142,9 +146,9 @@ public class OrdersServiceImpl implements OrdersService{
         paymentEntity.setOrderType(OrderType.PAYLATER);
         ordersRepository.save(ordersEntity);
         paymentRepository.save(paymentEntity);
-        log.info("이치문 처럼안되는건가...?"+ordersEntity.getStoreEntity().getId());
+        log.info("이치문 처럼안되는건가...?" + ordersEntity.getStoreEntity().getId());
 
-        sseService.sendToSAdmin("S"+ordersEntity.getStoreEntity().getId(),"new-order",ordersId+"번 주문이 들어왔습니다.");
+        sseService.sendToSAdmin("S" + ordersEntity.getStoreEntity().getId(), "new-order", ordersId + "번 주문이 들어왔습니다.");
 
     }
 
@@ -152,41 +156,34 @@ public class OrdersServiceImpl implements OrdersService{
     public void changeStatus(Long ordersId, String ordersStatus) {
         OrdersEntity orders = ordersRepository.findById(ordersId).get();
         orders.setOrdersStatus(checkStatus(ordersStatus));
-        if(ordersStatus.equals("preparing")){
+        if (ordersStatus.equals("preparing")) {
             orders.setPreparingTime(LocalDateTime.now());
-        }
-        else if(ordersStatus.equals("delivering")){
+        } else if (ordersStatus.equals("delivering")) {
             orders.setDeliveringTime(LocalDateTime.now());
-        }
-        else {
+        } else {
             orders.setDeliveredTime(LocalDateTime.now());
         }
         ordersRepository.save(orders);
-        if(orders.getCheckInEntity().getUsersEntity()!=null){
-            if(ordersStatus.equals("preparing")){
-                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문이 승인되어 조리를 시작하였습니다.");
+        if (orders.getCheckInEntity().getUsersEntity() != null) {
+            if (ordersStatus.equals("preparing")) {
+                sseService.sendToUsers("U" + orders.getCheckInEntity().getUsersEntity().getId(), "new-changeStatus", orders.getId() + "번 주문이 승인되어 조리를 시작하였습니다.");
 
-            }
-            else if(ordersStatus.equals("delivering")){
-                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문의 조리가 완료되어 배달을 시작합니다.");
+            } else if (ordersStatus.equals("delivering")) {
+                sseService.sendToUsers("U" + orders.getCheckInEntity().getUsersEntity().getId(), "new-changeStatus", orders.getId() + "번 주문의 조리가 완료되어 배달을 시작합니다.");
 
-            }
-            else {
-                sseService.sendToUsers("U"+orders.getCheckInEntity().getUsersEntity().getId(),"new-changeStatus",orders.getId()+"번 주문 배달이 완료되었습니다.");
+            } else {
+                sseService.sendToUsers("U" + orders.getCheckInEntity().getUsersEntity().getId(), "new-changeStatus", orders.getId() + "번 주문 배달이 완료되었습니다.");
             }
 
-        }
-        else {
-            if(ordersStatus.equals("preparing")){
-                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문이 승인되어 조리를 시작하였습니다.");
+        } else {
+            if (ordersStatus.equals("preparing")) {
+                sseService.sendToUsers("G" + orders.getCheckInEntity().getGuestEntity().getId(), "new-changeStatus", orders.getId() + "번 주문이 승인되어 조리를 시작하였습니다.");
 
-            }
-            else if(ordersStatus.equals("delivering")){
-                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문의 조리가 완료되어 배달을 시작합니다.");
+            } else if (ordersStatus.equals("delivering")) {
+                sseService.sendToUsers("G" + orders.getCheckInEntity().getGuestEntity().getId(), "new-changeStatus", orders.getId() + "번 주문의 조리가 완료되어 배달을 시작합니다.");
 
-            }
-            else {
-                sseService.sendToUsers("G"+orders.getCheckInEntity().getGuestEntity().getId(),"new-changeStatus",orders.getId()+"번 주문 배달이 완료되었습니다.");
+            } else {
+                sseService.sendToUsers("G" + orders.getCheckInEntity().getGuestEntity().getId(), "new-changeStatus", orders.getId() + "번 주문 배달이 완료되었습니다.");
             }
 
         }
@@ -197,15 +194,14 @@ public class OrdersServiceImpl implements OrdersService{
     public List<OrdersDTO> ordersListByEmail(String email) {
 
         List<OrdersEntity> ordersEntityList = null;
-        if(email.contains("@")){
+        if (email.contains("@")) {
             ordersEntityList = ordersRepository.findByCheckInEntity_UsersEntityEmail(email);
 
-        }
-        else {
+        } else {
             ordersEntityList = ordersRepository.findByCheckInEntity_GuestEntityPhone(email);
         }
 
-        List<OrdersDTO> ordersDTOList = ordersEntityList.stream().map(ordersEntity-> modelMapper.map(ordersEntity, OrdersDTO.class).setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(), StoreDTO.class)
+        List<OrdersDTO> ordersDTOList = ordersEntityList.stream().map(ordersEntity -> modelMapper.map(ordersEntity, OrdersDTO.class).setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(), StoreDTO.class)
                 .setImgUrl(imageRepository.findByStoreEntity_Id(ordersEntity.getStoreEntity().getId()).get().getFullUrl())).setOrdersItemDTOList(ordersEntity.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class))).toList())).toList();
 
 
@@ -214,13 +210,11 @@ public class OrdersServiceImpl implements OrdersService{
 
     @Override
     public OrdersStatus checkStatus(String ordersStatus) {
-        if(ordersStatus.equals("preparing")){
+        if (ordersStatus.equals("preparing")) {
             return OrdersStatus.PREPARING;
-        }
-        else if(ordersStatus.equals("delivering")){
+        } else if (ordersStatus.equals("delivering")) {
             return OrdersStatus.DELIVERING;
-        }
-        else {
+        } else {
             return OrdersStatus.DELIVERED;
         }
     }

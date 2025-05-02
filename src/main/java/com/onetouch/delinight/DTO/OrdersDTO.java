@@ -34,6 +34,8 @@ public class OrdersDTO {
     private OrdersStatus ordersStatus;
     private PaidCheck paid;
     private CheckOutLogDTO checkOutLogDTO;
+    private String hotelName;
+    private Long hotelId;
 
 
     private LocalDateTime pendingTime;
@@ -47,15 +49,18 @@ public class OrdersDTO {
         this.storeDTO = storeDTO;
         return this;
     }
+    public OrdersDTO setHotelName(String hotelName){
+        this.hotelName= hotelName;
+        return this;
+    }
+    public OrdersDTO setHotelId(Long hotelId){
+        this.hotelId = hotelId;
+        return this;
+    }
     public OrdersDTO setCheckInDTO(CheckInDTO checkInDTO){
         this.checkInDTO = checkInDTO;
         return this;
     }
-
-//    public OrdersDTO setCheckOutLogDTO(CheckOutLogDTO checkOutLogDTO) {
-//        this.checkOutLogDTO = checkOutLogDTO;
-//        return this;
-//    }
 
     public OrdersDTO setOrdersItemDTOList(List<OrdersItemDTO> ordersItemDTOList){
         this.ordersItemDTOList = ordersItemDTOList;

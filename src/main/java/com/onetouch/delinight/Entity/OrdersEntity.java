@@ -76,6 +76,7 @@ public class OrdersEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
+    @ToString.Exclude
     private PaymentEntity paymentEntity;
 
 

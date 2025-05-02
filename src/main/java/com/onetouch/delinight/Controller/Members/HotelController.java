@@ -64,8 +64,8 @@ public class HotelController {
         return "members/hotel/listA";
     }
 
-    @GetMapping("/read")
-    public String readView(Principal principal, Model model) {
+    @GetMapping("/read2")
+    public String readView2(Principal principal, Model model) {
 
 
         log.info("principal log !!" + principal.getName());
@@ -76,16 +76,67 @@ public class HotelController {
         HotelEntity hotelEntity =
                 hotelRepository.findByMembersEntity_Email(principal.getName());
 
+        String imgUrl = imageService.readHotel(hotelEntity.getId());
+        model.addAttribute("imgUrl", imgUrl);
         model.addAttribute("hotel", hotelEntity);
 
-        return "members/hotel/read";
+        return "members/hotel/read2";
+    }
+@GetMapping("/read/{id}")
+public String readView(Principal principal, Model model, @PathVariable("id") Long id) {
+
+
+    log.info("principal log !!" + principal.getName());
+    log.info("principal log !!" + principal.getName());
+    log.info("principal log !!" + principal.getName());
+    log.info(id);
+    log.info(id);
+    log.info(id);
+    log.info(id);
+
+
+    MembersDTO membersDTO =
+            membersService.findByEmail(principal.getName());
+    log.info(membersDTO);
+    log.info(membersDTO);
+
+    HotelEntity hotelEntity =
+            hotelRepository.findById(id).get();
+
+    String imgUrl = imageService.readHotel(hotelEntity.getId());
+    model.addAttribute("imgUrl", imgUrl);
+    model.addAttribute("hotel", hotelEntity);
+
+    return "members/hotel/read";
+}
+    
+// TODO: 2025-05-02 수정페이지 안열림, 수정해야함
+    @GetMapping("/update2/{id}")
+    public String updateView2(Principal principal, Model model, @PathVariable("id") Long id) {
+
+
+        log.info(id);
+        log.info(id);
+        log.info(id);
+
+        HotelEntity hotelEntity =
+                hotelRepository.findById(id).get();
+
+        model.addAttribute("hotel", hotelEntity);
+        String imgUrl = imageService.readHotel(hotelEntity.getId());
+        model.addAttribute("imgUrl", imgUrl);
+        return "members/hotel/update2";
     }
 
     @GetMapping("/update")
-    public String updateView(Principal principal, Model model) {
+    public String updateView(Principal principal, Model model, @PathVariable("id") Long id) {
+
+        log.info(id);
+        log.info(id);
+        log.info(id);
 
         HotelEntity hotelEntity =
-                hotelRepository.findByMembersEntity_Email(principal.getName());
+                hotelRepository.findById(id).get();
 
         model.addAttribute("hotel", hotelEntity);
         String imgUrl = imageService.readHotel(hotelEntity.getId());

@@ -8,6 +8,7 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.PaidCheck;
+import com.onetouch.delinight.DTO.ExcelDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
 import com.onetouch.delinight.DTO.PaymentDTO;
 
@@ -22,6 +23,8 @@ public interface PaymentService {
 
     // 계산 메소드
     List<PaymentDTO> processPayments(List<PaymentDTO> paymentDTOList);
+
+    List<ExcelDTO> extractData(List<PaymentDTO> paymentDTOList);
 
 
 }

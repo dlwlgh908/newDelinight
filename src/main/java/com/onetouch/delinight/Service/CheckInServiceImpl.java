@@ -205,7 +205,6 @@ public class CheckInServiceImpl implements CheckInService{
 
         CheckOutLogEntity checkOutLogEntity = new CheckOutLogEntity();
 
-        ordersService.checkInToCheckOut(checkInEntity.getId(), checkOutLogEntity.getId());
 
         checkOutLogEntity.setRoomEntity(checkInEntity.getRoomEntity());
         checkOutLogEntity.setCheckinDate(checkInEntity.getCheckinDate());
@@ -227,6 +226,8 @@ public class CheckInServiceImpl implements CheckInService{
         checkInEntity.setPassword(null);
 
         checkInRepository.save(checkInEntity);
+        ordersService.checkInToCheckOut(checkInEntity.getId(), checkOutLogEntity.getId());
+
 
     }
 

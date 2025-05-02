@@ -32,7 +32,7 @@ public class MemberDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(String.valueOf(role)));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+String.valueOf(role)));
     }
 
     @Override
