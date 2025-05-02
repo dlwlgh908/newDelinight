@@ -42,17 +42,30 @@ public class RoomRestController {
 
     }
 
+    @PostMapping("/modify")
+    public ResponseEntity<String> modify(RoomDTO roomDTO) {
+        log.info(roomDTO);
+
+        roomService.update(roomDTO);
+
+        return ResponseEntity.ok("성공");
+    }
+
     @PostMapping("/del")
     public ResponseEntity<String> del(Long id) {
 
         log.info(id);
-        log.info(id);
-        log.info(id);
+        try {
+            roomService.del(id);
+            return ResponseEntity.ok("성공");
 
-        roomService.del(id);
+        } catch (IllegalStateException e) {
+            log.info("삭제 불가 : ", e.getMessage());
+            return ResponseEntity.badRequest().body("현재 체크인 상태인 방입니다.");
+        }
 
 
 
-        return ResponseEntity.ok("성공");
+
     }
 }

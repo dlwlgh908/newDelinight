@@ -284,4 +284,9 @@ public class CheckInServiceImpl implements CheckInService{
                 }).collect(Collectors.toList());
         return checkInDTOList;
     }
+
+    @Override
+    public void del(Long id) {
+        checkInRepository.deleteById(id);
+    }
 }
