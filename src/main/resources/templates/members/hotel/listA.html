@@ -57,9 +57,12 @@
                                     <button th:if="${list.membersDTO == null}" type="button" class="addMembers btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-hotelid="${list.getId()}">
                                         관리자 추가하기
                                     </button>
-                                    <a href="#" th:if="${list.membersDTO != null}" class="modiMembers alink-update" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-hotelid="${list.getId()}">변경하기</a>
                                 </td>
-                                <td><button class="btn btn-outline-primary" id="delBtn" th:value="${list.id}">삭제</button></td>
+                                <td>
+                                    <a href="#" th:if="${list.membersDTO != null}" class="modiMembers btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-hotelid="${list.getId()}"><i class="fa-solid fa-pen" style="color: #198754"></i></a>
+
+                                    <button class="btn btn-outline-danger" id="delBtn" th:value="${list.id}"><i class="fa-solid fa-trash" style="color: #dc3545"></i></button>
+                                </td>
                             </tr>
                         </th:block>
                         </tbody>

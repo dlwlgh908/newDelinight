@@ -67,7 +67,6 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                 <button type="button" class="btn btn-primary room_registerbtn">저장</button>
-                                                <button type="button" class="btn btn-primary room_dbtn">삭제</button>
                                             </div>
                                         </div>
                                     </div>
@@ -86,8 +85,8 @@
                                 <td th:text="${list.content}"></td>
                                 <td th:text="${list.hotelDTO.name}"></td>
                                 <td>
-                                    <a href="#"><i class="fa-solid fa-pen me-2" style="color: #198754"></i></a>
-                                    <a href="#"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
+                                    <a class="btn btn-outline-success"  th:value="${list.id}" href="#"><i class="fa-solid fa-pen " style="color: #198754"></i></a>
+                                    <a class="btn btn-outline-danger"  th:data-id="${list.id}" id="dbtn"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
                                 </td>
                             </tr>
 
@@ -107,17 +106,42 @@
     <!--추가할 스크립트가 있다면 이곳에서 <script>태그 열고 작업-->
     <!--기존 config 파일과 겹칠 수 있으므로 class나 id는 직접 작명해주세요-->
     <script th:inline="javascript">
+
+        $(function () {
+            $(document).on("click", "#dbtn", function () {
+                let id = $(this).attr("data-id");
+                alert(id);
+
+                $.ajax({
+                    url: "/room/rest/del",
+                    method: "post",
+                    data: {id: id},
+                    success: function () {
+                        alert("성공")
+                        location.reload();
+
+                    },
+                    error: function () {
+
+                    },
+                });
+            });
+        });
+
+
+
+
         let test = document.getElementById("name").value;
         console.log(test);
         console.log(name);
         let modalregister = $(".modalregister")
         let modal = $(".modal")
         let room_registerbtn = $(".room_registerbtn")
-        let room_dbtn = $(".room_dbtn")
+        let room_dbtn = $("#room_dbtn")
+        let roomId = document.getElementById("#room_dbtn").value;
 
-        room_dbtn.on("click", function () {
-            alert("gdgd")
-        });
+
+
 
 
         room_registerbtn.on("click", function () {

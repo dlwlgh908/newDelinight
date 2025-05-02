@@ -21,9 +21,9 @@ public class RoomRestController {
 
     @PostMapping("/register")
     private ResponseEntity register(RoomDTO roomDTO) {
-        log.info("값이 들어오나요? : " + roomDTO );
-        log.info("값이 들어오나요? : " + roomDTO );
-        log.info("값이 들어오나요? : " + roomDTO );
+        log.info("값이 들어오나요? : " + roomDTO);
+        log.info("값이 들어오나요? : " + roomDTO);
+        log.info("값이 들어오나요? : " + roomDTO);
 
 
         if (roomDTO == null) {
@@ -40,6 +40,19 @@ public class RoomRestController {
         }
 
 
+    }
 
+    @PostMapping("/del")
+    public ResponseEntity<String> del(Long id) {
+
+        log.info(id);
+        log.info(id);
+        log.info(id);
+
+        roomService.del(id);
+
+
+
+        return ResponseEntity.ok("성공");
     }
 }
