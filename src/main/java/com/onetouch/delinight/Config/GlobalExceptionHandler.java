@@ -1,19 +1,19 @@
-package com.onetouch.delinight.Config;
-
-import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.nio.file.AccessDeniedException;
-
+//package com.onetouch.delinight.Config;
+//
+//import org.springframework.context.annotation.Primary;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.stereotype.Component;
+//import org.springframework.web.bind.annotation.ControllerAdvice;
+//import org.springframework.web.bind.annotation.ExceptionHandler;
+//
+//import java.nio.file.AccessDeniedException;
+//
 //@ControllerAdvice
 //@Component
 //public class GlobalExceptionHandler {
-
-
+//
+//
 //    // 400 Bad Request
 //    @ExceptionHandler(IllegalArgumentException.class)
 //    public ResponseEntity<String> handleBadRequest(IllegalArgumentException e) {
@@ -41,5 +41,5 @@ import java.nio.file.AccessDeniedException;
 //        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 //                .body("서버 내부 오류 발생: " + e.getMessage());
 //    }
-
+//
 //}
