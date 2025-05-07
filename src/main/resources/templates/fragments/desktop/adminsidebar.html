@@ -23,7 +23,7 @@
                 <!--수퍼어드민, 호텔어드민, 스토어어드민-->
                 <a class="nav-link" href="/members/account/dashHub" th:if="${role.name() != 'SYSTEMADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-house"></i></div>
-                    대시보드
+                    홈 화면
                 </a>
                 <!--계정관리-->
                 <!--시스템어드민, 수퍼어드민, 호텔어드민-->
@@ -36,7 +36,7 @@
                 <!--스토어어드민-->
                 <a class="nav-link" th:href="@{/members/store/read(id=${storeId})}" th:if="${role.name() == 'STOREADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>
-                    가맹점 관리
+                    내 가맹점 관리
                 </a>
 
 
@@ -98,7 +98,7 @@
                 <div class="collapse" id="collapseStore" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
 
-                        <a class="nav-link"  href="/members/store/list">가맹점 관리</a>
+                        <a class="nav-link"  href="/members/store/list">가맹점 목록</a>
                         <a class="nav-link" href="/members/store/memberlist">가맹주 관리</a>
 
                     </nav>
@@ -119,11 +119,11 @@
 
                     </nav>
                 </div>
-                <!--오더관리-->
+                <!--주문관리-->
                 <!--스토어어드민-->
                 <a class="nav-link" th:if="${role.name() == 'STOREADMIN'}" href="/members/store/orders/list">
                     <div class="sb-nav-link-icon"><i class="fas fa-bell-concierge"></i></div>
-                    오더 관리
+                    주문 관리
                 </a>
                 <!--메뉴관리-->
                 <!--스토어어드민-->
@@ -145,7 +145,7 @@
                 <!--수퍼어드민, 호텔어드민, 스토어어드민-->
                 <a class="nav-link collapsed" href="#" th:if="${role.name() != 'SYSTEMADMIN'}"
                 data-bs-toggle="collapse" data-bs-target="#collapseNPS" aria-expanded="false" aria-controls="collapseNPS">
-                    <div class="sb-nav-link-icon"><i class="fas fa-headset"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-medal"></i></div>
                     고객만족도 평가
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
@@ -164,7 +164,7 @@
 
 
                 <!--정산-->
-                <div class="sb-sidenav-menu-heading">settlement</div>
+                <div class="sb-sidenav-menu-heading">DASHBOARD</div>
 
                 <!--정산 페이지 미완으로 추후 수정!!!!-->
 
