@@ -122,7 +122,7 @@ public class InquireServiceImpl implements InquireService {
         InquireEntity inquireEntity = optionalInquireEntity.get();
         inquireEntity.setTitle(inquireDTO.getTitle());
         inquireEntity.setContent(inquireDTO.getContent());
-        inquireEntity.setInquire(inquireDTO.getInquire());
+        inquireEntity.setInquireType(inquireDTO.getInquireType());
         inquireRepository.save(inquireEntity);
         return null;
     }

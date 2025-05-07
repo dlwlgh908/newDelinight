@@ -50,4 +50,10 @@ public class PaymentEntity extends BaseTimeEntity {
     private String priceMonth;      // 정산 연월
 
 
+
+    @Column(name = "amount")
+    private int amount; // 결제 금액 (포인트 적용 후 최종 금액)
+
+
+
 }

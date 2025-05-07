@@ -9,7 +9,6 @@ package com.onetouch.delinight.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +43,8 @@ public class HotelEntity {
     @ToString.Exclude
     private MembersEntity membersEntity;
 
-
-
+    @OneToMany(mappedBy = "hotelEntity", fetch = FetchType.LAZY)
+    private List<StoreEntity> stores = new ArrayList<>();
 
 
     public HotelEntity setMembersEntity(MembersEntity membersEntity) {

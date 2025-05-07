@@ -2,6 +2,7 @@ package com.onetouch.delinight.Controller.Users;
 
 
 import com.onetouch.delinight.DTO.NetPromoterScoreDTO;
+import com.onetouch.delinight.Service.MembersService;
 import com.onetouch.delinight.Service.NetPromoterScoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -20,6 +21,7 @@ import java.util.List;
 public class NetPromoterScoreRestController {
 
     private final NetPromoterScoreService netPromoterScoreService;
+    private final MembersService membersService;
 
     @PostMapping("/saveSurvey")
     public ResponseEntity<String> saveSurvey(@RequestBody List<NetPromoterScoreDTO> npsDTOList) {
@@ -40,6 +42,8 @@ public class NetPromoterScoreRestController {
         return ResponseEntity.ok("success");
 
     }
+
+
 
 
 }

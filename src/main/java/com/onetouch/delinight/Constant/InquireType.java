@@ -1,6 +1,6 @@
 package com.onetouch.delinight.Constant;
 
-public enum Inquire {
+public enum InquireType {
     ROOMSERVICE, ROOMCARE, OTHERINQUIRIES
 
     }

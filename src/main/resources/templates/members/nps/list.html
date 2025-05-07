@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/desktop/layout}">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>고객만족도 평가</title>
+</head>
+<body>
+
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+
+    <main>
+        <div class="container-fluid px-5">
+            <h3 class="mt-5">고객만족도 평가</h3>
+            <ol class="breadcrumb mb-4">
+                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                <a href="/members/nps/list" class="breadcrumb-item active">통계</a>
+                <a href="/members/nps/chart" class="breadcrumb-item active">데이터테이블</a>
+            </ol>
+        </div>
+
+        <div class="card custom-shadow mb-4">
+            <div class="card-body">
+
+                <!-- 버튼을 추가해서 필터링할 수 있도록 -->
+                <div class="mb-3">
+                    <button class="btn btn-primary filter-btn" data-type="ALL">전체</button>
+                    <button class="btn btn-outline-primary filter-btn" data-type="HOTEL">호텔</button>
+                    <button class="btn btn-outline-primary filter-btn" data-type="STORE">스토어</button>
+                </div>
+
+                <!-- 테이블이 여기에 동적으로 생성됨 -->
+                <table id="npsTable" class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>매장</th>
+                        <th>1문항</th>
+                        <th>2문항</th>
+                        <th>3문항</th>
+                        <th>4문항</th>
+                        <th>5문항</th>
+                        <th>점수</th>
+                        <th>기타문의</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 동적으로 데이터가 들어갈 곳 -->
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script th:inline="javascript">
+
+        $(document).ready(function () {
+
+            let npsList = []
+
+            // 데이터를 가져와서 테이블에 표시
+            $.ajax({
+                url: '/api/nps/list',
+                method: 'get',
+                success:function (data) {
+                    console.log("데이터 가져오기 성공:", data)
+                    npsList = data          // 전체 데이터를 저장
+                    renderTable(npsList)    // 전체 데이터로 초기 렌더링
+                },
+                error:function (xhr, status, error) {
+                    console.log("데이터를 불러오는데 실패함")
+                    console.log("상태 코드:", status)
+                    console.log("에러 메시지:", error)
+                    console.log("전체 에러 객체:", xhr)
+                }
+            })
+
+            // 필터 버튼 클릭 시
+            $('.filter-btn').click(function () {
+                let type = $(this).data('type')
+                console.log("필터 버튼 클릭, 선택된 타입:", type)
+
+                let filteredData = npsList             // 기본적으로 전체 데이터를 필터링
+
+                if (type === 'HOTEL') {
+                    filteredData = npsList.filter(nps => nps.hotelOrStore === 'hotel')
+                    console.log("HOTEL 필터링된 데이터:", filteredData)
+                } else if (type === 'STORE') {
+                    filteredData = npsList.filter(nps => nps.hotelOrStore === 'store')
+                    console.log("STORE 필터링된 데이터:", filteredData)
+                }
+
+                renderTable(filteredData)              // 필터링된 데이터를 테이블에 표시
+            })
+
+            // 테이블 렌더링 함수
+            function renderTable(data) {
+                console.log("테이블 렌더링 시작, 데이터:", data)
+                let tbody = $('#npsTable tbody')
+                tbody.empty()                       // 기존 테이블 내용 초기화
+
+                data.forEach(nps => {
+                    let row = `
+                                <tr>
+                                    <td>${nps.id}</td>
+                                    <td>${nps.hotelName || nps.storeName}</td>
+                                    <td>${nps.questionOne}</td>
+                                    <td>${nps.questionTwo}</td>
+                                    <td>${nps.questionThree}</td>
+                                    <td>${nps.questionFour}</td>
+                                    <td>${nps.questionFive}</td>
+                                    <td>${nps.totalScore}</td>
+                                    <td>${nps.etcQuestion}</td>
+                                </tr>
+                            `
+                    tbody.append(row)
+                })
+            }
+
+        })
+
+    </script>
+
+</div>
+</body>
+</html>
