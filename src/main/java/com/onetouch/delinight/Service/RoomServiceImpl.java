@@ -96,6 +96,8 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public void del(Long id) {
+        log.info("service에 들어온 id : "+ id);
+        log.info("service에 들어온 id : "+ id);
 
         CheckInEntity checkInEntity =
             checkInRepository.selectRoom(id);

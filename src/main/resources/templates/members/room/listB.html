@@ -203,13 +203,14 @@
 
             $(document).on("click", "#dbtn", function () {
                 let id = $(this).attr("data-id");
+                alert(id);
                 if (!confirm("정말로 삭제하시겠습니까?")) {
                     return;
                 }
 
                 $.ajax({
                     url: "/room/rest/del",
-                    method: "post",
+                    method: "delete",
                     data: {id: id},
                     success: function () {
                         location.reload();
@@ -224,14 +225,6 @@
 
 
 
-        let test = document.getElementById("name").value;
-        console.log(test);
-        console.log(name);
-        let modalregister = $(".modalregister")
-        let modal = $(".modal")
-        let room_registerbtn = $(".room_registerbtn")
-        let room_dbtn = $("#room_dbtn")
-        let roomId = document.getElementById("#room_dbtn").value;
 
 
 

@@ -34,5 +34,6 @@ public class CenterEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "members_id")
+    @ToString.Exclude
     private MembersEntity membersEntity;
 }
