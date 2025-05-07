@@ -6,36 +6,28 @@
 >
 <head>
     <title>델리나잇</title>
-
-    <!--css, link, -->
 </head>
 <body>
 
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--작업 영역-->
-            <!--반드시 이 안에서만 작업-->
-
-
             <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
-
                     <!--페이지 제목 명명-->
                     <h3>문의사항 목록</h3>
                     <ol class="breadcrumb mb-5">
                         <a href="/members/account/common/hotelAdHome" class="breadcrumb-item active">홈</a>
-                        <a href="#" class="breadcrumb-item active no-click">고객 서비스 관리</a>
+                        <a href="#" class="breadcrumb-item active no-click">고객 서비스</a>
                     </ol>
 
-
-                    <table class="table align-middle mb-5">
+                    <table class="table align-middle table-hover mb-5">
                         <thead>
                         <tr>
                             <th>#</th>
                             <th>제목</th>
                             <th>내용</th>
-                            <th>요청시간</th>
+                            <th>문의시간</th>
                             <th>답변시간</th>
                         </tr>
                         </thead>
@@ -48,15 +40,13 @@
                                     </a>
                                 </td>
                                 <td th:text="${inquireDTO.content}"></td>
-                                <td th:text="${#temporals.format(inquireDTO.regTime,'yy/MM/dd/ HH:mm')}"></td>
-                                <td th:text="${#temporals.format(inquireDTO.responseTime,'yy/MM/dd/ HH:mm')}"></td>
+                                <td th:text="${#temporals.format(inquireDTO.regTime,'yyyy-MM-dd HH:mm')}"></td>
+                                <td th:text="${#temporals.format(inquireDTO.responseTime,'yyyy-MM-dd HH:mm')}"></td>
                             </tr>
                         </th:block>
-
-
                     </table>
 
-
+                    <!--페이지네이션-->
                     <ul class="pagination justify-content-center">
                         <!-- 처음 페이지 버튼 -->
                         <li class="page-menu" th:classappend="${inquireDTOList.number == 0} ? 'disabled'">
@@ -89,23 +79,15 @@
                         </li>
                     </ul>
 
-
-                    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-
+                    <!--콘피그에 있는거라 지워도 되는데 일단 보고 지우자-->
+<!--                    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>-->
                 </div>
-
-
-
             </div>
-
-
         </div>
     </main>
 
     <!--스크립트 영역-->
     <!--추가할 스크립트가 있다면 이곳에서 <script>태그 열고 작업-->
-    <!--기존 config 파일과 겹칠 수 있으므로 class나 id는 직접 작명해주세요-->
-
 
     <!--푸터-->
     <!--콘텐츠 내부에 포함된 형식이므로 첨삭 엄금!!!-->

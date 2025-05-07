@@ -15,7 +15,7 @@ $(function(){
                 console.log(result.content)
                 result.content.forEach(function (order) {
                     const itemsJson =encodeURIComponent(JSON.stringify(order.ordersItemDTOList))
-                    str += "<tr><td scope='col'>"+order.id+"</td><td scope='col'>"+order.checkInDTO.roomDTO.hotelDTO.name+" / "+order.checkInDTO.roomDTO.name+"</td><td>"+formatLocalDateTime(order.awaitingTime)+"</td><td scope='col'>"+(order.preparingTime ? formatLocalDateTime(order.preparingTime):"-")+"</td><td scope='col'>"+(order.deliveringTime ? formatLocalDateTime(order.deliveringTime):"-")+"</td><td scope='col'><button type='button' class='btn btn-outline-dark memoCheck' data-memo='"+order.memo+"'>확인 하기</button></td><td scope='col'><button type='button' class='btn btn-outline-dark menuCheck' data-orderitemdtos='"+itemsJson+"'>확인 하기</button></td><td scope='col'>"+checkStatus(order.ordersStatus)+"</td><td>"+checkStatusChangeButton(order.ordersStatus,order.id)+"</td> </tr>"
+                    str += "<tr><td scope='col'>"+order.id+"</td><td scope='col'>"+order.checkInDTO.roomDTO.hotelDTO.name+"</td><td scope='col'>"+order.checkInDTO.roomDTO.name+"</td><td>"+formatLocalDateTime(order.awaitingTime)+"</td><td scope='col'>"+(order.preparingTime ? formatLocalDateTime(order.preparingTime):"-")+"</td><td scope='col'>"+(order.deliveringTime ? formatLocalDateTime(order.deliveringTime):"-")+"</td><td scope='col'><button type='button' class='btn btn-outline-secondary memoCheck' data-memo='"+order.memo+"'>확인하기</button></td><td scope='col'><button type='button' class='btn btn-outline-secondary menuCheck' data-orderitemdtos='"+itemsJson+"'>확인하기</button></td><td scope='col'>"+checkStatus(order.ordersStatus)+"</td><td>"+checkStatusChangeButton(order.ordersStatus,order.id)+"</td> </tr>"
                 })
                 $(".trWrap").html(str)
 
@@ -96,14 +96,14 @@ $(function(){
         if (!dateTimeStr) return "-";
 
         const date = new Date(dateTimeStr);
-        const yy = String(date.getFullYear()).slice(2); // 연도 뒤 2자리
+        const yyyy = String(date.getFullYear());
         const MM = String(date.getMonth() + 1).padStart(2, '0'); // 월 (0-based)
         const dd = String(date.getDate()).padStart(2, '0');
         const hh = String(date.getHours()).padStart(2, '0');
         const mm = String(date.getMinutes()).padStart(2, '0');
         const ss = String(date.getSeconds()).padStart(2, '0');
 
-        return `${yy}.${MM}.${dd} ${hh}:${mm}:${ss}`;
+        return `${yyyy}-${MM}-${dd} ${hh}:${mm}:${ss}`;
     }
     function checkStatus(status){
         switch (status){
@@ -120,11 +120,11 @@ $(function(){
     function checkStatusChangeButton(status, id){
         switch (status){
             case "AWAITING" :
-                return "<button class='btn btn-outline-primary changeBtn'  data-current='awaiting' data-orderid='"+id+"'>승인 하기</button>"
+                return "<button class='btn btn-outline-primary changeBtn'  data-current='awaiting' data-orderid='"+id+"'>승인하기</button>"
             case "PREPARING" :
-                return "<button class='btn btn-outline-success changeBtn' data-current='preparing' data-orderid='"+id+"'>배달 시작</button>"
+                return "<button class='btn btn-outline-success changeBtn' data-current='preparing' data-orderid='"+id+"'>배달시작</button>"
             case "DELIVERING" :
-                return "<button class='btn btn-outline-success changeBtn' data-current='delivering' data-orderid='"+id+"'>배달 완료</button>"
+                return "<button class='btn btn-outline-success changeBtn' data-current='delivering' data-orderid='"+id+"'>배달완료</button>"
             case "DELIVERED" :
                 return "배달 완료"
         }
@@ -175,7 +175,7 @@ $(function(){
                 console.log(result.content)
                 result.content.forEach(function (order) {
                     const itemsJson =encodeURIComponent(JSON.stringify(order.ordersItemDTOList))
-                    str += "<tr><td scope='col'>"+order.id+"</td><td scope='col'>"+order.checkInDTO.roomDTO.hotelDTO.name+" / "+order.checkInDTO.roomDTO.name+"</td><td>"+formatLocalDateTime(order.awaitingTime)+"</td><td scope='col'>"+formatLocalDateTime(order.preparingTime)+"</td><td scope='col'>"+formatLocalDateTime(order.deliveringTime)+"</td><td scope='col'>"+formatLocalDateTime(order.deliveredTime)+"</td><td scope='col'><button type='button' class='btn btn-outline-dark memoCheck' data-memo='"+order.memo+"'>확인 하기</button></td><td scope='col'><button type='button' class='btn btn-outline-dark menuCheck' data-orderitemdtos='"+itemsJson+"'>확인 하기</button></td></tr>"
+                    str += "<tr><td scope='col'>"+order.id+"</td><td scope='col'>"+order.checkInDTO.roomDTO.hotelDTO.name+"</td><td scope='col'>"+order.checkInDTO.roomDTO.name+"</td><td>"+formatLocalDateTime(order.awaitingTime)+"</td><td scope='col'>"+(order.preparingTime ? formatLocalDateTime(order.preparingTime):"-")+"</td><td scope='col'>"+(order.deliveringTime ? formatLocalDateTime(order.deliveringTime):"-")+"</td><td scope='col'><button type='button' class='btn btn-outline-secondary memoCheck' data-memo='"+order.memo+"'>확인하기</button></td><td scope='col'><button type='button' class='btn btn-outline-secondary menuCheck' data-orderitemdtos='"+itemsJson+"'>확인하기</button></td><td scope='col'>"+checkStatus(order.ordersStatus)+"</td><td>"+checkStatusChangeButton(order.ordersStatus,order.id)+"</td> </tr>"
                 })
                 $(".trWrap2").html(str)
 

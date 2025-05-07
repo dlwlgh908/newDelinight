@@ -84,7 +84,7 @@ public class EmailService {
             return CompletableFuture.completedFuture(null);
         }catch (MessagingException e) {
             log.error("이메일 전송 중 오류 발생 - email: {}, name: {}, link: {}", email, name, surveyLink, e);
-            throw new RuntimeException("이메일 전송 중 오류 발생", e); // 원래 예외를 함께 던짐
+            throw new RuntimeException("이메일 전송 중 오류 발생", e);
         }
 
     }

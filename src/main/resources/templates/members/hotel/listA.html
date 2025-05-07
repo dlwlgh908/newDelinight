@@ -20,19 +20,15 @@
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--내용 넣는 곳-->
-            <!--반드시 이 아래에서만 작업-->
-
-            <!--페이지 이름-->
-            <h3 class="mt-5">호텔 목록</h3>
-            <ol class="breadcrumb mb-4">
-                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                <a href="#" class="breadcrumb-item active no-click">호텔 관리</a>
-            </ol>
-
             <!--텍스트 박스-->
-            <div class="card custom-shadow mb-4">
+            <div class="card mb-4 mt-5">
                 <div class="card-body">
+                    <h3>등록된 호텔 목록</h3>
+                    <ol class="breadcrumb mb-5">
+                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">호텔 관리</a>
+                    </ol>
+
                     <table class="table table-hover align-middle">
 
                         <thead>
@@ -57,9 +53,12 @@
                                     <button th:if="${list.membersDTO == null}" type="button" class="addMembers btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-hotelid="${list.getId()}">
                                         관리자 추가하기
                                     </button>
-                                    <a href="#" th:if="${list.membersDTO != null}" class="modiMembers alink-update" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-hotelid="${list.getId()}">변경하기</a>
                                 </td>
-                                <td><button class="btn btn-outline-primary" id="delBtn" th:value="${list.id}">삭제</button></td>
+                                <td>
+                                    <a href="#" th:if="${list.membersDTO != null}" class="modiMembers btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-hotelid="${list.getId()}"><i class="fa-solid fa-pen" style="color: #198754"></i></a>
+
+                                    <button class="btn btn-outline-danger" id="delBtn" th:value="${list.id}"><i class="fa-solid fa-trash" style="color: #dc3545"></i></button>
+                                </td>
                             </tr>
                         </th:block>
                         </tbody>

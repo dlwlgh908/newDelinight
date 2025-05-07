@@ -72,7 +72,7 @@ public class SecurityConfig {
                 .formLogin(formLogin -> formLogin
                         .loginPage("/members/account/login")
                         .loginProcessingUrl("/members/account/login")
-                        .defaultSuccessUrl("/members/account/accounthub")
+                        .defaultSuccessUrl("/members/account/dashHub")
                         .failureHandler(new CustomAuthenticationFailureHandler()) // 로그인 실패 핸들러 추가
                         .usernameParameter("email")
                 )

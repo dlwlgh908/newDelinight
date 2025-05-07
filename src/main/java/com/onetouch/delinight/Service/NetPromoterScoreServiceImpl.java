@@ -83,22 +83,27 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
     public void npsInsert(List<NetPromoterScoreDTO> npsDTOList, Long checkOutId) {
 
         for (NetPromoterScoreDTO netPromoterScoreDTO : npsDTOList) {
-
+            log.info("처리 중인 NPS DTO 데이터 = {}", netPromoterScoreDTO);
             // NetPromoterScoreEntity 빌더 패턴으로 생성
             NetPromoterScoreEntity netPromoterScoreEntity = NetPromoterScoreEntity.builder()
                     .checkOutLogEntity(checkOutLogRepository.findById(checkOutId).get())    // 체크아웃 ID
-                    .QuestionOne(netPromoterScoreDTO.getQuestionOne())                      // 설문1
-                    .QuestionTwo(netPromoterScoreDTO.getQuestionTwo())                      // 설문2
-                    .QuestionThree(netPromoterScoreDTO.getQuestionThree())                  // 설문3
-                    .QuestionFour(netPromoterScoreDTO.getQuestionFour())                    // 설문4
-                    .QuestionFive(netPromoterScoreDTO.getQuestionFive())                    // 설문5
+                    .questionOne(netPromoterScoreDTO.getQuestionOne())                      // 설문1
+                    .questionTwo(netPromoterScoreDTO.getQuestionTwo())                      // 설문2
+                    .questionThree(netPromoterScoreDTO.getQuestionThree())                  // 설문3
+                    .questionFour(netPromoterScoreDTO.getQuestionFour())                    // 설문4
+                    .questionFive(netPromoterScoreDTO.getQuestionFive())                    // 설문5
+                    .etcQuestion(netPromoterScoreDTO.getEtcQuestion())                      // 기타 문의사항
+                    .totalScore(netPromoterScoreDTO.getTotalScore())                        // 합계점수
                     .insertTime(LocalDateTime.now())                                        // 설문 응답 시간 기록
                     .build();
 
+
             // 설문 대상이 호텔인지 매장인지 구분하여 설정
             if(netPromoterScoreDTO.getHotelOrStore().equals("hotel")){
+                log.info("호텔 ID 조회중 = {}", netPromoterScoreDTO.getHotelId());
                 netPromoterScoreEntity.setHotelEntity(hotelRepository.findById(netPromoterScoreDTO.getHotelId()).get());
             } else {
+                log.info("스토어 ID 조회중 = {}", netPromoterScoreDTO.getStoreId());
                 netPromoterScoreEntity.setStoreEntity(storeRepository.findById(netPromoterScoreDTO.getStoreId()).get());
             }
 

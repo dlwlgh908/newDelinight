@@ -10,7 +10,7 @@
 <nav th:fragment="adminHeader" class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
     <div class="navbar-brand ps-3">
-        <a class="navbar-brand-a" href="/members/account/accounthub">Deli-Night</a>
+        <a class="navbar-brand-a" href="/members/account/dashHub">Deli-Night</a>
     </div>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
@@ -40,8 +40,8 @@
                         <li><a href="/members/account/mypage"><i class="fas fa-circle-user"></i>마이페이지</a></li>
 
                         <div class="icon-wrap">
-                            <li th:if="${member.role.name == 'STOREADMIN'}"><a href="/members/store/orders/list"><i class="fas fa-bell"></i>알림함</a></li>
-                            <li th:if="${member.role.name == 'ADMIN'}"><a href="/members/inquire/list"><i class="fas fa-bell"></i>알림함</a></li>
+                            <li th:if="${member.role.name == 'STOREADMIN'}"><a href="/members/store/orders/list"><i class="fas fa-bell"></i>주문알림</a></li>
+                            <li th:if="${member.role.name == 'ADMIN'}"><a href="/members/inquire/list"><i class="fas fa-bell"></i>문의알림</a></li>
                             <span class="notification-badge custom-shadow"
                                   th:if="${alertCount != 0 and member.role.name != 'SUPERADMIN'}"
                                   th:text="${alertCount}"></span>

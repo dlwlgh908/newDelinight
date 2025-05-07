@@ -21,9 +21,9 @@ public class RoomRestController {
 
     @PostMapping("/register")
     private ResponseEntity register(RoomDTO roomDTO) {
-        log.info("값이 들어오나요? : " + roomDTO );
-        log.info("값이 들어오나요? : " + roomDTO );
-        log.info("값이 들어오나요? : " + roomDTO );
+        log.info("값이 들어오나요? : " + roomDTO);
+        log.info("값이 들어오나요? : " + roomDTO);
+        log.info("값이 들어오나요? : " + roomDTO);
 
 
         if (roomDTO == null) {
@@ -38,6 +38,32 @@ public class RoomRestController {
             return new ResponseEntity<String>(roomDTO.getId() + "번글이 저장되었습니다.", HttpStatus.OK);
 
         }
+
+
+    }
+
+    @PostMapping("/modify")
+    public ResponseEntity<String> modify(RoomDTO roomDTO) {
+        log.info(roomDTO);
+
+        roomService.update(roomDTO);
+
+        return ResponseEntity.ok("성공");
+    }
+
+    @PostMapping("/del")
+    public ResponseEntity<String> del(Long id) {
+
+        log.info(id);
+        try {
+            roomService.del(id);
+            return ResponseEntity.ok("성공");
+
+        } catch (IllegalStateException e) {
+            log.info("삭제 불가 : ", e.getMessage());
+            return ResponseEntity.badRequest().body("현재 체크인 상태인 방입니다.");
+        }
+
 
 
 

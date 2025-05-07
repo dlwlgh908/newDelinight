@@ -13,19 +13,15 @@
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--작업 영역-->
-            <!--반드시 이 안에서만 작업-->
-
-            <!--페이지 제목 명명-->
-            <h3 class="mt-5">룸 목록</h3>
-            <ol class="breadcrumb mb-5">
-                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                <a href="#" class="breadcrumb-item active no-click">룸 관리</a>
-            </ol>
-
-            <!--기본 카드 양식-->
-            <div class="card custom-shadow mb-4">
+            <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
+
+                    <!--페이지 제목 명명-->
+                    <h3>룸 목록</h3>
+                    <ol class="breadcrumb mb-4">
+                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">룸 관리</a>
+                    </ol>
 
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary modalregister float-end mb-3"
@@ -34,40 +30,65 @@
                     </button>
 
                     <!--카드 제목-->
-                    <table class="table align-middle">
+                    <table class="table align-middle table-hover">
 
                         <thead>
                         <th scope="col">#</th>
-                        <th scope="col">이름</th>
+                        <th class="col-2">이름</th>
                         <th scope="col">설명</th>
                         <th scope="col">설명</th>
                         <th scope="col">수정</th>
                             <div class="col offset-8">
+
                                 <!-- Modal -->
                                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">방 등록</h1>
+                                                <label class="col-form-label form-label ms-2">새 룸 등록</label>
                                                 <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <!--부트스트랩에서 끌어옴-->
-                                                <div class="form-floating mb-3">
-                                                    <label for="name" class="name">방 이름</label>
-                                                    <input type="text" class="form-control name" id="name" placeholder="방 이름">
+                                                <div class="mb-3">
+                                                    <input type="text" for="name" class="form-control name" id="name" placeholder="룸명(호수)">
                                                 </div>
-                                                <div class="form-floating">
-                                                    <label for="content" class="content">설명</label>
-                                                    <textarea cols="20" rows="20" class="form-control content" id="content" placeholder="설명"></textarea>
+                                                <div>
+                                                    <textarea type="text" for="content" class="form-control content" id="content" placeholder="설명"></textarea>
                                                 </div>
 
 
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
                                                 <button type="button" class="btn btn-primary room_registerbtn">저장</button>
-                                                <button type="button" class="btn btn-primary room_dbtn">삭제</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel2">방 수정</h1>
+                                                <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!--부트스트랩에서 끌어옴-->
+                                                <div class="form-floating mb-3">
+                                                    <div for="name" class="name">방 이름</div>
+                                                    <input type="text"  class="form-control name" id="name2" placeholder="방 이름">
+                                                </div>
+                                                <div class="form-floating">
+                                                    <div for="content" class="content">설명</div>
+                                                    <textarea cols="20" rows="20" class="form-control content" id="content2" placeholder="설명"></textarea>
+                                                </div>
+                                                <div id="hiddenId" data-id=""></div>
+
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" id="room_modifybtn">저장</button>
                                             </div>
                                         </div>
                                     </div>
@@ -79,15 +100,12 @@
                         <th:block  th:each="list:${roomDTOList}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
-                                <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
-                                    [[${list.name}]]
-                                </a>
-                                </td>
+                                <td th:text="${list.name}" th:data-num="${list.id}"></td>
                                 <td th:text="${list.content}"></td>
                                 <td th:text="${list.hotelDTO.name}"></td>
                                 <td>
-                                    <a href="#"><i class="fa-solid fa-pen me-2" style="color: #198754"></i></a>
-                                    <a href="#"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
+                                    <a class="btn btn-outline-success modalmodify me-2" th:data-id="${list.id}" data-bs-toggle="modal" id="ubtn" data-bs-target="#exampleModal2"  th:value="${list.id}"><i class="fa-solid fa-pen hoverBtn" style="color: #198754"></i></a>
+                                    <a class="btn btn-outline-danger"  th:data-id="${list.id}" id="dbtn"><i class="fa-solid fa-trash hoverBtn" style="color: #dc3545"></i></a>
                                 </td>
                             </tr>
 
@@ -106,18 +124,87 @@
     <!--스크립트 영역-->
     <!--추가할 스크립트가 있다면 이곳에서 <script>태그 열고 작업-->
     <!--기존 config 파일과 겹칠 수 있으므로 class나 id는 직접 작명해주세요-->
+
     <script th:inline="javascript">
+
+
+
+        $(function () {
+
+            $(document).on("click", "#ubtn", function () {
+                let id = $(this).attr("data-id");
+                $("#hiddenId").attr("data-id", id);
+                alert(id)
+            });
+            $(document).on("click", "#room_modifybtn", function () {
+                let id = $("#hiddenId").attr("data-id");
+                let name = $("#name2").val();
+                let content = $("#content2").val();
+
+                alert(id)
+                alert(name)
+                alert(content)
+
+                let roomDTO = {
+                    id : id,
+                    name : name,
+                    content : content
+                };
+
+
+                $.ajax({
+                    url: "/room/rest/modify",
+                    method: "post",
+                    data: roomDTO,
+                    success: function () {
+                        alert("성공")
+                        location.reload();
+                    },
+                    error: function () {
+
+                    },
+                })
+
+            });
+
+
+            $(document).on("click", "#dbtn", function () {
+                let id = $(this).attr("data-id");
+                if (!confirm("정말로 삭제하시겠습니까?")) {
+                    return;
+                }
+
+                $.ajax({
+                    url: "/room/rest/del",
+                    method: "post",
+                    data: {id: id},
+                    success: function () {
+                        alert("삭제 되었습니다.")
+                        location.reload();
+
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseText);
+
+                    },
+                });
+            });
+        });
+
+
+
+
         let test = document.getElementById("name").value;
         console.log(test);
         console.log(name);
         let modalregister = $(".modalregister")
         let modal = $(".modal")
         let room_registerbtn = $(".room_registerbtn")
-        let room_dbtn = $(".room_dbtn")
+        let room_dbtn = $("#room_dbtn")
+        let roomId = document.getElementById("#room_dbtn").value;
 
-        room_dbtn.on("click", function () {
-            alert("gdgd")
-        });
+
+
 
 
         room_registerbtn.on("click", function () {
