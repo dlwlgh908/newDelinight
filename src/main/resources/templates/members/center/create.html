@@ -59,16 +59,16 @@
 
                     <form action="/members/center/create" th:field="${centerDTO}" method="post" enctype="multipart/form-data">
                         <div class="centerFormData"></div>
+                        <div class="container">
+                            <div class="row">
 
-                            <div class="d-flex">
+                                <div class="col-6">
 
-                                <div class="w-50">
-                                    <div class="row mb-3">
-                                        <label for="name" class="col-sm-3 col-form-label form-label">본사명</label>
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="name" name="name">
-                                            <div class="text-sm mt-1 text-danger" th:if="${nameError != null}" th:text="${nameError}"></div>
-                                        </div>
+
+                                    <div class="md-3  mb-3">
+                                        <label for="name" class="form-label">본사명</label>
+                                        <input type="text" class="form-control" id="name" name="name">
+                                        <div class="text-sm mt-1 text-danger" th:if="${nameError != null}" th:text="${nameError}"></div>
                                     </div>
 
                                     <div class="row mb-3">

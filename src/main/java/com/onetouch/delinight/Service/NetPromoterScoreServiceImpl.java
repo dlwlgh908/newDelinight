@@ -97,7 +97,6 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
                     .insertTime(LocalDateTime.now())                                        // 설문 응답 시간 기록
                     .build();
 
-            log.info("생성된 NetPromoterScoreEntity = {}", netPromoterScoreEntity);
 
             // 설문 대상이 호텔인지 매장인지 구분하여 설정
             if(netPromoterScoreDTO.getHotelOrStore().equals("hotel")){

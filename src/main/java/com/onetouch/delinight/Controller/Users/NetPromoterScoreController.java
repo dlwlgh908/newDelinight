@@ -76,12 +76,12 @@ public class NetPromoterScoreController {
 
             log.info(hotelId);
 
-            return "/users/nps/survey";
+            return "users/nps/survey";
 
         }catch (Exception e) {
 
             log.info("NPS 설문 데이터 조회 실패", e);
-            return "/redirect:/users/nps/survey";
+            return null;
 
         }
     }
