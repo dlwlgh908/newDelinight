@@ -38,62 +38,61 @@
                         <th scope="col">설명</th>
                         <th scope="col">설명</th>
                         <th scope="col">수정</th>
-                            <div class="col offset-8">
+                        <div class="col offset-8">
 
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <label class="col-form-label form-label ms-2">새 룸 등록</label>
-                                                <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <!-- 새 룸 등록 Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <label class="col-form-label form-label ms-2">새 룸 등록</label>
+                                            <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <input type="text" class="form-control name" id="name" placeholder="룸명(호수)">
                                             </div>
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <input type="text" for="name" class="form-control name" id="name" placeholder="룸명(호수)">
-                                                </div>
-                                                <div>
-                                                    <textarea type="text" for="content" class="form-control content" id="content" placeholder="설명"></textarea>
-                                                </div>
-
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-                                                <button type="button" class="btn btn-primary room_registerbtn">저장</button>
+                                            <div>
+                                                <textarea type="text" class="form-control content" id="content" placeholder="설명"></textarea>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel2">방 수정</h1>
-                                                <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!--부트스트랩에서 끌어옴-->
-                                                <div class="form-floating mb-3">
-                                                    <div for="name" class="name">방 이름</div>
-                                                    <input type="text"  class="form-control name" id="name2" placeholder="방 이름">
-                                                </div>
-                                                <div class="form-floating">
-                                                    <div for="content" class="content">설명</div>
-                                                    <textarea cols="20" rows="20" class="form-control content" id="content2" placeholder="설명"></textarea>
-                                                </div>
-                                                <div id="hiddenId" data-id=""></div>
 
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary" id="room_modifybtn">저장</button>
-                                            </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary room_registerbtn">저장</button>
+                                            <button type="button" class="btn btn-gray" data-bs-dismiss="modal">취소</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- 룸 수정 Modal -->
+                            <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <label class="col-form-label form-label ms-2" id="exampleModalLabel2">방 수정</label>
+                                            <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <input type="text" class="form-control name" id="name2" placeholder="룸명(호수)">
+                                            </div>
+                                            <div>
+                                                <textarea type="text" class="form-control content" id="content2" placeholder="설명"></textarea>
+                                            </div>
+                                            <div id="hiddenId" data-id=""></div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" id="room_modifybtn">저장</button>
+                                            <button type="button" class="btn btn-gray" data-bs-dismiss="modal">취소</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         </thead>
 
                         <tbody>
@@ -134,16 +133,20 @@
             $(document).on("click", "#ubtn", function () {
                 let id = $(this).attr("data-id");
                 $("#hiddenId").attr("data-id", id);
-                alert(id)
+
+                // 클릭한 tr의 방이름과 설명 추출
+                let $tr = $(this).closest("tr");
+                let name = $tr.find("td").eq(0).text();
+                let content = $tr.find("td").eq(1).text();
+
+                // 모달 input에 값 넣어주기
+                $("#name2").val(name.trim());
+                $("#content2").val(content.trim());
             });
             $(document).on("click", "#room_modifybtn", function () {
                 let id = $("#hiddenId").attr("data-id");
                 let name = $("#name2").val();
                 let content = $("#content2").val();
-
-                alert(id)
-                alert(name)
-                alert(content)
 
                 let roomDTO = {
                     id : id,
@@ -157,7 +160,6 @@
                     method: "post",
                     data: roomDTO,
                     success: function () {
-                        alert("성공")
                         location.reload();
                     },
                     error: function () {
@@ -179,13 +181,10 @@
                     method: "post",
                     data: {id: id},
                     success: function () {
-                        alert("삭제 되었습니다.")
                         location.reload();
 
                     },
                     error: function (xhr) {
-                        alert(xhr.responseText);
-
                     },
                 });
             });
@@ -216,8 +215,6 @@
                 name: name,
                 content: content
             }
-            alert(name)
-            alert(content)
             console.log(roomDTO)
 
             $.ajax({
@@ -225,7 +222,6 @@
                 method: "post",
                 data: roomDTO,
                 success: function (data) {
-                    alert(data)
                     modal.modal("hide");
                     location.reload();
 
