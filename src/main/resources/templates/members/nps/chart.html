@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/desktop/layout}">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <title>고객만족도 평가</title>
+</head>
+<body>
+
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+
+    <main>
+
+        <div class="container-fluid px-5">
+            <h3 class="mt-5">고객만족도 평가</h3>
+            <ol class="breadcrumb mb-4">
+                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                <a href="/members/nps/list" class="breadcrumb-item active">통계</a>
+                <a href="/members/nps/chart" class="breadcrumb-item active">데이터테이블</a>
+            </ol>
+        </div>
+
+        <div class="card custom-shadow mb-4">
+            <div class="card-body">
+
+                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+                    <canvas id="donutChart" style="width:100%; max-width:600px; height:500px;"></canvas>
+                    <canvas id="barChart" style="width:100%; max-width:600px; height:500px;"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script th:inline="javascript">
+
+        $(document).ready(function () {
+
+            let npsList = []
+
+            $.ajax({
+
+                url: '/api/nps/list',
+                method: 'get',
+                success:function (data) {
+                    console.log("NPS 데이터 가져옴 : ", data)
+                    npsList = data;
+                    drawDonutChart(npsList)                 // 도넛 차트 호출
+                    drawBarChart(npsList)                   // 바 차트 호출
+                },
+                error: function (xhr, status, error) {
+                    console.error("데이터 불러오기 실패:", error)
+                }
+            })
+
+            // 도넛 차트 함수
+            function drawDonutChart(data) {
+                let scoreBuckets = {
+                    '1번 문항': 0,
+                    '2번 문항': 0,
+                    '3번 문항': 0,
+                    '4번 문항': 0,
+                    '5번 문항': 0
+            }
+                count =0
+
+
+                data.forEach(scores => {
+
+                    scoreBuckets['1번 문항'] += scores.questionOne
+                    scoreBuckets['2번 문항'] += scores.questionTwo
+                    scoreBuckets['3번 문항'] += scores.questionThree
+                    scoreBuckets['4번 문항'] += scores.questionFour
+                    scoreBuckets['5번 문항'] += scores.questionFive
+                    count +=1
+                })
+                scoreBuckets['1번 문항'] = ((scoreBuckets['1번 문항']/count).toFixed(1))
+                scoreBuckets['2번 문항'] = ((scoreBuckets['2번 문항']/count).toFixed(1))
+                scoreBuckets['3번 문항'] = ((scoreBuckets['3번 문항']/count).toFixed(1))
+                scoreBuckets['4번 문항'] = ((scoreBuckets['4번 문항']/count).toFixed(1))
+                scoreBuckets['5번 문항'] = ((scoreBuckets['5번 문항']/count).toFixed(1))
+
+
+                let ctx = document.getElementById('donutChart').getContext('2d')
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(scoreBuckets),
+                        datasets: [{
+                            label: '점수 분포',
+                            data: Object.values(scoreBuckets),
+                            backgroundColor: ['red', 'yellow', 'blue', 'Skyblue', 'Green'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'right' }
+                        }
+                    }
+                })
+            }
+
+            // 바 차트 함수
+            function drawBarChart(data) {
+                const labels = data.map(item => item.insertTime.substring(0, 10));
+                const scores = data.map(item => item.totalScore);
+
+                const ctx = document.getElementById('barChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '총점',
+                            data: scores,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                })
+            }
+
+
+        })
+
+    </script>
+
+</div>
+</body>
+</html>

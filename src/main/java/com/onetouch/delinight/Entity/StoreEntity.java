@@ -39,5 +39,11 @@ public class StoreEntity {
     @JoinColumn(name = "members_id")
     private MembersEntity membersEntity;
 
+    public StoreEntity setMembersEntity(MembersEntity membersEntity){
+        this.membersEntity = membersEntity;
+        return  this;
+    }
+
+
 
 }
