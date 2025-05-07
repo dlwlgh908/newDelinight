@@ -74,7 +74,8 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
                         .join(storeEntity.hotelEntity, hotelEntity)
                         .join(hotelEntity.branchEntity, branchEntity)
                         .join(branchEntity.centerEntity, centerEntity)
-                        .where(centerEntity.membersEntity.id.eq(memberId));            }
+                        .where(centerEntity.membersEntity.id.eq(memberId));
+            }
 
         }
 

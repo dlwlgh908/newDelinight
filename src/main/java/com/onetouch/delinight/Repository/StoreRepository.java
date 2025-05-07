@@ -8,7 +8,6 @@
 package com.onetouch.delinight.Repository;
 
 import com.onetouch.delinight.Entity.HotelEntity;
-import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.StoreEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +24,10 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
 
     @Query("select s from StoreEntity s where s.hotelEntity.membersEntity.email = :email")
     public List<StoreEntity> selectallByHotelAdmin(String email);
+
+    List<StoreEntity> findByHotelEntity(HotelEntity hotelEntity);
+
+
 
 
 }

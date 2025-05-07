@@ -55,6 +55,15 @@ public class MembersEntity {
     @ToString.Exclude
     private HotelEntity hotelEntity;
 
+    @JoinColumn(name = "store_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private StoreEntity storeEntity;
+
+    public StoreEntity setStoreEntity(StoreEntity storeEntity){
+        this.storeEntity = storeEntity;
+        return this.storeEntity;
+    }
+
 
 
 }
