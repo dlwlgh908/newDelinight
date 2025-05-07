@@ -11,74 +11,60 @@
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--작업 영역-->
-            <!--반드시 이 안에서만 작업-->
-
-            <!--페이지 제목 명명-->
-            <h3 class="mt-5">1:1 문의답변</h3>
-            <ol class="breadcrumb mb-4">
-                <!--페이지 소제목 명명-->
-                <li class="breadcrumb-item active"></li>
-            </ol>
-            <div class="card custom-shadow mb-4">
-                <div class="card">
+            <div class="card custom-shadow mt-5 mb-4">
                     <div class="card-body">
-                        <div class="row md-3">
-                            <a href="/members/inquire/list" class="md-3 mt-3 btn btn-primary" style="width: 60px; height: 40px">이전</a>
+                        <h3>1:1 문의답변</h3>
+                        <ol class="breadcrumb mb-5">
+                            <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                            <a href="/members/inquire/list" class="breadcrumb-item active">문의사항 관리</a>
+                        </ol>
 
-                        </div>
-
-                        <div class="row md-3">
-                            <div class="col-4">문의유형</div>
-                            <div class="col" th:text="${inquireDTO.inquireType}"></div>
-                        </div>
-
-                        <div class="row md-3">
-                            <div class="col-4">글번호</div>
-                            <div class="col" th:text="${inquireDTO.id}"></div>
-                        </div>
-
-                        <div class="row md-3">
-                            <div class="col-4">제목</div>
-                            <div class="col" th:text="${inquireDTO.title}"></div>
-                        </div>
-
-                        <div class="row md-3">
-                            <div class="col-4">내용</div>
-                            <div class="col" th:text="${inquireDTO.content}"></div>
-                        </div>
-
-                        <div>
-                            <div class="col mt-3">
-                                <label>답변내용</label><br>
-<!--                                <textarea class="replyText" name="replyText"></textarea><br>-->
-                                <textarea name="replyText" class="form-control replyText" rows="1" oninput="autoResize(this)"
-                                          style="overflow:hidden; resize: none; min-height: 1rem">
-                                    </textarea>
-                                <button type="submit" class="md-3 mt-3 btn btn-primary insertBtn" style="width: 60px; height: 40px">저장</button>
-                            </div>
-
-<!--                            <div class="col mt-3">-->
-<!--                                <label>댓글내용</label><br>-->
-<!--                                <div class="form-control replyWrap" style="border: 1px solid black"></div>-->
-<!--                            </div>-->
-<!--                            <div class="col mt-3">-->
-<!--                                <label>댓글내용</label><br>-->
-<!--                                <div class="form-control replyWrap" style="border: 1px solid black; display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; min-height: 100px; max-height: 300px;">-->
-<!--                                </div>-->
-<!--                            </div>-->
-                            <div class="col mt-3">
-                                <label>댓글내용</label><br>
-                                <div class="form-control replyWrap" style="border: 1px solid black; height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; padding: 10px;">
+                        <div class="d-flex">
+                            <div class="w-50">
+                                <div class="row mb-2">
+                                    <label class="col-sm-3 col-form-label form-label">문의유형</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control-plaintext" th:value="${inquireDTO.inquireType}" readonly>
+                                    </div>
                                 </div>
 
+                                <div class="row mb-2">
+                                    <label class="col-sm-3 col-form-label form-label">글 번호</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control-plaintext" th:value="${inquireDTO.id}" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <label class="col-sm-3 col-form-label form-label">제목</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control-plaintext" th:value="${inquireDTO.title}" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <label class="col-sm-3 col-form-label form-label">문의내용</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control-plaintext" th:value="${inquireDTO.content}" readonly>
+                                    </div>
+                                </div>
                             </div>
 
-
+                            <div class="w-50">
+                                <div class="row mb-2">
+                                    <label class="col-sm-3 col-form-label form-label">답변내용</label>
+                                    <div class="col-sm-6">
+                                        <textarea name="replyText" class="form-control replyText" oninput="autoResize(this)"></textarea>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
+                        <div class="mt-5 text-center">
+                            <button type="submit" class="btn btn-primary insertBtn">저장</button>
+                            <a href="/members/inquire/list" class="btn btn-gray">취소</a>
+                        </div>
                     </div>
-                </div>
             </div>
 
         </div>
@@ -165,23 +151,6 @@
                         }
                         $(".replyWrap").html(str)
                     }
-
-        //             success: function (data) {
-        //                 let str = "";
-        //                 const myId = [[${session.userId}]]; // 로그인한 내 ID (이건 너 프로젝트에 맞춰 수정해야 함)
-        //
-        //                 for (let i = 0; i < data.length; i++) {
-        //                     const reply = data[i];
-        //                     const who = (reply.writerId === myId) ? "me" : "other"; // 내가 쓴 거면 me, 남이 쓴 거면 other
-        //
-        //                     str += `
-        //     <div class="replyItem ${who}">
-        //         <div class="bubble">${reply.replyText}</div>
-        //     </div>
-        // `;
-        //                 }
-        //                 $(".replyWrap").html(str);
-        //             }
                 })
             }
 
