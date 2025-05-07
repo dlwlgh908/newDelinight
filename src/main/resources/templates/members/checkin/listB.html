@@ -7,6 +7,21 @@
 <head>
     <title>델리나잇</title>
 </head>
+<style>
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        display: none; /* 처음엔 숨김 */
+        opacity: 0.9;
+    }
+</style>
 
 <body>
 <!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
@@ -171,6 +186,7 @@
 
 
 
+
                         </tbody>
 
                     </table>
@@ -184,9 +200,7 @@
 
     <!--스크립트 시작 -->
     <script>
-        $(document).on("click", "#addCheckinBtn", function () {
 
-        });
 
         function formatDate(dateString) {
             let year = "20" + dateString.substring(0, 2);
@@ -267,6 +281,11 @@
                 let email = $(this).closest("tr").find(".email").val();
                 let userId = $(this).closest("tr").find(".userId").val();
 
+                if (!checkinDate || !checkoutDate || !phone || !email) {
+                    alert("⚠️ 모든 항목을 입력해야 체크인할 수 있습니다!")
+                    return;
+                }
+
 
                 $.ajax({
                     url : "/checkin/rest/register",
@@ -283,9 +302,10 @@
                     }),
                     success: function (data) {
                         console.log(data)
+                        alert("✅ 체크인이 완료되었습니다!")
                         location.reload()
                     },
-                })
+                });
             });
         });
 
@@ -300,6 +320,7 @@
 
                     success: function (data) {
                         console.log(data)
+                        alert("✅ 체크아웃이 완료되었습니다!")
                         location.reload()
                     },
                 })

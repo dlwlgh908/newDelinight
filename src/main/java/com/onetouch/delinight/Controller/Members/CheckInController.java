@@ -10,6 +10,7 @@ package com.onetouch.delinight.Controller.Members;
 import com.onetouch.delinight.Constant.CheckInStatus;
 import com.onetouch.delinight.DTO.CheckInDTO;
 import com.onetouch.delinight.DTO.RoomDTO;
+import com.onetouch.delinight.Repository.CheckInRepository;
 import com.onetouch.delinight.Service.CheckInService;
 import com.onetouch.delinight.Service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class CheckInController {
 
     private final CheckInService checkInService;
     private final RoomService roomService;
+    private final CheckInRepository checkInRepository;
 //
 //    @GetMapping("/list")
 //    public String listView(Model model) {
@@ -55,33 +57,54 @@ public class CheckInController {
 //
 //    }
 
-    @GetMapping("/list")
-    public String listA(Model model, @RequestParam(value = "checkinstatus", required = false) String checkinstatus) {
+//    @GetMapping("/list")
+//    public String listA(Model model, @RequestParam(value = "checkinstatus", required = false) String checkinstatus) {
+//
+//
+//        CheckInStatus checkInStatus;
+//        List<CheckInDTO> checkInDTOList = null;
+//
+//
+//        if (checkinstatus != null && !checkinstatus.isEmpty()) {
+//            if (checkinstatus.equals("VACANCY")) {
+//                checkInStatus = CheckInStatus.VACANCY;
+//                checkInDTOList =checkInService.getListCheckinByStatus(checkInStatus);
+//
+//
+//            } else if (checkinstatus.equals("CHECKIN")) {
+//                checkInStatus = CheckInStatus.CHECKIN;
+//                checkInDTOList = checkInService.getListCheckinByStatus(checkInStatus);
+//            }
+//        } else {
+//            checkInDTOList =
+//                    checkInService.list2();
+//
+//        }
+//
+//        model.addAttribute("checkInDTOList", checkInDTOList);
+//        model.addAttribute("checkinstatus", checkinstatus);
+//
+//        return "members/checkin/listB";
+//
+//    }
+@GetMapping("/list")
+public String listA(Model model, @RequestParam(value = "checkinstatus", required = false) String checkinstatus) {
 
 
-        CheckInStatus checkInStatus;
-        List<CheckInDTO> checkInDTOList = null;
+    List<CheckInDTO> checkInDTOList;
 
-        if (checkinstatus != null && !checkinstatus.isEmpty()) {
-            if (checkinstatus.equals("VACANCY")) {
-                checkInStatus = CheckInStatus.VACANCY;
-                checkInDTOList =checkInService.getListCheckinByStatus(checkInStatus);
+    if (checkinstatus != null && !checkinstatus.isEmpty()) {
+        CheckInStatus checkInStatus = CheckInStatus.valueOf(checkinstatus.toUpperCase());
 
-
-            } else if (checkinstatus.equals("CHECKIN")) {
-                checkInStatus = CheckInStatus.CHECKIN;
-                checkInDTOList = checkInService.getListCheckinByStatus(checkInStatus);
-            }
-        } else {
-            checkInDTOList =
-                    checkInService.list2();
-
-        }
-
-        model.addAttribute("checkInDTOList", checkInDTOList);
-        model.addAttribute("checkinstatus", checkinstatus);
-
-        return "members/checkin/listB";
-
+        checkInDTOList = checkInService.getListCheckinByStatus(checkInStatus);
+    } else {
+        checkInDTOList = checkInService.listCheckInWithPrice(); // ✅ 가격 포함된 리스트 가져오기
     }
+
+
+    model.addAttribute("checkInDTOList", checkInDTOList);
+    model.addAttribute("checkinstatus", checkinstatus);
+
+    return "members/checkin/listB";
+}
 }
