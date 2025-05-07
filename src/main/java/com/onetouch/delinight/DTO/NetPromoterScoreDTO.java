@@ -2,6 +2,8 @@ package com.onetouch.delinight.DTO;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -22,6 +24,10 @@ public class NetPromoterScoreDTO {
     private String hotelOrStore;
     private Long hotelId;
     private Long storeId;
+    private String storeName;
+    private String hotelName;
+    private LocalDateTime insertTime;
+
 
 
 }
