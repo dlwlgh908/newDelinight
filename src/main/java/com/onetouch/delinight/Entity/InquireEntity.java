@@ -1,7 +1,7 @@
 package com.onetouch.delinight.Entity;
 
 
-import com.onetouch.delinight.Constant.Inquire;
+import com.onetouch.delinight.Constant.InquireType;
 import com.onetouch.delinight.Entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,7 +34,7 @@ public class InquireEntity extends BaseTimeEntity {
     private LocalDateTime responseTime; //답변시간
 
     @Enumerated(EnumType.STRING)
-    private Inquire inquire;
+    private InquireType inquireType;
 
 
 
