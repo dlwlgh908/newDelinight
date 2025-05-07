@@ -7,7 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
-import com.onetouch.delinight.Constant.Inquire;
+import com.onetouch.delinight.Constant.InquireType;
 import com.onetouch.delinight.Entity.CheckInEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -32,12 +32,11 @@ public class InquireDTO {
     private LocalDateTime updateTime; //수정시간
     private LocalDateTime responseTime; //답변시간
 
-    private Inquire inquire;
+    private InquireType inquireType;
 
 
 
 
-    private CheckInEntity checkInEntity;
 
     private CheckInDTO checkInDTO;
     private HotelDTO hotelDTO;

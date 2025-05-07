@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/point")
 @RequiredArgsConstructor
 @Log4j2
-public class PointController {
+public class PointRestController {
 
     private final PointService pointService;
 
@@ -63,5 +63,20 @@ public class PointController {
         log.info("[지갑 삭제 완료] 사용자 ID: {}", usersId);
         return ResponseEntity.ok("포인트 지갑 삭제 완료");
     }
+
+    @PostMapping("/process-payment")
+    public ResponseEntity<String> processPayment(
+            @RequestParam Long usersId,
+            @RequestParam Long paymentId,
+            @RequestParam int paymentAmount,
+            @RequestParam(defaultValue = "0") int usedPoint
+    ) {//사용자 id, 결제id, 결제금액, 포인트 사용량
+        log.info("[결제 요청] 사용자 ID: {}, 결제 ID: {}, 결제 금액: {}, 사용 포인트: {}", usersId, paymentId, paymentAmount, usedPoint);
+        //실제 결제 처리와 포인트 관련 처리
+        //포인트 차감및 적립하거나 결제 정보를 저장
+        pointService.processPaymentWithPoint(usersId, paymentId, paymentAmount, usedPoint);
+        return ResponseEntity.ok("결제 및 포인트 처리 완료");
+    }
+
 
 }
