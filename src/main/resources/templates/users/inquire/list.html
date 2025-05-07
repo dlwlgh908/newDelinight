@@ -17,7 +17,7 @@
 
 </head>
 <body>
-<div class="container-fluid px-3" layout:fragment="content">
+<div class="container-fluid px-3 flex-grow-1 d-flex flex-column" layout:fragment="content">
 
 
     <div style="display: flex; justify-content: flex-end; align-items: center; height: 40px;">
@@ -34,8 +34,8 @@
                     <div><strong>[[${inquireDTO.title}]]</strong></div>
                     <div class="small text-muted">[[${inquireDTO.content}]]</div>
                     <div class="d-flex justify-content-between mt-2">
-                        <small>요청: [[${#temporals.format(inquireDTO.regTime,'yy/MM/dd HH:mm')}]]</small>
-                        <small>답변: [[${#temporals.format(inquireDTO.responseTime,'yy/MM/dd HH:mm')}]]</small>
+                        <small>요청: [[${#temporals.format(inquireDTO.regTime,'yyyy-MM-dd HH:mm')}]]</small>
+                        <small>답변: [[${#temporals.format(inquireDTO.responseTime,'yyyy-MM-dd HH:mm')}]]</small>
                     </div>
                 </a>
             </th:block>

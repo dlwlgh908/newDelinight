@@ -48,8 +48,8 @@
                                     </a>
                                 </td>
                                 <td th:text="${inquireDTO.content}"></td>
-                                <td th:text="${#temporals.format(inquireDTO.regTime,'yy/MM/dd/ HH:mm')}"></td>
-                                <td th:text="${#temporals.format(inquireDTO.responseTime,'yy/MM/dd/ HH:mm')}"></td>
+                                <td th:text="${#temporals.format(inquireDTO.regTime,'yyyy-MM-dd HH:mm')}"></td>
+                                <td th:text="${#temporals.format(inquireDTO.responseTime,'yyyy-MM-dd HH:mm')}"></td>
                             </tr>
                         </th:block>
 
