@@ -59,8 +59,8 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
             Role role = membersRepository.findById(memberId).get().getRole();
             log.info(role);
             if(role.equals(Role.STOREADMIN)){
-                query.join(ordersEntity.storeEntity, storeEntity)   // PaymentEntity에 있는 membersEntity와 join
-                        .where(storeEntity.membersEntity.id.eq(memberId));                      // 멤버 ID로 필터링
+                query.join(ordersEntity.storeEntity, storeEntity)                                // PaymentEntity에 있는 membersEntity와 join
+                        .where(storeEntity.membersEntity.id.eq(memberId));                       // 멤버 ID로 필터링
             }
             else if(role.equals(Role.ADMIN)){
                 log.info("이퀄스?");
