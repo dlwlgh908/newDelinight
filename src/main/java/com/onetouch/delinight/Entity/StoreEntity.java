@@ -33,10 +33,12 @@ public class StoreEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")
+    @ToString.Exclude
     private HotelEntity hotelEntity;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "members_id")
+    @ToString.Exclude
     private MembersEntity membersEntity;
 
     public StoreEntity setMembersEntity(MembersEntity membersEntity){

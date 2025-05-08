@@ -34,5 +34,6 @@ public class BranchEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center_id")
+    @ToString.Exclude
     private CenterEntity centerEntity;
 }

@@ -13,12 +13,16 @@ import com.onetouch.delinight.DTO.OrdersDTO;
 import com.onetouch.delinight.Service.CheckInService;
 import com.onetouch.delinight.Service.MenuService;
 import com.onetouch.delinight.Service.OrdersService;
+import com.onetouch.delinight.Service.PointService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -32,6 +36,8 @@ public class RoomServiceController {
     private final MenuService menuService;
     private final OrdersService ordersService;
     private final CheckInService checkInService;
+
+    private final PointService pointService;
 
     @GetMapping("/main")
     public String main(Model model, Principal principal){
@@ -77,6 +83,9 @@ public class RoomServiceController {
         model.addAttribute("ordersDTOList", ordersDTOList);
         return "users/order/request";
     }
+
+
+
 
 
 

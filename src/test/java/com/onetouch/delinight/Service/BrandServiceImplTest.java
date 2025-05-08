@@ -74,7 +74,7 @@ class BrandServiceImplTest {
         hotelDTO.setName("신라호텔bb ");
         hotelDTO.setContent("여수bb");
         hotelDTO.setMembersDTO(membersDTO);
-        hotelDTO.setBrandDTO(brandDTO);
+//        hotelDTO.setBrandDTO(brandDTO);
         hotelDTO.setBranchDTO(branchDTO);
 
         log.info(branchDTO);

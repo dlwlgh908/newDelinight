@@ -26,12 +26,16 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         if (exception instanceof UsernameNotFoundException) {
             errorParam = "user_not_found";
         }else if (exception instanceof InternalAuthenticationServiceException) {
+
             Throwable cause = exception.getCause();
+            log.info("로그인 실패 - 원인: {}", exception.getMessage());
             if (cause instanceof UsernameNotFoundException) {
                 errorParam = "user_not_found";
+                log.info("로그인 실패 - 원인: {}", exception.getMessage());
             }
         } else if (exception instanceof BadCredentialsException) {
             errorParam = "bad_credentials";
+            log.info("로그인 실패 - 원인: {}", exception.getMessage());
             log.info("아이디는 맞는데 비번이 틀림!!");
         }
 

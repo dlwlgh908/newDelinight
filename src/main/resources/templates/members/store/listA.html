@@ -5,13 +5,12 @@
       layout:decorate="~{layout/desktop/layout}"
 >
 <head>
-
-    <style>
-        .modal-body{
-            height: 400px;
-            overflow:scroll;
-        }
-    </style>
+<!--    <style>-->
+<!--        .modal-body{-->
+<!--            height: 400px;-->
+<!--            overflow:scroll;-->
+<!--        }-->
+<!--    </style>-->
     <title>델리나잇</title>
 </head>
 
@@ -20,27 +19,23 @@
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--내용 넣는 곳-->
-            <!--반드시 이 아래에서만 작업-->
-
-            <!--페이지 이름-->
-            <h3 id="test" class="mt-5">Store</h3>
-
-            <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">Dashboard-subheading</li>
-            </ol>
-
-            <!--텍스트 박스-->
-            <div class="card custom-shadow mb-4">
+            <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
-                    <!--<pre> 코드는 <>를 문자 그대로 쓸 수 있게 해준다-->
-                    <table class="table align-middle">
+
+                    <!--페이지 이름-->
+                    <h3>가맹점 목록</h3>
+                    <ol class="breadcrumb mb-5">
+                        <a href="/members/account/storeAdHome" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">가맹점 관리</a>
+                    </ol>
+                    <table class="table align-middle table-hover">
 
                         <thead>
                         <th scope="col">#</th>
                         <th scope="col">이름</th>
                         <th scope="col">설명</th>
                         <th scope="col">관리자</th>
+                        <th scope="col"></th>
                         <th scope="col">수정</th>
 
                         </thead>
@@ -49,10 +44,7 @@
                         <th:block  th:each="list:${storeDTOList}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
-                                <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/members/hotel/read(id=${list.id})}">
-                                    [[${list.name}]]
-                                </a>
-                                </td>
+                                <td th:text="${list.name}"></td>
                                 <td th:text="${list.content}"></td>
                                 <td>
                                     <span th:if="${list.membersDTO != null}" th:text="${list.membersDTO.name}"></span>
@@ -61,20 +53,23 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <a th:if="${list.membersDTO != null}" class="modiMembers me-2" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}" href="#"><i class="fa-solid fa-pen ms-2" style="color: #198754"></i></a>
-                                    <a th:value="${list.id}" href="#" id="delBtn"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
+                                    <a th:if="${list.membersDTO != null}" class="modiMembers btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}" href="#">관리자 변경하기</a>
+                                </td>
+                                <td>
+                                    <a th:if="${list.membersDTO != null}" class=" btn btn-outline-success modiStoreBtn" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}" ><i class="fa-solid fa-pen hoverBtn" style="color: #198754"></i></a>
+                                    <a th:value="${list.id}" id="delBtn2" class="btn btn-outline-danger delStoreBtn"><i class="fa-solid fa-trash hoverBtn" style="color: #dc3545"></i></a>
                                 </td>
                             </tr>
                         </th:block>
                         </tbody>
                     </table>
 
-                    <!-- Modal -->
+                    <!-- 관리자 변경 Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">관리자 추가하기</h1>
+                                    <label class="col-form-label form-label ms-2" id="exampleModalLabel">관리자 변경</label>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -83,47 +78,48 @@
                                         <th>#</th>
                                         <th>이름</th>
                                         <th>이메일</th>
-                                        <th>추가하기</th>
+                                        <th></th>
                                         </thead>
-                                        <tbody class="resultSpace" style="margin-bottom: 500px;">
+                                        <tbody class="resultSpace">
 
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                    <button type="button" class="btn btn-primary">저장</button>
+                                    <button type="button" class="btn btn-gray" data-bs-dismiss="modal">취소</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- 정보수정 Modal -->
                     <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel2">관리자 수정하기</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <label class="col-form-label form-label ms-2" id="exampleModalLabel2">가맹점 정보수정</label>
+                                    <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <table class="table table-hover align-middle">
-                                        <thead>
-                                        <th>#</th>
-                                        <th>이름</th>
-                                        <th>이메일</th>
-                                        <th>추가하기</th>
-                                        </thead>
-                                        <tbody class="resultSpace" style="margin-bottom: 500px;">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control name" id="name2" placeholder="가맹점명">
+                                    </div>
+                                    <div>
+                                        <textarea type="text" class="form-control content" id="content2" placeholder="설명"></textarea>
+                                    </div>
+                                    <div id="hiddenId" data-id=""></div>
 
-                                        </tbody>
-                                    </table>
+
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                    <button type="button" class="btn btn-primary" id="room_modifybtn">저장</button>
+                                    <button type="button" class="btn btn-gray" data-bs-dismiss="modal">취소</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -135,20 +131,30 @@
     <!--스크립트 시작 -->
     <script>
 
+        $(document).on("click", ".modiStoreBtn", function () {
+            let targetModal = $("#exampleModal2");
+            targetModal.modal("show");
+
+            // 클릭한 tr의 방이름과 설명 추출
+            let $tr = $(this).closest("tr");
+            let name = $tr.find("td").eq(0).text();
+            let content = $tr.find("td").eq(1).text();
+
+            // 모달 input에 값 넣어주기
+            $("#name2").val(name.trim());
+            $("#content2").val(content.trim());
+        });
+
         $(document).on("click", ".modiMembers2", function () {
             let memberId = $(this).data("memberid")
             let storeId = $(".resultSpace").data("storeid")
             let listName = $(this).data("name")
 
-
-            alert(memberId);
-            alert(storeId);
             $.ajax({
                 url: "/store/rest/modify",
                 type: "post",
                 data : {"memberId": memberId, "storeId" : storeId},
                 success: function () {
-                    alert("성공")
                     location.reload();
                 },
                 error: function () {
@@ -166,8 +172,6 @@
             let storeId = $(this).data("storeid");
             let currentName = $(this).data("name")
 
-            alert("수정클릭")
-            alert(storeId)
             $.ajax({
                 url: "/store/rest/membersList",
                 type: "get",
@@ -175,30 +179,18 @@
                     $(".resultSpace").empty();
                     let topRow = null;
                     result.forEach(function (resultItem) {
-                        let tr = $("<tr></tr>").css({
-                            "background-color": "#f9f9f9", /* 하이라이트 */
-                            "border": "1px solid #ddd",   /* 테두리 */
-                            "margin-bottom": "20px",      /* 행 아래의 간격 */
-                            "padding": "30px",/* 행 안쪽 간격 */
-                            "margin-right": "40px"
-                        });
+                        let tr = $("<tr></tr>")
                         if (resultItem.name === currentName) {
-                            topRow = $("<tr></tr>").css({
-                                "background-color": "#f9f9f9",
-                                "border": "1px solid #ddd",
-                                "margin-bottom": "20px",
-                                "padding": "30px",
-                                "margin-right": "40px"
-                            });
+                            topRow = $("<tr></tr>")
                             topRow.append("<td>" + resultItem.id + "</td>");
                             topRow.append("<td>" + resultItem.name + "</td>");
                             topRow.append("<td>" + resultItem.email + "</td>");
-                            topRow.append("<td><button class='btn-danger btn modiMembers2' disabled data-memberid='" + resultItem.id + "'>현재 관리자</button></td>");
+                            topRow.append("<td><button class='btn btn-gray modiMembers2' disabled data-memberid='" + resultItem.id + "'>현재 관리자</button></td>");
                         } else {
                             tr.append("<td>" + resultItem.id + "</td>");
                             tr.append("<td>" + resultItem.name + "</td>");
                             tr.append("<td>" + resultItem.email + "</td>");
-                            tr.append("<td><button class='btn-primary btn modiMembers2' data-memberid='" + resultItem.id + "'>관리자교체</button></td>");
+                            tr.append("<td><button class='btn-outline-primary btn modiMembers2' data-memberid='" + resultItem.id + "'>등록</button></td>");
                         }
 
 
@@ -254,13 +246,7 @@
                 success:function (result) {
                     $(".resultSpace").empty();
                     result.forEach(function (resultItem) {
-                        let tr = $("<tr></tr>").css({
-                            "background-color": "#f9f9f9", /* 하이라이트 */
-                            "border": "1px solid #ddd",   /* 테두리 */
-                            "margin-bottom": "20px",      /* 행 아래의 간격 */
-                            "padding": "30px",/* 행 안쪽 간격 */
-                            "margin-right": "40px"
-                        });
+                        let tr = $("<tr></tr>")
 
                         tr.append("<td>" + resultItem.id + "</td>");
                         tr.append("<td>" + resultItem.name + "</td>");

@@ -16,7 +16,7 @@
                 <div class="card custom-shadow mb-4 mt-5">
                     <div class="card-body">
                         <!--페이지 이름-->
-                        <h3 th:text="${storeDTO.name}"></h3>
+                        <h3 th:text="${storeDTO.name}"> 정보수정</h3>
                         <ol class="breadcrumb mb-5">
                             <a href="/members/account/home" class="breadcrumb-item active">홈</a>
                             <a href="#" class="breadcrumb-item active no-click">가맹점 관리</a>
@@ -50,7 +50,7 @@
 
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary me-2 px-4">저장</button>
-                                <a href="/members/account/home" class="btn btn-gray px-4">취소</a>
+                                <a th:href="@{/members/store/read(id=${storeId})}" class="btn btn-gray px-4">취소</a>
                             </div>
 
                         </form>

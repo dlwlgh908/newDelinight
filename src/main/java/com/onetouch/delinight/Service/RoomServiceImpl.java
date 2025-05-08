@@ -7,16 +7,20 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.Constant.CheckInStatus;
 import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.RoomDTO;
+import com.onetouch.delinight.Entity.CheckInEntity;
 import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.RoomEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
+import com.onetouch.delinight.Repository.CheckInRepository;
 import com.onetouch.delinight.Repository.HotelRepository;
 import com.onetouch.delinight.Repository.RoomRepository;
 import com.onetouch.delinight.Repository.UsersRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Log4j2
 public class RoomServiceImpl implements RoomService{
 
 
@@ -36,6 +41,7 @@ public class RoomServiceImpl implements RoomService{
     private final UsersRepository usersRepository;
     private final CheckInService checkInService;
     private final HotelService hotelService;
+    private final CheckInRepository checkInRepository;
 
     @Override
     public RoomDTO create(RoomDTO roomDTO) {
@@ -90,6 +96,20 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public void del(Long id) {
-        roomRepository.deleteById(id);
+        log.info("service에 들어온 id : "+ id);
+        log.info("service에 들어온 id : "+ id);
+
+        CheckInEntity checkInEntity =
+            checkInRepository.selectRoom(id);
+
+        log.info("가져온 checkinEntity" + checkInEntity);
+        if (checkInEntity.getCheckInStatus().equals(CheckInStatus.VACANCY)) {
+            checkInService.del(checkInEntity.getId());
+            roomRepository.deleteById(id);
+        } else {
+            log.info("현재 체크인 상태인 방입니다.");
+            throw new IllegalStateException("현재 체크인 상태인 방입니다.");
+        }
+
     }
 }

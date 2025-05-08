@@ -7,10 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,17 +39,30 @@ public class RoomRestController {
 
     }
 
-    @PostMapping("/del")
+    @PostMapping("/modify")
+    public ResponseEntity<String> modify(RoomDTO roomDTO) {
+        log.info(roomDTO);
+
+        roomService.update(roomDTO);
+
+        return ResponseEntity.ok("성공");
+    }
+
+    @DeleteMapping("/del")
     public ResponseEntity<String> del(Long id) {
 
         log.info(id);
-        log.info(id);
-        log.info(id);
+        try {
+            roomService.del(id);
+            return ResponseEntity.ok("성공");
 
-        roomService.del(id);
+        } catch (IllegalStateException e) {
+            log.info("삭제 불가 : ", e.getMessage());
+            return ResponseEntity.badRequest().body("현재 체크인 상태인 방입니다.");
+        }
 
 
 
-        return ResponseEntity.ok("성공");
+
     }
 }
