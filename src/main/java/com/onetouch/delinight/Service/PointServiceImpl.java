@@ -1,6 +1,7 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.PointType;
+import com.onetouch.delinight.Entity.PaymentEntity;
 import com.onetouch.delinight.Entity.PointLogEntity;
 import com.onetouch.delinight.Entity.PointWalletEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
@@ -73,8 +74,6 @@ public class PointServiceImpl implements PointService{
     //포인트 적립
     @Override
     public void earnPoint(Long usersId, Long paymentId, int paymentAmount) {
-        //결제 금액의 10%를 포인트로 적립할 양으로 계산한다.
-        int earnPoint = (int) (paymentAmount * 0.1);
 
         //유저인지
         UsersEntity users = usersRepository.findById(usersId)

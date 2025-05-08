@@ -29,6 +29,13 @@ public class AdminNpsRestController {
         return ResponseEntity.ok(netPromoterScoreDTOList);
     }
 
+    @GetMapping("/chart")
+    public ResponseEntity<List<NetPromoterScoreDTO>> npsChart(@AuthenticationPrincipal MemberDetails memberDetails) {
+        Long memberId = memberDetails.getMembersEntity().getId();
+        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreService.findAll(memberId);
+        return ResponseEntity.ok(netPromoterScoreDTOList);
+    }
+
 
 
 }

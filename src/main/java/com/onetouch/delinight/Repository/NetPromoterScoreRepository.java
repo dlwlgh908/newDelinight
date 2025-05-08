@@ -10,7 +10,8 @@ import java.util.List;
 public interface NetPromoterScoreRepository extends JpaRepository<NetPromoterScoreEntity , Long> {
 
     List<NetPromoterScoreEntity> findAll();
-    List<NetPromoterScoreEntity> findByHotelEntityOrStoreEntityIn(HotelEntity hotelEntity, List<StoreEntity> storeEntities);
+    List<NetPromoterScoreEntity> findByStoreEntityAndHotelEntity(HotelEntity hotelEntity, List<StoreEntity> storeEntities);
     List<NetPromoterScoreEntity> findByStoreEntity(StoreEntity storeEntity);
+
 
 }
