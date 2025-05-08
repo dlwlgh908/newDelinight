@@ -3,11 +3,15 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/desktop/layout}">
+
 <head>
     <meta charset="UTF-8">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <title>고객만족도 평가</title>
 </head>
+
 <body>
 
 <div layout:fragment="adminContent" id="layoutSidenav_content">
@@ -25,12 +29,28 @@
         <div class="card custom-shadow mb-4">
             <div class="card-body">
 
-                <!-- 버튼을 추가해서 필터링할 수 있도록 -->
-                <div class="mb-3">
-                    <button class="btn btn-primary filter-btn" data-type="ALL">전체</button>
-                    <button class="btn btn-outline-primary filter-btn" data-type="HOTEL">호텔</button>
-                    <button class="btn btn-outline-primary filter-btn" data-type="STORE">스토어</button>
+                <div class="d-flex align-items-center gap-4">
+                    <div class="d-flex align-items-center" style="flex: 0 0 auto; min-width: 200px;">
+                        <label for="startDate" class="mb-0 me-2 fw-bold" style="white-space: nowrap;">시작일</label>
+                        <input type="date" id="startDate" class="form-control mb-0" style="width: 150px;">
+                    </div>
+                    <div class="d-flex align-items-center" style="flex: 0 0 auto; min-width: 200px;">
+                        <label for="endDate" class="mb-0 me-2 fw-bold" style="white-space: nowrap;">종료일</label>
+                        <input type="date" id="endDate" class="form-control mb-0" style="width: 150px;">
+                    </div>
+
+                    <select id="hotelSelect" class="form-select">
+                        <option value="">호텔 선택</option>
+                    </select>
+
+                    <select id="storeSelect" class="form-select" disabled>
+                        <option value="">스토어 선택</option>
+                    </select>
                 </div>
+
+
+
+
 
                 <!-- 테이블이 여기에 동적으로 생성됨 -->
                 <table id="npsTable" class="table table-bordered">
@@ -57,75 +77,110 @@
 
     </main>
 
-    <script th:inline="javascript">
-
+    <script>
         $(document).ready(function () {
 
-            let npsList = []
+            // 1. 역할을 정의 (서버에서 템플릿으로 주입 가능)
+            const role = 'CENTER'; // 예: "CENTER", "HOTEL", "STORE" (백엔드에서 템플릿으로 주입 가능)
 
-            // 데이터를 가져와서 테이블에 표시
+            // 2. 역할에 따른 동작
+            if (role === 'CENTER') {
+                // 2-1. 센터는 모든 호텔 목록을 불러오기
+                $.get('/api/hotels', function (hotels) {
+                    hotels.forEach(hotel => {
+                        // 2-2. 호텔 선택 드롭다운에 호텔 목록을 추가
+                        $('#hotelSelect').append(`<option value="${hotel.id}">${hotel.name}</option>`)
+                    })
+                })
+
+                // 2-3. 호텔 선택 변경 시 해당 호텔에 속한 스토어 목록을 불러오기
+                $('#hotelSelect').on('change', function () {
+                    const hotelId = $(this).val() // 선택한 호텔 ID
+                    // 2-4. 스토어 선택 드롭다운을 활성화하고 초기화
+                    $('#storeSelect').prop('disabled', false).empty().append('<option value="">스토어 선택</option>')
+
+                    if (hotelId) {
+                        // 2-5. 선택한 호텔에 속한 스토어를 불러와서 스토어 드롭다운에 추가
+                        $.get(`/api/hotels/${hotelId}/stores`, function (stores) {
+                            stores.forEach(store => {
+                                $('#storeSelect').append(`<option value="${store.id}">${store.name}</option>`)
+                            })
+                        })
+                    }
+                })
+            }
+
+            else if (role === 'HOTEL') {
+                // 3. 호텔 역할을 가진 사용자는 본인에게 속한 스토어만 선택할 수 있게
+                $.get('/api/nps/list', function (stores) {
+                    // 3-1. 스토어 드롭다운을 활성화하고 호텔 선택은 숨기기
+                    $('#storeSelect').prop('disabled', false)
+                    stores.forEach(store => {
+                        // 3-2. 호텔에 속한 스토어만 스토어 드롭다운에 추가
+                        $('#storeSelect').append(`<option value="${store.id}">${store.name}</option>`)
+                    })
+                })
+                // 3-3. 호텔 선택 드롭다운은 필요 없으므로 숨김
+                $('#hotelSelect').hide();
+            }
+
+            else if (role === 'STORE') {
+                // 4. 스토어 역할을 가진 사용자는 본인만 선택할 수 있게
+                $.get('/api/nps/list', function (store) {
+                    // 4-1. 본인만 선택 가능하도록 스토어 드롭다운을 활성화하고 선택
+                    $('#storeSelect').prop('disabled', false)
+                        .append(`<option value="${store.id}" selected>${store.name}</option>`)
+                })
+                // 4-2. 호텔 선택 드롭다운은 필요 없으므로 숨김
+                $('#hotelSelect').hide()
+            }
+
+            // 5. NPS 데이터 가져오기 (전체 NPS 데이터 불러오기)
+            let npsList = []  // NPS 데이터를 저장할 배열
+
             $.ajax({
-                url: '/api/nps/list',
+                url: '/api/nps/list',                       // NPS 데이터 API 호출
                 method: 'get',
-                success:function (data) {
+                success: function (data) {
                     console.log("데이터 가져오기 성공:", data)
-                    npsList = data          // 전체 데이터를 저장
-                    renderTable(npsList)    // 전체 데이터로 초기 렌더링
+                    npsList = data                          // 전체 데이터를 저장
+                    renderTable(npsList)                    // 전체 데이터로 초기 렌더링
                 },
-                error:function (xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.log("데이터를 불러오는데 실패함")
                     console.log("상태 코드:", status)
                     console.log("에러 메시지:", error)
                     console.log("전체 에러 객체:", xhr)
                 }
-            })
+            });
 
-            // 필터 버튼 클릭 시
-            $('.filter-btn').click(function () {
-                let type = $(this).data('type')
-                console.log("필터 버튼 클릭, 선택된 타입:", type)
-
-                let filteredData = npsList             // 기본적으로 전체 데이터를 필터링
-
-                if (type === 'HOTEL') {
-                    filteredData = npsList.filter(nps => nps.hotelOrStore === 'hotel')
-                    console.log("HOTEL 필터링된 데이터:", filteredData)
-                } else if (type === 'STORE') {
-                    filteredData = npsList.filter(nps => nps.hotelOrStore === 'store')
-                    console.log("STORE 필터링된 데이터:", filteredData)
-                }
-
-                renderTable(filteredData)              // 필터링된 데이터를 테이블에 표시
-            })
-
-            // 테이블 렌더링 함수
+            // 6. 테이블 렌더링 함수
             function renderTable(data) {
-                console.log("테이블 렌더링 시작, 데이터:", data)
-                let tbody = $('#npsTable tbody')
-                tbody.empty()                       // 기존 테이블 내용 초기화
+                let tbody = $('#npsTable tbody')  // 테이블 본문 선택
+                tbody.empty()  // 테이블 본문 초기화
 
                 data.forEach(nps => {
+                    // 6-1. 각 NPS 데이터 항목을 테이블의 새로운 행으로 추가
                     let row = `
-                                <tr>
-                                    <td>${nps.id}</td>
-                                    <td>${nps.hotelName || nps.storeName}</td>
-                                    <td>${nps.questionOne}</td>
-                                    <td>${nps.questionTwo}</td>
-                                    <td>${nps.questionThree}</td>
-                                    <td>${nps.questionFour}</td>
-                                    <td>${nps.questionFive}</td>
-                                    <td>${nps.totalScore}</td>
-                                    <td>${nps.etcQuestion}</td>
-                                </tr>
-                            `
+                    <tr>
+                      <td>${nps.id}</td>
+                      <td>${nps.storeName || nps.hotelName}</td>
+                      <td>${nps.questionOne}</td>
+                      <td>${nps.questionTwo}</td>
+                      <td>${nps.questionThree}</td>
+                      <td>${nps.questionFour}</td>
+                      <td>${nps.questionFive}</td>
+                      <td>${nps.totalScore}</td>
+                      <td>${nps.etcQuestion}</td>
+                    </tr>
+                  `
                     tbody.append(row)
                 })
             }
-
         })
-
     </script>
 
 </div>
+
 </body>
 </html>

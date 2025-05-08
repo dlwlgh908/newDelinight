@@ -1,10 +1,6 @@
 package com.onetouch.delinight.Service;
 
-import com.onetouch.delinight.Constant.PaidCheck;
 import com.onetouch.delinight.Constant.PointType;
-import com.onetouch.delinight.DTO.OrdersDTO;
-import com.onetouch.delinight.DTO.PaymentDTO;
-import com.onetouch.delinight.Entity.PaymentEntity;
 import com.onetouch.delinight.Entity.PointLogEntity;
 import com.onetouch.delinight.Entity.PointWalletEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
@@ -18,8 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.module.ResolutionException;
-import java.time.LocalDate;
-import java.util.List;
 
 @Log4j2
 @Service
@@ -67,7 +61,6 @@ public class PointServiceImpl implements PointService{
     //포인트 적립
     @Override
     public void earnPoint(Long usersId, Long paymentId, int paymentAmount) {
-
         //결제 금액의 10%를 포인트로 적립할 양으로 계산한다.
         int earnPoint = (int) (paymentAmount * 0.1);
 
