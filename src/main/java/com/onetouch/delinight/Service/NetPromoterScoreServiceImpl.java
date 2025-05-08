@@ -148,7 +148,7 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
         } else if (membersEntity.getRole() == Role.ADMIN) {
             // ADMIN 권한: 호텔 ID에 따라 NPS 데이터 조회 (자기 호텔의 설문과 그에 속한 스토어들)
             log.info("ADMIN 권한 - 호텔 ID: {} 관련 NPS 데이터 조회 시작", membersEntity.getHotelEntity().getId());
-            netPromoterScoreDTOList = netPromoterScoreRepository.findByHotelEntityOrStoreEntityIn(
+            netPromoterScoreDTOList = netPromoterScoreRepository.findByStoreEntityAndHotelEntity(
                             membersEntity.getHotelEntity(), membersEntity.getHotelEntity().getStores() // 해당 호텔에 속한 모든 스토어
                     ).stream().map(nps -> {
                         NetPromoterScoreDTO dto = modelMapper.map(nps, NetPromoterScoreDTO.class);
