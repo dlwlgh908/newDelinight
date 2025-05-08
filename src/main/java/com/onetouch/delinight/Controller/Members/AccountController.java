@@ -17,11 +17,13 @@ import com.onetouch.delinight.Service.HotelService;
 import com.onetouch.delinight.Service.MembersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.security.Principal;
 
@@ -35,7 +37,7 @@ public class AccountController {
     private final MembersRepository membersRepository;
     private final CenterService centerService;
     private final HotelService hotelService;
-    private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/redirectPage")
     public String redirectPage() {
@@ -209,54 +211,51 @@ public class AccountController {
                              @ModelAttribute MembersDTO membersDTO, Model model,
                              @RequestParam(value = "currentPassword", required = false) String currentPassword,
                              @RequestParam(value = "newPassword", required = false) String newPassword,
+                             @RequestParam(value = "newPhone", required = false) String newPhone,
                              @RequestParam(value = "confirmPassword", required = false) String confirmPassword) {
-
 
         MembersEntity membersEntity = membersRepository.findByEmail(principal.getName());
         boolean hasError = false;
 
-        //전화번호 변경
-        if (membersDTO.getPhone() == null || membersDTO.getPhone().trim().isEmpty()){
-            model.addAttribute("phoneError", "전화번호를 입력해주세요.");
-            hasError = true;
-        }
+        ////유효성검사
+        ////전화번호
+        //if (membersDTO.getPhone() == null || membersDTO.getPhone().trim().isEmpty()){
+        //    model.addAttribute("phoneError", "전화번호를 입력해주세요.");
+        //    hasError = true;
+        //}
+        ////비밀번호
+        ////현재 비밀번호에 입력된 값이 있을 때 실행됨
+        //if (currentPassword != null && !currentPassword.trim().isEmpty()){
+        //
+        //    //현재 비밀번호 검증
+        //    if (!passwordEncoder.matches(currentPassword, membersEntity.getPassword())){
+        //        model.addAttribute("currentPasswordError", "비밀번호가 일치하지 않습니다.");
+        //        hasError = true;
+        //    }
+        //
+        //    //새 비밀번호, 새 비밀번호 확인 검증
+        //    if (!newPassword.equals(confirmPassword)){
+        //        model.addAttribute("confirmPasswordError", "새 비밀번호 확인이 일치하지 않습니다.");
+        //        hasError = true;
+        //    }
+        //}
 
-        //비밀번호 변경
-        //현재 비밀번호에 입력된 값이 있을 때 실행됨
-        if (currentPassword != null && !currentPassword.trim().isEmpty()){
 
-            //현재 비밀번호 검증
-            if (!passwordEncoder.matches(currentPassword, membersEntity.getPassword())){
-                model.addAttribute("currentPasswordError", "비밀번호가 일치하지 않습니다.");
-                hasError = true;
-            }
+        membersDTO =
+            modelMapper.map(membersEntity, MembersDTO.class);
 
-            //새 비밀번호, 새 비밀번호 확인 검증
-            if (!newPassword.equals(confirmPassword)){
-                model.addAttribute("confirmPasswordError", "새 비밀번호 확인이 일치하지 않습니다.");
-                hasError = true;
-            }
-
-            //모두 통과 후 비밀번호 업데이트 진행
-            if (!hasError) {
-                String encodedNewPassword = passwordEncoder.encode(confirmPassword);
-                membersDTO.setPassword(encodedNewPassword);
-            }
-        }
-
-        //통과 후 업데이트 진행
-        if(hasError){
-            model.addAttribute("member", membersEntity);
-            return "/members/account/common/update";
-        }
-
-        membersDTO.setId(membersEntity.getId());
-        membersService.update(membersDTO);
+        membersService.update(membersDTO, newPhone ,newPassword);
+        log.info(membersDTO);
+        log.info(membersDTO);
+        log.info(newPassword);
+        log.info(newPassword);
+        log.info(newPhone);
+        log.info(newPhone);
 
         MembersEntity members = membersRepository.findByEmail(principal.getName());
         model.addAttribute("member", members);
 
-        return "/members/account/common/mypage";
+        return "members/account/common/mypage";
     }
 
 
