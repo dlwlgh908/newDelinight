@@ -18,11 +18,6 @@ public class AdminNpsController {
 
     private final NetPromoterScoreService netPromoterScoreService;
 
-    @GetMapping("/npsmail")
-    public String npsmail(Long checkOutId) {
-        netPromoterScoreService.sendNpsTemporary(checkOutId);
-        return "redirect:/members/nps";
-    }
 
 
     @GetMapping("/list")
