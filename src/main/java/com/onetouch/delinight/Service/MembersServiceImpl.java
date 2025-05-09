@@ -127,15 +127,23 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
-    public void update(MembersDTO membersDTO) {
+    public void update(MembersDTO membersDTO, String newPhone, String newPassword) {
 
         MembersEntity membersEntity =
                 modelMapper.map(membersDTO, MembersEntity.class);
         MembersEntity members =
                 membersRepository.findById(membersEntity.getId()).orElseThrow(EntityNotFoundException::new);
 
-        members.setPhone(membersEntity.getPhone());
-        members.setPassword(membersEntity.getPassword());
+        if (newPhone != null && !newPhone.trim().isEmpty()){
+            members.setPhone(newPhone);
+        }
+
+        if (newPassword != null && !newPassword.trim().isEmpty()){
+            String encodePassword = passwordEncoder.encode(newPassword);
+            members.setPassword(encodePassword);
+        }
+
+        membersRepository.save(members);
     }
 
     @Override
