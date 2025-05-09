@@ -28,6 +28,21 @@ public class NetPromoterScoreDTO {
     private String hotelName;
     private LocalDateTime insertTime;
 
+    private HotelDTO hotelDTO;
+    private StoreDTO storeDTO;
+
+    public NetPromoterScoreDTO setHotelDTO(HotelDTO hotelDTO) {
+
+        this.hotelDTO = hotelDTO;
+        return this;
+    }
+    public NetPromoterScoreDTO setStoreDTO(StoreDTO storeDTO) {
+
+        this.storeDTO = storeDTO;
+        return this;
+    }
+
+
 
 
 }

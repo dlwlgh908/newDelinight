@@ -13,7 +13,9 @@ public interface NetPromoterScoreService {
 
     public void npsInsert(List<NetPromoterScoreDTO> npsDTOList, Long checkOutId);
 
-    public List<NetPromoterScoreDTO> findAll(Long memberId);
+    public List<NetPromoterScoreDTO> npsAll(Long memberId);
+
+
 
 
 

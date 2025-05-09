@@ -28,7 +28,7 @@ public class AdminNpsController {
     public String list(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
         Long memberId = memberDetails.getMembersEntity().getId();
         Role role = memberDetails.getMembersEntity().getRole();
-        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreService.findAll(memberId);
+        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreService.npsAll(memberId);
         model.addAttribute("role", role);
         model.addAttribute("npsList", netPromoterScoreDTOList);
         return "members/nps/list";
@@ -38,7 +38,7 @@ public class AdminNpsController {
     public String chart(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
         Long memberId = memberDetails.getMembersEntity().getId();
         Role role = memberDetails.getMembersEntity().getRole();
-        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreService.findAll(memberId);
+        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreService.npsAll(memberId);
         model.addAttribute("role", role);
         model.addAttribute("npsList", netPromoterScoreDTOList);
         return "members/nps/chart";

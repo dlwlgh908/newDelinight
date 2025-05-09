@@ -25,14 +25,15 @@ public class AdminNpsRestController {
     @GetMapping("/list")
     public ResponseEntity<List<NetPromoterScoreDTO>> npsList(@AuthenticationPrincipal MemberDetails memberDetails) {
         Long memberId = memberDetails.getMembersEntity().getId();
-        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreService.findAll(memberId);
+        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreService.npsAll(memberId);
+        log.info(netPromoterScoreDTOList);
         return ResponseEntity.ok(netPromoterScoreDTOList);
     }
 
     @GetMapping("/chart")
     public ResponseEntity<List<NetPromoterScoreDTO>> npsChart(@AuthenticationPrincipal MemberDetails memberDetails) {
         Long memberId = memberDetails.getMembersEntity().getId();
-        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreService.findAll(memberId);
+        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreService.npsAll(memberId);
         return ResponseEntity.ok(netPromoterScoreDTOList);
     }
 

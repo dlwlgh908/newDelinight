@@ -33,8 +33,7 @@ public class MembersDTO {
 
     private Role role;
     private Status status;
-
-
+    private StoreDTO storeDTO;
 
 
     public MembersDTO(MembersEntity entity) {
@@ -45,6 +44,11 @@ public class MembersDTO {
         this.password = entity.getPassword();
         this.role = entity.getRole();
         this.status = entity.getStatus();
+    }
+
+    public StoreDTO setStoreDTO(StoreDTO storeDTO){
+        this.storeDTO = storeDTO;
+        return this.storeDTO;
     }
 
 
