@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/desktop/layout}">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <title>고객만족도 평가</title>
+</head>
+<body>
+
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+
+    <main>
+
+        <div class="container-fluid px-5">
+            <h3 class="mt-5">고객만족도 평가</h3>
+            <ol class="breadcrumb mb-4">
+                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                <a href="/members/nps/list" class="breadcrumb-item active">데이터테이블</a>
+                <a href="/members/nps/chart" class="breadcrumb-item active">통계</a>
+            </ol>
+        </div>
+
+        <div class="card custom-shadow mb-4">
+            <div class="card-body">
+
+                <div id="centerManagerView" style="display: none;"></div>
+                <div id="hotelManagerView" style="display: none;"></div>
+                <div id="storeManagerView" style="display: none;"></div>
+
+
+            </div>
+        </div>
+
+    </main>
+
+    <script th:inline="javascript">
+
+        // 권한 가져오기
+        const role = [[${role}]]
+        console.log(`[초기화] 사용자 권한: ${role}`)
+        initRoleView(role)
+
+        function initRoleView(role) {
+            if (role === 'SUPERADMIN') {
+                $('#centerManagerView').show()
+            } else if (role === 'ADMIN') {
+                $('#hotelManagerView').show()
+            } else if (role === 'STOREADMIN') {
+                $('#storeManagerView').show()
+            } else {
+                console.warn('알 수 없는 역할:', role)
+            }
+        }
+
+        // 전역 변수
+        let npsList = [], hotelData = [], storeData = [], stores = [], hotels = []
+        let today = new Date()
+        let startOfMonth = new Date(today.getFullYear(), today.getMonth(), 2)
+        let endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1)
+
+        // 날짜 초기 설정
+        $('#startDate').val(formatDate(startOfMonth))
+        $('#endDate').val(formatDate(endOfMonth))
+        console.log('[초기화] 기본 날짜 범위 설정 완료')
+
+
+
+
+    </script>
+
+</div>
+</body>
+</html>

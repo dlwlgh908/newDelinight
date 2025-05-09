@@ -14,24 +14,13 @@
         <div layout:fragment="adminContent" id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-5">
-                    <!--내용 넣는 곳-->
-                    <!--반드시 이 아래에서만 작업-->
-
-                    <!--페이지 이름-->
-                    <h3 class="mt-5">정보수정</h3>
-                    <ol class="breadcrumb mb-4">
-                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                        <a href="#" class="breadcrumb-item active no-click">마이페이지</a>
-                        <a href="/members/account/mypage" class="breadcrumb-item active">정보수정</a>
-                    </ol>
-
-                    <!--텍스트 박스-->
-                    <div class="card mb-4 custom-shadow">
+                    <div class="card mb-4 custom-shadow mt-5">
                        <div class="card-body">
-
-                           <h5 class="mb-4 fw-bold">기본 정보</h5>
-
-                           <hr class="hrMain">
+                           <h3>정보수정</h3>
+                           <ol class="breadcrumb mb-5">
+                               <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                               <a href="/members/account/mypage" class="breadcrumb-item active">내 정보</a>
+                           </ol>
 
                            <form action="/members/account/update" method="post" enctype="multipart/form-data">
                                <div class="row mb-1">
@@ -60,7 +49,7 @@
                                <div class="row mb-4">
                                    <label class="col-sm-2 col-form-label form-label">전화번호</label>
                                    <div class="col-sm-3">
-                                       <input type="text" class="form-control" id="staticMembersPhone" name="phone" maxlength="13" th:placeholder="${member.phone}">
+                                       <input type="text" class="form-control" id="staticMembersPhone" name="newPhone" maxlength="11" th:placeholder="${member.phone}">
                                        <div class="text-sm mt-1">
                                            변경할 전화번호를 입력해주세요.
                                        </div>
@@ -81,13 +70,14 @@
                                    <div class="row mb-4">
                                        <label class="col-sm-2 col-form-label form-label">현재 비밀번호</label>
                                        <div class="col-sm-4">
-                                           <input type="password" class="form-control" maxlength="16">
+                                           <input type="password" class="form-control" name="currentPassword" maxlength="16">
+                                           <div th:text="${currentPasswordError}" class="text-sm mt-1 text-danger"></div>
                                        </div>
                                    </div>
                                    <div class="row mb-4">
                                        <label class="col-sm-2 col-form-label form-label">새 비밀번호</label>
                                        <div class="col-sm-4">
-                                           <input type="password" class="form-control" name="password" maxlength="16">
+                                           <input type="password" class="form-control" name="newPassword" maxlength="16">
                                            <div class="text-sm mt-1">
                                                영문/숫자/특수문자 조합(8~16자로 작성) <br>
                                            </div>
@@ -96,13 +86,14 @@
                                    <div class="row mb-4">
                                        <label class="col-sm-2 col-form-label form-label">새 비밀번호 확인</label>
                                        <div class="col-sm-4">
-                                           <input type="password" class="form-control" maxlength="16">
+                                           <input type="password" class="form-control" name="confirmPassword" maxlength="16">
+                                           <div th:text="${confirmPasswordError}" class="text-sm mt-1 text-danger"></div>
                                        </div>
                                    </div>
                                </div>
 
                                <div class="text-center mt-5">
-                                   <a class="btn btn-primary me-2 px-4">저장</a>
+                                   <button type="submit" class="btn btn-primary me-2 px-4">저장</button>
                                    <a href="/members/account/mypage" class="btn btn-gray px-4">취소</a>
                                </div>
                            </form>
@@ -112,21 +103,6 @@
 
                 </div>
             </main>
-
-            <!--전화번호 입력창 하이폰-->
-            <script>
-                document.getElementById("staticMembersPhone").addEventListener("input", function (e) {
-                    let value = e.target.value.replace(/\D/g, ""); // 숫자만 남김
-
-                    if (value.length > 3 && value.length <= 7) {
-                        value = value.replace(/(\d{3})(\d+)/, "$1-$2");
-                    } else if (value.length > 7) {
-                        value = value.replace(/(\d{3})(\d{4})(\d+)/, "$1-$2-$3");
-                    }
-
-                    e.target.value = value;
-                });
-            </script>
 
             <!--비밀번호 변경창 토글-->
             <script>

@@ -33,6 +33,51 @@ public class CheckInServiceImpl implements CheckInService{
     private final PasswordEncoder passwordEncoder;
     private final CartService cartService;
 
+
+
+    @Override
+    public List<CheckInDTO> listCheckInWithPrice() {
+        List<CheckInEntity> checkInEntities = checkInRepository.findAll();
+        log.debug("🔍 [STEP 1] 전체 체크인 데이터 조회: {}", checkInEntities.size());
+
+        return checkInEntities.stream().map(checkInEntity -> {
+            CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class);
+
+            log.debug("🔍 [STEP 2] 현재 체크인 ID: {}", checkInEntity.getId());
+
+            // ✅ RoomDTO 항상 설정
+            checkInDTO.setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class));
+
+            // ✅ CHECKIN 상태인 경우 GuestDTO 또는 UsersDTO 설정
+            if (checkInEntity.getCheckInStatus().equals(CheckInStatus.CHECKIN)) {
+                if (checkInEntity.getGuestEntity() != null) {
+                    checkInDTO.setGuestDTO(modelMapper.map(checkInEntity.getGuestEntity(), GuestDTO.class))
+                            .setPassword(checkInDTO.getPassword())
+                            .setCertId(checkInDTO.getCertId())
+                            .setEmail(checkInDTO.getEmail())
+                            .setPhone(checkInDTO.getPhone());
+
+                    log.debug("🔍 [STEP 3] GuestDTO 설정 완료: {}", checkInDTO.getGuestDTO());
+                } else if (checkInEntity.getUsersEntity() != null) {
+                    checkInDTO.setUsersDTO(modelMapper.map(checkInEntity.getUsersEntity(), UsersDTO.class))
+                            .setEmail(checkInEntity.getUsersEntity().getEmail())
+                            .setPhone(checkInEntity.getUsersEntity().getPhone());
+
+                    log.debug("🔍 [STEP 4] UsersDTO 설정 완료: {}", checkInDTO.getUsersDTO());
+                }
+            }
+
+            // ✅ 결제 금액 조회 및 설정
+            Integer totalPrice = checkInRepository.selectPriceByCheckinId(checkInEntity.getId());
+            checkInDTO.setPrice(totalPrice != null ? (long) totalPrice : 0L);
+
+            log.debug("🔍 [STEP 5] 최종 DTO에 반영된 price: {}", checkInDTO.getPrice());
+
+            return checkInDTO;
+        }).collect(Collectors.toList());
+    }
+
+
     @Override
     public void create(RoomEntity roomEntity) {
 

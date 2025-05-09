@@ -3,7 +3,14 @@ package com.onetouch.delinight.Repository;
 import com.onetouch.delinight.Entity.NetPromoterScoreEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface NetPromoterScoreRepository extends JpaRepository<NetPromoterScoreEntity , Long> {
+
+    List<NetPromoterScoreEntity> findAll();
+    List<NetPromoterScoreEntity> findByStoreEntity_MembersEntity_Id(Long membersId);
+    List<NetPromoterScoreEntity> findByStoreEntity_HotelEntity_MembersEntity_IdOrHotelEntity_MembersEntity_Id(Long membersId, Long membersId2);
+    List<NetPromoterScoreEntity> findByStoreEntity_HotelEntity_BranchEntity_CenterEntity_MembersEntity_IdOrHotelEntity_BranchEntity_CenterEntity_MembersEntity_Id(Long membersId, Long membersId2);
 
 
 }

@@ -12,6 +12,7 @@ import com.onetouch.delinight.Entity.CheckInEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -28,6 +29,9 @@ public interface CheckInRepository extends JpaRepository<CheckInEntity, Long> {
 
     @Query("select c from CheckInEntity c where c.roomEntity.id = :id")
     CheckInEntity selectRoom(Long id);
+
+    @Query("select sum(o.totalPrice) from OrdersEntity o where o.paymentEntity.orderType = 'PAYLATER' and o.checkInEntity.id = :id")
+    Integer selectPriceByCheckinId(@Param("id") Long id);
 
 
 }

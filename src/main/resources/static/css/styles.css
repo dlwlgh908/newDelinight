@@ -104,6 +104,15 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.radiusRoom {
+  font-size: 1rem;
+  border: 1px solid grey;
+  border-radius: 15px;
+  padding: 0 8px;
+  display: inline-block;
+  text-align: center;
+}
+
 hr {
   margin: 1rem 0;
   color: #999;
@@ -5531,7 +5540,7 @@ textarea.form-control-lg {
 
 .modal {
   --bs-modal-zindex: 1055;
-  --bs-modal-width: 500px;
+  --bs-modal-width: 700px;
   --bs-modal-padding: 1rem;
   --bs-modal-margin: 0.5rem;
   --bs-modal-color: ;
@@ -5565,6 +5574,7 @@ textarea.form-control-lg {
 
 .modal-dialog {
   position: relative;
+  top: 15%;
   width: auto;
   margin: var(--bs-modal-margin);
   pointer-events: none;

@@ -14,6 +14,8 @@ public interface ReplyService {
 
     //상세보기
     public ReplyDTO read(Long id);
+    public ReplyDTO findByInquireId(Long id);
+
     //댓글 수정
     public  ReplyDTO update(ReplyDTO replyDTO);
 

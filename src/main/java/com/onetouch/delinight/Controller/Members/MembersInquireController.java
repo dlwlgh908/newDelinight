@@ -2,12 +2,14 @@ package com.onetouch.delinight.Controller.Members;
 
 import com.onetouch.delinight.DTO.InquireDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.DTO.ReplyDTO;
 import com.onetouch.delinight.Entity.InquireEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.InquireRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.HotelService;
 import com.onetouch.delinight.Service.InquireService;
+import com.onetouch.delinight.Service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -31,6 +33,7 @@ public class MembersInquireController {
     private final InquireRepository inquireRepository;
     private final MembersRepository membersRepository;
     private final HotelService hotelService;
+    private final ReplyService replyService;
 
 
     // 멤버에서는 읽기(읽기 페이지 속에 댓글이 들어가는거임), 리스트
@@ -57,15 +60,16 @@ public class MembersInquireController {
 
     //상세보기
     @GetMapping("/read")
-    public String read(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
+    public String read(@RequestParam Long id, Model model){
         InquireDTO inquireDTO = inquireService.read(id);
+        ReplyDTO replyDTO = replyService.findByInquireId(id);
 
         model.addAttribute("inquireDTO", inquireDTO);
+        model.addAttribute("replyDTO", replyDTO);
+
         log.info(inquireDTO);
         log.info(inquireDTO);
         return "/members/inquire/read";
     }
-
-
 
 }

@@ -32,6 +32,8 @@ public interface CheckInService {
 
     public void del(Long id);
 
+    public List<CheckInDTO> listCheckInWithPrice();
+
 
 
 

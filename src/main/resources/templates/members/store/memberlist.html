@@ -39,10 +39,7 @@
                         <th:block  th:each="list:${membersEntityList}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
-                                <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/members/hotel/read(id=${list.id})}">
-                                    [[${list.name}]]
-                                </a>
-                                </td>
+                                <td th:text="${list.name}" th:data-num="${list.id}" th:href="@{/members/hotel/read(id=${list.id})}"></td>
                                 <td th:text="${list.phone}"></td>
 
                                 <td th:text="${list.email}"></td>
@@ -64,7 +61,7 @@
                                 </td>
 
                                 <td>
-                                    <a th:value="${list.id}" href="#" id="delBtn"><i class="fa-solid fa-trash" style="color: #dc3545"></i></a>
+                                    <a class="btn btn-outline-danger" th:value="${list.id}" id="dbtn"><i class="fa-solid fa-trash hoverBtn text-danger"></i></a>
                                 </td>
                             </tr>
 
@@ -111,7 +108,7 @@
             });
 
 
-            $(document).on("click", "#delBtn", function () {
+            $(document).on("click", "#dbtn", function () {
 
                 alert(123)
                 let id = this.getAttribute("value");

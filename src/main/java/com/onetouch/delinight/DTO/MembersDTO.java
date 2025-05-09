@@ -10,7 +10,6 @@ package com.onetouch.delinight.DTO;
 import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.Entity.MembersEntity;
-import jakarta.persistence.Column;
 import lombok.*;
 
 @Getter
@@ -34,8 +33,7 @@ public class MembersDTO {
 
     private Role role;
     private Status status;
-
-
+    private StoreDTO storeDTO;
 
 
     public MembersDTO(MembersEntity entity) {
@@ -47,4 +45,11 @@ public class MembersDTO {
         this.role = entity.getRole();
         this.status = entity.getStatus();
     }
+
+    public StoreDTO setStoreDTO(StoreDTO storeDTO){
+        this.storeDTO = storeDTO;
+        return this.storeDTO;
+    }
+
+
 }

@@ -100,6 +100,13 @@ public class ReplyServiceImpl implements ReplyService{
         return modelMapper.map(replyEntity, ReplyDTO.class);
     }
 
+    @Override
+    public ReplyDTO findByInquireId(Long id) {
+        ReplyEntity replyEntity = replyRepository.findByInquireEntityId(id).orElse(null);
+
+        return replyEntity != null ? modelMapper.map(replyEntity, ReplyDTO.class) : new ReplyDTO();
+    }
+
 
     @Override
     public ReplyDTO update(ReplyDTO replyDTO) {

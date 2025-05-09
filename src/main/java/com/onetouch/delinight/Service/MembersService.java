@@ -12,8 +12,6 @@ import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +24,7 @@ public interface MembersService {
 
     public boolean assignCheck(String email, int sep);
     public void create(MembersDTO membersDTO);
-    public void update(MembersDTO membersDTO);
+    public void update(MembersDTO membersDTO, String newPhone, String newPassword);
 
     public Page<MembersEntity> getList(int page);
     public Page<MembersEntity> getListHotel(int page, String email);

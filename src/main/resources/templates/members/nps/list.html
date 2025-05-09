@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/desktop/layout}"> <!-- 공통 레이아웃 적용 -->
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <title>고객만족도 평가</title>
+
+</head>
+
+<body>
+
+<div layout:fragment="adminContent" id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-5">
+            <h3 class="mt-5">고객만족도 평가</h3>
+            <ol class="breadcrumb mb-4">
+                <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                <a href="/members/nps/list" class="breadcrumb-item active">데이터테이블</a>
+                <a href="/members/nps/chart" class="breadcrumb-item active">통계</a>
+            </ol>
+        </div>
+
+        <div class="card custom-shadow mb-4">
+            <div class="card-body">
+
+                <div id="centerManagerView" style="display: none;"></div>
+                <div id="hotelManagerView" style="display: none;"></div>
+                <div id="storeManagerView" style="display: none;"></div>
+
+                <div class="d-flex justify-content-start gap-2" style="gap: 10px;">
+                    <!-- 필터 영역 -->
+                    <div>
+                        <label for="startDate">시작일:</label>
+                        <input type="date" id="startDate" name="startDate">
+                        <label for="endDate">종료일:</label>
+                        <input type="date" id="endDate" name="endDate">
+                        <button id="filterButton">조회</button>
+                    </div>
+
+                    <!-- 호텔 선택 영역 -->
+                    <div class="hotelSelectWrap">
+                        <label for="hotelSelect">호텔</label>
+                        <select id="hotelSelect">
+                            <option value="">모든 호텔</option>
+                            <!-- 옵션들 동적으로 추가 -->
+                        </select>
+                    </div>
+
+                    <!-- 스토어 선택 영역 -->
+                    <div class="storeSelectWrap">
+                        <label for="storeSelect">스토어</label>
+                        <select id="storeSelect">
+                            <option value="">모든 스토어</option>
+                            <!-- 옵션들 동적으로 추가 -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 탭 버튼 -->
+                <div class="tabs" style="margin-top: 15px;">
+                    <button id="hotelTab" class="tab-button active">호텔</button>
+                    <button id="storeTab" class="tab-button">스토어</button>
+                </div>
+
+                <table id="npsHotelTable" class="table table-bordered hotelTitle" style="display:none;">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>매장</th>
+                        <th>1문항</th>
+                        <th>2문항</th>
+                        <th>3문항</th>
+                        <th>4문항</th>
+                        <th>5문항</th>
+                        <th>점수</th>
+                        <th>기타문의</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- AJAX 데이터 삽입 -->
+                    </tbody>
+                </table>
+
+                <table id="npsStoreTable" class="table table-bordered" style="display:none;">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>매장</th>
+                        <th>1문항</th>
+                        <th>2문항</th>
+                        <th>3문항</th>
+                        <th>4문항</th>
+                        <th>5문항</th>
+                        <th>점수</th>
+                        <th>기타문의</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- AJAX 데이터 삽입 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 모달 HTML -->
+        <div id="myModal" style="display: none;">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <p id="modalContent"></p>
+            </div>
+        </div>
+
+    </main>
+
+    <script th:inline="javascript">
+
+        $(document).ready(function () {
+
+            // 전역 변수
+            let npsList = [], hotelData = [], storeData = [], stores = [], hotels = []
+            let today = new Date()
+            let startOfMonth = new Date(today.getFullYear(), today.getMonth(), 2)
+            let endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1)
+
+            // 날짜 초기 설정
+            $('#startDate').val(formatDate(startOfMonth))
+            $('#endDate').val(formatDate(endOfMonth))
+            console.log('[초기화] 기본 날짜 범위 설정 완료')
+
+            // 권한 가져오기
+            const role = [[${role}]]
+            console.log(`[초기화] 사용자 권한: ${role}`)
+            initRoleView(role)
+
+            // 탭 전환
+            $('#hotelTab').on('click', () => switchTab('hotel'))
+            $('#storeTab').on('click', () => switchTab('store'))
+            console.log(`[탭 전환] 현재 탭: ${type === 'hotel' ? '호텔' : '스토어'}`)
+
+            // 필터 조회 버튼
+            $('#filterButton').on('click', () => {
+                const startDate = $('#startDate').val()
+                const endDate = $('#endDate').val()
+                console.log(`[조회] 필터 버튼 클릭 - 시작일: ${startDate}, 종료일: ${endDate}`)
+                loadNpsData(startDate, endDate, role)
+            })
+
+            // 호텔 셀렉트박스 선택 시
+            $('#hotelSelect').on('change', function () {
+                const selectedHotel = $(this).val()
+                console.log(`[필터] 호텔 선택: ${selectedHotel || '전체'}`)
+                const filteredHotelData = selectedHotel ? hotelData.filter(nps => nps.hotelName === selectedHotel) : hotelData
+                renderTable('#npsHotelTable', filteredHotelData)
+
+                const filteredStores = selectedHotel ? [...new Set(storeData.filter(nps => nps.hotelName === selectedHotel).map(nps => nps.storeName))] : [...new Set(storeData.map(nps => nps.storeName))]
+
+                updateStoreSelectBox(filteredStores)
+            })
+
+            // 스토어 셀렉트박스 선택 시
+            $('#storeSelect').on('change', function () {
+                const selectedHotel = $('#hotelSelect').val()
+                const selectedStore = $(this).val()
+                console.log(`[필터] 스토어 선택: ${selectedStore || '전체'}, 호텔: ${selectedHotel || '전체'}`)
+
+                const filteredStoreData = storeData.filter(nps => {
+                    const hotelMatch = selectedHotel ? nps.hotelName === selectedHotel : true
+                    const storeMatch = selectedStore ? nps.storeName === selectedStore : true
+                    return hotelMatch && storeMatch
+                })
+
+                renderTable('#npsStoreTable', filteredStoreData)
+            })
+
+            // 유틸리티 / 기능 함수
+            function formatDate(date) {
+                return date.toISOString().split('T')[0]
+            }
+
+            function switchTab(type) {
+                if (type === 'hotel') {
+                    $('#npsHotelTable').show()
+                    $('#npsStoreTable').hide()
+                    $('#hotelTab').addClass('active')
+                    $('#storeTab').removeClass('active')
+                } else {
+                    $('#npsHotelTable').hide()
+                    $('#npsStoreTable').show()
+                    $('#storeTab').addClass('active')
+                    $('#hotelTab').removeClass('active')
+                }
+            }
+
+            function initRoleView(role) {
+                if (role === 'SUPERADMIN') {
+                    $('#centerManagerView').show()
+                    loadNpsData($('#startDate').val(), $('#endDate').val(), 'center')
+                } else if (role === 'ADMIN') {
+                    $('#hotelManagerView').show()
+                    $('.hotelSelectWrap').hide()
+                    loadNpsData($('#startDate').val(), $('#endDate').val(), 'hotel')
+                } else if (role === 'STOREADMIN') {
+                    $('#storeManagerView').show()
+                    $('.storeSelectWrap, .hotelSelectWrap, .hotelTitle').hide()
+                    loadNpsData($('#startDate').val(), $('#endDate').val(), 'store')
+                } else {
+                    console.warn('알 수 없는 역할:', role)
+                }
+            }
+
+            function loadNpsData(startDate, endDate, type) {
+                console.log(`[데이터] NPS 데이터 불러오기 시작 - 유형: ${type}, 기간: ${startDate} ~ ${endDate}`)
+                $.ajax({
+                    url: '/api/nps/list',
+                    method: 'GET',
+                    data: { startDate, endDate },
+                    success: function (data) {
+                        console.log(`[데이터] NPS 데이터 로딩 완료 - 총 ${data.length}건`)
+                        npsList = data
+                        hotelData = npsList.filter(item => item.hotelOrStore === 'hotel' && item.insertTime >= startDate && item.insertTime <= endDate)
+                        storeData = npsList.filter(item => item.hotelOrStore === 'store' && item.insertTime >= startDate && item.insertTime <= endDate)
+
+                        hotels = [...new Set(hotelData.map(item => item.hotelName))]
+                        stores = [...new Set(storeData.map(item => item.storeName))]
+
+                        updateHotelSelectBox(hotels)
+                        updateStoreSelectBox(stores)
+                        renderTables()
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('NPS 데이터 로딩 실패:', error)
+                    }
+                })
+            }
+
+            function updateHotelSelectBox(hotels) {
+                const hotelSelect = $('#hotelSelect')
+                hotelSelect.empty().append('<option value="">모든 호텔</option>')
+                hotels.forEach(hotel => {
+                    hotelSelect.append(`<option value="${hotel}">${hotel}</option>`)
+                })
+            }
+
+            function updateStoreSelectBox(stores) {
+                const storeSelect = $('#storeSelect')
+                storeSelect.empty().append('<option value="">모든 스토어</option>')
+                stores.forEach(store => {
+                    storeSelect.append(`<option value="${store}">${store}</option>`)
+                })
+            }
+
+            function renderTables() {
+                if (hotelData.length > 0) {
+                    $('#npsHotelTable').show()
+                    renderTable('#npsHotelTable', hotelData)
+                } else {
+                    $('#npsHotelTable').hide()
+                }
+
+                if (storeData.length > 0) {
+                    $('#npsStoreTable').show()
+                    renderTable('#npsStoreTable', storeData)
+                } else {
+                    $('#npsStoreTable').hide()
+                }
+            }
+
+            function renderTable(tableId, data) {
+                const tableBody = $(tableId).find('tbody')
+                tableBody.empty()
+
+                data.forEach(nps => {
+                    const name = nps.hotelOrStore === 'hotel' ? nps.hotelName : nps.storeName
+                    const row = `
+                                    <tr>
+                                        <td>${nps.id}</td>
+                                        <td>${name}</td>
+                                        <td>${nps.questionOne}</td>
+                                        <td>${nps.questionTwo}</td>
+                                        <td>${nps.questionThree}</td>
+                                        <td>${nps.questionFour}</td>
+                                        <td>${nps.questionFive}</td>
+                                        <td>${nps.totalScore}</td>
+                                        <td>${nps.etcQuestion}</td>
+                                    </tr>
+                                `
+                    tableBody.append(row)
+                })
+
+            }
+
+        })
+
+
+    </script>
+
+</div>
+
+</body>
+</html>

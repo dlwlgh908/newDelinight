@@ -1,9 +1,12 @@
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.Constant.Role;
+import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.NetPromoterScoreDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.CheckOutLogEntity;
+import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.NetPromoterScoreEntity;
 import com.onetouch.delinight.Entity.OrdersEntity;
 import com.onetouch.delinight.Repository.*;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +38,7 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
     private final ModelMapper modelMapper;
     private final HotelRepository hotelRepository;
     private final StoreRepository storeRepository;
+    private final MembersRepository membersRepository;
 
 
     @Override
@@ -114,18 +119,53 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
 
 
     @Override
-    public List<NetPromoterScoreDTO> npsList() {
-        List<NetPromoterScoreEntity> netPromoterScoreEntitiesList = netPromoterScoreRepository.findAll();
-        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreEntitiesList.stream()
-                .map(entity -> modelMapper.map(entity, NetPromoterScoreDTO.class)).toList();
-        return netPromoterScoreDTOList;
-    }
+    public List<NetPromoterScoreDTO> npsAll(Long memberId) {
+        MembersEntity membersEntity = membersRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
+        log.info("조회 요청: memberId={}, role={}", memberId, membersEntity.getRole());
 
-    @Override
-    public NetPromoterScoreDTO npsDetail(Long npsId) {
-        NetPromoterScoreEntity netPromoterScoreEntity = netPromoterScoreRepository.findById(npsId).orElseThrow(EntityNotFoundException::new);
-        NetPromoterScoreDTO netPromoterScoreDTO = modelMapper.map(netPromoterScoreEntity, NetPromoterScoreDTO.class);
-        return netPromoterScoreDTO;
+        List<NetPromoterScoreEntity> netPromoterScoreEntityList = new ArrayList<>();
+        log.info("다 갖고옴? {}",netPromoterScoreEntityList);
+
+        try{
+
+            if (membersEntity.getRole().equals(Role.SUPERADMIN)){
+                netPromoterScoreEntityList = netPromoterScoreRepository.findByStoreEntity_HotelEntity_BranchEntity_CenterEntity_MembersEntity_IdOrHotelEntity_BranchEntity_CenterEntity_MembersEntity_Id(memberId, memberId);
+            }else if(membersEntity.getRole().equals(Role.ADMIN)){
+                netPromoterScoreEntityList = netPromoterScoreRepository.findByStoreEntity_HotelEntity_MembersEntity_IdOrHotelEntity_MembersEntity_Id(memberId, memberId);
+            }else if(membersEntity.getRole().equals(Role.STOREADMIN)){
+                netPromoterScoreEntityList = netPromoterScoreRepository.findByStoreEntity_MembersEntity_Id(memberId);
+            }else {
+                log.info("알 수 없는 관리자 권한입니다.");
+            }
+
+        }catch (Exception e){
+            log.info("데이터 조회 중 오류 발생 : {}", e.getMessage());
+        }
+
+        List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreEntityList.stream().map(entity -> {
+                    // 기본 DTO 변환
+                    NetPromoterScoreDTO npsDTO = modelMapper.map(entity, NetPromoterScoreDTO.class);
+                    log.info(npsDTO);
+
+                    // 호텔 정보 설정
+                    if (entity.getHotelEntity() != null) {
+                        npsDTO.setHotelOrStore("hotel");
+                        npsDTO.setHotelDTO(modelMapper.map(entity.getHotelEntity(), HotelDTO.class));
+
+                    }
+
+                    // 스토어 정보 설정
+                    if (entity.getStoreEntity() != null) {
+                        npsDTO.setHotelOrStore("store");
+
+                        npsDTO.setStoreDTO(modelMapper.map(entity.getStoreEntity(), StoreDTO.class).setHotelDTO(modelMapper.map(entity.getStoreEntity().getHotelEntity(),HotelDTO.class)));
+                    }
+
+                    return npsDTO;
+                }).toList();
+
+        // 변환된 DTO 리스트 반환
+        return netPromoterScoreDTOList;
     }
 
 
