@@ -37,7 +37,7 @@ public class MembersInquireController {
 
     //목록
     @GetMapping("/list")
-    public String list(Model model, Principal principal,@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    public String list(Model model, Principal principal,@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Long hotelId = hotelService.findHotelByEmail(principal.getName());
 

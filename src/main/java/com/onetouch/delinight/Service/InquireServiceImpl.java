@@ -92,7 +92,15 @@ public class InquireServiceImpl implements InquireService {
 
             return Page.empty();
         }
-        Page<InquireEntity> pageList = inquireRepository.findByCheckInEntity_UsersEntity_Id(usersEntity.getId(),pageable);
+
+        //최신순으로 정렬
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "regTime"));
+
+
+        Page<InquireEntity> pageList = inquireRepository.findByCheckInEntity_UsersEntity_Id(usersEntity.getId(),sortedPageable);
         //방금 찾은 체크인 기록의 id로 문의글을 찾고, 한페이지씩 잘라서 가져와
 
         return pageList.map(data -> modelMapper.map(data, InquireDTO.class));
@@ -100,6 +108,12 @@ public class InquireServiceImpl implements InquireService {
     }
     @Override
     public Page<InquireDTO> inquireList(Pageable pageable,Long hotelId) {
+
+        //최신순으로 정렬
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "regTime"));
 
         Page<InquireEntity> pageList = inquireRepository.findByHotelEntity_Id(hotelId,pageable);
         //방금 찾은 체크인 기록의 id로 문의글을 찾고, 한페이지씩 잘라서 가져와

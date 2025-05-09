@@ -83,7 +83,7 @@ public class UsersInquireController {
     //목록
 
     @GetMapping("/list")
-    public String list(Model model,@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
+    public String list(Model model,@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
             , Principal principal){ //usersId 파라미터로 받아서 해당 유저의 문의글만 조회
 
 
