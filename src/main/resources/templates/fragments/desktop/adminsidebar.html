@@ -32,7 +32,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-circle-user"></i></div>
                     계정 관리
                 </a>
-                <!--가맹점 관리-->
+                <!--가맹점관리-->
                 <!--스토어어드민-->
                 <a class="nav-link" th:href="@{/members/store/read(id=${storeId})}" th:if="${role.name() == 'STOREADMIN'}">
                     <div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>
@@ -50,7 +50,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-hotel"></i></div>
                     본사 관리<br>
                 </a>
-                <!--본사관리-->
+                <!--브랜드관리-->
                 <!--시스템어드민, 수퍼어드민-->
                 <a class="nav-link" href="/members/brand/list"
                    th:if="${role.name() == 'SUPERADMIN'}">

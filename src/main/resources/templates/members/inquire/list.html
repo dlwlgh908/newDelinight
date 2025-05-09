@@ -23,10 +23,11 @@
                     <table class="table align-middle table-hover mb-5">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>문의시간</th>
-                            <th>제목</th>
-                            <th>내용</th>
+                            <th style="width: 5%;">#</th>
+                            <th style="width: 12%;">문의시간</th>
+                            <th style="width: 11%;">유형</th>
+                            <th style="width: 20%;">제목</th>
+                            <th style="width: 37%;">내용</th>
                             <th>답변시간</th>
                         </tr>
                         </thead>
@@ -34,6 +35,11 @@
                             <tr>
                                 <td th:text="${inquireDTO.id}"></td>
                                 <td th:text="${#temporals.format(inquireDTO.regTime,'yyyy-MM-dd HH:mm')}"></td>
+                                <td>
+                                    <span th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMSERVICE}" class="text-secondary">룸서비스</span>
+                                    <span th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMCARE}" class="text-secondary">룸케어</span>
+                                    <span th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).OTHERINQUIRIES}" class="text-secondary">기타문의</span>
+                                </td>
                                 <td>
                                     <a class="alink-title table-title" th:href="@{/members/inquire/read(id=${inquireDTO.id})}">
                                         [[${inquireDTO.title}]]
@@ -89,7 +95,9 @@
 
     <!--스크립트 영역-->
     <!--추가할 스크립트가 있다면 이곳에서 <script>태그 열고 작업-->
+
     <script>
+        <!--문의사항 리스트 보기 제한-->
         document.addEventListener("DOMContentLoaded", function () {
 
             //제목 글자수 제한
@@ -111,7 +119,6 @@
             });
         });
     </script>
-
 
     <!--푸터-->
     <!--콘텐츠 내부에 포함된 형식이므로 첨삭 엄금!!!-->

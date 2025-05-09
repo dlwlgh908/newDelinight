@@ -6,6 +6,19 @@
 >
 <head>
     <title>델리나잇</title>
+
+    <style>
+        .v-center-text {
+            padding: 0.5rem 0.8rem;
+            align-items: center;
+            border: 1px solid rgb(206, 212, 218);
+            border-radius: 0.3rem;
+            line-height: 1.5;
+        }
+        textarea {
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="adminContent" id="layoutSidenav_content">
@@ -21,48 +34,51 @@
 
                         <div class="d-flex">
                             <div class="w-50">
-                                <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label form-label">문의유형</label>
+                                <div class="row mb-4">
+                                    <label class="col-sm-2 col-form-label form-label">문의유형</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control-plaintext" th:value="${inquireDTO.inquireType}" readonly>
+                                        <button th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMSERVICE}" class="btn btn-gray" disabled>
+                                            룸서비스
+                                        </button>
+
+                                        <button th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMCARE}" class="btn btn-gray" disabled>
+                                            룸케어
+                                        </button>
+
+                                        <button th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).OTHERINQUIRIES}" class="btn btn-gray" disabled>
+                                            기타문의
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label form-label">제목</label>
+                                    <div class="col-sm-9">
+                                        <div class="form-control-plaintext v-center-text" readonly>[[${inquireDTO.title}]]</div>
                                     </div>
                                 </div>
 
                                 <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label form-label">글 번호</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control-plaintext" th:value="${inquireDTO.id}" readonly>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label form-label">제목</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control-plaintext" th:value="${inquireDTO.title}" readonly>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label form-label">문의내용</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control-plaintext" th:value="${inquireDTO.content}" readonly>
+                                    <label class="col-sm-2 col-form-label form-label">문의내용</label>
+                                    <div class="col-sm-9">
+                                        <div class="form-control-plaintext v-center-text" readonly>[[${inquireDTO.content}]]</div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="w-50">
                                 <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label form-label">답변내용</label>
-                                    <div class="col-sm-6">
-                                        <textarea name="replyText" class="form-control replyText" oninput="autoResize(this)"></textarea>
+                                    <label class="col-sm-2 col-form-label form-label">답변내용</label>
+                                    <div class="col-sm-9">
+                                        <textarea th:if="${replyDTO.replyText == null}" name="replyText" class="form-control replyText" oninput="autoResize(this)" placeholder="작성하기"></textarea>
+                                        <div th:if="${replyDTO.replyText != null}" class="form-control-plaintext v-center-text">[[${replyDTO.replyText}]]</div>
+                                        <div class="mt-5 text-end">
+                                            <button type="submit" class="btn btn-primary insertBtn">전송</button>
+                                            <a href="/members/inquire/list" class="btn btn-gray">취소</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="mt-5 text-center">
-                            <button type="submit" class="btn btn-primary insertBtn">저장</button>
-                            <a href="/members/inquire/list" class="btn btn-gray">취소</a>
                         </div>
                     </div>
             </div>
@@ -70,6 +86,15 @@
         </div>
     </main>
 
+
+    <script>
+        window.addEventListener('load', function () {
+            document.querySelectorAll('.auto-resize').forEach(function (el) {
+                el.style.height = 'auto';
+                el.style.height = el.scrollHeight + 'px';
+            });
+        });
+    </script>
 
     <script th:inline="javascript">
 
