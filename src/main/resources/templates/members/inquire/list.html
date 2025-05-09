@@ -6,6 +6,14 @@
 >
 <head>
     <title>델리나잇</title>
+
+    <style>
+        .radiusRoom {
+            background-color: gray;
+            border: none;
+        }
+        .radiusRoom span {color: white}
+    </style>
 </head>
 <body>
 
@@ -36,9 +44,11 @@
                                 <td th:text="${inquireDTO.id}"></td>
                                 <td th:text="${#temporals.format(inquireDTO.regTime,'yyyy-MM-dd HH:mm')}"></td>
                                 <td>
-                                    <span th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMSERVICE}" class="text-secondary">룸서비스</span>
-                                    <span th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMCARE}" class="text-secondary">룸케어</span>
-                                    <span th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).OTHERINQUIRIES}" class="text-secondary">기타문의</span>
+                                    <div class="radiusRoom">
+                                        <span th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMSERVICE}">룸서비스</span>
+                                        <span th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMCARE}">룸케어</span>
+                                        <span th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).OTHERINQUIRIES}">기타문의</span>
+                                    </div>
                                 </td>
                                 <td>
                                     <a class="alink-title table-title" th:href="@{/members/inquire/read(id=${inquireDTO.id})}">
