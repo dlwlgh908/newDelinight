@@ -20,7 +20,7 @@ public class PointLogEntity {
     private Long id;
 
     @Column(name = "point_amount")
-    private int pointAmount; // 포인트금액
+    private int pointAmount; // 적립 및 사용 포인트 양
 
     @Enumerated(EnumType.STRING)
     @Column(name = "point_type")

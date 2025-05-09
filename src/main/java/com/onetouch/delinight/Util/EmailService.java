@@ -5,17 +5,25 @@
  * ***************************/
 package com.onetouch.delinight.Util;
 
+import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.DTO.PerformanceMailDTO;
+import com.onetouch.delinight.Service.MembersService;
+import com.onetouch.delinight.Service.OpenAIService;
+import com.onetouch.delinight.Service.PaymentService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -27,6 +35,9 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final TemplateEngine templateEngine;
+    private final PaymentService paymentService;
+    private final MembersService membersService;
+    private final OpenAIService  openAIService;
 
     // 초기 셋팅
     public void sendHtmlEmail(String to, String subject, String templateName, String tempPassword, Map<String, Object> variables) {
@@ -85,6 +96,50 @@ public class EmailService {
         }catch (MessagingException e) {
             log.error("이메일 전송 중 오류 발생 - email: {}, name: {}, link: {}", email, name, surveyLink, e);
             throw new RuntimeException("이메일 전송 중 오류 발생", e);
+        }
+
+    }
+
+
+    @Transactional
+    public void sendDailyPerformance(PerformanceMailDTO mailDTO){
+        MembersDTO membersDTO = membersService.findByEmail(mailDTO.getEmail());
+        if(!membersService.checkOperation(membersDTO)){
+            log.info("빠져나옴");
+
+            return;
+        }
+
+        try{
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
+
+
+            Context context = new Context();
+            context.setVariable("email", mailDTO.getEmail());
+            context.setVariable("name", mailDTO.getName());
+            context.setVariable("date", mailDTO.getDate());
+            context.setVariable("aiResponse",mailDTO.getAiResponse());
+            context.setVariable("targetName",mailDTO.getTargetName());
+            helper.addAttachment(mailDTO.getDate().toString()+"_일일매출현황.xlsx",new ByteArrayResource(paymentService.extractDailyExcel(membersDTO.getId(), membersDTO.getRole())));
+            context.setVariable("aiResponse", openAIService.analyzeSales(paymentService.makePrompt(membersDTO.getId(), membersDTO.getRole())));
+
+            log.info(mailDTO);
+
+            String html = templateEngine.process("/members/payment/dailyPerformance", context);
+
+            helper.setFrom("linkon9277@gmail.com");
+            helper.setTo(mailDTO.getEmail());
+            helper.setSubject(mailDTO.getTargetName()+"일일 매출 현황");
+            helper.setText(html, true);
+
+            javaMailSender.send(message);
+        }catch (MessagingException e) {
+            log.error("이메일 전송 중 오류 발생 - email: {}, name: {}", mailDTO.getEmail(), mailDTO.getName(), e);
+            throw new RuntimeException("이메일 전송 중 오류 발생", e); // 원래 예외를 함께 던짐
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
     }

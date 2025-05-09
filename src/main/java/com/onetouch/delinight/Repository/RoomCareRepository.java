@@ -7,8 +7,9 @@
  *********************************************************************/
 package com.onetouch.delinight.Repository;
 
+import com.onetouch.delinight.Entity.RoomCareEntity;
 import com.onetouch.delinight.Entity.RoomCareItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoomCareRepository extends JpaRepository<RoomCareItemEntity, Long> {
+public interface RoomCareRepository extends JpaRepository<RoomCareEntity, Long> {
 }

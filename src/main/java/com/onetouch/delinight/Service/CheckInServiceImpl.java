@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.hibernate.annotations.Check;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -298,9 +299,23 @@ public class CheckInServiceImpl implements CheckInService{
     }
 
     @Override
+    public HotelEntity findHotelInByEmail(Long CheckInId) {
+
+        HotelEntity hotelEntity = checkInRepository.findById(CheckInId).get().getRoomEntity().getHotelEntity();
+        return hotelEntity;
+    }
+
+    @Override
     public CheckInDTO findCheckInByEmail(String email) {
         CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
-        CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity.getRoomEntity().getHotelEntity(),HotelDTO.class)));
+        CheckInDTO checkInDTO;
+        if(checkInEntity==null){
+            CheckInEntity checkInEntity1 = checkInRepository.findByGuestEntity_Phone(email);
+            checkInDTO = modelMapper.map(checkInEntity1, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity1.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity.getRoomEntity().getHotelEntity(),HotelDTO.class)));
+        }
+        else {
+            checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity.getRoomEntity().getHotelEntity(),HotelDTO.class)));
+        }
         return checkInDTO;
     }
 

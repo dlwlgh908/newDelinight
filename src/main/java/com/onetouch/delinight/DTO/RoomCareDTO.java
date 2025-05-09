@@ -29,15 +29,20 @@ public class RoomCareDTO{
 
     private Long id;
 
-    private List<RoomCareItemEntity> roomCareItemEntities; // 룸케어아이템 리스트
-    private HotelEntity hotelEntity; // 호텔
-    private CheckInEntity checkInEntity; // 체크인 정보
+    private List<RoomCareItemDTO> roomCareItemDTOList; // 룸케어아이템 리스트
+    private HotelDTO hotelDTO; // 호텔
+    private CheckInDTO checkInDTO; // 체크인 정보
+    private CheckOutLogDTO checkOutLogDTO;
 
     private LocalDateTime awaitingTime; // 요청시간
     private LocalDateTime deliveredTime; // 완료시간
 
-    private CheckOutLogEntity checkOutLogEntity; // 체크아웃 정보
 
-    RoomCareStatus roomCareStatus; // 요청완료 상태
+    private RoomCareStatus roomCareStatus; // 요청완료 상태
+
+    public RoomCareDTO setHotelDTO(HotelDTO hotelDTO){
+        this.hotelDTO = hotelDTO;
+        return this;
+    }
 
 }

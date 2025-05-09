@@ -65,6 +65,7 @@
 
                 <!-- 탭 버튼 -->
                 <div class="tabs" style="margin-top: 15px;">
+                    <button id="allTab" class="tab-button active">전체</button>
                     <button id="hotelTab" class="tab-button active">호텔</button>
                     <button id="storeTab" class="tab-button">스토어</button>
                 </div>
@@ -140,6 +141,7 @@
             initRoleView(role)
 
             // 탭 전환
+            $('#allTab').on('click', () => switchTab('all'))
             $('#hotelTab').on('click', () => switchTab('hotel'))
             $('#storeTab').on('click', () => switchTab('store'))
             console.log(`[탭 전환] 현재 탭: ${type === 'hotel' ? '호텔' : '스토어'}`)
@@ -215,7 +217,7 @@
                 }
             }
 
-            function loadNpsData(startDate, endDate, type) {
+            function loadNpsData(   startDate, endDate, type) {
                 console.log(`[데이터] NPS 데이터 불러오기 시작 - 유형: ${type}, 기간: ${startDate} ~ ${endDate}`)
                 $.ajax({
                     url: '/api/nps/list',

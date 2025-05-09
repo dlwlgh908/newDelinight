@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>일일 매출 현황</title>
+</head>
+<body style="font-family: 'Apple SD Gothic Neo', Arial, sans-serif; background-color: #f8f8f8; padding: 20px; text-align: center;">
+<div style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+  <h2 style="color: #2c3e50;"><span th:text="${date}"></span> 일자  매출 현황</h2>
+
+
+
+  <p style="font-size: 16px; line-height: 1.6;">
+    안녕하세요 <span th:text="${name}"></span> 고객님, 전일자 <span th:text="targetName"></span>의 일일 매출 현황을 발송 드립니다.<br>
+  </p>
+
+  <h3 style="color: #2c3e50;">AI의 매출 데이터 분석 솔루션!</h3>
+  <div style="font-size: 16px; line-height: 1.6;" th:utext="${aiResponse}">
+
+  </div>
+  <p style="font-size: 16px; line-height: 1.6;">
+    <strong>DeliNight</strong> 서비스를 이용해 주셔서 진심으로 감사드립니다.
+  </p>
+  <p style="font-size: 14px; color: #7f8c8d;">
+    ※ AI의 의견은 Open AI사의 Chat GPT 3.5 turbo 모델을 사용하여 분석한 결과로 분석 요청 매출 데이터는 첨부된 엑셀 파일을 참고하시기 바랍니다.
+    ※ 본 메일은 발신 전용이며 회신하실 수 없습니다.
+  </p>
+
+  <p style="font-size: 14px; color: #bdc3c7;">
+    문의사항은 홈페이지 고객센터 또는 앱을 통해 연락 부탁드립니다.
+  </p>
+</div>
+</body>
+</html>
