@@ -157,7 +157,6 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
                     // 스토어 정보 설정
                     if (entity.getStoreEntity() != null) {
                         npsDTO.setHotelOrStore("store");
-
                         npsDTO.setStoreDTO(modelMapper.map(entity.getStoreEntity(), StoreDTO.class).setHotelDTO(modelMapper.map(entity.getStoreEntity().getHotelEntity(),HotelDTO.class)));
                     }
 
