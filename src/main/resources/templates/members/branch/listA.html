@@ -32,9 +32,10 @@
                         </thead>
 
                         <tbody>
-                        <th:block  th:each="list:${branchDTOList}">
+                        <th:block  th:each="list,stat:${branchDTOList}">
                             <tr>
-                                <th scope="row offset-4" th:text="${list.id}"></th>
+                                <th scope="row offset-4" th:text="${list.id}" hidden="hidden"></th>
+                                <th scope="row" th:text="${stat.count}"></th>
                                 <td><a th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
                                     [[${list.name}]]
                                 </a>

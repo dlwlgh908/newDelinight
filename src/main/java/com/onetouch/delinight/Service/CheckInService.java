@@ -5,6 +5,7 @@ import com.onetouch.delinight.DTO.CheckInDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.DTO.UsersDTO;
 import com.onetouch.delinight.Entity.CheckInEntity;
+import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.RoomEntity;
 import org.springframework.http.ResponseEntity;
 
@@ -29,6 +30,8 @@ public interface CheckInService {
     public List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus);
 
     public CheckInDTO findCheckInByEmail(String email);
+    public HotelEntity findHotelInByEmail(Long CheckInId);
+
 
     public void del(Long id);
 

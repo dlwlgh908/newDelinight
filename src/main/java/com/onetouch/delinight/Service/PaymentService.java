@@ -8,14 +8,20 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.PaidCheck;
+import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.DTO.ExcelDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
 import com.onetouch.delinight.DTO.PaymentDTO;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface PaymentService {
+
+    public byte[] extractDailyExcel(Long id, Role role) throws IOException;
+    public byte[] extractMonthlyExcel(Long id, Role role) throws IOException;
+    public String makePrompt(Long id, Role role);
 
     public List<OrdersDTO> readOrders(Long paymentId);
 
@@ -26,5 +32,7 @@ public interface PaymentService {
 
     List<ExcelDTO> extractData(List<PaymentDTO> paymentDTOList);
 
+
+    List<ExcelDTO> groupExcelDataBy(List<ExcelDTO> data, Role role);
 
 }

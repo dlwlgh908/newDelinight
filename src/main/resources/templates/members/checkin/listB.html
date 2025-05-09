@@ -52,15 +52,28 @@
 
                     <!--<pre> 코드는 <>를 문자 그대로 쓸 수 있게 해준다-->
 
+                    <div class="mb-3 row">
+                        <div class="col-4">
+                            <div class="d-flex">
+                                <label class="form-label col-form-label col-sm-3">예약 번호 :</label>
+                                <div class="col-sm-6 me-2">
+                                    <input type="text" id="reservationNum" class="form-control">
+                                </div>
+                                <button class="btn btn-primary col-2" id="reservBtn">조회</button>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex">
+                                <label class="form-label col-form-label col-sm-3">회원 조회 : </label>
+                                <div class="col-sm-6 me-2">
+                                    <input type="email" id="emailcheck" class="form-control">
+                                </div>
+                                <button class="btn btn-primary col-2" id="checkIdBtn">조회</button>
+                            </div>
+                        </div>
+                    </div>
 
-                    예약 번호 : <input type="text" id="reservationNum">
-                    <button class="btn btn-primary mb-3" id="reservBtn">조회</button>
-
-
-                    회원 조회 : <input type="email" id="emailcheck">
-                    <button class="btn btn-primary" id="checkIdBtn">조회</button>
-
-                    <div id="result" hidden="hidden" class="border rounded p-4 bg-gradient" style="width: 25%; position: absolute; top: 130px; right: 450px; font-size: 0.8rem">
+                    <div id="result" hidden="hidden" class="border rounded p-4 bg-gradient mb-3" style="width: 25%; position: absolute; top: 130px; right: 160px; font-size: 0.8rem">
                         <p class="mb-1">userId : <span id="id"></span></p>
                         <p class="mb-1">이름 : <span id="name"></span></p>
                         <p class="mb-1">이메일 : <span id="email"></span></p>
@@ -71,22 +84,23 @@
                     <table class="table align-middle table-hover">
 
                         <thead>
-                            <th scope="col">#</th>
-                            <th scope="col">이름</th>
-                            <th scope="col">체크인</th>
-                            <th scope="col">체크아웃</th>
-                            <th scope="col">전화번호</th>
-                            <th scope="col">이메일</th>
-                            <th scope="col">비밀번호(PW)</th>
-                            <th scope="col">결제 금액</th>
-                            <th scope="col">Status</th>
-                            <th class="tdContainer">회원등록</th>
+                        <th scope="col">#</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">체크인</th>
+                        <th scope="col">체크아웃</th>
+                        <th scope="col">전화번호</th>
+                        <th scope="col">이메일</th>
+                        <th scope="col">비밀번호</th>
+                        <th scope="col">결제 금액</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="resultCol" hidden="hidden">회원등록</th>
                         </thead>
 
                         <tbody id="checkinTable">
-                        <th:block  th:each="list:${checkInDTOList}">
+                        <th:block  th:each="list, stat:${checkInDTOList}">
                             <tr>
-                                <th scope="row offset-4" th:text="${list.id}" th:value="${list.id}" class="checkinId"></th>
+                                <th scope="row offset-4" th:text="${list.id}" th:value="${list.id}" class="checkinId" hidden="hidden" ></th>
+                                <th scope="row" th:text="${stat.count}"></th>
 
                                 <td>
                                     <div th:text="${list.roomDTO.name}" class="radiusRoom">></div>
@@ -148,7 +162,13 @@
                                         <span th:if="${list.getUsersDTO() == null}" class="password" id="password">Vacancy</span>
 
                                     </th:block>
-                                    <th:block th:if="${list.getPassword != null}">
+<!--                                    유저면-->
+                                    <th:block th:if="${list.getPassword != null and list.usersDTO != null}">
+                                        <span th:text="${list.getPassword}"></span>
+                                        <span><i class="fa-solid fa-user-check text-success"></i></span>
+                                    </th:block>
+<!--                                    게스트면-->
+                                    <th:block th:if="${list.getPassword != null and list.guestDTO != null}">
                                         <span th:text="${list.getPassword}"></span>
 
                                     </th:block>
@@ -342,6 +362,7 @@
                 $(".plusBtn").hide();
                 $(".minusBtn").show();
 
+
             })
             $(document).on("click", ".minusBtn",function () {
                 let id = $(this).data("checkinid")
@@ -385,22 +406,23 @@
                         `
                         $("#checkinTable tbody").append(newRow);
                         $(".trContainer").show();
+                        $(".resultCol").removeAttr("hidden");
+
 
                         result.hidden = false;
 
 
                     },
                     error: function () {
-                        // if (xhr.status === 400) {
-                        //     alert("이메일 값이 비어 있습니다. 다시 입력해주세요");
-                        // }else if (xhr.status === 404) {
-                        //     alert("회원 정보를 찾을 수 없습니다.");
-                        // }else {
-                        //     alert("알 수 없는 오류가 발생했습니다.");
-                        // }
-                        // console.log("요청데이터 : ", emailcheck)
-                        // console.log("응답 상태 코드 : ", xhr.status);
-                        // console.log("응답 메시지", xhr.responseText);
+                        let newRow =
+                            `
+                            <tr>
+                                <td>해당하는 이메일 정보가 없습니다.</td>
+                            </tr>
+                            `
+                        $("#checkinTable tbody").append(newRow);
+                        $(".trContainer").show();
+                        result.hidden = false;
                         alert("해당하는 이메일 정보가 없습니다..")
 
                     },

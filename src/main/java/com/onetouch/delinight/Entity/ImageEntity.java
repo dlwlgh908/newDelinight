@@ -41,4 +41,8 @@ public class ImageEntity extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name="store_id")
     private StoreEntity storeEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "room_care_menu_id")
+    private RoomCareMenuEntity roomCareMenuEntity;
 }

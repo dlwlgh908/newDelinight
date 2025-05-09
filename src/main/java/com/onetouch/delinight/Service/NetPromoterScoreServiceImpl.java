@@ -41,6 +41,8 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
     private final MembersRepository membersRepository;
 
 
+
+
     @Override
     public void sendNpsTemporary(Long checkOutId) {
         log.info("들어온 체크아웃 ID = {}" ,checkOutId);
@@ -157,7 +159,6 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
                     // 스토어 정보 설정
                     if (entity.getStoreEntity() != null) {
                         npsDTO.setHotelOrStore("store");
-
                         npsDTO.setStoreDTO(modelMapper.map(entity.getStoreEntity(), StoreDTO.class).setHotelDTO(modelMapper.map(entity.getStoreEntity().getHotelEntity(),HotelDTO.class)));
                     }
 

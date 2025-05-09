@@ -40,9 +40,10 @@
                         </thead>
 
                         <tbody>
-                        <th:block  th:each="list:${hotelDTOList}">
+                        <th:block  th:each="list,stat:${hotelDTOList}">
                             <tr>
-                                <th scope="row offset-4" th:text="${list.id}"></th>
+                                <th scope="row offset-4" th:text="${list.id}" hidden="hidden"></th>
+                                <th scope="row" th:text="${stat.count}"></th>
                                 <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/members/hotel/read/{id}(id=${list.id})}">
                                     [[${list.name}]]
                                 </a>

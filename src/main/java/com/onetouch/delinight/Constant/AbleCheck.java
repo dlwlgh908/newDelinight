@@ -1,7 +1,7 @@
 package com.onetouch.delinight.Constant;
 
-public enum PaidCheck {
+public enum AbleCheck {
 
-    none,paid,both
+    ENABLE, DISABLE
 
 }

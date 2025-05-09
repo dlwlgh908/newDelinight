@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.hibernate.annotations.Check;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -228,8 +229,16 @@ public class CheckInServiceImpl implements CheckInService{
             UsersEntity usersEntity =
                     usersRepository.findById(checkInDTO.getUserId()).orElseThrow(EntityNotFoundException::new);
             check.setUsersEntity(usersEntity);
-            cartService.makeCart(1, usersEntity.getId());
 
+            //회원이면 핸드폰 번호 뒤 4자리로 비밀번호 설정
+            String phone = usersEntity.getPhone();
+            if (phone != null && phone.length() >= 4) {
+                String lastFour = phone.substring(phone.length() - 4);
+                check.setPassword(lastFour);
+            }
+
+
+            cartService.makeCart(1, usersEntity.getId());
             checkInRepository.save(check);
 
         }
@@ -290,9 +299,23 @@ public class CheckInServiceImpl implements CheckInService{
     }
 
     @Override
+    public HotelEntity findHotelInByEmail(Long CheckInId) {
+
+        HotelEntity hotelEntity = checkInRepository.findById(CheckInId).get().getRoomEntity().getHotelEntity();
+        return hotelEntity;
+    }
+
+    @Override
     public CheckInDTO findCheckInByEmail(String email) {
         CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
-        CheckInDTO checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity.getRoomEntity().getHotelEntity(),HotelDTO.class)));
+        CheckInDTO checkInDTO;
+        if(checkInEntity==null){
+            CheckInEntity checkInEntity1 = checkInRepository.findByGuestEntity_Phone(email);
+            checkInDTO = modelMapper.map(checkInEntity1, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity1.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity.getRoomEntity().getHotelEntity(),HotelDTO.class)));
+        }
+        else {
+            checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity.getRoomEntity().getHotelEntity(),HotelDTO.class)));
+        }
         return checkInDTO;
     }
 

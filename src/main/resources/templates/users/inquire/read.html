@@ -40,7 +40,7 @@
         #replyWrap {
             min-height: 50px; /* 최소 높이 더 작게 */
             max-height: 200px; /* 최대 높이 줄임 */
-            overflow-y: auto;
+            /*overflow-y: auto;*/
         }
     </style>
 </head>
@@ -53,7 +53,11 @@
         <!-- 글 정보 -->
         <div class="row-3 mt-5">
             <div class="col-4 fw-bold">문의유형</div>
-            <div class="col" th:text="${inquireDTO.inquireType}"></div>
+            <div class="col">
+                <div th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMSERVICE}" class="text">룸서비스</div>
+                <div th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMCARE}" class="text">룸케어</div>
+                <div th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).OTHERINQUIRIES}" class="text">기타문의</div>
+            </div>
         </div>
 
         <div class="row-3 mt-3">
@@ -69,6 +73,9 @@
         <div class="row-3 mt-3">
             <div class="col-4 fw-bold">내용</div>
             <div class="col" th:text="${inquireDTO.content}"></div>
+            <div class="d-flex justify-content-between mt-2">
+                <small>요청: [[${#temporals.format(inquireDTO.regTime,'yyyy-MM-dd HH:mm')}]]</small>
+            </div>
         </div>
 
         <!-- 수정/이전 버튼 -->
@@ -93,6 +100,11 @@
         <!-- 댓글 목록 -->
         <div class="mt-5">
             <label class="fw-bold">댓글 내용</label>
+            <div class="d-flex justify-content-between mt-2">
+                <small th:if="${inquireDTO.responseTime != null}">답변: [[${#temporals.format(inquireDTO.responseTime,'yyyy-MM-dd HH:mm')}]]</small>
+                <small th:if="${inquireDTO.responseTime == null}" style="color: #ff1500">답변 대기중</small>
+            </div>
+
             <div class="p-3" style="border:1px solid #ddd; border-radius:8px; min-height: 80px;" id="replyWrap"></div>
         </div>
 
@@ -187,26 +199,16 @@
             // }
             function select() {
                 var inquireId = [[${inquireDTO.id}]];
-                var myId = [[${session.userId}]]; // 로그인한 내 아이디 (서버에서 세션 넘겨줘야 함)
 
                 $.ajax({
                     url: "/reply/list/" + inquireId,
                     type: "get",
                     success: function (data) {
+                        console.log(data)
                         let str = "";
                         for (let i = 0; i < data.length; i++) {
-                            const reply = data[i];
-                            const who = (reply.writerId === myId) ? "text-end" : "text-start"; // 내 댓글이면 오른쪽
+                            str += `<span>${data[i].replyText}</span>`
 
-                            const bubbleClass = (reply.writerId === myId) ? "my-reply" : "other-reply";
-
-                            str += `
-                    <div class="d-flex ${who}">
-                        <div class="${bubbleClass} p-2 mb-2">
-                            ${reply.replyText}
-                        </div>
-                    </div>
-                `;
                         }
                         $("#replyWrap").html(str);
                     }

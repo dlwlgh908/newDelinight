@@ -8,17 +8,21 @@
 package com.onetouch.delinight.Repository;
 
 import com.onetouch.delinight.Constant.OrdersStatus;
+import com.onetouch.delinight.DTO.UsersDTO;
 import com.onetouch.delinight.Entity.OrdersEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
 
-
+    boolean existsByStoreEntity_HotelEntity_BranchEntity_CenterEntity_MembersEntity_IdAndAndPendingTimeAfter(Long id, LocalDateTime time);
+    boolean existsByStoreEntity_HotelEntity_MembersEntity_IdAndAndPendingTimeAfter(Long id, LocalDateTime time);
+    boolean existsByStoreEntity_MembersEntity_IdAndAndPendingTimeAfter(Long id, LocalDateTime time);
 
     List<OrdersEntity> findByCheckInEntity_Id(Long id);
     void deleteByCheckInEntity_Id(Long id);
@@ -36,6 +40,11 @@ public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
 
     @Query("select o from OrdersEntity o where o.checkInEntity.id = :id")
     OrdersEntity selectCheckinId(Long id);
+
+
+
+    //사용자의 결제 이력을 가져오는 메서드 (체크인 정보에서 사용자 ID로 조회)
+    List<OrdersEntity> findByCheckInEntity_UsersEntity_Id(Long id);
 
 
 

@@ -227,23 +227,80 @@
             }
 
             function payNow(){
-                $(".memos").each(function (memo) {
-                        let memoObject = $(this)
-                        let ordersId = memoObject.data("textareaid")
-                        $.ajax({
-                            url: "/roomService/order/payNow",
-                            type: "post",
-                            data:{"ordersId":ordersId, "memo":memoObject.val()},
-                            success:function (){
-                            },
-                            error:function (){
-                            }
-                        })
-                    }
-                )
+                //사용자가 입력한 포인트 값 가져오기(업다면 0을로 처리)
+                const usedPoint = parseInt($("#usedPoint").val()) || 0;
 
-                requestPayment()
+                // 전체 결제 금액을 Thymeleaf로부터 가져와 JS 변수로 생성
+                const totalPrice = parseInt([[${totalPrice}]]);
+
+                // TossPayments 결제 금액을 포인트를 차감한 최종 금액으로 설정
+                const amount = totalPrice - usedPoint;
+
+                console.log("usedPoint",usedPoint);
+                console.log("totalPrice: ", totalPrice);
+                console.log("amount: ", amount);  // amount가 0으로 찍히는지 확인
+
+                // 1. 메모 저장: 사용자가 입력한 요청사항을 주문별로 서버로 전송합니다.
+                $(".memos").each(function () {
+                    let memoObject = $(this); //현재 메모 input 엘리먼트
+                    let ordersId = memoObject.data("textareaid"); //해당 주문 id
+                    $.ajax({
+                        url: "/roomService/order/payNow",
+                        type: "post",
+                        data: {"ordersId": ordersId, "memo": memoObject.val()},
+                        success: function () {},
+                        error: function () {}
+                    });
+                });
+
+                // 2. 사용자가 포인트를 입력해서 쓰는 경우
+                if (usedPoint > 0) {
+                    $.ajax({
+                        url: "/api/user/point/use",
+                        type: "post",
+                        async: false, // 중요: 포인트 처리 후 결제 요청하도록 동기 처리
+                        data: {
+                            usersId: [[${usersId}]],
+                            paymentId: paymentKey,
+                            usedPoint: usedPoint
+                        },
+                        success: function () {
+                            console.log("포인트 사용 완료");
+                            requestPayment(); //포인트 사용 후 결제
+                        },
+                        error: function () {
+                            alert("포인트 사용 오류");
+                        }
+                    });
+                }else {
+                    // 3. 결제 요청
+                    requestPayment(); //포인트 사용 안 하면 바로 결제
+                }
+
+                detectCloseModal(); //모달 감지는 항상
+
+
             }
+
+
+            // function payNow(){
+            //     $(".memos").each(function (memo) {
+            //             let memoObject = $(this)
+            //             let ordersId = memoObject.data("textareaid")
+            //             $.ajax({
+            //                 url: "/roomService/order/payNow",
+            //                 type: "post",
+            //                 data:{"ordersId":ordersId, "memo":memoObject.val()},
+            //                 success:function (){
+            //                 },
+            //                 error:function (){
+            //                 }
+            //             })
+            //         }
+            //     )
+            //
+            //     requestPayment()
+            // }
 
 
             function detectCloseModal() {
@@ -289,10 +346,12 @@
         <!--포인트-->
         <script>
             $(document).ready(function () {
-                const usersId = /*[[${usersId}]]*/ 1; // Thymeleaf 변수
-                const totalPrice = parseInt(/*[[${totalPrice}]]*/ 20000); // 결제금액
+                // const usersId = /*[[${usersId}]]*/ 1; // Thymeleaf 변수
+                const usersId = [[${usersId}]] ; // Thymeleaf 변수
+                // const totalPrice = parseInt(/*[[${totalPrice}]]*/ 20000); // 결제금액
+                const totalPrice = parseInt([[${totalPrice}]] ); // 결제금액
 
-                // 보유 포인트 불러오기
+                // 보유 포인트 조회
                 $.ajax({
                     url: "/api/user/point",
                     type: "get",
@@ -301,37 +360,41 @@
                         const userPoint = data.point;
                         $("#userPoint").text(userPoint + " P");
 
-                        // 입력 제어
+                        //포인트 입력 및 제어
                         $("#usedPoint").on("input", function () {
                             let val = parseInt($(this).val()) || 0;
 
-                            if (val < 0) val = 0;
-                            if (val > userPoint) val = userPoint;
-                            if (val > totalPrice) val = totalPrice;
+                            if (val < 0) val = 0; //사용자가 -10 같이 잘못된 음수를 입력하면 0으로 고정합니다.
+                            if (val > userPoint) val = userPoint; //입력값이 보유 포인트보다 크면 보유 포인트로 제한
+                            if (val > totalPrice) val = totalPrice; //입력값이 총 결제 금액보다 크면, 결제 금액까지만 사용할 수 있도록 제한
 
                             $(this).val(val);
                             updateFinalPrice(val);
+                            //현재 사용한 포인트를 바탕으로 최종 결제 금액을 실시간으로 업데이트
+
                         });
 
-                        // 전부 사용 버튼 클릭
+                        //포인트 전부 사용 버튼 클릭
                         window.useAllPoint = function () {
-                            let maxUsable = Math.min(userPoint, totalPrice);
-                            $("#usedPoint").val(maxUsable);
-                            updateFinalPrice(maxUsable);
+                            let maxUsable = Math.min(userPoint, totalPrice);//최대 사용 가능한 포인트
+                            $("#usedPoint").val(maxUsable); //포인트 입력창에 최대값을 자동으로 채우고
+                            updateFinalPrice(maxUsable); //최종 결제 금액을 다시 계산
                         };
 
                         updateFinalPrice(0);
+                        //페이지가 처음 로딩될 때, 포인트 사용없이 결제금액을 보여주기 위해 0으로 계산한다
                     },
                     error: function () {
-                        alert("포인트 조회 실패");
+                        // alert("포인트 조회 실패");
                     }
                 });
 
-                // 결제 금액 갱신 함수
+                // 결제 최종 금액 갱신 함수
                 function updateFinalPrice(usedPoint) {
                     const final = totalPrice - usedPoint;
                     $("#finalPrice").text(final.toLocaleString() + "원");
                 }
+
             });
         </script>
 

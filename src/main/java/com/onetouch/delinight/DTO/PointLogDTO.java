@@ -14,7 +14,7 @@ public class PointLogDTO {
 
     private Long id; //포인트 아이디
 
-    private int amount; //포인트 양
+    private int pointAmount; //포인트 양
 
     private PointType pointType;
 
