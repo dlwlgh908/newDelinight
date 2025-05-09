@@ -25,17 +25,13 @@ public class RoomCareItemEntity {
     @Column(name = "room_care_item_id")
     private Long id; //룸케어아이템 코드번호
 
-    @Column(nullable = false, length = 50)
-    private String name; //룸케어아이템명
-
-    @Column(nullable = false, length = 50)
-    private String content; //룸케어아이템 내용
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_care_id")
     private RoomCareEntity roomCareEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id")
-    private HotelEntity hotelEntity;
+    @JoinColumn(name = "room_care_menu_id")
+    private RoomCareMenuEntity roomCareMenuEntity;
+
+    private Long quantity;
 }

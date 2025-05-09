@@ -34,8 +34,11 @@ $(function () {
 
                 $.each(result, function(key,value){
                     var imgNums = key;
-                    $(".hiddenImgNum").html('<input type="hidden" class="imgNum" name="imgNum" value="' + key + '"/>')
                     var imgFullUrl = value;
+                    console.log(key);
+                    console.log(value);
+                    $(".hiddenImgNum").html('<input type="hidden" class="imgNum" name="imgNum" value="' + imgNums + '"/><input type="hidden" class="imgFullUrl" name="imgNum" value="' + imgFullUrl + '"/>');
+
                     if(currentUrl.includes("/members/hotel")){
                         if($(".hotelImg").attr("th:src")){
                             $(".hotelImg").removeAttr("th:src")

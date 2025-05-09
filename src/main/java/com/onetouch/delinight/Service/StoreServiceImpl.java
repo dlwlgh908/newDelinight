@@ -210,6 +210,13 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public List<StoreDTO> findAll() {
+        List<StoreEntity> storeEntityList = storeRepository.findAll();
+        List<StoreDTO> storeDTOList = storeEntityList.stream().map(storeEntity -> modelMapper.map(storeEntity, StoreDTO.class).setMemberDTO(modelMapper.map(storeEntity.getMembersEntity(), MembersDTO.class))).toList();
+        return storeDTOList;
+    }
+
+    @Override
     public List<StoreDTO> storeList(String email) {
         List<StoreEntity> storeEntityList =
             storeRepository.selectallByHotelAdmin(email);

@@ -18,6 +18,7 @@ import java.util.Map;
 
 public interface MembersService {
 
+    public boolean checkOperation(MembersDTO membersDTO);
     public List<MembersDTO> findMembersListByCenterEmail(String email);
 
     public List<MembersDTO> findMembersListByHotelEmail(String email);

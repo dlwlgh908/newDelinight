@@ -1,6 +1,7 @@
 package com.onetouch.delinight.Controller.Members;
 
 import com.onetouch.delinight.Constant.PaidCheck;
+import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.DTO.ExcelDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.DTO.PaymentDTO;
@@ -63,7 +64,6 @@ log.info(memberDetails.getAuthorities());
 
 
         try {
-
             log.info(startDate);
             log.info(endDate);
             // 1. 현재 로그인한 사용자 정보 가져오기
@@ -84,29 +84,88 @@ log.info(memberDetails.getAuthorities());
             log.info("결제 내역 후처리 완료");
             // 6. 다운로드 요청일 경우 엑셀 파일로 반환
             if (download) {
-                log.info("진입!!!!!!");
-                List<ExcelDTO> excelDTOList = paymentService.extractData(processedPayment);
-                ClassPathResource templateFile = new ClassPathResource("templates/payment_data.xlsx");
-                try (InputStream inp = templateFile.getInputStream();
-                     Workbook workbook = new XSSFWorkbook(inp);
-                     ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-                    Sheet sheet = workbook.getSheetAt(0);
-                    int rowIdx = 1;
-                    for (ExcelDTO row : excelDTOList) {
-                        Row rowOne = sheet.createRow(rowIdx++);
-                        rowOne.createCell(0).setCellValue(row.getDate());
-                        rowOne.createCell(1).setCellValue(row.getMenuName());
-                        rowOne.createCell(2).setCellValue(row.getUnitPrice());
-                        rowOne.createCell(3).setCellValue(row.getQuantity());
-                        rowOne.createCell(4).setCellValue(row.getTotalPrice());
+                Role role = membersService.findRoleByEmail(memberDetails.getUsername()).keySet().iterator().next();
+                if(role.equals(Role.SUPERADMIN)){
+                    log.info("본사 관리자 엑셀 다운로드 시작 ");
+                    List<ExcelDTO> excelDTOList = paymentService.extractData(processedPayment);
+                    ClassPathResource templateFile = new ClassPathResource("templates/payment_data_center.xlsx");
+                    try (InputStream inp = templateFile.getInputStream();
+                         Workbook workbook = new XSSFWorkbook(inp);
+                         ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                        Sheet sheet = workbook.getSheetAt(0);
+                        List<ExcelDTO> groupedExcelDTOList = paymentService.groupExcelDataBy(excelDTOList,Role.SUPERADMIN);
+                        int rowIdx = 1;
+                        for (ExcelDTO row : groupedExcelDTOList) {
+                            Row rowOne = sheet.createRow(rowIdx++);
+                            rowOne.createCell(0).setCellValue(row.getDate());
+                            rowOne.createCell(1).setCellValue(row.getHotelName());
+                            rowOne.createCell(2).setCellValue(row.getTotalPrice());
+                        }
+                        workbook.write(out);
+
+
+                        HttpHeaders headers = new HttpHeaders();
+                        headers.add("Content-Disposition", "attachment; filename=payment_data.xlsx");
+                        return ResponseEntity.ok().headers(headers).contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")).body(out.toByteArray());
                     }
-                    workbook.write(out);
 
 
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.add("Content-Disposition", "attachment; filename=payment_data.xlsx");
-                    return ResponseEntity.ok().headers(headers).contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")).body(out.toByteArray());
                 }
+                else if (role.equals(Role.ADMIN)){
+                    log.info("호텔 관리자 엑셀 다운로드 시작 ");
+                    List<ExcelDTO> excelDTOList = paymentService.extractData(processedPayment);
+                    ClassPathResource templateFile = new ClassPathResource("templates/payment_data_hotel.xlsx");
+                    try (InputStream inp = templateFile.getInputStream();
+                         Workbook workbook = new XSSFWorkbook(inp);
+                         ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                        Sheet sheet = workbook.getSheetAt(0);
+                        List<ExcelDTO> groupedExcelDTOList = paymentService.groupExcelDataBy(excelDTOList,Role.ADMIN);
+                        int rowIdx = 1;
+                        for (ExcelDTO row : groupedExcelDTOList) {
+                            Row rowOne = sheet.createRow(rowIdx++);
+                            rowOne.createCell(0).setCellValue(row.getDate());
+                            rowOne.createCell(1).setCellValue(row.getStoreName());
+                            rowOne.createCell(2).setCellValue(row.getTotalPrice());
+                        }
+                        workbook.write(out);
+
+
+                        HttpHeaders headers = new HttpHeaders();
+                        headers.add("Content-Disposition", "attachment; filename=payment_data.xlsx");
+                        return ResponseEntity.ok().headers(headers).contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")).body(out.toByteArray());
+                    }
+
+
+                }
+                else if(role.equals(Role.STOREADMIN)){
+
+                    log.info("스토어 관리자 엑셀 다운로드 시작 ");
+                    List<ExcelDTO> excelDTOList = paymentService.extractData(processedPayment);
+                    ClassPathResource templateFile = new ClassPathResource("templates/payment_data_store.xlsx");
+                    try (InputStream inp = templateFile.getInputStream();
+                         Workbook workbook = new XSSFWorkbook(inp);
+                         ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                        Sheet sheet = workbook.getSheetAt(0);
+                        int rowIdx = 1;
+                        List<ExcelDTO> groupedExcelDTOList = paymentService.groupExcelDataBy(excelDTOList,Role.STOREADMIN);
+                        for (ExcelDTO row : groupedExcelDTOList) {
+                            Row rowOne = sheet.createRow(rowIdx++);
+                            rowOne.createCell(0).setCellValue(row.getDate());
+                            rowOne.createCell(1).setCellValue(row.getMenuName());
+                            rowOne.createCell(2).setCellValue(row.getUnitPrice());
+                            rowOne.createCell(3).setCellValue(row.getQuantity());
+                            rowOne.createCell(4).setCellValue(row.getTotalPrice());
+                        }
+                        workbook.write(out);
+
+
+                        HttpHeaders headers = new HttpHeaders();
+                        headers.add("Content-Disposition", "attachment; filename=payment_data.xlsx");
+                        return ResponseEntity.ok().headers(headers).contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")).body(out.toByteArray());
+                    }
+
+                }
+
             }
             // 후처리 된 결제 내역 반환
             return new ResponseEntity<>(processedPayment, HttpStatus.OK);

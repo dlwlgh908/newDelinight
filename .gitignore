@@ -17,6 +17,7 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 **/config/AWSConfig
+/Users/2jyo/Downloads/newDelinight/src/main/resources/application.properties
 
 
 ### IntelliJ IDEA ###

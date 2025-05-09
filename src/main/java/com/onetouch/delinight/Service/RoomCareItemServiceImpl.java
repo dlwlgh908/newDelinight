@@ -43,7 +43,6 @@ public class RoomCareItemServiceImpl implements RoomCareItemService{
         HotelEntity hotelEntity = membersEntity.getHotelEntity();
         if (hotelEntity == null) throw new EntityNotFoundException("어드민이 소속된 호텔 정보 없음");
 
-        roomCareItemEntity.setHotelEntity(hotelEntity);
 
         roomCareItemRepository.save(roomCareItemEntity);
     }
@@ -60,8 +59,6 @@ public class RoomCareItemServiceImpl implements RoomCareItemService{
         RoomCareItemEntity roomCareItemEntityUpdate = roomCareItemRepository.findById(roomCareItemEntity.getId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 RoomCareItem을 찾을 수 없음"));
 
-        roomCareItemEntityUpdate.setName(roomCareItemEntity.getName());
-        roomCareItemEntityUpdate.setContent(roomCareItemEntity.getContent());
 
         roomCareItemRepository.save(roomCareItemEntityUpdate);
     }
