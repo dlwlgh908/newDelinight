@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class AdminNpsRestController {
         return ResponseEntity.ok(netPromoterScoreDTOList);
     }
 
-    @GetMapping("/chart")
+    @PostMapping("/chart")
     public ResponseEntity<List<NetPromoterScoreDTO>> npsChart(@AuthenticationPrincipal MemberDetails memberDetails) {
         Long memberId = memberDetails.getMembersEntity().getId();
         List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreService.npsAll(memberId);
