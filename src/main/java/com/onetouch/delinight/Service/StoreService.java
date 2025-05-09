@@ -35,6 +35,8 @@ public interface StoreService {
 
     public List<StoreDTO> storeList(String email);
 
+    public List<StoreDTO> findAll();
+
 
 
 

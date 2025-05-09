@@ -9,6 +9,7 @@ package com.onetouch.delinight.DTO;
 
 import com.onetouch.delinight.Entity.RoomCareEntity;
 import jakarta.persistence.*;
+import jdk.jfr.Name;
 import lombok.*;
 
 @Getter
@@ -20,9 +21,17 @@ import lombok.*;
 public class RoomCareItemDTO {
 
     private Long id; //룸케어아이템 코드번호
-    private String name; //룸케어아이템명
-    private String content; //룸케어아이템 내용
 
-    private RoomCareEntity roomCareEntity; // 룸케어
-    private Long hotelId; // 호텔
+    @ToString.Exclude
+    private RoomCareDTO roomCareDTO; // 룸케어
+
+    private Long roomCareMenuDTOId;
+    private Long quantity;
+
+
+
+    public RoomCareItemDTO setRoomCareDTO(RoomCareDTO roomCareDTO){
+        this.roomCareDTO = roomCareDTO;
+        return this;
+    }
 }

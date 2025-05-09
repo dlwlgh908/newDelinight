@@ -15,11 +15,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
 
-
+    boolean existsByStoreEntity_HotelEntity_BranchEntity_CenterEntity_MembersEntity_IdAndAndPendingTimeAfter(Long id, LocalDateTime time);
+    boolean existsByStoreEntity_HotelEntity_MembersEntity_IdAndAndPendingTimeAfter(Long id, LocalDateTime time);
+    boolean existsByStoreEntity_MembersEntity_IdAndAndPendingTimeAfter(Long id, LocalDateTime time);
 
     List<OrdersEntity> findByCheckInEntity_Id(Long id);
     void deleteByCheckInEntity_Id(Long id);

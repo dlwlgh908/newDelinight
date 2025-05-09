@@ -17,15 +17,24 @@ import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -33,7 +42,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PaymentServiceImpl implements PaymentService{
+public class PaymentServiceImpl implements PaymentService {
 
     private final CustomPaymentRepositoryImpl customPaymentRepository;
     private final PaymentRepository paymentRepository;
@@ -42,12 +51,231 @@ public class PaymentServiceImpl implements PaymentService{
 
 
     @Override
+    public byte[] extractMonthlyExcel(Long id, Role role) throws IOException {
+
+        //비교할 전달 첫날, 마지막날 추출
+        LocalDate prevMonthStartdate = LocalDate.now().minusMonths(2).withDayOfMonth(1);
+        LocalDate prevMonthEnddate = LocalDate.now().minusMonths(1).withDayOfMonth(1).minusDays(1);
+
+        //마감한 달 첫날, 마지막날 추출
+        LocalDate MonthStartdate = LocalDate.now().minusMonths(1).withDayOfMonth(1);
+        LocalDate MonthEnddate = LocalDate.now().minusDays(1);
+
+        if (role.equals(Role.SUPERADMIN)) {
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, prevMonthEnddate, MonthEnddate);
+            List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
+            List<ExcelDTO> processedExcelData = groupExcelDataBy(rawExcelData, Role.SUPERADMIN);
+            ClassPathResource templateFile = new ClassPathResource("templates/payment_data_center.xlsx");
+
+            try (InputStream inp = templateFile.getInputStream();
+                 Workbook workbook = new XSSFWorkbook(inp);
+                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                Sheet sheet = workbook.getSheetAt(0);
+                int rowIdx = 1;
+                for (ExcelDTO row : processedExcelData) {
+                    Row rowOne = sheet.createRow(rowIdx++);
+                    rowOne.createCell(0).setCellValue(row.getDate());
+                    rowOne.createCell(1).setCellValue(row.getMenuName());
+                    rowOne.createCell(2).setCellValue(row.getUnitPrice());
+                    rowOne.createCell(3).setCellValue(row.getQuantity());
+                    rowOne.createCell(4).setCellValue(row.getTotalPrice());
+                }
+                workbook.write(out);
+                byte[] excelFile = out.toByteArray();
+                return excelFile;
+
+
+            }
+        } else if (role.equals(Role.ADMIN)) {
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, prevMonthEnddate, MonthEnddate);
+            List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
+            List<ExcelDTO> processedExcelData = groupExcelDataBy(rawExcelData, Role.ADMIN);
+            ClassPathResource templateFile = new ClassPathResource("templates/payment_data_hotel.xlsx");
+            try (InputStream inp = templateFile.getInputStream();
+                 Workbook workbook = new XSSFWorkbook(inp);
+                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                Sheet sheet = workbook.getSheetAt(0);
+                int rowIdx = 1;
+                for (ExcelDTO row : processedExcelData) {
+                    Row rowOne = sheet.createRow(rowIdx++);
+                    rowOne.createCell(0).setCellValue(row.getDate());
+                    rowOne.createCell(1).setCellValue(row.getMenuName());
+                    rowOne.createCell(2).setCellValue(row.getUnitPrice());
+                    rowOne.createCell(3).setCellValue(row.getQuantity());
+                    rowOne.createCell(4).setCellValue(row.getTotalPrice());
+                }
+                workbook.write(out);
+                byte[] excelFile = out.toByteArray();
+                return excelFile;
+
+
+            }
+
+
+        } else {
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, prevMonthEnddate, MonthEnddate);
+            List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
+            log.info(rawExcelData);
+            ClassPathResource templateFile = new ClassPathResource("templates/payment_data_store.xlsx");
+            try (InputStream inp = templateFile.getInputStream();
+                 Workbook workbook = new XSSFWorkbook(inp);
+                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                Sheet sheet = workbook.getSheetAt(0);
+                int rowIdx = 1;
+                for (ExcelDTO row : rawExcelData) {
+                    Row rowOne = sheet.createRow(rowIdx++);
+                    rowOne.createCell(0).setCellValue(row.getDate());
+                    rowOne.createCell(1).setCellValue(row.getMenuName());
+                    rowOne.createCell(2).setCellValue(row.getUnitPrice());
+                    rowOne.createCell(3).setCellValue(row.getQuantity());
+                    rowOne.createCell(4).setCellValue(row.getTotalPrice());
+                }
+                workbook.write(out);
+                byte[] excelFile = out.toByteArray();
+                return excelFile;
+
+
+            }
+        }
+    }
+
+    @Override
+    public byte[] extractDailyExcel(Long id, Role role) throws IOException {
+
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        LocalDate startDate = yesterday.withDayOfMonth(1);
+        LocalDate endDate = yesterday;
+
+
+        if (role.equals(Role.SUPERADMIN)) {
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
+            List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
+            List<ExcelDTO> processedExcelData = groupExcelDataBy(rawExcelData, Role.SUPERADMIN);
+            ClassPathResource templateFile = new ClassPathResource("templates/payment_data_center.xlsx");
+
+            try (InputStream inp = templateFile.getInputStream();
+                 Workbook workbook = new XSSFWorkbook(inp);
+                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                Sheet sheet = workbook.getSheetAt(0);
+                int rowIdx = 1;
+                for (ExcelDTO row : processedExcelData) {
+                    Row rowOne = sheet.createRow(rowIdx++);
+                    rowOne.createCell(0).setCellValue(row.getDate());
+                    rowOne.createCell(1).setCellValue(row.getMenuName());
+                    rowOne.createCell(2).setCellValue(row.getUnitPrice());
+                    rowOne.createCell(3).setCellValue(row.getQuantity());
+                    rowOne.createCell(4).setCellValue(row.getTotalPrice());
+                }
+                workbook.write(out);
+                byte[] excelFile = out.toByteArray();
+                return excelFile;
+
+
+            }
+        } else if (role.equals(Role.ADMIN)) {
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
+            List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
+            List<ExcelDTO> processedExcelData = groupExcelDataBy(rawExcelData, Role.ADMIN);
+            ClassPathResource templateFile = new ClassPathResource("templates/payment_data_hotel.xlsx");
+            try (InputStream inp = templateFile.getInputStream();
+                 Workbook workbook = new XSSFWorkbook(inp);
+                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                Sheet sheet = workbook.getSheetAt(0);
+                int rowIdx = 1;
+                for (ExcelDTO row : processedExcelData) {
+                    Row rowOne = sheet.createRow(rowIdx++);
+                    rowOne.createCell(0).setCellValue(row.getDate());
+                    rowOne.createCell(1).setCellValue(row.getMenuName());
+                    rowOne.createCell(2).setCellValue(row.getUnitPrice());
+                    rowOne.createCell(3).setCellValue(row.getQuantity());
+                    rowOne.createCell(4).setCellValue(row.getTotalPrice());
+                }
+                workbook.write(out);
+                byte[] excelFile = out.toByteArray();
+                return excelFile;
+
+
+            }
+
+
+        } else {
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
+            List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
+            log.info(rawExcelData);
+            ClassPathResource templateFile = new ClassPathResource("templates/payment_data_store.xlsx");
+            try (InputStream inp = templateFile.getInputStream();
+                 Workbook workbook = new XSSFWorkbook(inp);
+                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                Sheet sheet = workbook.getSheetAt(0);
+                int rowIdx = 1;
+                for (ExcelDTO row : rawExcelData) {
+                    Row rowOne = sheet.createRow(rowIdx++);
+                    rowOne.createCell(0).setCellValue(row.getDate());
+                    rowOne.createCell(1).setCellValue(row.getMenuName());
+                    rowOne.createCell(2).setCellValue(row.getUnitPrice());
+                    rowOne.createCell(3).setCellValue(row.getQuantity());
+                    rowOne.createCell(4).setCellValue(row.getTotalPrice());
+                }
+                workbook.write(out);
+                byte[] excelFile = out.toByteArray();
+                return excelFile;
+
+
+            }
+
+
+        }
+
+
+    }
+
+    @Override
+    public String makePrompt(Long id, Role role) {
+
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        LocalDate startDate = yesterday.withDayOfMonth(1);
+        LocalDate endDate = yesterday;
+
+        StringBuilder prompt = new StringBuilder();
+        prompt.append("일자별 매출 ");
+
+
+        if (role.equals(Role.SUPERADMIN)) {
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
+            List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
+            List<ExcelDTO> processedExcelData = groupExcelDataBy(rawExcelData, Role.SUPERADMIN);
+            for (ExcelDTO data : processedExcelData) {
+                prompt.append(data.getDate()).append("일 호텔명 : ").append(data.getHotelName()).append(", 총합 가격 : ").append(data.getTotalPrice()).append("원 ");
+            }
+            prompt.append("입니다. 호텔별 이번달 룸서비스(음식 주문 서비스) 일자별 매출 데이터로 호텔별 매출 트렌드, 일자별 매출 트렌드를 보고 분석하여 1. 주말, 평일 별 트렌드, 2. 개선사항 솔루션, 3. 매출 개선을 위해 추천하는 가맹점 계약 추천(예: 최근 트렌드 음식인 마라탕 등 젊은 이의 입맛을 사로잡는 중화요리집과의 계약 추천)을 근거와 함께 주세요. 해당 답변은 th:utext를 통해 메일 내 자동 삽입될 예정으로 <br>등 html 태그를 함께 답변 해주시고 utf-8로 인코딩될 예정으로 이모지도 삽입 가능합니다. gpt agent님님 답변은 꼭 한글로 주세요. ");
+        } else if (role.equals(Role.ADMIN)) {
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
+            List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
+            List<ExcelDTO> processedExcelData = groupExcelDataBy(rawExcelData, Role.ADMIN);
+            for (ExcelDTO data : processedExcelData) {
+                prompt.append(data.getDate()).append("일 가맹점 명 : ").append(data.getStoreName()).append(" 총합 판매액 : ").append(data.getTotalPrice()).append("원 ");
+            }
+            prompt.append("입니다. 호텔의 이번달 룸서비스(음식 주문 서비스) 일자별 매출 데이터로 스토어별 매출 트렌드, 일자별 매출 트렌드를 보고 분석하여 1. 주말, 평일 별 트렌드, 2. 개선사항 솔루션, 3. 매출 개선을 위해 스토어별 기존 메뉴들과 연관성(스토어 이름들을 보고 스토어 주력 메뉴들을 유추하여) 메뉴 추천(예: 최근 매운맛을 유독 좋아하는 젊은 세대들이 늘어남으로 매운 짬뽕(네이밍 : 119짬뽕)메뉴를 추가하여 고객 선택의 다양성을 이끌어내세요)을 근거와 함께 주세요. 해당 답변은 th:utext를 통해 메일 내 자동 삽입될 예정으로 <br>등 html 태그를 함께 답변 해주시고 utf-8로 인코딩될 예정으로 이모지도 삽입 가능합니다. gpt agent님님 답변은 꼭 한글로 주세요. ");
+
+        } else {
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
+            List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
+            for (ExcelDTO data : rawExcelData) {
+                prompt.append(data.getDate()).append("일 메뉴 : ").append(data.getMenuName()).append(", ").append(data.getQuantity()).append(" 개 판매, 개별 가격 : ").append(data.getUnitPrice()).append("원, 총합 판매액 : ").append(data.getTotalPrice()).append("원 ");
+            }
+            prompt.append("입니다. 스토어의 이번달 룸서비스(음식 주문 서비스) 일자별 매출 데이터로 메뉴별 매출 트렌드, 일자별 매출 트렌드를 보고 분석하여 1. 주말, 평일 별 트렌드, 2. 개선사항 솔루션, 3. 매출 개선을 위해 신규 메뉴 추천(예: 최근 매운맛을 유독 좋아하는 젊은 세대들이 늘어남으로 매운 짬뽕(네이밍 : 119짬뽕)메뉴를 추가하여 고객 선택의 다양성을 이끌어내세요)을 근거와 함께 주세요. 해당 답변은 th:utext를 통해 메일 내 자동 삽입될 예정으로 <br>등 html 태그를 함께 답변 해주시고 utf-8로 인코딩될 예정으로 이모지도 삽입 가능합니다. gpt agent님 답변은 꼭 한글로 주세요. ");
+        }
+
+        return prompt.toString();
+    }
+
+    @Override
     public List<OrdersDTO> readOrders(Long paymentId) {
 
         PaymentEntity paymentEntity = paymentRepository.findById(paymentId).get();
         List<OrdersEntity> ordersEntityList = paymentEntity.getOrdersEntityList();
         List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
-                .map(data->modelMapper.map(data,OrdersDTO.class)
+                .map(data -> modelMapper.map(data, OrdersDTO.class)
                         .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
                         .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class))).toList();
 
@@ -55,7 +283,8 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
-    public List<PaymentDTO> paymentByCriteria (PaidCheck paidCheck, Long memberId, LocalDate startDate, LocalDate endDate) {
+    public List<PaymentDTO> paymentByCriteria(PaidCheck paidCheck, Long memberId, LocalDate startDate, LocalDate
+            endDate) {
 
         Role role = membersRepository.findById(memberId).get().getRole();
 
@@ -83,17 +312,17 @@ public class PaymentServiceImpl implements PaymentService{
         List<ExcelDTO> result = new ArrayList<>();
 
 
-        for(PaymentDTO paymentDTO : paymentDTOList){
+        for (PaymentDTO paymentDTO : paymentDTOList) {
             LocalDate date = paymentDTO.getRegTime().toLocalDate();
-            for(OrdersDTO ordersDTO : paymentDTO.getOrdersDTOList()){
-                for(OrdersItemDTO ordersItemDTO : ordersDTO.getOrdersItemDTOList()){
+            for (OrdersDTO ordersDTO : paymentDTO.getOrdersDTOList()) {
+                for (OrdersItemDTO ordersItemDTO : ordersDTO.getOrdersItemDTOList()) {
                     MenuDTO menuDTO = ordersItemDTO.getMenuDTO();
                     ExcelDTO row = new ExcelDTO();
                     row.setDate(date);
                     row.setQuantity(ordersItemDTO.getQuantity().intValue());
                     row.setUnitPrice(menuDTO.getPrice());
                     row.setMenuName(menuDTO.getName());
-                    row.setTotalPrice(menuDTO.getPrice()*ordersItemDTO.getQuantity().intValue());
+                    row.setTotalPrice(menuDTO.getPrice() * ordersItemDTO.getQuantity().intValue());
                     row.setHotelName(ordersDTO.getStoreDTO().getHotelDTO().getName());
                     row.setStoreName(ordersDTO.getStoreDTO().getName());
                     result.add(row);
@@ -146,6 +375,36 @@ public class PaymentServiceImpl implements PaymentService{
         }).collect(Collectors.toList());  // 결과 리스트 반환
     }
 
+    @Override
+    public List<ExcelDTO> groupExcelDataBy(List<ExcelDTO> data, Role role) {
+        Map<String, ExcelDTO> groupedMap = new LinkedHashMap<>();
+
+        for (ExcelDTO dto : data) {
+            String key;
+
+            if (role.equals(Role.SUPERADMIN)) {
+                key = dto.getDate() + "|" + dto.getHotelName();
+            } else if (role.equals(Role.ADMIN)) {
+                key = dto.getDate() + "|" + dto.getStoreName();
+            } else {
+                return data; // STOREADMIN은 그룹핑 없이 그대로 사용
+            }
+
+            if (groupedMap.containsKey(key)) {
+                ExcelDTO existing = groupedMap.get(key);
+                existing.setTotalPrice(existing.getTotalPrice() + dto.getTotalPrice());
+            } else {
+                ExcelDTO copy = new ExcelDTO();
+                copy.setDate(dto.getDate());
+                copy.setHotelName(dto.getHotelName());
+                copy.setStoreName(dto.getStoreName());
+                copy.setTotalPrice(dto.getTotalPrice());
+                groupedMap.put(key, copy);
+            }
+        }
+
+        return new ArrayList<>(groupedMap.values());
+    }
 
 
 }

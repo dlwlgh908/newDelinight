@@ -13,10 +13,7 @@ import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.CenterEntity;
 import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
-import com.onetouch.delinight.Repository.CenterRepository;
-import com.onetouch.delinight.Repository.HotelRepository;
-import com.onetouch.delinight.Repository.MembersRepository;
-import com.onetouch.delinight.Repository.StoreRepository;
+import com.onetouch.delinight.Repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -29,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +47,7 @@ public class MembersServiceImpl implements MembersService{
     private final CenterRepository centerRepository;
     private final HotelRepository hotelRepository;
     private final CenterService centerService;
+    private final OrdersRepository ordersRepository;
 
 
 
@@ -83,6 +82,22 @@ public class MembersServiceImpl implements MembersService{
         }
 
         return result;
+    }
+
+    @Override
+    public boolean checkOperation(MembersDTO membersDTO) {
+        LocalDate yesterDay = LocalDate.now().minusDays(1);
+        if(membersDTO.getRole().equals(Role.SUPERADMIN)){
+            return ordersRepository.existsByStoreEntity_HotelEntity_BranchEntity_CenterEntity_MembersEntity_IdAndAndPendingTimeAfter(membersDTO.getId(), yesterDay.atTime(0,0));
+        }
+        else if(membersDTO.getRole().equals(Role.ADMIN)){
+            return ordersRepository.existsByStoreEntity_HotelEntity_MembersEntity_IdAndAndPendingTimeAfter(membersDTO.getId(), yesterDay.atTime(0,0));
+
+        }
+        else {
+            return ordersRepository.existsByStoreEntity_MembersEntity_IdAndAndPendingTimeAfter(membersDTO.getId(), yesterDay.atTime(0,0));
+
+        }
     }
 
     @Override

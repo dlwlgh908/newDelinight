@@ -7,5 +7,12 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.RoomCareItemDTO;
+import com.onetouch.delinight.DTO.RoomCareRequestDTO;
+
+import java.util.List;
+
 public interface RoomCareService {
+
+    public void orders(List<RoomCareItemDTO> roomCareItemDTOList, String email);
 }

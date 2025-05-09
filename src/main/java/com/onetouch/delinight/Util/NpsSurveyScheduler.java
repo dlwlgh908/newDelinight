@@ -1,8 +1,12 @@
 package com.onetouch.delinight.Util;
 
+import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.DTO.PerformanceMailDTO;
+import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.CheckOutLogEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.CheckOutLogRepository;
+import com.onetouch.delinight.Service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,6 +22,7 @@ public class NpsSurveyScheduler {
 
     private final CheckOutLogRepository checkOutLogRepository;
     private final EmailService emailService;
+    private final StoreService storeService;
 
     // 매일 오전 9시에 실행 될 스케줄러
     @Scheduled(cron = "0 10 10 * * ?")
@@ -40,6 +45,26 @@ public class NpsSurveyScheduler {
                 }
 
             }
+
+    }
+
+    @Scheduled(cron = "00 00 08 * * ?")
+    public void sendDailyPerformance(){
+
+        log.info("스케쥴러 작동 ");
+        List<StoreDTO> storeDTOList = storeService.findAll();
+        for(StoreDTO storeDTO : storeDTOList){
+            if(storeDTO.getMembersDTO()!=null){
+                MembersDTO membersDTO = storeDTO.getMembersDTO();
+                PerformanceMailDTO mailDTO = new PerformanceMailDTO();
+                mailDTO.setDate(LocalDate.now());
+                mailDTO.setName(membersDTO.getName());
+                mailDTO.setTargetName(storeDTO.getName());
+                mailDTO.setEmail(membersDTO.getEmail());
+                emailService.sendDailyPerformance(mailDTO);
+            }
+        }
+
 
     }
 
