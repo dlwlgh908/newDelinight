@@ -7,15 +7,160 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <title>고객만족도 평가</title>
+    <style>
+        /* 전체적인 배경과 레이아웃 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        /* 컨테이너 스타일 */
+        .container-fluid {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        /* 제목 */
+        h3 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* 브레드크럼 스타일 */
+        .breadcrumb {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .breadcrumb-item {
+            color: #007bff;
+        }
+
+        .breadcrumb-item.active {
+            color: #6c757d;
+        }
+
+        /* 필터 및 선택 영역 스타일 */
+        .d-flex {
+            margin-bottom: 20px;
+        }
+
+        .d-flex > div {
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 14px;
+            color: #495057;
+        }
+
+        input[type="date"], select {
+            margin-left: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            font-size: 14px;
+        }
+
+        /* 버튼 스타일 */
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 탭 버튼 */
+        .tabs {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .tab-button {
+            background-color: #f8f9fa;
+            color: #495057;
+            border: 1px solid #ced4da;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .tab-button.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* 테이블 스타일 */
+        .table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .table td {
+            background-color: white;
+        }
+
+        /* 모달 스타일 */
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+        }
+
+        .modal-footer {
+            padding: 10px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+    </style>
+
 </head>
 
 <body>
 
 <div layout:fragment="adminContent" id="layoutSidenav_content">
-
     <main>
         <div class="container-fluid px-5">
             <h3 class="mt-5">고객만족도 평가</h3>
@@ -29,29 +174,30 @@
         <div class="card custom-shadow mb-4">
             <div class="card-body">
 
-                <!-- 모든 필터를 하나의 부모 div에 넣어서 가로로 배치 -->
-                <div class="filters" style="display: flex; align-items: center; gap: 20px;">
-                    <!-- 날짜 필터링 -->
-                    <div class="filter">
+                <div id="centerManagerView" style="display: none;"></div>
+                <div id="hotelManagerView" style="display: none;"></div>
+                <div id="storeManagerView" style="display: none;"></div>
+
+                <div class="d-flex justify-content-start gap-2" style="gap: 10px;">
+                    <!-- 필터 영역 -->
+                    <div>
                         <label for="startDate">시작일:</label>
                         <input type="date" id="startDate" name="startDate">
-
                         <label for="endDate">종료일:</label>
                         <input type="date" id="endDate" name="endDate">
-
                         <button id="filterButton">조회</button>
                     </div>
 
-                    <!-- 호텔 선택 필터 -->
-                    <div class="filter">
+                    <!-- 호텔 선택 영역 -->
+                    <div class="hotelSelectWrap">
                         <label for="hotelSelect">호텔</label>
                         <select id="hotelSelect">
                             <option value="">모든 호텔</option>
                         </select>
                     </div>
 
-                    <!-- 스토어 선택 필터 -->
-                    <div class="filter">
+                    <!-- 스토어 선택 영역 -->
+                    <div class="storeSelectWrap">
                         <label for="storeSelect">스토어</label>
                         <select id="storeSelect">
                             <option value="">모든 스토어</option>
@@ -59,10 +205,13 @@
                     </div>
                 </div>
 
+                <!-- 탭 버튼 -->
+                <div class="tabs" style="margin-top: 15px;">
+                    <button id="hotelTab" class="tab-button active">호텔</button>
+                    <button id="storeTab" class="tab-button">스토어</button>
+                </div>
 
-                <!-- 호텔 테이블 -->
-                <h5 class="mt-4">호텔 고객만족도</h5>
-                <table id="npsHotelTable" class="table table-bordered" style="display:none;">
+                <table id="npsHotelTable" class="table table-bordered hotelTitle" style="display:none;">
                     <thead>
                     <tr>
                         <th>번호</th>
@@ -79,8 +228,6 @@
                     <tbody></tbody>
                 </table>
 
-                <!-- 스토어 테이블 -->
-                <h5 class="mt-4">스토어 고객만족도</h5>
                 <table id="npsStoreTable" class="table table-bordered" style="display:none;">
                     <thead>
                     <tr>
@@ -95,15 +242,35 @@
                         <th>기타문의</th>
                     </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                    <!-- AJAX -->
+                    </tbody>
                 </table>
+
+                <!-- 상세보기 모달 -->
+                <div id="detailModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">상세보기</h5>
+                            </div>
+                            <div class="modal-body" id="modalContent">
+                                <!-- 상세 정보 내용이 여기에 표시됩니다. -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
             </div>
         </div>
 
     </main>
 
-    <script>
+    <script th:inline="javascript">
 
         $(document).ready(function () {
 
@@ -117,29 +284,108 @@
             let startOfMonth = new Date(today.getFullYear(), today.getMonth(), 2)
             let endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1)
 
+            let hotelQuestions = [
+                '고객님께서 이용하신 객실의 청결 상태(침구, 욕실, 바닥 등)는 전반적으로 얼마나 만족스러웠나요?',
+                '호텔 직원들의 응대 태도와 서비스는 고객님께 충분한 만족감을 드렸다고 느끼셨나요?',
+                '숙박 요금은 제공된 서비스 및 시설 수준에 비추어 적절하다고 생각하시나요?',
+                '헬스장, 수영장, 레스토랑 등 부대시설의 이용 편의성과 품질은 기대에 부합했나요?',
+                '고객님께서 이번 숙박 전반에 대해 얼마나 만족하셨는지 평가 부탁드립니다.'
+            ];
+
+            let storeQuestions = [
+                '매장에서 구매하신 상품의 품질(신선도, 상태, 내구성 등)은 기대에 부응했나요?',
+                '스토어 직원들의 응대 태도 및 친절함은 고객님의 쇼핑 경험에 긍정적인 영향을 주었나요?',
+                '매장 내부의 청결 상태와 정돈 상태(진열, 바닥, 화장실 등)는 어떠했는지 평가해 주세요.',
+                '상품 가격이 품질이나 서비스 수준에 비추어 합리적이라고 느끼셨나요?',
+                '이번 매장에서의 전반적인 쇼핑 경험에 대해 얼마나 만족하셨는지 평가해 주세요.'
+            ];
+
+            let originalTitles = ['1문항', '2문항', '3문항', '4문항', '5문항'];
+
+            $(document).ready(function() {
+                $('td.hover-question').hover(
+                    function () {
+                        const index = $(this).data('index');
+                        const type = $(this).data('type');
+
+                        const question = (type === 'hotel') ? hotelQuestions[index] : storeQuestions[index];
+                        const table = $(this).closest('table');
+                        const th = table.find('thead th').eq(index + 2);
+
+                        th.text(question);
+                    },
+                    function () {
+                        const index = $(this).data('index');
+                        const table = $(this).closest('table');
+                        const th = table.find('thead th').eq(index + 2);
+                        th.text(originalTitles[index]);
+                    }
+                );
+            });
+
             // 날짜 필터 초기값 설정
             $('#startDate').val(formatDate(startOfMonth))  // 시작일
             $('#endDate').val(formatDate(endOfMonth))      // 종료일
+
+            // 탭 클릭 시 이벤트 처리
+            $('#hotelTab').on('click',function () {
+                $('#npsHotelTable').show()
+                $('#npsStoreTable').hide()
+                $(this).addClass('active')
+                $('#storeTab').removeClass('active')
+            })
+            $('#storeTab').on('click', function () {
+                $('#npsStoreTable').show()
+                $('#npsHotelTable').hide()
+                $(this).addClass('active')
+                $('#hotelTab').removeClass('active')
+            })
+
+            // 로그인된 사용자 정보에 따라 역할을 확인하여 뷰 변경
+            let role = [[${role}]]
+            console.log('Role:', role)
+
+            // 역할에 따라 보여주는 뷰를 다르게 설정
+            if (role === 'SUPERADMIN') {
+                $('#centerManagerView').show()
+                loadNpsData($('#startDate').val(), $('#endDate').val(), "center");
+            } else if (role === 'ADMIN') {
+                $('.hotelSelectWrap').hide();
+                $('#hotelManagerView').show()
+
+                console.log("진입")
+                loadNpsData($('#startDate').val(), $('#endDate').val(), "hotel");
+            } else if (role === 'STOREADMIN') {
+                $('#storeManagerView').show()
+                $('.storeSelectWrap').hide()
+                $('.hotelSelectWrap').hide();
+                $('.hotelTitle').hide();
+                loadNpsData($('#startDate').val(), $('#endDate').val(), "store");
+            }else{
+                console.log("알 수 없는 역할")
+            }
 
             // 날짜 형식 변환 함수 (yyyy-mm-dd)
             function formatDate(date) {
                 return date.toISOString().split('T')[0]
             }
 
-            // 최초 페이지 진입 시 데이터를 불러오도록 처리
-            loadNpsData($('#startDate').val(), $('#endDate').val());
 
             // 조회 버튼 클릭 시
             $('#filterButton').on('click', function () {
                 let startDate = $('#startDate').val()
                 let endDate = $('#endDate').val()
 
+                console.log('필터 클릭 시작', startDate, '종료:', endDate)
+
                 // Ajax 요청을 통해 NPS 데이터 로딩
-                loadNpsData(startDate, endDate)
+                loadNpsData(startDate, endDate, role)
             })
 
             // NPS 데이터 로드 함수
-            function loadNpsData(startDate, endDate) {
+            function loadNpsData(startDate, endDate, type) {
+                console.log('NPS 데이터 시작', startDate, '종료', endDate)
+                console.log(type)
                 $.ajax({
                     url: '/api/nps/list',
                     method: 'GET',
@@ -150,21 +396,28 @@
                     success: function (data) {
                         console.log("NPS 데이터 로딩 성공 : ", data)
 
-                        // 받은 데이터를 npsList에 저장
+                        // 받은 데이터를 npsList 저장
                         npsList = data
 
                         // hotelOrStore 기준으로 데이터 필터링
                         hotelData = npsList.filter(item => item.hotelOrStore === 'hotel' && item.insertTime >= startDate && item.insertTime <= endDate)
                         storeData = npsList.filter(item => item.hotelOrStore === 'store' && item.insertTime >= startDate && item.insertTime <= endDate)
 
+                        console.log('Hotel Data:', hotelData)
+                        console.log('Store Data:', storeData)
+
                         // 고유한 호텔 이름 추출하여 hotels 배열에 저장
                         hotels = [...new Set(hotelData.map(item => item.hotelName))]
+
+                        console.log('Hotels List:', hotels)
 
                         // 셀렉트박스에 호텔 목록 추가
                         updateHotelSelectBox(hotels)
 
                         // 고유한 스토어 이름 추출하여 stores 배열에 저장
                         stores = [...new Set(storeData.map(item => item.storeName))]
+
+                        console.log('Stores List:', stores)
 
                         // 셀렉트박스에 스토어 목록 추가
                         updateStoreSelectBox(stores)
@@ -180,6 +433,8 @@
 
             // 셀렉트박스에 호텔 목록 추가 함수
             function updateHotelSelectBox(hotels) {
+                console.log('Updating Hotel Select Box:', hotels)
+
                 let hotelSelect = $('#hotelSelect')
                 hotelSelect.empty()  // 기존 옵션 비우기
 
@@ -194,6 +449,8 @@
 
             // 셀렉트박스에 스토어 목록 추가 함수
             function updateStoreSelectBox(stores) {
+                console.log('Updating Store Select Box:', stores)
+
                 let storeSelect = $('#storeSelect')
                 storeSelect.empty()  // 기존 옵션 비우기
 
@@ -210,6 +467,8 @@
             $('#hotelSelect').on('change', function () {
                 let selectedHotel = $(this).val()
 
+                console.log('Hotel Selected:', selectedHotel)
+
                 // 호텔별로 데이터를 필터링
                 let filteredHotelData = selectedHotel ? hotelData.filter(nps => nps.hotelName === selectedHotel) : hotelData
 
@@ -220,6 +479,8 @@
             // 셀렉트박스에서 스토어 선택 시 해당 스토어에 대한 설문만 필터링하여 렌더링
             $('#storeSelect').on('change', function () {
                 let selectedStore = $(this).val()
+
+                console.log('Store Selected:', selectedStore)
 
                 // 스토어별로 데이터를 필터링
                 let filteredStoreData = selectedStore ? storeData.filter(nps => nps.storeName === selectedStore) : storeData
@@ -255,22 +516,43 @@
                 // 데이터를 테이블 형식으로 추가
                 data.forEach(nps => {
                     let row = `
-                    <tr>
-                        <td>${nps.id}</td>
-                        <td>${nps.hotelOrStore === 'hotel' ? nps.hotelName : nps.storeName}</td>
-                        <td>${nps.questionOne}</td>
-                        <td>${nps.questionTwo}</td>
-                        <td>${nps.questionThree}</td>
-                        <td>${nps.questionFour}</td>
-                        <td>${nps.questionFive}</td>
-                        <td>${nps.totalScore}</td>
-                        <td>${nps.etcQuestion}</td>
-                    </tr>
-                `
+                                <tr>
+                                    <td>${nps.id}</td>
+                                    <td>${nps.hotelOrStore === 'hotel' ? nps.hotelName : nps.storeName}</td>
+                                    <td>${nps.questionOne}</td>
+                                    <td>${nps.questionTwo}</td>
+                                    <td>${nps.questionThree}</td>
+                                    <td>${nps.questionFour}</td>
+                                    <td>${nps.questionFive}</td>
+                                    <td>${nps.totalScore}</td>
+                                    <td><button class="btn btn-info viewDetail" data-etc="${nps.etcQuestion}" data-id="${nps.id}">상세보기</button></td>
+                                </tr>
+                            `
                     tableBody.append(row)
                 })
+
             }
+
+            // 모달 열기 함수
+            function openModal(etcQuestion, id) {
+                let modalContent = `<p><strong>ID:</strong> ${id}</p><p><strong>기타 문의:</strong> ${etcQuestion}</p>`
+                $('#modalContent').html(modalContent)
+                $('#detailModal').modal('show')
+            }
+
+            // 동적으로 생성된 .viewDetail 버튼 클릭 시 모달 열기 (이벤트 델리게이션 사용)
+            $(document).on('click', '.viewDetail', function () {
+                const etcQuestion = $(this).data('etc')
+                const id = $(this).data('id')
+                openModal(etcQuestion, id)
+            })
+
+            $(document).on('click', '.btn-secondary, .close', function () {
+                $('#detailModal').modal('hide');
+            })
+
         })
+
 
     </script>
 
