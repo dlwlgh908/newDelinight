@@ -228,8 +228,16 @@ public class CheckInServiceImpl implements CheckInService{
             UsersEntity usersEntity =
                     usersRepository.findById(checkInDTO.getUserId()).orElseThrow(EntityNotFoundException::new);
             check.setUsersEntity(usersEntity);
-            cartService.makeCart(1, usersEntity.getId());
 
+            //회원이면 핸드폰 번호 뒤 4자리로 비밀번호 설정
+            String phone = usersEntity.getPhone();
+            if (phone != null && phone.length() >= 4) {
+                String lastFour = phone.substring(phone.length() - 4);
+                check.setPassword(lastFour);
+            }
+
+
+            cartService.makeCart(1, usersEntity.getId());
             checkInRepository.save(check);
 
         }

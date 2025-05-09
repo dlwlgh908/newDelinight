@@ -36,9 +36,10 @@
                         </thead>
 
                         <tbody>
-                        <th:block  th:each="list:${membersEntityList}">
+                        <th:block  th:each="list,stat:${membersEntityList}">
                             <tr>
-                                <th scope="row offset-4" th:text="${list.id}"></th>
+                                <th scope="row offset-4" th:text="${list.id}" hidden="hidden"></th>
+                                <th scope="row" th:text="${stat.count}"></th>
                                 <td th:text="${list.name}" th:data-num="${list.id}" th:href="@{/members/hotel/read(id=${list.id})}"></td>
                                 <td th:text="${list.phone}"></td>
 
