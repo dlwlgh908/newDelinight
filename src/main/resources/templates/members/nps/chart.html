@@ -121,12 +121,12 @@
 
             $('#hotelChart').on('click', () => {
                 console.log('호텔 차트 버튼 클릭')
-                switchTab('hotel')
+                switchTab('hotelChart')
             })
 
             $('#storeChart').on('click', () => {
                 console.log('스토어 차트 버튼 클릭')
-                switchTab('store')
+                switchTab('storeChart')
             })
 
             // 차트 유형 변경 시 데이터 재요청
@@ -143,9 +143,8 @@
                 const startDate = $('#startDate').val()
                 const endDate = $('#endDate').val()
                 switchType = type
-                console.log(switchType)
                 chartDate(startDate, endDate, switchType)
-                console.log("와라라라라라ㅏㄹ라", startDate, endDate, switchType)
+                console.log("탭 버튼 클릭 시 실행 : ", startDate, endDate, switchType)
             }
 
              // 페이지 로드 시 기본 차트 호출
@@ -175,7 +174,7 @@
 
 
             // 차트 데이터 요청 및 렌더링
-            function chartDate(startDate, endDate) {
+            function chartDate(startDate, endDate, switchType) {
                 $.ajax({
                     url: '/api/nps/chart',
                     type: 'post',
@@ -192,10 +191,10 @@
                         let avgScores = {}
                         console.log("점수 : ", avgScores)
 
-                        if (type === 'hotelChart'){
+                        if (switchType === 'hotelChart'){
                             avgScores = questionScore(hotelData)
                             console.log("호텔 문항별 평균 점수 : ", avgScores)
-                        }else if (type === 'storeChart'){
+                        }else if (switchType === 'storeChart'){
                             avgScores = questionScore(storeData)
                             console.log("스토어 문항별 평균 점수 : ", avgScores)
                         }else {
