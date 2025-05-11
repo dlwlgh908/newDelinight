@@ -103,6 +103,19 @@
 
     })
 
+    document.addEventListener("DOMContentLoaded", function () {
+        let urlParams = new URLSearchParams(window.location.search);
+        let errorParam = urlParams.get("error");
+
+        if (errorParam === "bad_credentials") {
+            document.getElementById("passwordError").textContent = "비밀번호가 다릅니다.";
+        }
+        if (errorParam === "users_not_found") {
+            document.getElementById("emailError").textContent = "아이디를 찾을 수 없습니다.";
+        }
+
+    });
+
 
     // 탭 버튼 클릭 시 로그인 폼 전환
     document.addEventListener("DOMContentLoaded", function () {
