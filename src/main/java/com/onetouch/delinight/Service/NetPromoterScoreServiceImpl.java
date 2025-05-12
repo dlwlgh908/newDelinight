@@ -41,8 +41,6 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
     private final MembersRepository membersRepository;
 
 
-
-
     @Override
     public void sendNpsTemporary(Long checkOutId) {
         log.info("들어온 체크아웃 ID = {}" ,checkOutId);

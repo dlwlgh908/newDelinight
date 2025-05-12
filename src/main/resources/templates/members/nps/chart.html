@@ -60,17 +60,22 @@
 
                 </div>
 
-                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 20px;">
-
-                    <canvas id="pieChart" width="200" height="100"></canvas>
-                    <canvas id="barChart" width="200" height="100"></canvas>
-
+                <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+                    <div style="width: 600px; height: 500px;">
+                        <canvas id="pieChart" width="300" height="300"></canvas>
+                    </div>
+                    <div style="width: 600px; height: 500px;">
+                        <canvas id="barChart" width="300" height="300"></canvas>
+                    </div>
                 </div>
 
             </div>
         </div>
 
     </main>
+
+
+
 
     <script th:inline="javascript">
 
@@ -184,7 +189,7 @@
                 })
 
                 Object.keys(scoreSum).forEach(key => {
-                    scoreSum[key] = (scoreSum[key] / count).toFixed(1)
+                    scoreSum[key] = count === 0 ? 0 : Number((scoreSum[key] / count).toFixed(1))
                 })
 
                 return scoreSum
@@ -275,6 +280,7 @@
                         scales: {
                             y: {
                                 beginAtZero: true,
+                                min: 0,
                                 max: 5
                             }
                         }
