@@ -108,10 +108,7 @@
         let errorParam = urlParams.get("error");
 
         if (errorParam === "bad_credentials") {
-            document.getElementById("passwordError").textContent = "비밀번호가 다릅니다.";
-        }
-        if (errorParam === "users_not_found") {
-            document.getElementById("emailError").textContent = "아이디를 찾을 수 없습니다.";
+            document.getElementById("passwordError").textContent = "이메일 혹은 비밀번호가 다릅니다.";
         }
 
     });

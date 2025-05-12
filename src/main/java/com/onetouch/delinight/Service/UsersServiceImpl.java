@@ -8,6 +8,7 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.UsersDTO;
+import com.onetouch.delinight.Entity.CheckInEntity;
 import com.onetouch.delinight.Entity.GuestEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
@@ -68,7 +69,7 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        log.info(email);
+        log.info(email+"감지");
         UsersEntity usersEntity = usersRepository.selectEmail(email);
 
         if (usersEntity == null) {
@@ -79,11 +80,11 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
 
             if(membersEntity != null){
                 return new MemberDetails(membersEntity);
-
             }
-            GuestEntity guestEntity = checkInRepository.findByGuestEntity_Phone(email).getGuestEntity();
+            CheckInEntity checkInEntity = checkInRepository.findByGuestEntity_Phone(email);
 
-            if(guestEntity != null){
+            if(checkInEntity != null){
+                GuestEntity guestEntity = checkInEntity.getGuestEntity();
                 return new CustomGuestDetails(guestEntity);
             }
 
@@ -127,7 +128,6 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
             usersEntity.setPassword(encodedPassword);
             // 변경된 비밀번호 Entity DB 저장
             usersRepository.save(usersEntity);
-            log.info("술먹고 취해서 그런가 정말 왜 안되는지 모르겠어 ㅠㅠ");
             return true; // 성곡적으로 비밀번호 변경
         }else{
             return false;

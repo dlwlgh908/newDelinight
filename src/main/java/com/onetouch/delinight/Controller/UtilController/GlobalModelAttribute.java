@@ -65,7 +65,14 @@ public class GlobalModelAttribute {
                         Integer alertCount = hotelService.unansweredCheck(hotelService.findHotelByEmail(memberDetails.getUsername()));
                         model.addAttribute("alertCount", alertCount);
                         // 호텔 어드민일때(수정 해야함)
-                    } else {
+                    } else if (memberDetails.getMembersEntity().getRole() == Role.SYSTEMADMIN) {
+
+                        Integer alertCount = 0;
+                        model.addAttribute("alertCount", alertCount);
+
+                    }
+
+                    else {
                         Integer alertCount = membersService.countOfRequestAccount(memberDetails.getUsername());
 
                         model.addAttribute("alertCount", alertCount);
