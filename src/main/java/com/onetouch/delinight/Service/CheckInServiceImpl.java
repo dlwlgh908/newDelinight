@@ -288,13 +288,18 @@ public class CheckInServiceImpl implements CheckInService{
     @Override
     public UsersDTO checkEmail(String email) {
         UsersEntity usersEntity =
-                usersRepository.selectEmail(email);
+                usersRepository.findByEmail(email);
 
-        UsersDTO usersDTO =
-                modelMapper.map(usersEntity, UsersDTO.class);
+        if(usersEntity!=null) {
+            UsersDTO usersDTO =
+                    modelMapper.map(usersEntity, UsersDTO.class);
 
 
-        return usersDTO;
+            return usersDTO;
+        }
+        else {
+            return null;
+        }
 
     }
 
@@ -311,7 +316,7 @@ public class CheckInServiceImpl implements CheckInService{
         CheckInDTO checkInDTO;
         if(checkInEntity==null){
             CheckInEntity checkInEntity1 = checkInRepository.findByGuestEntity_Phone(email);
-            checkInDTO = modelMapper.map(checkInEntity1, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity1.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity.getRoomEntity().getHotelEntity(),HotelDTO.class)));
+            checkInDTO = modelMapper.map(checkInEntity1, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity1.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity1.getRoomEntity().getHotelEntity(),HotelDTO.class)));
         }
         else {
             checkInDTO = modelMapper.map(checkInEntity, CheckInDTO.class).setRoomDTO(modelMapper.map(checkInEntity.getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(checkInEntity.getRoomEntity().getHotelEntity(),HotelDTO.class)));

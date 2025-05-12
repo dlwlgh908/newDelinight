@@ -40,8 +40,21 @@ public class RoomCareDTO{
 
     private RoomCareStatus roomCareStatus; // 요청완료 상태
 
+    public RoomCareDTO setCheckInDTO(CheckInDTO checkInDTO){
+        this.checkInDTO = checkInDTO;
+        return this;
+    }
+    public RoomCareDTO setCheckOutLogDTO(CheckOutLogDTO checkOutLogDTO){
+        this.checkOutLogDTO = checkOutLogDTO;
+        return this;
+    }
     public RoomCareDTO setHotelDTO(HotelDTO hotelDTO){
         this.hotelDTO = hotelDTO;
+        return this;
+    }
+
+    public RoomCareDTO setRoomCareItemDTOList(List<RoomCareItemDTO> roomCareItemDTOList){
+        this.roomCareItemDTOList = roomCareItemDTOList;
         return this;
     }
 

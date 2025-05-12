@@ -27,8 +27,8 @@ public interface OrdersService {
 
     public List<OrdersDTO> read(Long paymentNum);
 
-    public void changePayLater(Long ordersId, String memo);
-    public void changePayNow(Long ordersId, String memo);
+    public void changePayLater(Long ordersId, String memo, String email);
+    public void changePayNow(Long ordersId, String memo, String email);
 
     public void changeStatus(Long ordersId, String ordersStatus);
     public OrdersStatus checkStatus(String ordersStatus);
