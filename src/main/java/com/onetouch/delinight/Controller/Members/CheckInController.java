@@ -10,7 +10,9 @@ package com.onetouch.delinight.Controller.Members;
 import com.onetouch.delinight.Constant.CheckInStatus;
 import com.onetouch.delinight.DTO.CheckInDTO;
 import com.onetouch.delinight.DTO.RoomDTO;
+import com.onetouch.delinight.Entity.CheckOutLogEntity;
 import com.onetouch.delinight.Repository.CheckInRepository;
+import com.onetouch.delinight.Repository.CheckOutLogRepository;
 import com.onetouch.delinight.Service.CheckInService;
 import com.onetouch.delinight.Service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class CheckInController {
     private final CheckInService checkInService;
     private final RoomService roomService;
     private final CheckInRepository checkInRepository;
+    private final CheckOutLogRepository checkOutLogRepository;
 //
 //    @GetMapping("/list")
 //    public String listView(Model model) {
@@ -101,9 +104,13 @@ public String listA(Model model, @RequestParam(value = "checkinstatus", required
         checkInDTOList = checkInService.listCheckInWithPrice(); // ✅ 가격 포함된 리스트 가져오기
     }
 
+    List<CheckOutLogEntity> checkOutLogEntityList = checkOutLogRepository.findAll();
+
+
 
     model.addAttribute("checkInDTOList", checkInDTOList);
     model.addAttribute("checkinstatus", checkinstatus);
+    model.addAttribute("checkOutLogEntityList", checkOutLogEntityList);
 
     return "members/checkin/listB";
 }

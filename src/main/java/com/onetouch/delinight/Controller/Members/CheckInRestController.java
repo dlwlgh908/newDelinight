@@ -20,7 +20,7 @@ public class CheckInRestController {
     private final CheckInService checkInService;
 
 
-    @PostMapping("/register")
+    @PostMapping("/checkin")
     public ResponseEntity<String> checkin(@RequestBody CheckInDTO checkInDTO,Long userId) {
 
 
@@ -36,7 +36,7 @@ public class CheckInRestController {
         return ResponseEntity.ok("성공");
     }
 
-    @PostMapping("/out")
+    @PostMapping("/checkout")
     public ResponseEntity<String> checkout(@RequestParam Long id) {
         log.info("받은 id : " + id);
 

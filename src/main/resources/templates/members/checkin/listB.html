@@ -47,6 +47,9 @@
                         <li class="nav-item">
                             <a class="nav-link" th:classappend="${checkinstatus == 'CHECKIN'} ? 'active'"  th:href="@{/members/checkin/list(checkinstatus='CHECKIN')}">투숙중인 방</a>
                         </li>
+<!--                        <li th:each="checkout : ${checkOutLogEntityList}">-->
+<!--                            <span>체크 아웃 리스트</span>-->
+<!--                        </li>-->
                     </ul>
 
 
@@ -310,7 +313,7 @@
 
 
                 $.ajax({
-                    url : "/checkin/rest/register",
+                    url : "/checkin/rest/checkin",
                     type: "post",
                     contentType : "application/json",
                     data : JSON.stringify({
@@ -337,7 +340,7 @@
 
 
                 $.ajax({
-                    url : "/checkin/rest/out?id=" + id,
+                    url : "/checkin/rest/checkout?id=" + id,
                     type: "post",
 
                     success: function (data) {
