@@ -74,16 +74,34 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
     @Override
     public List<OrdersDTO> npsSelect(Long checkOutId) {
         log.info("npsSelect 들어온 ID = {}" ,checkOutId);
-        CheckOutLogEntity checkOut = checkOutLogRepository.findById(checkOutId).orElseThrow(EntityNotFoundException::new);
-        // 해당 체크아웃 ID에 속한 주문 목록 조회
-        List<OrdersEntity> ordersEntityList = ordersRepository.findByCheckOutLogEntity_Id(checkOutId);
-        // OrdersEntity → OrdersDTO 변환 및 필요한 정보(호텔명, 호텔ID, StoreDTO) 추가 매핑
-        List<OrdersDTO> ordersDTOList = ordersEntityList.stream()
-                        .map(ordersEntity -> modelMapper.map(ordersEntity, OrdersDTO.class)
-                        .setHotelName(checkOut.getRoomEntity().getHotelEntity().getName())                      // 호텔 이름
-                        .setHotelId(checkOut.getRoomEntity().getHotelEntity().getId())                          // 호텔 ID
-                        .setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(),StoreDTO.class))).toList();  // 매장
-        return ordersDTOList;
+
+        try {
+
+            CheckOutLogEntity checkOut = checkOutLogRepository.findById(checkOutId).orElseThrow(EntityNotFoundException::new);
+            log.info("체크아웃 정보 조회 완료 : {}", checkOut);
+
+            // 해당 체크아웃 ID에 속한 주문 목록 조회
+            List<OrdersEntity> ordersEntityList = ordersRepository.findByCheckOutLogEntity_Id(checkOutId);
+            log.info("주문 목록 조회 완료, 주문 개수 : {}", ordersEntityList.size());
+
+            // OrdersEntity → OrdersDTO 변환 및 필요한 정보(호텔명, 호텔ID, StoreDTO) 추가 매핑
+            List<OrdersDTO> ordersDTOList = ordersEntityList.stream().map(ordersEntity -> modelMapper
+                            .map(ordersEntity, OrdersDTO.class)
+                            .setHotelName(checkOut.getRoomEntity().getHotelEntity().getName())                      // 호텔 이름
+                            .setHotelId(checkOut.getRoomEntity().getHotelEntity().getId())                          // 호텔 ID
+                            .setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(),StoreDTO.class)))            // 매장
+                            .toList();
+
+            log.info("최종 OrderDTO 리스트 크기 : {}", ordersDTOList.size());
+            return ordersDTOList;
+
+        }catch (Exception e) {
+
+            log.info("npsSelect 처리 중 오류 발생 : ", e);
+            throw e;
+
+        }
+
     }
 
     @Override
