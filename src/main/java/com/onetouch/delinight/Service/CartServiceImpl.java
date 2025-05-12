@@ -104,7 +104,6 @@ public class CartServiceImpl implements CartService{
 
         savedPaymentEntity.setOrdersEntityList(ordersEntityList);
         paymentRepository.save(savedPaymentEntity);
-        clear(cartNum);
 
         return savedPaymentEntity.getId();
 

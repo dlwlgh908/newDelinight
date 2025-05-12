@@ -11,10 +11,7 @@ import com.onetouch.delinight.Constant.OrderType;
 import com.onetouch.delinight.Constant.OrdersStatus;
 import com.onetouch.delinight.Constant.PaidCheck;
 import com.onetouch.delinight.DTO.*;
-import com.onetouch.delinight.Entity.CheckOutLogEntity;
-import com.onetouch.delinight.Entity.OrdersEntity;
-import com.onetouch.delinight.Entity.PaymentEntity;
-import com.onetouch.delinight.Entity.StoreEntity;
+import com.onetouch.delinight.Entity.*;
 import com.onetouch.delinight.Repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -40,6 +37,7 @@ public class OrdersServiceImpl implements OrdersService {
     private final OrdersRepository ordersRepository;
     private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
+    private final CartService cartService;
     private final SseService sseService;
 
     @Override
@@ -122,7 +120,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public void changePayNow(Long ordersId, String memo) {
+    public void changePayNow(Long ordersId, String memo, String email) {
         OrdersEntity ordersEntity = ordersRepository.findById(ordersId).get();
         ordersEntity.setMemo(memo);
         ordersEntity.setOrdersStatus(OrdersStatus.AWAITING);
@@ -132,12 +130,14 @@ public class OrdersServiceImpl implements OrdersService {
         paymentEntity.setPaidCheck(PaidCheck.paid);
         ordersRepository.save(ordersEntity);
         paymentRepository.save(paymentEntity);
+        Long id = cartService.cartCheck(email);
+        cartService.clear(id);
         sseService.sendToSAdmin("S" + ordersEntity.getStoreEntity().getId(), "new-order", ordersId + "번 주문이 들어왔습니다.");
 
     }
 
     @Override
-    public void changePayLater(Long ordersId, String memo) {
+    public void changePayLater(Long ordersId, String memo, String email) {
         OrdersEntity ordersEntity = ordersRepository.findById(ordersId).get();
         ordersEntity.setMemo(memo);
         ordersEntity.setOrdersStatus(OrdersStatus.AWAITING);
@@ -146,8 +146,8 @@ public class OrdersServiceImpl implements OrdersService {
         paymentEntity.setOrderType(OrderType.PAYLATER);
         ordersRepository.save(ordersEntity);
         paymentRepository.save(paymentEntity);
-        log.info("이치문 처럼안되는건가...?" + ordersEntity.getStoreEntity().getId());
-
+        Long id = cartService.cartCheck(email);
+        cartService.clear(id);
         sseService.sendToSAdmin("S" + ordersEntity.getStoreEntity().getId(), "new-order", ordersId + "번 주문이 들어왔습니다.");
 
     }

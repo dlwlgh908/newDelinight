@@ -4,6 +4,7 @@ package com.onetouch.delinight.Controller.Users;
 import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.UsersRepository;
+import com.onetouch.delinight.Service.CheckInService;
 import com.onetouch.delinight.Service.RoomCareMenuService;
 import com.onetouch.delinight.Service.RoomCareService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,15 +28,27 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/users/roomCare")
 @Log4j2
-@Slf4j
 public class UserRoomCareController {
 
     private final RoomCareService roomCareService;
     private final RoomCareMenuService roomCareMenuService;
     private final UsersRepository usersRepository;
+    private final CheckInService checkInService;
+
 
     @GetMapping("/list")
-    public String list(Principal principal){
+    public String list(Principal principal, Model model){
+        Long checkInId = checkInService.findCheckInByEmail(principal.getName()).getId();
+        List<RoomCareDTO> roomCareDTOList = roomCareService.list(checkInId);
+        log.info(roomCareDTOList);
+        model.addAttribute("roomCareDTOList", roomCareDTOList);
+        UsersDTO usersDTO = checkInService.checkEmail(principal.getName());
+        if(usersDTO!=null) {
+            Long usersId = usersDTO.getId();
+            List<RoomCareDTO> oldRoomCareDatas = roomCareService.oldList(usersId);
+            model.addAttribute("oldRoomCareDatas", oldRoomCareDatas);
+        }
+
         return "/users/roomCare/list";
     }
 
@@ -72,5 +85,14 @@ public class UserRoomCareController {
 
 
         return "/users/roomCare/request";
+    }
+
+
+    @GetMapping("/read")
+    public String read(Long id, Model model){
+
+        RoomCareDTO roomCareDTO = roomCareService.read(id);
+        model.addAttribute("roomCareDTO", roomCareDTO);
+        return "users/roomCare/read";
     }
 }

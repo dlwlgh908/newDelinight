@@ -28,22 +28,35 @@
 
     <table class="table table-striped">
 
-<!--        <div class="list-group">-->
-<!--            <th:block th:each="">-->
-<!--                <a th:href="" class="list-group-item list-group-item-action mb-2">-->
-<!--                    <div><strong></strong></div>-->
-<!--                    <div class="small text-muted"></div>-->
-<!--                    <div class="d-flex justify-content-between mt-2">-->
-<!--                        <small>요청: </small>-->
-<!--                        <small>답변: \</small>-->
-<!--                    </div>-->
-<!--                </a>-->
-<!--            </th:block>-->
-<!--        </div>-->
+        <div class="list-group">
+            <div th:if="${roomCareDTOList.size() == 0}">
+                <p>요청 하신 서비스가 없습니다.</p>
+            </div>
+            <th:block th:each="data : ${roomCareDTOList}">
+                <a class="list-group-item list-group-item-action mb-2 readHrefTag" th:data-id="${data.id}">
+                    <div><strong></strong></div>
+                    <div class="justify-content-between mt-2">
+                        <div class="d-flex align-items-center">요청 사항 :
+                            <small th:each="item : ${data.RoomCareItemDTOList}"
+                                   th:text="|${item.RoomCareMenuDTO.name}&nbsp|"></small></div>
+                        <div class="row"><small th:text="|요청 시간 : ${#temporals.format(data.awaitingTime, 'MM-dd HH:mm')}|"></small></div>
+                        <div class="row"><small th:if="${data.deliveredTime!=null}" th:text="|완료 시간 : ${#temporals.format(data.deliveredTime, 'MM-dd HH:mm')}|"></small></div>
+                    </div>
+                </a>
+            </th:block>
+        </div>
     </table>
 
 
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script th:inline="javascript">
+
+        $(".readHrefTag").on("click", function () {
+            let id = $(this).data("id")
+            window.location.href="/users/roomCare/read?id="+id;
+        })
+
+    </script>
     <script text="javascript">
 
         $(function () {

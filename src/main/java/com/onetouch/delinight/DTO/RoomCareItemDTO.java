@@ -28,7 +28,12 @@ public class RoomCareItemDTO {
     private Long roomCareMenuDTOId;
     private Long quantity;
 
+    private RoomCareMenuDTO roomCareMenuDTO;
 
+    public RoomCareItemDTO setRoomCareMenuDTO(RoomCareMenuDTO roomCareMenuDTO){
+        this.roomCareMenuDTO = roomCareMenuDTO;
+        return this;
+    }
 
     public RoomCareItemDTO setRoomCareDTO(RoomCareDTO roomCareDTO){
         this.roomCareDTO = roomCareDTO;

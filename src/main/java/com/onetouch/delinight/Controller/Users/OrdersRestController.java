@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/roomService/order")
@@ -19,17 +21,17 @@ public class OrdersRestController {
 
 
     @PostMapping("/payNow")
-    public ResponseEntity<String> payNow(Long ordersId, String memo){
+    public ResponseEntity<String> payNow(Long ordersId, String memo, Principal principal){
         log.info("선결제 진입");
-        ordersService.changePayNow(ordersId, memo);
+        ordersService.changePayNow(ordersId, memo, principal.getName());
         return ResponseEntity.ok("저장 성공");
     }
 
 
     @PostMapping("/payLater")
-    public ResponseEntity<String> payLater(Long ordersId, String memo){
+    public ResponseEntity<String> payLater(Long ordersId, String memo, Principal principal){
         log.info("후결제 진입");
-        ordersService.changePayLater(ordersId, memo);
+        ordersService.changePayLater(ordersId, memo, principal.getName());
         return ResponseEntity.ok("저장 성공");
     }
 }

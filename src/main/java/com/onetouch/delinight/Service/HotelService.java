@@ -22,6 +22,7 @@ public interface HotelService {
 
     public List<HotelDTO> list();
 
+    public HotelDTO findHotelDTOById(Long id);
     public Long findHotelByEmail(String email);
 
 

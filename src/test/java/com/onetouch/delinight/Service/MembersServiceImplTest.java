@@ -77,7 +77,7 @@ class MembersServiceImplTest {
     @Test
     @Commit
     public void EncodingTest(){
-        MembersEntity membersEntity = membersRepository.findById(21L).get();
+        MembersEntity membersEntity = membersRepository.findById(27L).get();
         membersEntity.setPassword(passwordEncoder.encode("akqjqtk12!"));
         membersRepository.save(membersEntity);
     }
