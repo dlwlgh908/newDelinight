@@ -26,10 +26,7 @@ public class CheckInRestController {
 
         log.info("들어오는 값 : " + checkInDTO);
 
-        log.info("password 들어오나요? : " +checkInDTO.getPassword());
-        log.info("password 들어오나요? : " +checkInDTO.getPassword());
-        log.info("password 들어오나요? : " +checkInDTO.getPassword());
-        log.info("password 들어오나요? : " +checkInDTO.getPassword());
+
 
 
         checkInService.checkin(checkInDTO);
