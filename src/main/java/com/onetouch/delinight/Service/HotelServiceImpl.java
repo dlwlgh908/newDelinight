@@ -135,6 +135,13 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    public HotelDTO findHotelDTOById(Long id) {
+        HotelEntity hotelEntity = hotelRepository.findById(id).get();
+        HotelDTO hotelDTO = modelMapper.map(hotelEntity, HotelDTO.class);
+        return hotelDTO;
+    }
+
+    @Override
     public Long findHotelByEmail(String email) {
         HotelEntity hotelEntity = hotelRepository.findByMembersEntity_Email(email);
 

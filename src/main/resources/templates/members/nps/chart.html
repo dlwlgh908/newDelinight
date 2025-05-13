@@ -41,6 +41,8 @@
                         <label for="endDate">종료일</label>
                         <input type="date" id="endDate" name="endDate">
 
+                        <button id="selectBtn">조회</button>
+
                         <label for="type">차트 유형</label>
                         <select id="type" name="type">
                             <option value="chartAll">전체</option>
@@ -58,17 +60,22 @@
 
                 </div>
 
-                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 20px;">
-
-                    <canvas id="pieChart" width="200" height="100"></canvas>
-                    <canvas id="barChart" width="200" height="100"></canvas>
-
+                <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+                    <div style="width: 600px; height: 500px;">
+                        <canvas id="pieChart" width="300" height="300"></canvas>
+                    </div>
+                    <div style="width: 600px; height: 500px;">
+                        <canvas id="barChart" width="300" height="300"></canvas>
+                    </div>
                 </div>
 
             </div>
         </div>
 
     </main>
+
+
+
 
     <script th:inline="javascript">
 
@@ -83,18 +90,26 @@
                 switch (role) {
                     case 'SUPERADMIN':
                         $('#centerManagerView').show()
+                        $('#chartAll').show()
+                        $('#hotelChart').show()
+                        $('#storeChart').show()
                         break
                     case 'ADMIN':
                         $('#hotelManagerView').show()
+                        $('#chartAll').show()
+                        $('#hotelChart').show()
+                        $('#storeChart').show()
                         break
                     case 'STOREADMIN':
                         $('#storeManagerView').show()
+                        $('#chartAll').show()
+                        $('#hotelChart').hide()
+                        $('#storeChart').show()
                         break
                     default:
                         console.warn('알 수 없는 역할:', role)
                 }
             }
-
 
             // 전역 변수 선언 및 초기 날짜 설정
             let pieChartInstance = null
@@ -111,7 +126,6 @@
             console.log('[초기화] 종료일:', $('#endDate').val())
 
             $('#type').val('chartAll') // 기본 차트 유형
-
 
             // 탭 클릭 이벤트 처리
             $('#chartAll').on('click', () => {
@@ -137,7 +151,16 @@
                 chartDate(startDate, endDate, type)
                 console.log("기본 차트 유형 변경 이벤트 :", startDate, endDate, type)
             })
-            
+
+            // 날짜 조회 버튼 클릭 이벤트 처리
+            $('#selectBtn').on('click',function () {
+                let startDate = $('#startDate').val()
+                let endDate = $('#endDate').val()
+                let type = $('#type').val()
+                chartDate(startDate, endDate, type)
+                console.log("조회 버튼 클릭 변경 이벤트 : ", startDate, endDate, type)
+            })
+
             // 탭 버튼 클릭 시 chartDate 실행 + select 값 연동
             function switchTab(type) {
                 const startDate = $('#startDate').val()
@@ -147,7 +170,7 @@
                 console.log("탭 버튼 클릭 시 실행 : ", startDate, endDate, switchType)
             }
 
-             // 페이지 로드 시 기본 차트 호출
+            // 페이지 로드 시 기본 차트 호출
             const startType = $('#type').val()
             chartDate($('#startDate').val(), $('#endDate').val(), startType)
             console.log("페이지 로드 시 차트 요청:", $('#startDate').val(), $('#endDate').val(), startType)
@@ -166,7 +189,7 @@
                 })
 
                 Object.keys(scoreSum).forEach(key => {
-                    scoreSum[key] = (scoreSum[key] / count).toFixed(1)
+                    scoreSum[key] = count === 0 ? 0 : Number((scoreSum[key] / count).toFixed(1))
                 })
 
                 return scoreSum
@@ -182,14 +205,22 @@
                     success: function (data) {
                         console.log("NPS Chart 데이터:", data)
 
-                        hotelData = data.filter(hotel => hotel.hotelOrStore === 'hotel')
-                        storeData = data.filter(store => store.hotelOrStore === 'store')
+                        // 날짜 조건에 맞게 데이터를 필터링
+                        let startDateObj = new Date(startDate)
+                        let endDateObj = new Date(endDate)
+
+                        let filteredData = data.filter(date => {
+                            let localDate = new Date(date.insertTime)
+                            return localDate >= startDateObj && localDate <= endDateObj
+                        })
+
+                        let hotelData = filteredData.filter(hotel => hotel.hotelOrStore === 'hotel')
+                        let storeData = filteredData.filter(store => store.hotelOrStore === 'store')
 
                         console.log("받아온 호텔 데이터 : ", hotelData)
                         console.log("받아온 스토어 데이터 : ", storeData)
 
                         let avgScores = {}
-                        console.log("점수 : ", avgScores)
 
                         if (switchType === 'hotelChart'){
                             avgScores = questionScore(hotelData)
@@ -198,7 +229,7 @@
                             avgScores = questionScore(storeData)
                             console.log("스토어 문항별 평균 점수 : ", avgScores)
                         }else {
-                            avgScores = questionScore(data)
+                            avgScores = questionScore(filteredData)
                             console.log("전체 문항별 평균 점수 : ", avgScores)
                         }
 
@@ -224,17 +255,8 @@
                         datasets: [{
                             label: '문항별 평균 점수',
                             data: Object.values(data),
-                            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                            backgroundColor: ['#FF9999', '#66B2FF', '#99FF99', '#FFCC99', '#FF66FF'],
                         }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: '문항별 평균 점수 (파이 차트)'
-                            }
-                        }
                     }
                 })
             }
@@ -251,32 +273,23 @@
                         datasets: [{
                             label: '문항별 평균 점수',
                             data: Object.values(data),
-                            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-                            borderColor: '#ddd',
-                            borderWidth: 1
+                            backgroundColor: '#66B2FF',
                         }]
                     },
                     options: {
-                        responsive: true,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: '문항별 평균 점수 (막대 차트)'
-                            }
-                        },
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                max: 10
+                                min: 0,
+                                max: 5
                             }
                         }
                     }
                 })
             }
 
-        }) // document.ready 끝
+        })
     </script>
-
 
 </div>
 </body>

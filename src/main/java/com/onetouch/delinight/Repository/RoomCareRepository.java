@@ -11,5 +11,10 @@ import com.onetouch.delinight.Entity.RoomCareEntity;
 import com.onetouch.delinight.Entity.RoomCareItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface RoomCareRepository extends JpaRepository<RoomCareEntity, Long> {
+    public List<RoomCareEntity> findByCheckInEntity_RoomEntity_HotelEntity_MembersEntity_Id(Long membersId);
+    public List<RoomCareEntity> findByCheckInEntity_Id(Long checkInId);
+    public List<RoomCareEntity> findByCheckOutLogEntity_UsersEntity_Id(Long usersId);
 }

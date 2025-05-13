@@ -155,7 +155,12 @@
 <h2>고객 만족도 평가</h2>
 
 <div class="hotelNPSWrap"></div>
-<div class="storeNPSWrap"></div>
+
+<div th:if="${storeDTOList != null and !storeDTOList.isEmpty()}">
+    <div class="storeNPSWrap"></div>
+</div>
+
+
 <button class="saveSurveyBtn" style="display: none;">제출</button>
 
 <div id="myModal" class="modal">
@@ -174,11 +179,19 @@
         let storeDTOList = [[${storeDTOList}]]
         let hotelId = [[${hotelId}]]
         let hotelName = [[${hotelName}]]
+        let hotelOnly = [[${hotelOnly}]]
 
         console.log(checkOutId)
         console.log(storeDTOList)
         console.log(hotelId)
         console.log(hotelName)
+
+        function checkEmptyOrder() {
+            if(storeDTOList===null){
+                $(".nextBtn").text("제출");
+                $(".nextBtn").removeClass("nextBtn").addClass("saveSurveyBtn");
+            }
+        }
 
         // 호텔 이름을 화면에 표시
         $(".hotelNPSWrap").prepend(`<h3>${hotelName} 설문</h3>`)
@@ -236,12 +249,15 @@
         let hotelHtml = generateQuestionBlock("hotel", hotelId, hotelName, hotelQuestions)
         $(".hotelNPSWrap").html(hotelHtml)
 
-        // 스토어 설문 생성
-        let storeHtml = ""
-        storeDTOList.forEach(store => {
-            storeHtml += generateQuestionBlock("store", store.id, store.name, storeQuestions)
-        })
-        $(".storeNPSWrap").html(storeHtml)
+        if(storeDTOList!==null){
+            // 스토어 설문 생성
+            let storeHtml = ""
+            storeDTOList.forEach(store => {
+                storeHtml += generateQuestionBlock("store", store.id, store.name, storeQuestions)
+            })
+            $(".storeNPSWrap").html(storeHtml)
+        }
+
 
         // 첫 번째 설문만 보여주기
         $(".survey-section").first().show()
@@ -306,7 +322,7 @@
         }
 
         // 제출 버튼 클릭 이벤트
-        $(".saveSurveyBtn").click(function () {
+        $(document).on("click",".saveSurveyBtn",function () {
             console.log("설문 제출 버튼 클릭")
 
             let npsList = []
@@ -341,6 +357,7 @@
                 }
             })
         })
+        checkEmptyOrder()
     })
 
 </script>

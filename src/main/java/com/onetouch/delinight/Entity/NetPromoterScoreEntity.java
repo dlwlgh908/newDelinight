@@ -22,6 +22,7 @@ public class NetPromoterScoreEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "log_id")
+    @ToString.Exclude
     private CheckOutLogEntity checkOutLogEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)

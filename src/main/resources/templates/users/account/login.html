@@ -103,6 +103,16 @@
 
     })
 
+    document.addEventListener("DOMContentLoaded", function () {
+        let urlParams = new URLSearchParams(window.location.search);
+        let errorParam = urlParams.get("error");
+
+        if (errorParam === "bad_credentials") {
+            document.getElementById("passwordError").textContent = "이메일 혹은 비밀번호가 다릅니다.";
+        }
+
+    });
+
 
     // 탭 버튼 클릭 시 로그인 폼 전환
     document.addEventListener("DOMContentLoaded", function () {

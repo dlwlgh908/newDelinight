@@ -43,6 +43,7 @@ public class CheckOutLogEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
+    @ToString.Exclude
     private UsersEntity usersEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
