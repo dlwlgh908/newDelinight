@@ -9,19 +9,14 @@
 </head>
 
 <body>
-<!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
-            <!--내용 넣는 곳-->
-            <!--반드시 이 아래에서만 작업-->
             <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
-
-                    <!--페이지 이름-->
                     <h3 th:text="${storeDTO.name}"></h3>
                     <ol class="breadcrumb mb-5">
-                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="/members/account/dashHub" class="breadcrumb-item active">홈</a>
                         <a href="#" class="breadcrumb-item active no-click">가맹점 관리</a>
                     </ol>
 
@@ -61,7 +56,6 @@
         <script src="/js/imgscript.js" type="text/javascript"></script>
     </div>
 
-    <!--푸터 절대 수정 금지!!!!-->
     <!--푸터-->
     <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
 </div>

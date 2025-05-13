@@ -36,7 +36,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         } else if (exception instanceof BadCredentialsException) {
             errorParam = "bad_credentials";
             log.info("로그인 실패 - 원인: {}", exception.getMessage());
-            log.info("아이디는 맞는데 비번이 틀림!!");
         }
 
         response.sendRedirect("/members/account/login?error=" + errorParam);

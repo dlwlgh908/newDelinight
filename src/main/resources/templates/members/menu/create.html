@@ -4,6 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/desktop/layout}"
 >
+
 <head>
     <title>델리나잇</title>
 </head>
@@ -11,29 +12,24 @@
 <body>
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
+        <!--내용 넣는 곳-->
         <div class="container-fluid px-5">
-            <div class="card custom-shadow mt-5 mb-4">
+            <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
-                    <h3>메뉴 정보 수정</h3>
+                    <h3>새 메뉴 등록</h3>
                     <ol class="breadcrumb mb-5">
-                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                        <a href="/members/menu/list" class="breadcrumb-item active">메뉴 목록</a>
+                        <a href="/members/account/dashHub" class="breadcrumb-item active">홈</a>
+                        <a href="/members/menu/list" class="breadcrumb-item active">메뉴 관리</a>
                     </ol>
 
-                    <form action="/members/menu/update" method="post" enctype="multipart/form-data" th:object="${menuDTO}" >
+                    <form action="/members/menu/create" th:object="${menuDTO}" method="post" class="formWrap"
+                          enctype="multipart/form-data">
 
                         <div class="d-flex">
 
                             <div class="w-50">
-                                <input hidden readonly name="id" th:value="${menuDTO.id}">
+                                <input type="hidden" name="id" id="id">
                                 <div class="hiddenImgNum"></div>
-
-                                <div class="row mb-3">
-                                    <label for="id" class="col-sm-3 col-form-label form-label">메뉴 번호</label>
-                                    <div class="col-sm-3">
-                                        <input type="text"  readonly class="form-control-plaintext" id="id" th:field="*{id}">
-                                    </div>
-                                </div>
 
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label form-label" for="inputGroupSelect02">카테고리</label>
@@ -62,23 +58,23 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="name" class="col-sm-3 col-form-label form-label">메뉴명</label>
+                                    <label class="col-sm-3 col-form-label form-label" for="name">메뉴명</label>
                                     <div class="col-sm-6">
-                                        <input type="text"  class="form-control" id="name" th:field="*{name}">
+                                        <input type="text" class="form-control" id="name" name="name">
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="content" class="col-sm-3 col-form-label form-label">메뉴정보</label>
+                                    <label class="col-sm-3 col-form-label form-label" for="content">메뉴정보</label>
                                     <div class="col-sm-8">
-                                        <textarea type="text" class="form-control" id="content" th:field="*{content}"></textarea>
+                                        <textarea type="text" class="form-control" id="content" name="content"></textarea>
                                     </div>
                                 </div>
 
-                                <div class="row mb-3">
-                                    <label for="price" class="col-sm-3 col-form-label form-label">가격</label>
+                                <div class="row mt-3">
+                                    <label class="col-sm-3 col-form-label form-label" for="price">가격</label>
                                     <div class="col-sm-6">
-                                        <input type="text"  class="form-control" id="price" th:field="*{price}">
+                                        <input type="text" class="form-control" id="price" name="price">
                                     </div>
                                 </div>
 
@@ -96,22 +92,43 @@
                             </div>
 
                             <div class="w-50">
-                                <img class="menuImg" th:src="${imgUrl}">
+                                <img class="menuImg img-thumbnail" src="/img/defaultFood.jpeg" alt="미리보기 이미지">
                             </div>
-                        </div>
-                        <div class="mt-5 text-center">
-                            <button type="submit" class="btn btn-primary">저장</button>
-                            <a th:href="@{/members/menu/list(id=${menuDTO.id})}" class="btn btn-gray">취소</a>
                         </div>
                     </form>
 
-                    <script type="text/javascript" src="/js/imgscript.js"></script>
-
+                    <div class="text-center mt-5 mb-3">
+                        <button type="button" class="btn submitBtn btn-primary">등록</button>
+                        <a href="/members/menu/list" class="btn btn-gray">취소</a>
+                    </div>
                 </div>
             </div>
 
+
+            <script type="text/javascript" src="/js/imgscript.js"></script>
+
+
         </div>
     </main>
+    <script text="javascript">
+
+        $(".submitBtn").on("click", function () {
+            let hiddenImgNum = $(".imgNum").val()
+            if(hiddenImgNum===""){
+                Swal.fire({
+                    icon: 'error',
+                    title: '메뉴 등록 시 이미지가 필수 입니다.',
+                    text: '메뉴를 대표할 이미지를 등록해주세요.',
+                });
+            }
+            else {
+                $(".formWrap").submit()
+
+            }
+        })
+
+    </script>
+
 
     <!--푸터 절대 수정 금지!!!!-->
     <!--푸터-->
