@@ -5,49 +5,12 @@
       layout:decorate="~{layout/desktop/layout}"
 >
 <head>
-    <style>
-        .search {
-            max-width: 350px;
-            height: 100%;
-            outline: none;
-            font-size: 14px;
-            font-weight: 500;
-            caret-color: #2b2b2b;
-            color: black;
-            padding: 7px 10px;
-            border: 1.5px solid black;
-            border-top-left-radius: 7px;
-            border-bottom-left-radius: 7px;
-            margin-right: 1px;
-            transition: all .2s ease;
-        }
-
-        .search__btn {
-            border: none;
-            cursor: pointer;
-            background-color: rgba(42, 42, 45, 1);
-            border-top-right-radius: 7px;
-            border-bottom-right-radius: 7px;
-            height: 100%;
-            width: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .search__btn:hover {
-            background-color: rgba(54, 54, 56, 1);
-        }
-    </style>
-
     <title>델리나잇</title>
 </head>
 
 <body>
-<!--이 줄 div layout:fragment명과 id명 절대 수정 금지!!!!-->
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
-        <!--내용 넣는 곳-->
         <div class="container-fluid px-5">
             <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
@@ -59,24 +22,20 @@
 
                     <form action="/members/center/create" th:field="${centerDTO}" method="post" enctype="multipart/form-data">
                         <div class="centerFormData"></div>
-                        <div class="container">
-                            <div class="row">
-
-                                <div class="col-6">
-
-
-                                    <div class="md-3  mb-3">
-                                        <label for="name" class="form-label">본사명</label>
+                        <div class="col-6">
+                                <div class="row mb-3">
+                                    <label for="name" class="col-sm-3 col-form-label form-label">본사명</label>
+                                    <div class="col-sm-8">
                                         <input type="text" class="form-control" id="name" name="name">
                                         <div class="text-sm mt-1 text-danger" th:if="${nameError != null}" th:text="${nameError}"></div>
                                     </div>
+                                </div>
 
-                                    <div class="row mb-3">
-                                        <label for="content" class="col-sm-3 col-form-label form-label">설명</label>
-                                        <div class="col-sm-8">
-                                            <textarea type="text" class="form-control" id="content" name="content"></textarea>
-                                            <div class="text-sm mt-1 text-danger" th:if="${contentError != null}" th:text="${contentError}"></div>
-                                        </div>
+                                <div class="row mb-3">
+                                    <label for="content" class="col-sm-3 col-form-label form-label">설명</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control" id="content" name="content"></textarea>
+                                        <div class="text-sm mt-1 text-danger" th:if="${contentError != null}" th:text="${contentError}"></div>
                                     </div>
                                 </div>
                         </div>

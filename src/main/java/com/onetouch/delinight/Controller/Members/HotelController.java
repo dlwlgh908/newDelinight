@@ -110,13 +110,9 @@ public String readView(Principal principal, Model model, @PathVariable("id") Lon
     return "members/hotel/read";
 }
     
-// TODO: 2025-05-02 수정페이지 안열림, 수정해야함
     @GetMapping("/update2/{id}")
     public String updateView2(Principal principal, Model model, @PathVariable("id") Long id) {
 
-
-        log.info(id);
-        log.info(id);
         log.info(id);
 
         HotelEntity hotelEntity =
@@ -132,8 +128,6 @@ public String readView(Principal principal, Model model, @PathVariable("id") Lon
     public String updateView(Principal principal, Model model, @PathVariable("id") Long id) {
 
         log.info(id);
-        log.info(id);
-        log.info(id);
 
         HotelEntity hotelEntity =
                 hotelRepository.findById(id).get();
@@ -147,9 +141,6 @@ public String readView(Principal principal, Model model, @PathVariable("id") Lon
     @PostMapping("/update")
     public String updateProc(@ModelAttribute HotelDTO hotelDTO) {
 
-        log.info("update post 페이지" + hotelDTO);
-        log.info("update post 페이지" + hotelDTO);
-        log.info("update post 페이지" + hotelDTO);
         log.info("update post 페이지" + hotelDTO);
 
 

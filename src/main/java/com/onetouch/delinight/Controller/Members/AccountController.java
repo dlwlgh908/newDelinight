@@ -153,7 +153,7 @@ public class AccountController {
         if (role.equals(Role.SUPERADMIN)) {
             return "redirect:/members/center/read";
         } else { // 시스템 어드민일 경우
-            return "redirect:/members/center/list";
+            return "redirect:/members/center/create";
         }
     }
 

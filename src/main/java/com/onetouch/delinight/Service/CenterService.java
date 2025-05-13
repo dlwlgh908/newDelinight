@@ -9,6 +9,7 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.CenterDTO;
 import com.onetouch.delinight.DTO.CheckInDTO;
+import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
 
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.List;
 public interface CenterService {
 
     public void create(CenterDTO centerDTO, String email);
+
+    public void update(CenterDTO centerDTO);
 
     public List<CenterDTO> list();
 

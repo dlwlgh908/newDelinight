@@ -9,6 +9,7 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.CenterDTO;
 import com.onetouch.delinight.DTO.CheckInDTO;
+import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.CenterEntity;
 import com.onetouch.delinight.Entity.CheckInEntity;
@@ -16,7 +17,9 @@ import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.CenterRepository;
 import com.onetouch.delinight.Repository.CheckInRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.format.CellTextFormatter;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +48,19 @@ public class CenterServiceImpl implements CenterService{
         centerEntity.setMembersEntity(membersEntity);
 
         centerRepository.save(centerEntity);
+    }
+
+    @Override
+    public void update(CenterDTO centerDTO) {
+        CenterEntity centerEntity =
+                modelMapper.map(centerDTO, CenterEntity.class);
+        CenterEntity center =
+                centerRepository.findById(centerEntity.getId()).orElseThrow(EntityNotFoundException::new);
+
+        center.setName(centerEntity.getName());
+        center.setContent(centerEntity.getContent());
+
+        centerRepository.save(center);
     }
 
     @Override

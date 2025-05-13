@@ -9,14 +9,15 @@ package com.onetouch.delinight.Controller.Members;
 
 import com.onetouch.delinight.DTO.CenterDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.Entity.CenterEntity;
+import com.onetouch.delinight.Repository.CenterRepository;
 import com.onetouch.delinight.Service.CenterService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
 public class CenterController {
 
     private final CenterService centerService;
+    private final CenterRepository centerRepository;
 
     @GetMapping("/create")
     public String createView() {
@@ -39,8 +41,6 @@ public class CenterController {
     @PostMapping("/create")
     public String createProc(CenterDTO centerDTO, Principal principal, Model model) {
 
-        log.info("center create 진입");
-        log.info("center create 진입");
         log.info("center create 진입");
         boolean hasError = false;
 
@@ -63,8 +63,6 @@ public class CenterController {
                 centerService.checkEmail(email);
 
         log.info(membersDTO);
-        log.info(membersDTO);
-        log.info(membersDTO);
 
         centerService.create(centerDTO, email);
 
@@ -83,15 +81,34 @@ public class CenterController {
     @GetMapping("/read")
     public String readView(Principal principal, Model model) {
         log.info("principal log ! : " + principal.getName());
-        log.info("principal log ! : " + principal.getName());
-        log.info("principal log ! : " + principal.getName());
 
         CenterDTO centerDTO =
                 centerService.read(principal.getName());
-        model.addAttribute("centerDTO", centerDTO);
-
+        model.addAttribute("center", centerDTO);
 
         return "members/center/read";
+    }
 
+    @GetMapping("/update/{id}")
+    public String updateView(Model model, @PathVariable("id") Long id){
+        log.info(id);
+
+
+        CenterEntity centerEntity = centerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 center 없음"));
+
+        model.addAttribute("center", centerEntity);
+
+        return "members/center/update";
+    }
+
+    @PostMapping("/update")
+    public String updateProc(@ModelAttribute CenterDTO centerDTO){
+
+        log.info("update post 페이지" + centerDTO);
+
+        centerService.update(centerDTO);
+
+        return "redirect:/members/center/read";
     }
 }

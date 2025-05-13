@@ -17,10 +17,7 @@
 
 </head>
 <body>
-<div class="container-fluid px-3" layout:fragment="content">
-
-
-
+    <div class="container-fluid px-3 flex-grow-1 d-flex flex-column" layout:fragment="content">
         <form action="/users/inquire/register" th:object="${inquireDTO}" method="post" class="formWrap" enctype="multipart/form-data">
 
             <div class="row mb-5">
@@ -86,7 +83,5 @@
 
 
 </div>
-
-
 </body>
 </html>

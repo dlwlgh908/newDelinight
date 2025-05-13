@@ -14,10 +14,10 @@
         <div class="container-fluid px-5">
             <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
-                    <h3>고객만족도 데이터 통계</h3>
+                    <h3>데이터 테이블</h3>
                     <ol class="breadcrumb mb-5">
-                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                        <a href="/members/nps/list" class="breadcrumb-item active">데이터 테이블</a>
+                        <a href="/members/account/dashHub" class="breadcrumb-item active">홈</a>
+                        <a href="#" class="breadcrumb-item active no-click">고객만족도 평가</a>
                     </ol>
 
                     <div id="centerManagerView" style="display: none;"></div>
@@ -25,44 +25,34 @@
                     <div id="storeManagerView" style="display: none;"></div>
 
                     <!-- 검색조건 영역 -->
-                    <div class="row mb-4">
-                        <div class="col-sm-3">
-                            <label for="startDate" class="col-form-label form-label me-3">시작일</label>
-                            <div class="col-sm-3">
-                                <input type="date" id="startDate" name="startDate" class="form-control">
-                            </div>
+                    <div class="d-flex flex-wrap align-items-center mb-4">
+                        <div class="d-flex align-items-center me-4">
+                            <label for="startDate" class="form-label" style="width: 100px;">시작일</label>
+                            <input type="date" id="startDate" name="startDate" class="form-control">
                         </div>
 
-                        <div class="col-3">
-                            <label for="endDate" class="col-form-label form-label me-3">종료일</label>
-                            <div class="col-sm-3">
-                                <input type="date" id="endDate" name="endDate" class="form-control">
-                            </div>
+                        <div class="d-flex align-items-center me-4">
+                            <label for="endDate" class="form-label" style="width: 100px;">종료일</label>
+                            <input type="date" id="endDate" name="endDate" class="form-control">
                         </div>
 
-                        <div class="hotelSelectWrap col-3">
-                            <label for="hotelSelect" class="col-sm-2 col-form-label form-label me-3">호텔</label>
-                            <div class="col-sm-3">
-                                <select id="hotelSelect" class="form-select">
-                                    <option value="">전체</option>
-                                    <!-- 옵션들 동적으로 추가 -->
-                                </select>
-                            </div>
+                        <div class="hotelSelectWrap d-flex align-items-center me-4">
+                            <label for="hotelSelect" class="form-label" style="width: 60px;">호텔</label>
+                            <select id="hotelSelect" class="form-select">
+                                <option value="">전체</option>
+                                <!-- 옵션들 동적으로 추가 -->
+                            </select>
                         </div>
 
-                        <div class="storeSelectWrap col-3">
-                            <label for="storeSelect" class="col-sm-2 col-form-label form-label me-3">가맹점</label>
-                            <div class="col-sm-3">
-                                <select id="storeSelect" class="form-select">
-                                    <option value="">전체</option>
-                                    <!-- 옵션들 동적으로 추가 -->
-                                </select>
-                            </div>
+                        <div class="storeSelectWrap d-flex align-items-center me-2">
+                            <label for="storeSelect" class="form-label" style="width: 100px;">가맹점</label>
+                            <select id="storeSelect" class="form-select">
+                                <option value="">전체</option>
+                                <!-- 옵션들 동적으로 추가 -->
+                            </select>
                         </div>
 
-                        <div class="col-1">
-                            <button id="filterButton" class="btn btn-primary">조회</button>
-                        </div>
+                        <button id="filterButton" class="btn btn-primary"><i class="fas fa-magnifying-glass"></i></button>
                     </div>
 
 

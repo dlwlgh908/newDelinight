@@ -9,17 +9,14 @@
 </head>
 
 <body>
-<!--layout:fragment명과 id명 절대 수정 금지!!!!-->
 <div layout:fragment="adminContent" id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-5">
             <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
-
-                    <!--페이지 제목 명명-->
                     <h3>룸 목록</h3>
                     <ol class="breadcrumb mb-4">
-                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="/members/account/dashHub" class="breadcrumb-item active">홈</a>
                         <a href="#" class="breadcrumb-item active no-click">룸 관리</a>
                     </ol>
 
@@ -108,29 +105,16 @@
                                     <a class="btn btn-outline-danger"  th:data-id="${list.id}" id="dbtn"><i class="fa-solid fa-trash hoverBtn text-danger"></i></a>
                                 </td>
                             </tr>
-
                         </th:block>
-
-
-
                         </tbody>
-
                     </table>
                 </div>
             </div>
         </div>
     </main>
 
-    <!--스크립트 영역-->
-    <!--추가할 스크립트가 있다면 이곳에서 <script>태그 열고 작업-->
-    <!--기존 config 파일과 겹칠 수 있으므로 class나 id는 직접 작명해주세요-->
-
     <script th:inline="javascript">
-
-
-
         $(function () {
-
             $(document).on("click",".room_registerbtn", function () {
                 let name = $("#name").val()
                 let content = $("#content").val()
@@ -186,7 +170,6 @@
                     content : content
                 };
 
-
                 $.ajax({
                     url: "/room/rest/modify",
                     method: "post",
@@ -195,12 +178,9 @@
                         location.reload();
                     },
                     error: function () {
-
                     },
                 })
-
             });
-
 
             $(document).on("click", "#dbtn", function () {
                 let id = $(this).attr("data-id");
@@ -208,14 +188,12 @@
                 if (!confirm("정말로 삭제하시겠습니까?")) {
                     return;
                 }
-
                 $.ajax({
                     url: "/room/rest/del",
                     method: "delete",
                     data: {id: id},
                     success: function () {
                         location.reload();
-
                     },
                     error: function (xhr) {
                         alert("삭제불가 ❌. 현재 체크인 상태인 방입니다.")
@@ -223,13 +201,6 @@
                 });
             });
         });
-
-
-
-
-
-
-
 
 
         // room_registerbtn.on("click", function () {
@@ -250,17 +221,11 @@
         //         success: function (data) {
         //             modal.modal("hide");
         //             location.reload();
-        //
         //         },
         //     })
         // });
-
-
-
     </script>
 
-    <!--푸터-->
-    <!--콘텐츠 내부에 포함된 형식이므로 첨삭 엄금!!!-->
     <div th:replace="~{fragments/desktop/adminfooter::adminFooter}"></div>
 </div>
 </body>

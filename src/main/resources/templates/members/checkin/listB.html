@@ -7,21 +7,6 @@
 <head>
     <title>델리나잇</title>
 </head>
-<style>
-    .toast-container {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #333;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        display: none; /* 처음엔 숨김 */
-        opacity: 0.9;
-    }
-</style>
 
 <body>
 <div layout:fragment="adminContent" id="layoutSidenav_content">
@@ -32,7 +17,7 @@
 
                     <h3 id="test">체크인 현황</h3>
                     <ol class="breadcrumb mb-5">
-                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="/members/account/dashHub" class="breadcrumb-item active">홈</a>
                         <a href="#" class="breadcrumb-item active no-click">체크인 관리</a>
                     </ol>
 
@@ -49,31 +34,19 @@
                         </li>
                     </ul>
 
-
-                    <!--<pre> 코드는 <>를 문자 그대로 쓸 수 있게 해준다-->
-
-                    <div class="mb-3 row">
-                        <div class="col-4">
-                            <div class="d-flex">
-                                <label class="form-label col-form-label col-sm-3">예약 번호 :</label>
-                                <div class="col-sm-6 me-2">
-                                    <input type="text" id="reservationNum" class="form-control">
-                                </div>
-                                <button class="btn btn-primary col-2" id="reservBtn">조회</button>
-                            </div>
+                    <div class="d-flex flex-wrap mb-4">
+                        <div class="d-flex align-items-center me-4">
+                            <label class="form-label" style="width: 150px;">예약 번호</label>
+                            <input type="text" id="reservationNum" class="form-control">
                         </div>
-                        <div class="col-4">
-                            <div class="d-flex">
-                                <label class="form-label col-form-label col-sm-3">회원 조회 : </label>
-                                <div class="col-sm-6 me-2">
-                                    <input type="email" id="emailcheck" class="form-control">
-                                </div>
-                                <button class="btn btn-primary col-2" id="checkIdBtn">조회</button>
-                            </div>
+                        <div class="d-flex align-items-center me-4">
+                            <label class="form-label" style="width: 150px;">회원 조회</label>
+                            <input type="email" id="emailcheck" class="form-control me-2">
+                            <button class="btn btn-primary" id="checkIdBtn"><i class="fas fa-magnifying-glass"></i></button>
                         </div>
                     </div>
 
-                    <div id="result" hidden="hidden" class="border rounded p-4 bg-gradient mb-3" style="width: 25%; position: absolute; top: 130px; right: 160px; font-size: 0.8rem">
+                    <div id="result" hidden="hidden" class="border rounded p-4 bg-gradient mb-3" style="width: 300px; position: absolute; top: 120px; right: 400px; font-size: 0.8rem">
                         <p class="mb-1">userId : <span id="id"></span></p>
                         <p class="mb-1">이름 : <span id="name"></span></p>
                         <p class="mb-1">이메일 : <span id="email"></span></p>
