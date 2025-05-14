@@ -56,25 +56,55 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Page<OrdersDTO> processList(Pageable pageable, String email) {
-        Page<OrdersEntity> processEntityList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(email, OrdersStatus.DELIVERED, OrdersStatus.PENDING, pageable);
-        Page<OrdersDTO> processDTOList = processEntityList.map(data -> modelMapper.map(data, OrdersDTO.class)
-                .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class).setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(), HotelDTO.class))))
-                .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
-                .setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class))).toList()));
-
-        return processDTOList;
+    public List<OrdersDTO> processList( String email) {
+        List<OrdersEntity> processEntityList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(email, OrdersStatus.DELIVERED, OrdersStatus.PENDING);
+        if(!processEntityList.isEmpty()) {
+            List<OrdersDTO> processDTOList = processEntityList.stream().map(data -> {
+                OrdersDTO ordersDTO = modelMapper.map(data, OrdersDTO.class);
+                if(data.getCheckInEntity() != null) {
+                    CheckInDTO checkInDTO = modelMapper.map(data.getCheckInEntity(), CheckInDTO.class);
+                    checkInDTO.setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(), RoomDTO.class));
+                    checkInDTO.getRoomDTO().setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(),HotelDTO.class));
+                    ordersDTO.setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class));
+                    ordersDTO.setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(
+                            ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class)
+                    ).toList());
+                    ordersDTO.setCheckInDTO(checkInDTO);
+                    return ordersDTO;
+                }
+                else {
+                    return null;
+                }
+            }).toList();
+            return processDTOList;
+        }
+        return null;
     }
 
     @Override
-    public Page<OrdersDTO> completeList(Pageable pageable, String email) {
-        Page<OrdersEntity> completeList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(email, OrdersStatus.DELIVERED, pageable);
-        Page<OrdersDTO> completeDTOList = completeList.map(data -> modelMapper.map(data, OrdersDTO.class)
-                .setCheckInDTO(modelMapper.map(data.getCheckInEntity(), CheckInDTO.class).setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(), RoomDTO.class).setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(), HotelDTO.class))))
-                .setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class))
-                .setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class))).toList()));
-
-        return completeDTOList;
+    public List<OrdersDTO> completeList(String email) {
+        List<OrdersEntity> completeList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(email, OrdersStatus.DELIVERED);
+        if(!completeList.isEmpty()) {
+            List<OrdersDTO> completeDTOList = completeList.stream().map(data -> {
+                OrdersDTO ordersDTO = modelMapper.map(data, OrdersDTO.class);
+                if(data.getCheckInEntity() != null) {
+                    CheckInDTO checkInDTO = modelMapper.map(data.getCheckInEntity(), CheckInDTO.class);
+                    checkInDTO.setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(), RoomDTO.class));
+                    checkInDTO.getRoomDTO().setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(),HotelDTO.class));
+                    ordersDTO.setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class));
+                    ordersDTO.setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(
+                            ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class)
+                    ).toList());
+                    ordersDTO.setCheckInDTO(checkInDTO);
+                    return ordersDTO;
+                }
+                else {
+                    return null;
+                }
+            }).toList();
+            return completeDTOList;
+        }
+        return null;
     }
 
     @Override

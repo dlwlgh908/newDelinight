@@ -12,10 +12,12 @@ $(function(){
             url:"/store/orders/processingList",
             type:"get",
             success:function (result) {
-                console.log(result.content)
-                result.content.forEach(function (order) {
+                console.log(result)
+                result.forEach(function (order) {
+                    if(order!==null){
                     const itemsJson =encodeURIComponent(JSON.stringify(order.ordersItemDTOList))
                     str += "<tr><td scope='col'>"+order.id+"</td><td scope='col'>"+order.checkInDTO.roomDTO.hotelDTO.name+"</td><td scope='col'>"+order.checkInDTO.roomDTO.name+"</td><td>"+formatLocalDateTime(order.awaitingTime)+"</td><td scope='col'>"+(order.preparingTime ? formatLocalDateTime(order.preparingTime):"-")+"</td><td scope='col'>"+(order.deliveringTime ? formatLocalDateTime(order.deliveringTime):"-")+"</td><td scope='col'><button type='button' class='btn btn-outline-secondary memoCheck' data-memo='"+order.memo+"'>확인하기</button></td><td scope='col'><button type='button' class='btn btn-outline-secondary menuCheck' data-orderitemdtos='"+itemsJson+"'>확인하기</button></td><td scope='col'>"+checkStatus(order.ordersStatus)+"</td><td>"+checkStatusChangeButton(order.ordersStatus,order.id)+"</td> </tr>"
+                    }
                 })
                 $(".trWrap").html(str)
 
@@ -134,6 +136,7 @@ $(function(){
         let current = $(this).data("current")
         let ordersId = $(this).data("orderid")
         statusChange(current, ordersId)
+        showCompleteList()
 
     })
 
@@ -172,10 +175,13 @@ $(function(){
             url:"/store/orders/completeList",
             type:"get",
             success:function (result) {
-                console.log(result.content)
-                result.content.forEach(function (order) {
-                    const itemsJson =encodeURIComponent(JSON.stringify(order.ordersItemDTOList))
-                    str += "<tr><td scope='col'>"+order.id+"</td><td scope='col'>"+order.checkInDTO.roomDTO.hotelDTO.name+"</td><td scope='col'>"+order.checkInDTO.roomDTO.name+"</td><td>"+formatLocalDateTime(order.awaitingTime)+"</td><td scope='col'>"+(order.preparingTime ? formatLocalDateTime(order.preparingTime):"-")+"</td><td scope='col'>"+(order.deliveringTime ? formatLocalDateTime(order.deliveringTime):"-")+"</td><td scope='col'><button type='button' class='btn btn-outline-secondary memoCheck' data-memo='"+order.memo+"'>확인하기</button></td><td scope='col'><button type='button' class='btn btn-outline-secondary menuCheck' data-orderitemdtos='"+itemsJson+"'>확인하기</button></td><td scope='col'>"+checkStatus(order.ordersStatus)+"</td><td>"+checkStatusChangeButton(order.ordersStatus,order.id)+"</td> </tr>"
+                console.log(result)
+                result.forEach(function (order) {
+                    if (order !== null) {
+
+                    const itemsJson = encodeURIComponent(JSON.stringify(order.ordersItemDTOList))
+                    str += "<tr><td scope='col'>" + order.id + "</td><td scope='col'>" + order.checkInDTO.roomDTO.hotelDTO.name + "</td><td scope='col'>" + order.checkInDTO.roomDTO.name + "</td><td>" + formatLocalDateTime(order.awaitingTime) + "</td><td scope='col'>" + (order.preparingTime ? formatLocalDateTime(order.preparingTime) : "-") + "</td><td scope='col'>" + (order.deliveringTime ? formatLocalDateTime(order.deliveringTime) : "-") + "</td><td scope='col'><button type='button' class='btn btn-outline-secondary memoCheck' data-memo='" + order.memo + "'>확인하기</button></td><td scope='col'><button type='button' class='btn btn-outline-secondary menuCheck' data-orderitemdtos='" + itemsJson + "'>확인하기</button></td><td scope='col'>" + checkStatus(order.ordersStatus) + "</td><td>" + checkStatusChangeButton(order.ordersStatus, order.id) + "</td> </tr>"
+                }
                 })
                 $(".trWrap2").html(str)
 

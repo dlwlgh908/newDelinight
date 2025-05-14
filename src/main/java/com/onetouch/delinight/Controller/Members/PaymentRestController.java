@@ -170,7 +170,7 @@ log.info(memberDetails.getAuthorities());
             // 후처리 된 결제 내역 반환
             return new ResponseEntity<>(processedPayment, HttpStatus.OK);
         } catch (Exception e) {
-            log.info("결제 내역 조회 중 오류 발생");
+            log.info("결제 내역 조회 중 오류 발생"+e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

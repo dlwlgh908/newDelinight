@@ -98,13 +98,14 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
             LocalDateTime endDate1 = endDate.atTime(LocalTime.MIDNIGHT);
 
             builder.and(paymentEntity.regTime.between(startDate1, endDate1));
-            log.info("날짜 범위로 필터링: {} ~ {}", startDate, endDate);
+            log.info("날짜 범위로 필터링: {} ~ {}", startDate1, endDate1);
         }
 
         query.where(builder);
 
         // 5. 쿼리 실행
         List<PaymentEntity> paymentEntities = query.fetch();
+        log.info("here?");
 
         // 6. PaymentEntity → PaymentDTO 변환
         List<PaymentDTO> paymentDTOList = paymentEntities.stream().map(payment -> {

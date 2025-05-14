@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PointLogRepository extends JpaRepository<PointLogEntity,Long> {
 
-    List<PointLogEntity> findByPaymentId(Long paymentId);
+//    List<PointLogEntity> findByPaymentId(Long paymentId);
 }
