@@ -129,7 +129,7 @@
                     type: "post",
                     data: $.param(insertD),//객체를 replyText=내용&inquireId=숫자 이런 식의 문자열로 바꿈
                     success: function (response) {
-                        alert(response); //예) "3번글이 저장되었습니다.
+                        // alert(response); //예) "3번글이 저장되었습니다.
                         $(".replyText").val(""); //입력창 초기화
                         select();//댓글 목록 다시 불러오기
 
