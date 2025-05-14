@@ -253,30 +253,30 @@
                         error: function () {}
                     });
                 });
-
-                // 2. 사용자가 포인트를 입력해서 쓰는 경우
-                if (usedPoint > 0) {
-                    $.ajax({
-                        url: "/api/user/point/use",
-                        type: "post",
-                        async: false, // 중요: 포인트 처리 후 결제 요청하도록 동기 처리
-                        data: {
-                            usersId: [[${usersId}]],
-                            paymentId: paymentKey,
-                            usedPoint: usedPoint
-                        },
-                        success: function () {
-                            console.log("포인트 사용 완료");
-                            requestPayment(); //포인트 사용 후 결제
-                        },
-                        error: function () {
-                            alert("포인트 사용 오류");
-                        }
-                    });
-                }else {
-                    // 3. 결제 요청
-                    requestPayment(); //포인트 사용 안 하면 바로 결제
-                }
+                //
+                // // 2. 사용자가 포인트를 입력해서 쓰는 경우
+                // if (usedPoint > 0) {
+                //     $.ajax({
+                //         url: "/api/user/point/use",
+                //         type: "post",
+                //         async: false, // 중요: 포인트 처리 후 결제 요청하도록 동기 처리
+                //         data: {
+                //             usersId: [[${usersId}]],
+                //             paymentId: paymentKey,
+                //             usedPoint: usedPoint
+                //         },
+                //         success: function () {
+                //             console.log("포인트 사용 완료");
+                //             requestPayment(); //포인트 사용 후 결제
+                //         },
+                //         error: function () {
+                //             alert("포인트 사용 오류");
+                //         }
+                //     });
+                // }else {
+                //     // 3. 결제 요청
+                //     requestPayment(); //포인트 사용 안 하면 바로 결제
+                // }
 
                 detectCloseModal(); //모달 감지는 항상
 
@@ -351,50 +351,50 @@
                 const usersId = [[${usersId}]] ; // Thymeleaf 변수
                 // const totalPrice = parseInt(/*[[${totalPrice}]]*/ 20000); // 결제금액
                 const totalPrice = parseInt([[${totalPrice}]] ); // 결제금액
-
-                // 보유 포인트 조회
-                $.ajax({
-                    url: "/api/user/point",
-                    type: "get",
-                    data: { usersId: usersId },
-                    success: function (data) {
-                        const userPoint = data.point;
-                        $("#userPoint").text(userPoint + " P");
-
-                        //포인트 입력 및 제어
-                        $("#usedPoint").on("input", function () {
-                            let val = parseInt($(this).val()) || 0;
-
-                            if (val < 0) val = 0; //사용자가 -10 같이 잘못된 음수를 입력하면 0으로 고정합니다.
-                            if (val > userPoint) val = userPoint; //입력값이 보유 포인트보다 크면 보유 포인트로 제한
-                            if (val > totalPrice) val = totalPrice; //입력값이 총 결제 금액보다 크면, 결제 금액까지만 사용할 수 있도록 제한
-
-                            $(this).val(val);
-                            updateFinalPrice(val);
-                            //현재 사용한 포인트를 바탕으로 최종 결제 금액을 실시간으로 업데이트
-
-                        });
-
-                        //포인트 전부 사용 버튼 클릭
-                        window.useAllPoint = function () {
-                            let maxUsable = Math.min(userPoint, totalPrice);//최대 사용 가능한 포인트
-                            $("#usedPoint").val(maxUsable); //포인트 입력창에 최대값을 자동으로 채우고
-                            updateFinalPrice(maxUsable); //최종 결제 금액을 다시 계산
-                        };
-
-                        updateFinalPrice(0);
-                        //페이지가 처음 로딩될 때, 포인트 사용없이 결제금액을 보여주기 위해 0으로 계산한다
-                    },
-                    error: function () {
-                        // alert("포인트 조회 실패");
-                    }
-                });
-
-                // 결제 최종 금액 갱신 함수
-                function updateFinalPrice(usedPoint) {
-                    const final = totalPrice - usedPoint;
-                    $("#finalPrice").text(final.toLocaleString() + "원");
-                }
+                //
+                // // 보유 포인트 조회
+                // $.ajax({
+                //     url: "/api/user/point",
+                //     type: "get",
+                //     data: { usersId: usersId },
+                //     success: function (data) {
+                //         const userPoint = data.point;
+                //         $("#userPoint").text(userPoint + " P");
+                //
+                //         //포인트 입력 및 제어
+                //         $("#usedPoint").on("input", function () {
+                //             let val = parseInt($(this).val()) || 0;
+                //
+                //             if (val < 0) val = 0; //사용자가 -10 같이 잘못된 음수를 입력하면 0으로 고정합니다.
+                //             if (val > userPoint) val = userPoint; //입력값이 보유 포인트보다 크면 보유 포인트로 제한
+                //             if (val > totalPrice) val = totalPrice; //입력값이 총 결제 금액보다 크면, 결제 금액까지만 사용할 수 있도록 제한
+                //
+                //             $(this).val(val);
+                //             updateFinalPrice(val);
+                //             //현재 사용한 포인트를 바탕으로 최종 결제 금액을 실시간으로 업데이트
+                //
+                //         });
+                //
+                //         //포인트 전부 사용 버튼 클릭
+                //         window.useAllPoint = function () {
+                //             let maxUsable = Math.min(userPoint, totalPrice);//최대 사용 가능한 포인트
+                //             $("#usedPoint").val(maxUsable); //포인트 입력창에 최대값을 자동으로 채우고
+                //             updateFinalPrice(maxUsable); //최종 결제 금액을 다시 계산
+                //         };
+                //
+                //         updateFinalPrice(0);
+                //         //페이지가 처음 로딩될 때, 포인트 사용없이 결제금액을 보여주기 위해 0으로 계산한다
+                //     },
+                //     error: function () {
+                //         // alert("포인트 조회 실패");
+                //     }
+                // });
+                //
+                // // 결제 최종 금액 갱신 함수
+                // function updateFinalPrice(usedPoint) {
+                //     const final = totalPrice - usedPoint;
+                //     $("#finalPrice").text(final.toLocaleString() + "원");
+                // }
 
             });
         </script>

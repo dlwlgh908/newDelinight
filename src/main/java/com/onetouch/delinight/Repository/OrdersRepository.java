@@ -30,8 +30,8 @@ public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
 
     List<OrdersEntity> findByCheckInEntity_UsersEntityEmail(String email);
     List<OrdersEntity> findByCheckInEntity_GuestEntityPhone(String phone);
-    Page<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(String email, OrdersStatus ordersStatus, OrdersStatus ordersStatus2, Pageable pageable);
-    Page<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(String email, OrdersStatus ordersStatus, Pageable pageable    );
+    List<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(String email, OrdersStatus ordersStatus, OrdersStatus ordersStatus2);
+    List<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(String email, OrdersStatus ordersStatus);
 
     List<OrdersEntity> findByCheckOutLogEntity_Id(Long checkOutId);
 

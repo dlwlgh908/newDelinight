@@ -36,19 +36,22 @@ public class StoreRestController {
     private final MembersService membersService;
 
     @GetMapping("/orders/processingList")
-    public ResponseEntity<Page<OrdersDTO>> processingList(@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails) {
+    public ResponseEntity<List<OrdersDTO>> processingList( @AuthenticationPrincipal MemberDetails memberDetails) {
 
 
         String email = memberDetails.getUsername();
-        Page<OrdersDTO> ordersDTOPage = ordersService.processList(pageable, email);
+        List<OrdersDTO> ordersDTOPage = ordersService.processList(email);
+        log.info(ordersDTOPage);
+
         return ResponseEntity.ok(ordersDTOPage);
     }
 
     @GetMapping("/orders/completeList")
-    public ResponseEntity<Page<OrdersDTO>> completeList(@PageableDefault(size = 10, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, Principal principal) {
+    public ResponseEntity<List<OrdersDTO>> completeList(Principal principal) {
 
-        String email = "hansin@a.a";
-        Page<OrdersDTO> ordersDTOPage = ordersService.completeList(pageable, email);
+        String email = principal.getName();
+        List<OrdersDTO> ordersDTOPage = ordersService.completeList(email);
+        log.info(ordersDTOPage);
         return ResponseEntity.ok(ordersDTOPage);
     }
 
