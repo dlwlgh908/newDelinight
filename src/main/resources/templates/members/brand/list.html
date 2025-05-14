@@ -18,77 +18,80 @@
                 <div class="card-body">
                     <h3>등록된 브랜드 목록</h3>
                     <ol class="breadcrumb mb-5">
-                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
+                        <a href="/members/account/dashHub" class="breadcrumb-item active">홈</a>
                         <a href="#" class="breadcrumb-item active no-click">브랜드 관리</a>
                     </ol>
 
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary modalregister float-end mb-3"
-                            data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        새 브랜드 +
-                    </button>
+                    <div class="d-flex">
+                        <div class="w-50">
+                            <table class="table align-middle">
+                                <thead>
+                                <th scope="col">#</th>
+                                <th scope="col">브랜드명</th>
+                                <th scope="col">브랜드 설명</th>
+                                <th scope="col"></th>
 
-                    <table class="table align-middle">
-
-                        <thead>
-                            <th scope="col">#</th>
-                            <th scope="col">브랜드명</th>
-                            <th scope="col">브랜드 설명</th>
-                            <th scope="col"></th>
-
-                            <div class="col offset-8">
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <label class="col-form-label form-label ms-2">새 브랜드 등록</label>
-                                                <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <input type="text" for="name" class="form-control name" id="name" placeholder="브랜드명">
+                                <div class="col offset-8">
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <label class="col-form-label form-label ms-2">새 브랜드 등록</label>
+                                                    <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <div>
-                                                    <textarea type="text" for="content" class="form-control content" id="content" placeholder="설명"></textarea>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <input type="text" for="name" class="form-control name" id="name" placeholder="브랜드명">
+                                                    </div>
+                                                    <div>
+                                                        <textarea type="text" for="content" class="form-control content" id="content" placeholder="설명"></textarea>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-                                                <button type="button" class="btn btn-primary brand_registerbtn">저장</button>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                                                    <button type="button" class="btn btn-primary brand_registerbtn">저장</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                      </thead>
+                                </thead>
+                                <tbody>
+                                <th:block  th:each="list,stat:${brandDTOList}">
+                                    <tr>
+                                        <th scope="row offset-4" th:text="${list.id}" hidden="hidden"></th>
+                                        <th scope="row" th:text="${stat.count}"></th>
+                                        <td><a class="alink-title text-dark" readonly="">
+                                            [[${list.name}]]
+                                        </a>
+                                        </td>
+                                        <td th:text="${list.content}"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-danger brand_dbtn" id="delBtn" th:value="${list.id}"><i class="fa-solid fa-trash" style="color: #dc3545"></i></button>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                                </tbody>
+                            </table>
+                        </div>
 
-                      <tbody>
-                <th:block  th:each="list,stat:${brandDTOList}">
-                    <tr>
-                        <th scope="row offset-4" th:text="${list.id}" hidden="hidden"></th>
-                        <th scope="row" th:text="${stat.count}"></th>
-                        <td><a class="alink-title text-dark" readonly="">
-                            [[${list.name}]]
-                        </a>
-                        </td>
-                        <td th:text="${list.content}"></td>
-                        <td>
-                            <button type="button" class="btn btn-outline-danger brand_dbtn" id="delBtn" th:value="${list.id}"><i class="fa-solid fa-trash" style="color: #dc3545"></i></button>
-                        </td>
-                    </tr>
-                </th:block>
-                </tbody>
-                    </table>
+                        <div class="w-50">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary modalregister ms-5"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                새 브랜드 +
+                            </button>
+                        </div>
+                    </div>
                </div>
             </div>
         </div>
     </main>
 
-<!--스크립트 영역-->
-<!--추가할 스크립트가 있다면 이곳에서 <script>태그 열고 작업-->
-<!--기존 config 파일과 겹칠 수 있으므로 class나 id는 직접 작명해주세요-->
+
 <script th:inline="javascript">
+
     let test = document.getElementById("name").value;
     console.log(test);
     console.log(name);
@@ -97,41 +100,28 @@
     let brand_registerbtn = $(".brand_registerbtn")
     let brand_dbtn = $(".brand_dbtn")
 
-
-
     brand_dbtn.on("click", function () {
         let num = this.getAttribute("value")
-        alert("gdgd")
-        alert(num);
         $.ajax({
             url: "/brand/rest/del",
             method: "post",
             data: {num : num},
             success: function () {
-                alert("성공")
                 location.reload();
             },
             error: function () {
-
             },
-
         })
     });
-
 
     brand_registerbtn.on("click", function () {
         let name = $("#name").val()
         let content = $("#content").val()
 
-
-
-
         let brandDTO = {
             name: name,
             content: content
         }
-        alert(name)
-        alert(content)
         console.log(brandDTO)
 
         $.ajax({
@@ -139,16 +129,10 @@
             method: "post",
             data: brandDTO,
             success: function (data) {
-                alert(data)
                 location.reload();
             },
-
-
         })
     });
-
-
-
 </script>
 
 <!--푸터-->
