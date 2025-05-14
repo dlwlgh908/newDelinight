@@ -1,7 +1,9 @@
 package com.onetouch.delinight.Controller.Members;
 
 
+import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.DTO.NetPromoterScoreDTO;
+import com.onetouch.delinight.Service.MembersService;
 import com.onetouch.delinight.Service.NetPromoterScoreService;
 import com.onetouch.delinight.Util.MemberDetails;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -22,6 +26,7 @@ import java.util.List;
 public class AdminNpsRestController {
 
     private final NetPromoterScoreService netPromoterScoreService;
+    private final MembersService membersService;
 
     @GetMapping("/list")
     public ResponseEntity<List<NetPromoterScoreDTO>> npsList(@AuthenticationPrincipal MemberDetails memberDetails) {
@@ -39,5 +44,12 @@ public class AdminNpsRestController {
     }
 
 
+    @GetMapping("/dashboard")
+    public ResponseEntity<List<Integer>> dashboard(Principal principal){
+        MembersDTO membersDTO = membersService.findByEmail(principal.getName());
+        log.info(membersDTO);
+        List<Integer> result = netPromoterScoreService.dashboard(membersDTO);
+        return ResponseEntity.ok(result);
+    }
 
 }

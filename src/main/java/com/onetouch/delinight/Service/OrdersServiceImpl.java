@@ -56,6 +56,32 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    public List<OrdersDTO> dashboard(String email) {
+        List<OrdersEntity> processEntityList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(email, OrdersStatus.PENDING);
+        if(!processEntityList.isEmpty()) {
+            List<OrdersDTO> processDTOList = processEntityList.stream().map(data -> {
+                OrdersDTO ordersDTO = modelMapper.map(data, OrdersDTO.class);
+                if(data.getCheckInEntity() != null) {
+                    CheckInDTO checkInDTO = modelMapper.map(data.getCheckInEntity(), CheckInDTO.class);
+                    checkInDTO.setRoomDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity(), RoomDTO.class));
+                    checkInDTO.getRoomDTO().setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(),HotelDTO.class));
+                    ordersDTO.setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class));
+                    ordersDTO.setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(
+                            ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class)
+                    ).toList());
+                    ordersDTO.setCheckInDTO(checkInDTO);
+                    return ordersDTO;
+                }
+                else {
+                    return null;
+                }
+            }).toList();
+            return processDTOList;
+        }
+        return null;
+    }
+
+    @Override
     public List<OrdersDTO> processList( String email) {
         List<OrdersEntity> processEntityList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(email, OrdersStatus.DELIVERED, OrdersStatus.PENDING);
         if(!processEntityList.isEmpty()) {

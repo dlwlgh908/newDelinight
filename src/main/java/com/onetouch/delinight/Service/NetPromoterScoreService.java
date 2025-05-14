@@ -1,5 +1,6 @@
 package com.onetouch.delinight.Service;
 
+import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.DTO.NetPromoterScoreDTO;
 import com.onetouch.delinight.DTO.OrdersDTO;
 
@@ -15,6 +16,7 @@ public interface NetPromoterScoreService {
 
     public List<NetPromoterScoreDTO> npsAll(Long memberId);
 
+    public List<Integer> dashboard(MembersDTO membersDTO);
 
 
 

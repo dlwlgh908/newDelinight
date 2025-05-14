@@ -80,7 +80,6 @@ public class RoomCareServiceImpl implements RoomCareService {
     public RoomCareDTO read(Long id) {
         RoomCareEntity roomCareEntity = roomCareRepository.findById(id).get();
 
-        log.info(roomCareEntity);
         RoomCareDTO roomCareDTO = modelMapper.map(roomCareEntity, RoomCareDTO.class)
                 .setRoomCareItemDTOList(roomCareEntity.getRoomCareItemEntities().stream().map(
                         roomCareItemEntity -> modelMapper.map(roomCareItemEntity, RoomCareItemDTO.class)

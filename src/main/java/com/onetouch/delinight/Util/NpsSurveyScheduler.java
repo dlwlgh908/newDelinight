@@ -30,9 +30,7 @@ public class NpsSurveyScheduler {
         log.info("스케줄러 동작시작");
         // 어제 체크아웃한 고객들 찾기
         LocalDate yesterday = LocalDate.now().minusDays(1);
-        log.info("어제 날짜 = {}", yesterday);
         List<CheckOutLogEntity> checkOutLogs = checkOutLogRepository.findByCheckoutDate(yesterday);
-        log.info("체크아웃 유저 = {}",  checkOutLogs.size());
 
         if (checkOutLogs.isEmpty()) {
             log.info("어제 체크아웃한 고객이 없습니다.");
@@ -44,16 +42,12 @@ public class NpsSurveyScheduler {
                     String email = checkOutAddEmail.getUsersEntity().getEmail();
                     String name = checkOutAddEmail.getUsersEntity().getName();
                     Long checkOutId = checkOutAddEmail.getId();
-                    log.info("체크아웃 ID: {}, 사용자 이름: {}, 이메일: {}", checkOutId, name, email);
 
 
                     String surveyLink = "http://localhost:8080/users/nps/survey/" + checkOutId;
-                    log.info("설문 링크: {}", surveyLink);
 
                     emailService.sendNpsEmail(email, name, surveyLink, checkOutId);
-                    log.info("NPS 설문 이메일 전송 완료: {}", email);
                 }else{
-                    log.info("CheckOut ID : {}에 연결된 사용자 정보가 없습니다.", checkOutAddEmail.getId());
                 }
 
             }

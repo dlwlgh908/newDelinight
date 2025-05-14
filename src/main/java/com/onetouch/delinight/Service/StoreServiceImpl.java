@@ -76,7 +76,6 @@ public class StoreServiceImpl implements StoreService {
             try {
                 storeEntity.setMembersEntity(membersEntity);
 
-                log.info(storeEntity);
                 storeRepository.save(storeEntity);
             }
 

@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -39,6 +41,20 @@ public class AccountController {
     private final HotelService hotelService;
     private final ModelMapper modelMapper;
 
+    @GetMapping("/makeSysA")
+    public ResponseEntity<String> makeSysA(){
+        membersService.makeSysA();
+        return ResponseEntity.ok("완료");
+    }
+
+    @GetMapping("/dashboard")
+    @ResponseBody
+    public ResponseEntity<List<MembersDTO>> dashboard(Principal principal){
+        log.info("김밥천");
+        MembersDTO membersDTO = membersService.findByEmail(principal.getName());
+        List<MembersDTO> result = membersService.findPendingMembersListByCenterMembers(membersDTO);
+        return ResponseEntity.ok(result);
+    }
     @GetMapping("/redirectPage")
     public String redirectPage() {
 
@@ -363,6 +379,9 @@ public class AccountController {
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error, Model model) {
 
+        if(membersRepository.findAll().isEmpty()){
+            model.addAttribute("reset", "on");
+        };
         if ("bad_credentials".equals(error)) {
             model.addAttribute("passwordError", "비밀번호가 틀립니다.");
         } else if ("unknown".equals(error)) {

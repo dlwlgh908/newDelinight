@@ -49,7 +49,6 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
     public void singUpUser(UsersDTO usersDTO) {
 
         boolean exists = usersRepository.existsByEmail(usersDTO.getEmail());
-        log.info("이거함????????????????????????????????????????????" + exists + usersDTO);
 
         if (exists) {
             throw new IllegalStateException("이미 가입된 이메일 입니다.");
@@ -58,9 +57,6 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         UsersEntity usersEntity = modelMapper.map(usersDTO, UsersEntity.class);
 
         usersEntity.setPassword(passwordEncoder.encode(usersEntity.getPassword()));
-        log.info("이메일 받고 인코딩한번더 받고 했뉘???????????????????????????????????");
-        log.info(usersEntity.getEmail());
-        log.info(usersEntity.getPassword());
 
         usersRepository.save(usersEntity);
     }
@@ -88,11 +84,9 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
                 return new CustomGuestDetails(guestEntity);
             }
 
-            log.info("member, user 어디에서도 찾을 수 없음");
             throw new UsernameNotFoundException("member, user 어디에서도 찾을 수 없음");
         }
 
-        log.info("생성 됐니?");
         return new CustomUserDetails(usersEntity);
     }
 
@@ -100,10 +94,8 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
     // 비밀번호 변경
     @Override
     public boolean passwordChange(UsersDTO usersDTO) {
-        log.info("서비스로 들어온 비밀번호 변경실행");
 
         if(!usersDTO.getPasswordOne().equals(usersDTO.getPasswordTwo())) {
-            log.info("비번 틀림");
             return false;
         }
 
@@ -111,13 +103,10 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         UsersEntity usersEntity = usersRepository.selectEmail(usersDTO.getEmail());
 
         if (usersEntity == null) {
-            log.info("서비스에서 유저를 찾아왔????" + usersEntity);
             return false;
         }
 
         // 기존 비밀번호 비교
-        log.info("기존 비밀번호 (암호화된 상태): " + usersEntity.getPassword());
-        log.info("입력한 비밀번호 (평문): " + usersDTO.getPasswordOne());
 
         boolean matches = passwordEncoder.matches(usersDTO.getPassword() , usersEntity.getPassword());
         log.info("DTO , Entity 비교 : " + matches);
@@ -141,8 +130,6 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
     public String sendTemporaryPassword(UsersDTO usersDTO) {
         // 1. 회원 정보 검증
         UsersEntity usersEntity = usersRepository.selectEmail(usersDTO.getEmail());
-        log.info(usersDTO);
-        log.info(usersEntity);
 
 
         if (usersEntity == null) {
@@ -155,7 +142,6 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
 
         // 2. 임시 비번 생성
         String tempPassword = PasswordUtil.generateTempPassword();
-        System.out.println("임시비번 : " + tempPassword);
 
         // 3. 비밀번호 암호화 후 저장
         usersEntity.setPassword(PasswordUtil.encodePassword(tempPassword));
@@ -191,7 +177,6 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         try {
             usersRepository.deleteByEmail(email);
         }catch (Exception e){
-            log.info("회원탈퇴 실패");
         }
 
     }
@@ -201,17 +186,12 @@ public class UsersServiceImpl implements UsersService , UserDetailsService {
         try {
             UsersEntity usersEntity = usersRepository.selectEmail(email);
             if (usersEntity == null) {
-                log.info("해당 이메일을 가진 회원을 찾을 수 없음: " + email);
                 throw new RuntimeException("해당 이메일을 가진 회원을 찾을 수 없습니다.");
             }
-            log.info("기존 회원 정보: " + usersEntity);
             usersEntity.setPhone(usersDTO.getPhone());
             usersEntity.setAddress(usersDTO.getAddress());
             usersRepository.save(usersEntity);
-            log.info("변경된 회원 정보 : " + usersEntity);
-            log.info("회원정보 수정 성공: " + usersEntity);
         } catch (Exception e) {
-            log.info("회원정보 수정 실패");
             throw new RuntimeException("회원정보 수정 중 오류 발생");
         }
     }

@@ -46,6 +46,12 @@ public class StoreRestController {
         return ResponseEntity.ok(ordersDTOPage);
     }
 
+    @GetMapping("/dashboard")
+    public ResponseEntity<List<OrdersDTO>> dashboard(Principal principal){
+        List<OrdersDTO> result = ordersService.dashboard(principal.getName());
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/orders/completeList")
     public ResponseEntity<List<OrdersDTO>> completeList(Principal principal) {
 

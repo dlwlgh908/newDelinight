@@ -24,48 +24,57 @@
             </ol>
         </div>
 
-        <div class="card custom-shadow mb-4">
+        <div class="card custom-shadow mb-4" style="height: 90%">
             <div class="card-body">
+                <div class="row text-center mb-3">
+                    <h3><img src="/img/chevron-double-left.svg" class="prevBtn"
+                             style="width: 27px; height: 27px"><span data-month="" id="currentMonth"></span>월<img
+                            class="nextBtn" src="/img/chevron-double-right.svg" style="width: 28px; height: 28px">
+                    </h3>
+                </div>
 
                 <div id="centerManagerView" style="display: none;"></div>
                 <div id="hotelManagerView" style="display: none;"></div>
                 <div id="storeManagerView" style="display: none;"></div>
 
-                <div class="d-flex justify-content-start gap-2" style="gap: 10px;">
+                <div class="d-flex justify-content-start gap-2 flex-wrap" style="gap: 10px;">
 
-                    <div>
 
-                        <label for="startDate">시작일</label>
-                        <input type="date" id="startDate" name="startDate">
-
-                        <label for="endDate">종료일</label>
-                        <input type="date" id="endDate" name="endDate">
-
-                        <button id="selectBtn">조회</button>
-
-                        <label for="type">차트 유형</label>
-                        <select id="type" name="type">
-                            <option value="chartAll">전체</option>
-                            <option value="hotelChart">호텔</option>
-                            <option value="storeChart">스토어</option>
-                        </select>
-
+                    <div class="col d-flex align-items-center" style="flex:0 0 15%">
+                        <label for="startDate" class="mb-0 me-2 fw-bold">시작일</label>
+                        <input type="date" id="startDate" class="form-control mb-0"
+                               style="width:75%; min-width:150px">
+                    </div>
+                    <div class="col d-flex align-items-center" style="flex:0 0 15%">
+                        <label for="endDate" class="mb-0 me-2 fw-bold">종료일</label>
+                        <input type="date" id="endDate" class="form-control mb-0"
+                               style="width:75%; min-width:150px">
                     </div>
 
+                    <button id="selectBtn" class="btn btn-outline-primary">조회</button>
+
+
                     <div class="tabs">
-                        <button id="chartAll">전체</button>
-                        <button id="hotelChart">호텔</button>
-                        <button id="storeChart">스토어</button>
+                        <button id="hotelChart" class="btn btn-outline-dark">호텔</button>
+                        <button id="storeChart" class="btn btn-outline-success">가맹점 총합</button>
+                        <button id="compareStoreChart" class="btn btn-outline-success">가맹점 별 비교</button>
+                        <button id="eachStoreChart" class="btn btn-outline-success">개별 가맹점</button>
+                        <button id="hotelQuestion" class="btn btn-outline-dark">질문 문항 확인</button>
+                        <button id="storeQuestion" class="btn btn-outline-dark">질문 문항 확인</button>
                     </div>
 
                 </div>
 
+
                 <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
-                    <div style="width: 600px; height: 500px;">
+                    <div style="width: 600px; height: 500px;" id="pieChartDiv">
                         <canvas id="pieChart" width="300" height="300"></canvas>
                     </div>
-                    <div style="width: 600px; height: 500px;">
+                    <div style="width: 600px; height: 500px;" id="barChartDiv">
                         <canvas id="barChart" width="300" height="300"></canvas>
+                    </div>
+                    <div style="width: 1000px; height: 500px;" id="compareChartDiv">
+                        <canvas id="compareChart" width="1000Px" height="500px"></canvas>
                     </div>
                 </div>
 
@@ -75,34 +84,43 @@
     </main>
 
 
-
-
     <script th:inline="javascript">
 
+        const today = new Date();
+        var currentMonth = today.getMonth() + 1
+
         $(document).ready(function () {
+
+            $(".prevBtn").on("click", function () {
+                previousMonth()
+            })
+            $(".nextBtn").on("click", function () {
+                nextMonth()
+            })
 
             // 사용자 역할별 화면 표시
             const role = [[${role}]]
             console.log(`[초기화] 사용자 권한: ${role}`)
             initRoleView(role)
 
+            $("#hotelQuestion").show()
+            $("#storeQuestion").hide()
+            $("#compareChartDiv").hide()
+
             function initRoleView(role) {
                 switch (role) {
                     case 'SUPERADMIN':
                         $('#centerManagerView').show()
-                        $('#chartAll').show()
                         $('#hotelChart').show()
                         $('#storeChart').show()
                         break
                     case 'ADMIN':
                         $('#hotelManagerView').show()
-                        $('#chartAll').show()
                         $('#hotelChart').show()
                         $('#storeChart').show()
                         break
                     case 'STOREADMIN':
                         $('#storeManagerView').show()
-                        $('#chartAll').show()
                         $('#hotelChart').hide()
                         $('#storeChart').show()
                         break
@@ -114,8 +132,8 @@
             // 전역 변수 선언 및 초기 날짜 설정
             let pieChartInstance = null
             let barChartInstance = null
+            let compareStoreChartInstance = null
 
-            let today = new Date()
             let startOfMonth = new Date(today.getFullYear(), today.getMonth(), 2)
             let endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1)
             let switchType;
@@ -137,10 +155,33 @@
                 console.log('호텔 차트 버튼 클릭')
                 switchTab('hotelChart')
             })
+            $('#hotelQuestion').on('click', () => {
+                Swal.fire({
+                    title: '호텔 문항 별 질문 내용',
+                    html: '<table class="table-striped"><thead><th>질문 번호</th><th>질문 내용</th></thead><tbody><tr><td>1번</td><td class="text-start">객실 청결 상태에 따른 만족도</td></tr><tr><td>2번</td><td class="text-start">응대 및 직원 친절도에 따른 만족도</td></tr><tr><td>3번</td><td class="text-start">서비스 대비 요금 적절도</td></tr><tr><td>4번</td><td class="text-start">시설에 대한 품질 및 편의성 만족도</td></tr><tr><td>5번</td><td class="text-start">전반적인 서비스 만족도 평가</td></tr></tbody></table>',
+                    width: '450px'
 
+
+                })
+            })
+            $('#storeQuestion').on('click', () => {
+                Swal.fire({
+                    title: '가맹점 문항 별 질문 내용',
+                    html: '<table class="table-striped"><thead><th>질문 번호</th><th>질문 내용</th></thead><tbody><tr><td>1번</td><td class="text-start">음식 품질에 따른 만족도</td></tr><tr><td>2번</td><td class="text-start">응대 따른 만족도</td></tr><tr><td>3번</td><td class="text-start">배달 서비스에 대한 만족도</td></tr><tr><td>4번</td><td class="text-start">서비스 대비 가격 적절도</td></tr><tr><td>5번</td><td class="text-start">전반적인 서비스 만족도 평가</td></tr></tbody></table>',
+                    width: '450px'
+                })
+            })
             $('#storeChart').on('click', () => {
                 console.log('스토어 차트 버튼 클릭')
                 switchTab('storeChart')
+            })
+
+            $('#compareStoreChart').on('click', () => {
+                console.log('스토어 별 차트 버튼 클릭')
+                switchTab('compareStoreChart')
+            })
+            $('#eachStoreChart').on('click', () => {
+                alert("5/19 최종 발표 시 구현 예정")
             })
 
             // 차트 유형 변경 시 데이터 재요청
@@ -153,7 +194,7 @@
             })
 
             // 날짜 조회 버튼 클릭 이벤트 처리
-            $('#selectBtn').on('click',function () {
+            $('#selectBtn').on('click', function () {
                 let startDate = $('#startDate').val()
                 let endDate = $('#endDate').val()
                 let type = $('#type').val()
@@ -195,9 +236,47 @@
                 return scoreSum
             }
 
+            function compareStoreData(data) {
+                let scoreSum = {}
+                let storeCount = {}
+
+                data.forEach(entry => {
+                    const storeName = entry.storeDTO.name
+                    const score = Number(entry.totalScore)
+                    console.log(storeName, score)
+
+                    if (!scoreSum[storeName]) {
+                        scoreSum[storeName] = 0
+                        storeCount[storeName] = 0
+                    }
+
+                    scoreSum[storeName] += score
+                    storeCount[storeName] += 1
+                })
+
+                // 평균 계산
+                const avgScores = []
+                for (let store in scoreSum) {
+                    const count = storeCount[store]
+                    const sum = scoreSum[store]
+                    const avg = count > 0 ? Number((sum / count).toFixed(1)) : 0
+                    avgScores.push({
+                        store: store,
+                        avgScore: avg
+                    })
+                }
+
+                return avgScores
+            }
+
 
             // 차트 데이터 요청 및 렌더링
             function chartDate(startDate, endDate, switchType) {
+
+
+                $("#currentMonth").attr("data-month", today.getMonth() + 1)
+                $("#currentMonth").html(today.getMonth() + 1)
+
                 $.ajax({
                     url: '/api/nps/chart',
                     type: 'post',
@@ -222,13 +301,41 @@
 
                         let avgScores = {}
 
-                        if (switchType === 'hotelChart'){
+                        if (switchType === 'hotelChart') {
                             avgScores = questionScore(hotelData)
+                            $("#compareChartDiv").hide()
+                            $("#hotelQuestion").show()
+                            $("#storeQuestion").hide()
+                            $("#pieChartDiv").show()
+                            $("#barChartDiv").show()
                             console.log("호텔 문항별 평균 점수 : ", avgScores)
-                        }else if (switchType === 'storeChart'){
+                        } else if (switchType === 'storeChart') {
                             avgScores = questionScore(storeData)
+                            $("#hotelQuestion").hide()
+                            $("#storeQuestion").show()
+                            $("#compareChartDiv").hide()
+                            $("#pieChartDiv").show()
+                            $("#barChartDiv").show()
                             console.log("스토어 문항별 평균 점수 : ", avgScores)
-                        }else {
+                        } else if (switchType === 'compareStoreChart') {
+                            avgScores = compareStoreData(storeData)
+                            $("#hotelQuestion").hide()
+                            $("#storeQuestion").show()
+                            $("#pieChartDiv").hide()
+                            $("#barChartDiv").hide()
+                            $("#compareChartDiv").show()
+                            compareStoreChart(avgScores)
+                            return;
+                        } else if (switchType === 'eachStoreChart') {
+                            avgScores = questionScore(storeData)
+                            $("#hotelQuestion").hide()
+                            $("#storeQuestion").show()
+                            $("#compareChartDiv").hide()
+                            $("#pieChartDiv").show()
+                            $("#barChartDiv").show()
+                            console.log("스토어 문항별 평균 점수 : ", avgScores)
+                            return
+                        } else {
                             avgScores = questionScore(filteredData)
                             console.log("전체 문항별 평균 점수 : ", avgScores)
                         }
@@ -241,6 +348,34 @@
                         console.log("NPS Chart 로딩 실패:", error)
                     }
                 })
+            }
+
+            function previousMonth() {
+                currentMonth = currentMonth - 1
+                let startDate = new Date(today.getFullYear(), currentMonth - 1, 2)
+                let endDate = new Date(today.getFullYear(), currentMonth, 1)
+                let format = (d) => d.toISOString().split('T')[0]
+
+                $('#startDate').val(format(startDate))
+                $('#endDate').val(format(endDate))
+                chartDate(startDate, endDate)
+
+
+                $("#currentMonth").html(currentMonth)
+            }
+
+            function nextMonth() {
+                currentMonth = currentMonth + 1
+                let startDate = new Date(today.getFullYear(), currentMonth - 1, 2)
+                let endDate = new Date(today.getFullYear(), currentMonth, 1)
+                let format = (d) => d.toISOString().split('T')[0]
+
+                $('#startDate').val(format(startDate))
+                $('#endDate').val(format(endDate))
+
+                chartDate(startDate, endDate)
+
+                    $("#currentMonth").html(currentMonth)
             }
 
             // 파이 차트 렌더링
@@ -274,6 +409,38 @@
                             label: '문항별 평균 점수',
                             data: Object.values(data),
                             backgroundColor: '#66B2FF',
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                min: 0,
+                                max: 5
+                            }
+                        }
+                    }
+                })
+            }
+
+            function compareStoreChart(data) {
+                if (compareStoreChartInstance) compareStoreChartInstance.destroy()
+                console.log(data)
+                const labels = data.map(item => item.store)
+                const scores = data.map(item => item.avgScore)
+
+
+                const ctx = document.getElementById('compareChart').getContext('2d')
+                compareStoreChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '각 스토어별 전체 평균 점수',
+                            data: scores,
+                            backgroundColor: '#66B2FF',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
                         }]
                     },
                     options: {

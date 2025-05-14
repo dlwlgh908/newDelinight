@@ -35,6 +35,7 @@ public interface InquireRepository extends JpaRepository<InquireEntity, Long> {
 
     //hotelId가 특정 값인 inquire만 전부 찾아서 리스트로 리턴
     public List<InquireEntity> findByHotelEntity_Id(Long hotelId);
+    public List<InquireEntity> findByHotelEntity_MembersEntity_EmailAndResponseTimeIsNull(String email);
     //
     public Page<InquireEntity> findByCheckInEntity_UsersEntity_Id(Long usersId,Pageable pageable);
 

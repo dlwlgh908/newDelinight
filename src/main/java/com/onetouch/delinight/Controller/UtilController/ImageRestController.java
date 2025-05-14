@@ -39,7 +39,6 @@ public class ImageRestController {
 
     @DeleteMapping("/delete/{imgNum}")
     public ResponseEntity<String> imgDelete(@PathVariable("imgNum")Long imgNum){
-        log.info(imgNum);
         imageService.delete(imgNum);
         return ResponseEntity.ok("삭제를 성공하였습니다.");
     }

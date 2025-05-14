@@ -7,10 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Service;
 
-import com.onetouch.delinight.DTO.CheckInDTO;
-import com.onetouch.delinight.DTO.HotelDTO;
-import com.onetouch.delinight.DTO.InquireDTO;
-import com.onetouch.delinight.DTO.UsersDTO;
+import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.CheckInEntity;
 import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.InquireEntity;
@@ -77,6 +74,15 @@ public class InquireServiceImpl implements InquireService {
         sseService.sendToHAdmin("H"+inquireEntity.getCheckInEntity().getRoomEntity().getHotelEntity().getId(),"new-inquire",inquireEntity.getCheckInEntity().getRoomEntity().getName()+"방으로 부터 새로운 문의가 들어왔습니다.");
 
         return inquireDTO;
+
+    }
+
+    @Override
+    public List<InquireDTO> findUnprocessedInquire(MembersDTO membersDTO) {
+
+        List<InquireEntity> inquireEntities = inquireRepository.findByHotelEntity_MembersEntity_EmailAndResponseTimeIsNull(membersDTO.getEmail());
+        List<InquireDTO> resultDTOList = inquireEntities.stream().map(resultDTO->modelMapper.map(resultDTO, InquireDTO.class)).toList();
+        return resultDTOList;
 
     }
 
