@@ -72,13 +72,13 @@
                                     <div class="col-sm-9">
                                         <textarea th:if="${replyDTO.replyText == null}" name="replyText" class="form-control replyText" oninput="autoResize(this)" placeholder="작성하기"></textarea>
                                         <div th:if="${replyDTO.replyText != null}" class="form-control-plaintext v-center-text">[[${replyDTO.replyText}]]</div>
-                                        <div class="mt-5 text-end">
-                                            <button type="submit" class="btn btn-primary insertBtn">전송</button>
-                                            <a href="/members/inquire/list" class="btn btn-gray">취소</a>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="mt-5 text-center">
+                            <button type="submit" class="btn btn-primary insertBtn"  th:if="${replyDTO.replyText == null}">전송</button>
+                            <a href="/members/inquire/list" class="btn btn-gray">취소</a>
                         </div>
                     </div>
             </div>
