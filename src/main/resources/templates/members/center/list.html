@@ -26,7 +26,8 @@
                         <thead>
                         <th class="col-1">#</th>
                         <th class="col-2">이름</th>
-                        <th class="col-7">설명</th>
+                        <th class="col-5">설명</th>
+                        <th class="col-2">초대</th>
                         <th class="col-2">수정</th>
                         </thead>
 
@@ -34,13 +35,15 @@
                         <th:block  th:each="list:${centerDTOList}">
                             <tr>
                                 <th th:text="${list.id}"></th>
-                                <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                                <td><a th:data-num="${list.id}" th:href="@{/members/center/read(id=${list.id})}">
                                     [[${list.name}]]
                                 </a>
                                 </td>
                                 <td th:text="${list.content}"></td>
-
-                                <td><button class="btn btn-outline-danger" id="delBtn"  th:value="${list.id}"><i class="fa-solid fa-trash" style="color: #dc3545"></i></button></td>
+                                <td><button class="copyBtn btn btn-dark" th:data-centerid="${list.id}">
+                                    초대링크 복사하기<i class="fa-solid fa-copy copy-icon ms-2"></i>
+                                </button></td>
+                                <td><button class="btn btn-outline-primary" id="delBtn"  th:value="${list.id}">삭제</button></td>
                             </tr>
                         </th:block>
                         </tbody>
@@ -55,6 +58,26 @@
     <!--스크립트 시작 -->
     <script>
         $(function (){
+            $(".copyBtn").on("click", function () {
+                let fullLink = "http://localhost:8080/members/account/accountRequest?role=super&id="+$(this).data("centerid") ;
+                let tempInput = $("<input>");
+                $("body").append(tempInput);
+                tempInput.val(fullLink).select();
+                let copy = document.execCommand('copy');
+                tempInput.remove();
+
+                if (copy) {
+                    let icon = $(this).find(".copy-icon");
+
+                    // 아이콘 클래스 변경
+                    icon.removeClass("fa-copy").addClass("fa-check");
+
+                    // 1.5초 뒤 다시 원상 복구
+                    setTimeout(function () {
+                        icon.removeClass("fa-check").addClass("fa-copy");
+                    }, 1500);
+                }
+            });
             $(document).on("click", "#delBtn", function () {
 
                 alert(123)

@@ -28,6 +28,9 @@
                         <a href="#" class="breadcrumb-item active no-click">호텔 관리</a>
                     </ol>
 
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#hotelCreate">
+                        새 호텔 +
+                    </button>
                     <table class="table table-hover align-middle">
 
                         <thead>
@@ -65,7 +68,33 @@
                         </tbody>
                     </table>
 
+                    <div class="modal fade" id="hotelCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">새 호텔 등록하기</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body"><label>
+                                    소속 지사 <select class="form-select">
+                                        <option selected>지사 선택</option>
+                                        <option th:each="branch : ${branchList}" th:value="${branch.id}">[[${branch.name}]]</option>
+                                    </select>
+                                </label>
+                                    <br>
+                                    <label>호텔 명 : <input type="text" class="form-label branchName"></label></br>
+                                    <label>호텔 소개 : <input type="text" class="form-label branchContent"></label>
+                                    <input type="hidden" class="centerId" th:value="${centerId}">
+                                    <input type="file" class="">
 
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary createBranch">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -274,6 +303,27 @@
         })
 
         $(function (){
+            $(".createHot").on("click",function () {
+                let branchName = $(".branchName").val();
+                let branchContent = $(".branchContent").val();
+                let centerId = $(".centerId").val();
+                $.ajax({
+
+                    url:"/members/branch/create",
+                    type:"post",
+                    data: {
+                        name : branchName,
+                        content : branchContent,
+                        centerId : centerId,
+
+                    },
+                    success : function () {
+                        window.location.reload();
+                    }
+                })
+
+
+            })
             $(document).on("click", "#delBtn", function () {
 
                 alert(123)

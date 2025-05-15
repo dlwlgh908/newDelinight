@@ -8,6 +8,7 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.HotelDTO;
+import com.onetouch.delinight.DTO.MembersDTO;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface HotelService {
 
     public void update(HotelDTO hotelDTO);
 
-    public List<HotelDTO> list();
+    public List<HotelDTO> list(MembersDTO membersDTO);
 
     public HotelDTO findHotelDTOById(Long id);
     public Long findHotelByEmail(String email);
