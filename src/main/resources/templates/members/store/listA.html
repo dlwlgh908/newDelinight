@@ -6,6 +6,10 @@
 >
 <head>
         <style>
+            .modal-content {
+                position: absolute;
+                top: -20px;
+            }
             .modal-body{
                 height: 400px;
                 overflow-y: auto;
@@ -28,6 +32,12 @@
                         <a href="#" class="breadcrumb-item active no-click">가맹점 관리</a>
                     </ol>
 
+                    <div class="d-flex justify-content-end mb-3">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#storeCreate">
+                            새 가맹점 +
+                        </button>
+                    </div>
+
                     <table class="table align-middle table-hover">
 
                         <thead>
@@ -49,20 +59,86 @@
                                 <td>
                                     <span th:if="${list.membersDTO != null}" th:text="${list.membersDTO.name}"></span>
                                     <button th:if="${list.membersDTO == null}" type="button" class="addMembers btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-storeid="${list.getId()}">
-                                        관리자 추가
+                                        추가하기
                                     </button>
                                 </td>
                                 <td>
                                     <a th:if="${list.membersDTO != null}" class="modiMembers btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}" href="#">관리자 변경</a>
                                 </td>
                                 <td>
-                                    <a th:if="${list.membersDTO != null}" class=" btn btn-outline-success modiStoreBtn" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}" ><i class="fa-solid fa-pen hoverBtn" style="color: #198754"></i></a>
-                                    <a th:value="${list.id}" id="delBtn2" class="btn btn-outline-danger delStoreBtn"><i class="fa-solid fa-trash hoverBtn" style="color: #dc3545"></i></a>
+                                    <a th:if="${list.membersDTO != null}" class=" btn btn-outline-success modiStoreBtn" data-bs-toggle="modal" data-bs-target="#exampleModal2" th:data-name="${list.membersDTO.name}" th:data-storeid="${list.getId()}" ><i class="fa-solid fa-pen hoverBtn"></i></a>
+                                    <a th:value="${list.id}" id="delBtn" class="btn btn-outline-danger delStoreBtn"><i class="fa-solid fa-trash hoverBtn"></i></a>
                                 </td>
                             </tr>
                         </th:block>
                         </tbody>
                     </table>
+
+                    <!-- 가맹점 추가 Modal -->
+                    <div class="modal fade" id="storeCreate" tabindex="-1" aria-labelledby="storeCreateLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="storeCreateLabel">새 가맹점 등록하기</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label class="form-label">가맹점명</label>
+                                            <input type="text" class="form-control storeName" placeholder="가맹점 이름을 입력하세요">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">가맹점 소개</label>
+                                            <textarea type="text" class="form-control storeContent" placeholder="간단한 소개를 입력하세요"></textarea>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label" for="formFileLg">가맹점 배너 이미지</label>
+                                            <input name="image" class="form-control imgInput" id="formFileLg" type="file">
+                                            <div class="form-text">이미지를 넣어주세요.</div>
+                                        </div>
+                                        <div class="hiddenImgNum"></div>
+
+                                    </form>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-gray" data-bs-dismiss="modal">취소</button>
+                                    <button type="button" class="btn btn-primary saveBtn" data-bs-dismiss="modal">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 가맹점 정보수정 Modal -->
+                    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <label class="col-form-label form-label ms-2" id="exampleModalLabel2">가맹점 정보수정</label>
+                                    <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control name" id="name2" placeholder="가맹점명">
+                                    </div>
+                                    <div>
+                                        <textarea type="text" class="form-control content" id="content2" placeholder="설명"></textarea>
+                                    </div>
+                                    <div id="hiddenId" data-id=""></div>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-gray" data-bs-dismiss="modal">취소</button>
+                                    <button type="button" class="btn btn-primary" id="room_modifybtn">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- 관리자 변경 Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -92,50 +168,47 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- 정보수정 Modal -->
-                    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <label class="col-form-label form-label ms-2" id="exampleModalLabel2">가맹점 정보수정</label>
-                                    <button type="button" class="btn btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control name" id="name2" placeholder="가맹점명">
-                                    </div>
-                                    <div>
-                                        <textarea type="text" class="form-control content" id="content2" placeholder="설명"></textarea>
-                                    </div>
-                                    <div id="hiddenId" data-id=""></div>
-
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-gray" data-bs-dismiss="modal">취소</button>
-                                    <button type="button" class="btn btn-primary" id="room_modifybtn">저장</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
-
-
         </div>
-
     </main>
 
     <!--스크립트 시작 -->
     <script>
 
+        $(function () {
+            $(".saveBtn").on("click", function () {
+                let hiddenImgNum = $(".imgNum").val()
+
+                let storeName = $(".storeName").val()
+                let storeContent = $(".storeContent").val()
+                let hotelId = $(".hotelId").val()
+                $.ajax({
+
+                    url:"/members/store/create",
+                    type:"post",
+                    data:{
+                        name: storeName,
+                        content : storeContent,
+                        hotelId : hotelId,
+                        imgNum : hiddenImgNum
+                    },
+                    success : function (msg) {
+                        window.location.reload()
+                    },
+                    error : function () {
+                        alert("오류 발생")
+                    }
+
+                })
+            })
+        })
+
         $(document).on("click", ".modiStoreBtn", function () {
             let targetModal = $("#exampleModal2");
             targetModal.modal("show");
 
-            // 클릭한 tr의 방이름과 설명 추출
+            // 클릭한 tr의 스토어 이름과 설명 추출
             let $tr = $(this).closest("tr");
             let name = $tr.find("td").eq(0).text();
             let content = $tr.find("td").eq(1).text();
