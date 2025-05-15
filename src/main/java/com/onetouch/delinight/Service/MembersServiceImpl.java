@@ -93,6 +93,7 @@ public class MembersServiceImpl implements MembersService{
         membersEntity.setStatus(Status.VALID);
         membersEntity.setEmail("sys@test.com");
         membersEntity.setName("시스템 관리자");
+        membersEntity.setPassword(passwordEncoder.encode("akqjqtk12!"));
         membersRepository.save(membersEntity);
     }
 
@@ -155,6 +156,9 @@ public class MembersServiceImpl implements MembersService{
         membersEntity.setStatus(Status.WAIT);
         membersEntity.setPassword(password);
 
+        if(membersDTO.getRole().equals(Role.SUPERADMIN)){
+
+        }
         if(membersDTO.getRole().equals(Role.ADMIN)){
             Optional<CenterEntity> optionalCenterEntity = centerRepository.findById(membersDTO.getParentId());
             optionalCenterEntity.ifPresent(membersEntity::setCenterEntity);

@@ -3,6 +3,8 @@
       xmlns:th="http://www.thymeleaf.org"
 >
 <head>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
@@ -15,7 +17,7 @@
 </head>
 <body>
 <div th:if="${reset}=='on'">
-    <button class="btn-outline-dark makeSysA">시스템 관리자 생성</button>
+    <button type="button" class="btn-outline-dark makeSysA">시스템 관리자 생성</button>
 </div>
     <form action="/members/account/login" method="post">
 
@@ -56,8 +58,9 @@
 
     <script text="javascript">
         $(".makeSysA").on("click",function () {
+            alert("123")
             $.ajax({
-                url:"members/account/makeSysA",
+                url:"/members/account/makeSysA",
                 type:"get",
                 success:function (){
                     alert("시스템 관리자 계정 생성 완료 id : system@test.com, pw:akqjqtk12!")

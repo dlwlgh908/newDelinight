@@ -40,12 +40,9 @@ public class CenterServiceImpl implements CenterService{
     @Override
     public void create(CenterDTO centerDTO, String email) {
 
-        MembersEntity membersEntity =
-            membersRepository.findById(centerDTO.getMembersId()).get();
 
         CenterEntity centerEntity =
             modelMapper.map(centerDTO, CenterEntity.class);
-        centerEntity.setMembersEntity(membersEntity);
 
         centerRepository.save(centerEntity);
     }

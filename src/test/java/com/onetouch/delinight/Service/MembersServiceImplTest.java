@@ -1,6 +1,7 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.Role;
+import com.onetouch.delinight.Constant.Status;
 import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.Entity.CenterEntity;
 import com.onetouch.delinight.Entity.HotelEntity;
@@ -45,22 +46,25 @@ class MembersServiceImplTest {
         log.info(membersEntityList.size());
     }
     @Test
+    @Commit
     public void createTest(){
 
-        CenterEntity centerEntity =
-            centerRepository.findById(1L).get();
+       Long centerId = 3L;
+       String CenterName = "조선";
+       String CeneteEmail = "3-";
 
+       for(int i=1; i<10; i++){
+           MembersEntity membersEntity = new MembersEntity();
+           membersEntity.setEmail("hotel"+CeneteEmail+i+"@test.com");
+           membersEntity.setName(CenterName+i);
+           membersEntity.setPassword(passwordEncoder.encode("akqjqtk12!"));
+           membersEntity.setPhone("0101112113"+i);
+           membersEntity.setRole(Role.ADMIN);
+           membersEntity.setStatus(Status.WAIT);
+           membersEntity.setCenterEntity(centerRepository.findById(centerId).get());
+           membersRepository.save(membersEntity);
+       }
 
-
-            MembersEntity membersEntity = new MembersEntity();
-
-            membersEntity.setRole(Role.ADMIN);
-            membersEntity.setName("admin 테스트계정");
-            membersEntity.setPassword("1234");
-            membersEntity.setPhone("01023342090");
-            membersEntity.setEmail("test@test.aaa");
-            membersEntity.setCenterEntity(centerEntity);
-            membersRepository.save(membersEntity);
 
     }
 

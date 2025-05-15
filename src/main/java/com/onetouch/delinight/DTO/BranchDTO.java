@@ -24,6 +24,7 @@ public class BranchDTO {
     private String content;
 
     private CenterDTO centerDTO;
+    private Long centerId;
 
     public BranchDTO setCenterDTO(CenterDTO  centerDTO){
         this.centerDTO = centerDTO;

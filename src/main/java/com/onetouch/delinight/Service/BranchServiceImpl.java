@@ -22,6 +22,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ public class BranchServiceImpl implements BranchService{
             modelMapper.map(branchDTO, BranchEntity.class);
 
         CenterEntity centerEntity =
-                centerRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+                centerRepository.findById(branchDTO.getCenterId()).orElseThrow(EntityNotFoundException::new);
         branchEntity.setCenterEntity(centerEntity);
 
 
@@ -62,9 +63,9 @@ public class BranchServiceImpl implements BranchService{
     }
 
     @Override
-    public List<BranchDTO> list() {
+    public List<BranchDTO> list(String email) {
         List<BranchEntity> branchEntityList =
-            branchRepository.findAll();
+            branchRepository.findByCenterEntity_MembersEntity_Email(email);
         List<BranchDTO> branchDTOList =
                 branchEntityList.stream().toList().stream().map(
                         branchEntity -> modelMapper.map(branchEntity, BranchDTO.class)

@@ -87,6 +87,7 @@ public class AccountController {
     @PostMapping("/accountRequest")
     public String accountRequestPost(MembersDTO membersDTO) {
         String roleStr = membersDTO.getRoleStr();
+        log.info(membersDTO);
 
         if (roleStr.equals("super")) {
             membersDTO.setRole(Role.SUPERADMIN);
@@ -169,7 +170,7 @@ public class AccountController {
         if (role.equals(Role.SUPERADMIN)) {
             return "redirect:/members/center/read";
         } else { // 시스템 어드민일 경우
-            return "redirect:/members/center/create";
+            return "redirect:/members/center/list";
         }
     }
 

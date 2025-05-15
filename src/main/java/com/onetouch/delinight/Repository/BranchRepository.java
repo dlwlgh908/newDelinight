@@ -18,7 +18,7 @@ import java.util.List;
 public interface BranchRepository extends JpaRepository<BranchEntity, Long> {
 
 
-
+        public List<BranchEntity> findByCenterEntity_MembersEntity_Email(String email);
 
 
 }

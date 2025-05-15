@@ -15,6 +15,8 @@ import java.util.List;
 
 public interface HotelRepository extends JpaRepository<HotelEntity, Long> {
 
+
+    public List<HotelEntity> findByBranchEntity_CenterEntity_MembersEntity_Email(String email);
     public HotelEntity findByMembersEntity_Email(String email);
 
     public boolean existsByMembersEntity_Email(String email);
