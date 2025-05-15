@@ -84,6 +84,7 @@ public class CenterController {
 
         CenterDTO centerDTO =
                 centerService.read(principal.getName());
+
         model.addAttribute("center", centerDTO);
 
         return "members/center/read";

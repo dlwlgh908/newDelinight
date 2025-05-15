@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -63,7 +64,10 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/users/welcome")
                 .invalidateHttpSession(true)
-        );
+        )
+                .sessionManagement(session -> session
+                        .invalidSessionUrl("/users/login")
+                        .maximumSessions(1).expiredUrl("/users/login"));
 
         return http.build();
     }
@@ -91,7 +95,10 @@ public class SecurityConfig {
                         .logoutUrl("/members/account/logout")
                         .logoutSuccessUrl("/members/account/logout-success")
                         .invalidateHttpSession(true)
-                );
+                )
+                .sessionManagement(session -> session
+                        .invalidSessionUrl("/members/account/login")
+                        .maximumSessions(1).expiredUrl("/users/login"));
         return http.build();
     }
 

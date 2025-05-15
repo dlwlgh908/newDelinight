@@ -19,7 +19,7 @@ public interface BranchService {
 
     public void update(BranchDTO branchDTO);
 
-    public List<BranchDTO> list();
+    public List<BranchDTO> list(String email);
 
     public void del(Long id);
 

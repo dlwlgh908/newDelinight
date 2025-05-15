@@ -127,14 +127,12 @@
                     name: name,
                     content: content
                 }
-                alert(roomDTO);
 
                 $.ajax({
                     url: "/room/rest/register",
                     method: "post",
                     data: roomDTO,
                     success: function (data) {
-                        alert(data)
                         $("#exampleModal").modal("hide");
                         location.reload();
 
@@ -184,7 +182,6 @@
 
             $(document).on("click", "#dbtn", function () {
                 let id = $(this).attr("data-id");
-                alert(id);
                 if (!confirm("정말로 삭제하시겠습니까?")) {
                     return;
                 }

@@ -28,10 +28,11 @@
                 <h5 th:if="${role.equals('가맹점 관리자')}" class="mb-4 fw-bold">가맹점 관리자 계정 신청</h5>
                 <hr class="hrMain">
 
-                <input th:if="${role.equals('본사 관리자')}" type="hidden" name="roleStr" value="center">
+                <input th:if="${role.equals('본사 관리자')}" type="hidden" name="roleStr" value="super">
                 <input th:if="${role.equals('호텔 관리자')}" type="hidden" name="roleStr" value="hotel">
                 <input th:if="${role.equals('가맹점 관리자')}" type="hidden" name="roleStr" value="store">
                 <input th:if="${role.equals('호텔 관리자')}" type="hidden" name="parentId" th:value="${parentId}">
+                <input th:if="${role.equals('본사 관리자')}" type="hidden" name="parentId" th:value="${parentId}">
                 <input th:if="${role.equals('가맹점 관리자')}" type="hidden" name="parentId" th:value="${parentId}">
 
                 <div class="row mb-4 mt-5">

@@ -27,6 +27,7 @@ public class HotelDTO {
     private MembersDTO membersDTO;
     private Long imgNum;
     private String imgUrl;
+    private Long branchId;
 
 
     public HotelDTO setImgUrl(String imgUrl){

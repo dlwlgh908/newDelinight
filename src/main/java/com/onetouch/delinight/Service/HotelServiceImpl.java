@@ -64,18 +64,11 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public void create(HotelDTO hotelDTO,String email) {
+    public void create(HotelDTO hotelDTO) {
         HotelEntity hotelEntity =
                 modelMapper.map(hotelDTO, HotelEntity.class);
         BranchEntity branchEntity =
-                branchRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-
-
-        MembersEntity membersEntity =
-                membersRepository.findByEmail(email);
-
-        hotelEntity.setMembersEntity(membersEntity);
-
+                branchRepository.findById(hotelDTO.getBranchId()).orElseThrow(EntityNotFoundException::new);
 
 
         hotelEntity.setBranchEntity(branchEntity);
@@ -114,16 +107,16 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<HotelDTO> list() {
+    public List<HotelDTO> list(MembersDTO membersDTO) {
         List<HotelEntity> hotelEntityList =
-                hotelRepository.findAll();
+                hotelRepository.findByBranchEntity_CenterEntity_MembersEntity_Email(membersDTO.getEmail());
         List<HotelDTO> hotelDTOList =
         hotelEntityList.stream().toList().stream().map(
                 hotelEntity -> {
                     HotelDTO hotelDTO = modelMapper.map(hotelEntity, HotelDTO.class);
                     if (hotelEntity.getMembersEntity() != null) {
-                        MembersDTO membersDTO = modelMapper.map(hotelEntity.getMembersEntity(), MembersDTO.class);
-                        hotelDTO.setMembersDTO(membersDTO);
+                        MembersDTO membersDTO1 = modelMapper.map(hotelEntity.getMembersEntity(), MembersDTO.class);
+                        hotelDTO.setMembersDTO(membersDTO1);
                     } else {
                         hotelDTO.setMembersDTO(null);
                     }
