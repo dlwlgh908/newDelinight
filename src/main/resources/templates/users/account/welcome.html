@@ -10,41 +10,19 @@
   <link rel="stylesheet" href="/css/mobile.css">
   <title>Mobile</title>
 </head>
-<body class="welcome-body">
-
-<div class="welcome-header">
-  <div class="welcome-content">
-
-    <div class="welcome-intro">
-      <h1>DeliNight</h1>
-      <p class="welcomeSub-subtext">당신의 밤을 더 맛있게!</p>
-      <p class="welcomeSub-subtext">반가워요! 우리 떠나볼까요?</p>
+<body>
+  <div class="p-3">
+    <div style="margin-top: 400px">
+      <div>
+        <h1 class="mb-3" style="font-weight: bold; font-size: 40px;">Deli Night</h1>
+        <p>당신의 밤을 더 맛있게!<br>반가워요! 우리 떠나볼까요?</p>
+      </div>
+      <div class="text-center" style="margin-top: 100px;">
+        <button onclick="location.href='/users/login'" class="p-2 btn btn-dark loginBtn">로그인</button>
+        <button onclick="location.href='/users/signUp'" class="p-2 btn btn-outline-dark signBtn">회원가입</button>
+        <a href="/users/login?sep=1" class="mt-4 text-secondary" style="font-size: 0.8rem">비회원으로 계속하기</a>
+      </div>
     </div>
-
-    <div class="welcome-btn-group">
-      <button id="btn-DeliNight-black-login" class="btn-DeliNight-black welcome-custom-shadow" onclick="location.href='/users/login'">
-        <i class="bi bi-person-fill"></i>로그인하기
-      </button>
-      <button id="btn-DeliNight-black-signUp" class="btn-DeliNight-black welcome-custom-shadow" onclick="location.href='/users/signUp'">
-        <i class="bi bi-person-fill"></i>회원가입하기
-      </button>
-      <button id="btn-DeliNight-white" class="btn-DeliNight-white welcome-custom-shadow" onclick="location.href='/users/login?sep=1'">
-        <i class="bi bi-person-badge-fill"></i>비회원으로 계속하기
-      </button>
-    </div>
-
-    <div class="welcome-footer">
-      <p>&copy; 2025 Deli Night. All rights reserved.</p>
-      <p>
-        <a href="/terms">이용약관</a> |
-        <a href="/privacy">개인정보처리방침</a> |
-        <a href="/contact">고객센터</a>
-      </p>
-    </div>
-
   </div>
-</div>
-
-
 </body>
 </html>

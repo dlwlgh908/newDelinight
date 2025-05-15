@@ -7,18 +7,12 @@
  *********************************************************************/
 package com.onetouch.delinight.Controller.Members;
 
-import com.onetouch.delinight.DTO.BranchDTO;
-import com.onetouch.delinight.DTO.HotelDTO;
-import com.onetouch.delinight.DTO.MembersDTO;
-import com.onetouch.delinight.DTO.MenuDTO;
+import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.HotelRepository;
 import com.onetouch.delinight.Repository.MembersRepository;
-import com.onetouch.delinight.Service.BranchService;
-import com.onetouch.delinight.Service.HotelService;
-import com.onetouch.delinight.Service.ImageService;
-import com.onetouch.delinight.Service.MembersService;
+import com.onetouch.delinight.Service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -41,6 +35,7 @@ public class HotelController {
     private final HotelRepository hotelRepository;
     private final MembersService membersService;
     private final ImageService imageService;
+    private final BrandService brandService;
 
     @GetMapping("/create")
     public String createView() {
@@ -66,9 +61,11 @@ public class HotelController {
                 hotelService.list(membersDTO);
 
         List<BranchDTO> branchList = branchService.list(principal.getName());
+        List<BrandDTO> brandList = brandService.list();
 
         model.addAttribute("hotelDTOList", hotelDTOList);
         model.addAttribute("branchList", branchList);
+        model.addAttribute("brandList", brandList);
         return "members/hotel/listA";
     }
 
@@ -91,65 +88,69 @@ public class HotelController {
         return "members/hotel/read2";
     }
 @GetMapping("/read/{id}")
-public String readView(Principal principal, Model model, @PathVariable("id") Long id) {
+public String readView( Model model, @PathVariable("id") Long id) {
 
 
-    log.info("principal log !!" + principal.getName());
-    log.info("principal log !!" + principal.getName());
-    log.info("principal log !!" + principal.getName());
-    log.info(id);
-    log.info(id);
-    log.info(id);
-    log.info(id);
+
+    HotelDTO hotelDTO =
+        hotelService.findHotelDTOById(id);
 
 
-    MembersDTO membersDTO =
-            membersService.findByEmail(principal.getName());
-    log.info(membersDTO);
-    log.info(membersDTO);
+    BrandDTO brandDTO =
+        brandService.read(hotelDTO.getBrandId());
 
-    HotelEntity hotelEntity =
-            hotelRepository.findById(id).get();
+    hotelDTO.setBrandDTO(brandDTO);
 
-    String imgUrl = imageService.readHotel(hotelEntity.getId());
+
+    String imgUrl = imageService.readHotel(hotelDTO.getId());
     model.addAttribute("imgUrl", imgUrl);
-    model.addAttribute("hotel", hotelEntity);
+    model.addAttribute("hotel", hotelDTO);
 
     return "members/hotel/read";
 }
     
     @GetMapping("/update2/{id}")
-    public String updateView2(Principal principal, Model model, @PathVariable("id") Long id) {
+    public String updateView2(Model model, @PathVariable("id") Long id) {
 
         log.info(id);
 
-        HotelEntity hotelEntity =
-                hotelRepository.findById(id).get();
+        HotelDTO hotelDTO =
+                hotelService.findHotelDTOById(id);
 
-        model.addAttribute("hotel", hotelEntity);
-        String imgUrl = imageService.readHotel(hotelEntity.getId());
+
+        BrandDTO brandDTO =
+                brandService.read(hotelDTO.getBrandId());
+
+        List<BrandDTO> brandList = brandService.list();
+
+        hotelDTO.setBrandDTO(brandDTO);
+
+        String imgUrl = imageService.readHotel(hotelDTO.getId());
         model.addAttribute("imgUrl", imgUrl);
+        model.addAttribute("hotel", hotelDTO);
+        model.addAttribute("brandList", brandList);
+
         return "members/hotel/update2";
     }
 
-    @GetMapping("/update")
-    public String updateView(Principal principal, Model model, @PathVariable("id") Long id) {
-
-        log.info(id);
-
-        HotelEntity hotelEntity =
-                hotelRepository.findById(id).get();
-
-        model.addAttribute("hotel", hotelEntity);
-        String imgUrl = imageService.readHotel(hotelEntity.getId());
-        model.addAttribute("imgUrl", imgUrl);
-        return "members/hotel/update";
-    }
+//    @GetMapping("/update")
+//    public String updateView(Principal principal, Model model, @PathVariable("id") Long id) {
+//
+//        log.info(id);
+//
+//        HotelEntity hotelEntity =
+//                hotelRepository.findById(id).get();
+//
+//        model.addAttribute("hotel", hotelEntity);
+//        String imgUrl = imageService.readHotel(hotelEntity.getId());
+//        model.addAttribute("imgUrl", imgUrl);
+//        return "members/hotel/update";
+//    }
 
     @PostMapping("/update")
-    public String updateProc(@ModelAttribute HotelDTO hotelDTO) {
+    public String updateProc(HotelDTO hotelDTO) {
 
-        log.info("update post 페이지" + hotelDTO);
+        log.info(hotelDTO);
 
 
         hotelService.update(hotelDTO);

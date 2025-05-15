@@ -25,9 +25,11 @@ public class HotelDTO {
 
     private BranchDTO branchDTO;
     private MembersDTO membersDTO;
+    private BrandDTO brandDTO;
     private Long imgNum;
     private String imgUrl;
     private Long branchId;
+    private Long brandId;
 
 
     public HotelDTO setImgUrl(String imgUrl){
@@ -36,6 +38,11 @@ public class HotelDTO {
     }
     public HotelDTO setMembersDTO(MembersDTO membersDTO){
         this.membersDTO = membersDTO;
+        return this;
+    }
+
+    public HotelDTO setBrandDTO(BrandDTO brandDTO) {
+        this.brandDTO = brandDTO;
         return this;
     }
 
