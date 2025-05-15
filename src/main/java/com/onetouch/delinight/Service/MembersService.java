@@ -18,6 +18,9 @@ import java.util.Map;
 
 public interface MembersService {
 
+    public void makeSysA();
+
+    public List<MembersDTO> findPendingMembersListByCenterMembers(MembersDTO membersDTO);
     public boolean checkOperation(MembersDTO membersDTO);
     public List<MembersDTO> findMembersListByCenterEmail(String email);
 

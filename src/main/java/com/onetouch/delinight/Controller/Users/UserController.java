@@ -54,17 +54,14 @@ public class UserController {
                 }
 
                 String email = principal.getName();
-                log.info(email);
 
                 // DB 사용자 이름 조회
                 UsersEntity usersEntity = usersRepository.selectEmail(email);
                 String name = usersEntity != null ? usersEntity.getName() : "고객";
-                log.info(name+usersEntity);
 
                 List<StoreDTO> storeDTOList = storeService.list(email);
 
                 model.addAttribute("storeDTOList",storeDTOList);
-                log.info(storeDTOList);
 
 
 
@@ -88,20 +85,16 @@ public class UserController {
 
         @PostMapping("/signUp")
         public String singUpPost(@Valid UsersDTO usersDTO , BindingResult bindingResult , Model model) {
-                log.info("전달받은 값 : " + usersDTO);
                 if(bindingResult.hasErrors()) {
                         // 오류 메시지를 모델에 담기
                         model.addAttribute("error" , bindingResult.getAllErrors());
-                        log.info("여기 실행함??????????????????????????????????????????????");
                         return "redirect:/users/account/signUp";
                 }
 
                 try {
                         usersService.singUpUser(usersDTO);
-                        log.info("회원가입 성공");
                 }catch (Exception e) {
                         model.addAttribute("errorMessage" , "회원가입 처리 중 오류가 발생했습니다.");
-                        log.info("회원가입 중 예외 발생");
                         return "/users/account/signUp";
                 }
 
@@ -126,11 +119,8 @@ public class UserController {
 
         @PostMapping("/passwordChange")
         public String passwordChangePost(UsersDTO usersDTO , RedirectAttributes redirectAttributes) {
-                log.info("passwordChange_Post");
-                log.info("변경된 값 : " +usersDTO);
 
                 boolean result = usersService.passwordChange(usersDTO);
-                log.info(result);
 
                 if(result) {
                         return "redirect:/users/login";
@@ -145,22 +135,18 @@ public class UserController {
         // 임시 비번발급
         @GetMapping("/sendPassword")
         public String sendPasswordGET() {
-                log.info("sendPassword진입완료!!!!!!!!!!!!!!");
                 return "/users/account/sendPassword";
         }
 
         @PostMapping("/sendPassword")
         public String sendPasswordPost(UsersDTO usersDTO , Model model) {
-                log.info("으아아아아아아아악 포스트진입함?????????");
                 try {
                         // 임시 비밀번호 발급 서비스 호출
                         String resultMessage = usersService.sendTemporaryPassword(usersDTO);
                         model.addAttribute("message" , resultMessage); // 성공 메시지
-                        log.info("으아아아아아아아악 성공함?????????");
                         return "redirect:/users/login";                                     // 실패 시 이동할 URL
                 }catch (IllegalStateException e){
                         model.addAttribute("error" , e.getMessage());  // 오류 메시지
-                        log.info("으아아아아아아아악 실패함?????????");
                         return "redirect:/users/login";                                     // 실패 시 이동할 URL
                 }
         }
@@ -169,10 +155,8 @@ public class UserController {
         public String updateGET(Principal principal, Model model) {
                 if (principal != null) {
                         String email = principal.getName(); // 현재 로그인한 사용자의 이메일 (username)
-                        log.info("updateGET 진입한 회원 : " + email);
                         model.addAttribute("email", email); // 뷰에서 사용하기 위해 추가
                 } else {
-                        log.info("updateGET 진입 - 로그인되지 않은 사용자");
                         return "redirect:/users/login"; // 비로그인 사용자는 로그인 페이지로 리다이렉트
                 }
                 return "users/account/update";
@@ -182,20 +166,17 @@ public class UserController {
         public String updatePost(Principal principal,UsersDTO usersDTO ,RedirectAttributes redirectAttributes) {
 
                 if (principal == null) {
-                        log.warn("회원정보 수정 요청 - 로그인되지 않은 사용자");
                         redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
                         return "redirect:/users/login"; // 로그인 페이지로 리다이렉트
                 }
 
                 String email = principal.getName(); // 현재 로그인한 사용자의 이메일 가져오기
-                log.info("수정 포스트 진입 - 이메일 : " + email);
 
                 try {
                         usersService.userUpdate(email, usersDTO);
                         redirectAttributes.addFlashAttribute("successMessage", "회원정보가 성공적으로 수정되었습니다.");
                         return "redirect:/users/home";
                 } catch (Exception e) {
-                        log.error("회원정보 수정 중 오류 발생", e);
                         redirectAttributes.addFlashAttribute("errorMessage", "회원정보 수정 중 오류가 발생했습니다.");
                         return "redirect:/users/update";
                 }
@@ -208,9 +189,8 @@ public class UserController {
                try {
                        String email = principal.getName();
                        usersService.userDelete(email);
-                       log.info("왜 id값을 못갓고와???????");
                }catch (Exception e){
-                       log.info("회원탈퇴 요청 실패");
+
                }
                return "redirect:/users/home";
         }

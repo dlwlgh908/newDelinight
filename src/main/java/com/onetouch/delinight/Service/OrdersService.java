@@ -20,6 +20,7 @@ public interface OrdersService {
 
     public OrdersDTO readOne(Long ordersId);
     public List<OrdersDTO> processList(String email);
+    public List<OrdersDTO> dashboard(String email);
     public List<OrdersDTO> completeList(String email);
     public StoreDTO findStoreByADMINEmail(String email);
 

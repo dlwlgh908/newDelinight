@@ -115,7 +115,6 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, prevMonthEnddate, MonthEnddate);
             List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
-            log.info(rawExcelData);
             ClassPathResource templateFile = new ClassPathResource("templates/payment_data_store.xlsx");
             try (InputStream inp = templateFile.getInputStream();
                  Workbook workbook = new XSSFWorkbook(inp);
@@ -201,7 +200,6 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
             List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
-            log.info(rawExcelData);
             ClassPathResource templateFile = new ClassPathResource("templates/payment_data_store.xlsx");
             try (InputStream inp = templateFile.getInputStream();
                  Workbook workbook = new XSSFWorkbook(inp);

@@ -19,9 +19,9 @@ import java.util.Optional;
 
 public interface MembersRepository extends JpaRepository<MembersEntity, Long> {
 
+    List<MembersEntity> findByStatusIs(Status status);
     Integer countByCenterEntity_IdAndStatus(Long id, Status status);
     List<MembersEntity> findByCenterEntity_Id(Long id);
-
 
     List<MembersEntity> findByHotelEntity_Id(Long id);
 

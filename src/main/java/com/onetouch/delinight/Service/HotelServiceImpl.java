@@ -60,7 +60,6 @@ public class HotelServiceImpl implements HotelService {
 
         HotelEntity hotelEntity = hotelRepository.findById(hotelId).get();
         hotelEntity.setMembersEntity(membersRepository.findById(memberId).get());
-        log.info(hotelEntity);
         hotelRepository.save(hotelEntity);
     }
 

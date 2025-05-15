@@ -125,7 +125,6 @@ public class EmailService {
             helper.addAttachment(mailDTO.getDate().toString()+"_일일매출현황.xlsx",new ByteArrayResource(paymentService.extractDailyExcel(membersDTO.getId(), membersDTO.getRole())));
             context.setVariable("aiResponse", openAIService.analyzeSales(paymentService.makePrompt(membersDTO.getId(), membersDTO.getRole())));
 
-            log.info(mailDTO);
 
             String html = templateEngine.process("/members/payment/dailyPerformance", context);
 

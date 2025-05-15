@@ -25,7 +25,6 @@ public class NetPromoterScoreRestController {
 
     @PostMapping("/saveSurvey")
     public ResponseEntity<String> saveSurvey(@RequestBody List<NetPromoterScoreDTO> npsDTOList) {
-        log.info("받은 NPS 데이터 = {}", npsDTOList);
 
         Long checkOutId = 0L; // 체크아웃 ID 초기값 설정
 

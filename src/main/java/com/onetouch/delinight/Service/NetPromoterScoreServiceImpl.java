@@ -1,10 +1,7 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.Role;
-import com.onetouch.delinight.DTO.HotelDTO;
-import com.onetouch.delinight.DTO.NetPromoterScoreDTO;
-import com.onetouch.delinight.DTO.OrdersDTO;
-import com.onetouch.delinight.DTO.StoreDTO;
+import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.CheckOutLogEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.NetPromoterScoreEntity;
@@ -43,17 +40,14 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
 
     @Override
     public void sendNpsTemporary(Long checkOutId) {
-        log.info("들어온 체크아웃 ID = {}" ,checkOutId);
         // 1. 사용자 검증
         CheckOutLogEntity checkOut = checkOutLogRepository.findById(checkOutId).orElseThrow(EntityNotFoundException::new);
-        log.info("실핸한 쿼리 = {}", checkOut);
 
         String email = checkOut.getUsersEntity().getEmail();
         String name = checkOut.getUsersEntity().getName();
 
         String surveyLink = "http://localhost:8080/users/nps/survey/" + checkOutId;
 
-        log.info("email = {}| name = {} | surveyLink = {}", email, name, surveyLink);
         Map<String, Object> variables = Map.of(
                 "email", checkOut.getUsersEntity().getEmail(),
                 "name", checkOut.getUsersEntity().getName(),
@@ -71,16 +65,13 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
 
     @Override
     public List<OrdersDTO> npsSelect(Long checkOutId) {
-        log.info("npsSelect 들어온 ID = {}" ,checkOutId);
 
         try {
 
             CheckOutLogEntity checkOut = checkOutLogRepository.findById(checkOutId).orElseThrow(EntityNotFoundException::new);
-            log.info("체크아웃 정보 조회 완료 : {}", checkOut);
 
             // 해당 체크아웃 ID에 속한 주문 목록 조회
             List<OrdersEntity> ordersEntityList = ordersRepository.findByCheckOutLogEntity_Id(checkOutId);
-            log.info("주문 목록 조회 완료, 주문 개수 : {}", ordersEntityList.size());
 
             // OrdersEntity → OrdersDTO 변환 및 필요한 정보(호텔명, 호텔ID, StoreDTO) 추가 매핑
             List<OrdersDTO> ordersDTOList = ordersEntityList.stream().map(ordersEntity -> modelMapper
@@ -90,12 +81,10 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
                             .setStoreDTO(modelMapper.map(ordersEntity.getStoreEntity(),StoreDTO.class)))            // 매장
                             .toList();
 
-            log.info("최종 OrderDTO 리스트 크기 : {}", ordersDTOList.size());
             return ordersDTOList;
 
         }catch (Exception e) {
 
-            log.info("npsSelect 처리 중 오류 발생 : ", e);
             throw e;
 
         }
@@ -106,7 +95,6 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
     public void npsInsert(List<NetPromoterScoreDTO> npsDTOList, Long checkOutId) {
 
         for (NetPromoterScoreDTO netPromoterScoreDTO : npsDTOList) {
-            log.info("처리 중인 NPS DTO 데이터 = {}", netPromoterScoreDTO);
             // NetPromoterScoreEntity 빌더 패턴으로 생성
             NetPromoterScoreEntity netPromoterScoreEntity = NetPromoterScoreEntity.builder()
                     .checkOutLogEntity(checkOutLogRepository.findById(checkOutId).get())    // 체크아웃 ID
@@ -123,10 +111,8 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
 
             // 설문 대상이 호텔인지 매장인지 구분하여 설정
             if(netPromoterScoreDTO.getHotelOrStore().equals("hotel")){
-                log.info("호텔 ID 조회중 = {}", netPromoterScoreDTO.getHotelId());
                 netPromoterScoreEntity.setHotelEntity(hotelRepository.findById(netPromoterScoreDTO.getHotelId()).get());
             } else {
-                log.info("스토어 ID 조회중 = {}", netPromoterScoreDTO.getStoreId());
                 netPromoterScoreEntity.setStoreEntity(storeRepository.findById(netPromoterScoreDTO.getStoreId()).get());
             }
 
@@ -137,12 +123,67 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
 
 
     @Override
+    public List<Integer> dashboard(MembersDTO membersDTO) {
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime startDate = today.withDayOfMonth(1).toLocalDate().atStartOfDay();
+
+        LocalDateTime endDate = today.withDayOfMonth(today.toLocalDate().lengthOfMonth())
+                .withHour(23)
+                .withMinute(59)
+                .withSecond(59)
+                .withNano(999_999_999);
+        List<NetPromoterScoreEntity> result;
+        if(membersDTO.getRole().equals(Role.STOREADMIN)){
+            result = netPromoterScoreRepository.findByStoreEntity_MembersEntity_EmailAndRegTimeBetween(membersDTO.getEmail(), startDate, endDate);
+            log.info(result);
+        }
+        else if(membersDTO.getRole().equals(Role.SUPERADMIN)){
+            result = netPromoterScoreRepository.findByHotelEntity_BranchEntity_CenterEntity_MembersEntity_EmailAndRegTimeBetween(membersDTO.getEmail(), startDate, endDate);
+            log.info(result);
+        }
+        else {
+            result = netPromoterScoreRepository.findByHotelEntity_MembersEntity_EmailAndRegTimeBetween(membersDTO.getEmail(), startDate, endDate);
+            log.info("asadsa"+result);
+        }
+
+        Integer avgOne = 0;
+        Integer avgTwo = 0;
+        Integer avgThree = 0;
+        Integer avgFour = 0;
+        Integer avgFive = 0;
+        Integer avgTotal = 0;
+        Integer count = 0;
+
+        for(NetPromoterScoreEntity netPromoterScoreEntity : result){
+            count++;
+            avgOne += netPromoterScoreEntity.getQuestionOne();
+            avgTwo += netPromoterScoreEntity.getQuestionTwo();
+            avgThree += netPromoterScoreEntity.getQuestionThree();
+            avgFour += netPromoterScoreEntity.getQuestionFour();
+            avgFive += netPromoterScoreEntity.getQuestionFive();
+        }
+        avgOne = avgOne/count;
+        avgTwo = avgTwo/count;
+        avgThree = avgThree/count;
+        avgFour = avgFour/count;
+        avgFive = avgFive/count;
+        avgTotal = (avgOne+avgTwo+avgThree+avgFour+avgFive)/5;
+        List<Integer> resultList = new ArrayList<>();
+        resultList.add(avgOne);
+        resultList.add(avgTwo);
+        resultList.add(avgThree);
+        resultList.add(avgFour);
+        resultList.add(avgFive);
+        resultList.add(avgTotal);
+        return resultList;
+
+    }
+
+    @Override
     public List<NetPromoterScoreDTO> npsAll(Long memberId) {
         MembersEntity membersEntity = membersRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
-        log.info("조회 요청: memberId={}, role={}", memberId, membersEntity.getRole());
 
         List<NetPromoterScoreEntity> netPromoterScoreEntityList = new ArrayList<>();
-        log.info("다 갖고옴? {}",netPromoterScoreEntityList);
 
         try{
 
@@ -163,7 +204,6 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
         List<NetPromoterScoreDTO> netPromoterScoreDTOList = netPromoterScoreEntityList.stream().map(entity -> {
                     // 기본 DTO 변환
                     NetPromoterScoreDTO npsDTO = modelMapper.map(entity, NetPromoterScoreDTO.class);
-                    log.info(npsDTO);
 
                     // 호텔 정보 설정
                     if (entity.getHotelEntity() != null) {

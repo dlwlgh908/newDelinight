@@ -51,6 +51,7 @@ public class MembersServiceImpl implements MembersService{
 
 
 
+
     @Override
     public MembersDTO findByEmail(String email) {
 
@@ -82,6 +83,32 @@ public class MembersServiceImpl implements MembersService{
         }
 
         return result;
+    }
+
+    @Override
+    public void makeSysA() {
+        MembersEntity membersEntity = new MembersEntity();
+        membersEntity.setPhone("010-5629-1665");
+        membersEntity.setRole(Role.SYSTEMADMIN);
+        membersEntity.setStatus(Status.VALID);
+        membersEntity.setEmail("sys@test.com");
+        membersEntity.setName("시스템 관리자");
+        membersRepository.save(membersEntity);
+    }
+
+    @Override
+    public List<MembersDTO> findPendingMembersListByCenterMembers(MembersDTO membersDTO) {
+
+        List<MembersEntity> result = membersRepository.findByStatusIs(Status.WAIT);
+        List<MembersDTO> resultDTOS = result.stream().map(resultOne->{
+
+            if(resultOne.getCenterEntity()==centerRepository.findById(centerService.findCenter(membersDTO.getEmail())).get()){
+                MembersDTO membersDTO1 = modelMapper.map(resultOne, MembersDTO.class);
+                return membersDTO1;
+            }
+            return null;
+        }).toList();
+        return resultDTOS;
     }
 
     @Override
@@ -261,7 +288,6 @@ public class MembersServiceImpl implements MembersService{
     @Override
     public Integer countOfRequestAccount(String email) {
         Long centerId = centerService.findCenter(email);
-        log.info(centerId);
         Integer result = membersRepository.countByCenterEntity_IdAndStatus(centerId, Status.WAIT);
         return result;
     }

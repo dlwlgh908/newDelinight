@@ -193,7 +193,6 @@ public class CheckInServiceImpl implements CheckInService{
 
 
 
-        log.info("checkin service"+checkInEntity);
         if(checkInDTO.getUserId()==null) {
             int certNum = (int) (Math.random() * 8999) + 1000;
             checkInDTO.setPassword(String.valueOf(certNum));

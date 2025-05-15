@@ -60,10 +60,8 @@
                         <th:block  th:each="list:${paging}">
                             <tr>
                                 <th scope="row offset-4" th:text="${list.id}"></th>
-                                <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
-
+                                <td th:data-num="${list.id}">
                                     [[${list.name}]]
-                                </a>
                                 </td>
                                 <td th:text="${list.email}"></td>
                                 <td th:text="${list.phone}"></td>

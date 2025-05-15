@@ -155,12 +155,9 @@ public class CartServiceImpl implements CartService{
     @Override
     public Long cartCheck(String email) {
 
-        log.info(email);
         CartEntity cartEntity = cartRepository.findByUsersEntity_Email(email);
-        log.info(cartEntity);
         if(cartEntity==null){
             cartEntity = cartRepository.findByGuestEntity_Phone(email);
-            log.info(cartEntity+"2222");
         }
         return cartEntity.getId();
     }
@@ -174,7 +171,6 @@ public class CartServiceImpl implements CartService{
                 .setMenuDTO(modelMapper.map(data.getMenuEntity(),MenuDTO.class).setImgUrl(imageRepository.findByMenuEntity_Id(data.getMenuEntity().getId()).get().getFullUrl()).setStoreDTO(modelMapper.map(data.getMenuEntity().getStoreEntity(), StoreDTO.class))
                 )).toList();
 
-        log.info(cartItemDTOList);
         return cartItemDTOList;
     }
 
@@ -195,7 +191,6 @@ public class CartServiceImpl implements CartService{
 
         if(sep == 1) { // users일 경우
 
-            log.info("sep1에 접근");
             CartEntity cartEntity = cartRepository.findByUsersEntity_Id(id);
             if(cartEntity==null){
                 return;
@@ -203,7 +198,6 @@ public class CartServiceImpl implements CartService{
             cartRepository.deleteById(cartEntity.getId());
         }
         else {
-            log.info("sep2에 접근");
             CartEntity cartEntity = cartRepository.findByGuestEntity_Id(id);
             if(cartEntity==null){
                 return;

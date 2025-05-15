@@ -34,7 +34,7 @@
                         <th:block  th:each="list:${centerDTOList}">
                             <tr>
                                 <th th:text="${list.id}"></th>
-                                <td><a th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
+                                <td><a class="alink-title" th:data-num="${list.id}" th:href="@{/board/read(id=${list.id})}">
                                     [[${list.name}]]
                                 </a>
                                 </td>

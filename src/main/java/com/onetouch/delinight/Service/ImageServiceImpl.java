@@ -71,14 +71,10 @@ public class ImageServiceImpl implements ImageService {
         fullUrl = "https://myimghouse.s3.ap-northeast-2.amazonaws.com/images/"+fileName;
 
         ImageDTO imageDTO = ImageDTO.builder().fullUrl(fullUrl).originName(originName).fileName(fileName).build();
-        log.info(imageDTO);
         ImageEntity imageEntity = modelMapper.map(imageDTO, ImageEntity.class);
         ImageEntity afterImage = imageRepository.save(imageEntity);
-        log.info(afterImage);
         Map<Long, String> result = new HashMap<>();
-        log.info(afterImage.getFullUrl()+afterImage.getImgNum());
         result.put(afterImage.getImgNum(), afterImage.getFullUrl());
-        log.info(result);
         return result;
     }
 
@@ -92,7 +88,6 @@ public class ImageServiceImpl implements ImageService {
             imageRepository.deleteById(imgNum);
         }
         else {
-            log.info("이미지가 없습니다.");
         }
     }
 
@@ -111,12 +106,10 @@ public class ImageServiceImpl implements ImageService {
             imageEntity.setFullUrl(fullUrl);
             imageEntity.setFileName(fileName);
             imageEntity.setOriginName(originName);
-            ImageEntity afterImg = imageRepository.save(imageEntity);
-            log.info(afterImg);
+            imageRepository.save(imageEntity);
         }
         else {
 
-            log.info("해당 아이디로 조회되는 이미지가 없습니다.");
         }
     }
 

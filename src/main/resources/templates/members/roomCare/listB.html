@@ -39,8 +39,7 @@
 
                     <div class="tab-content">
                         <div id="processing" class="tab-pane show active" style=" height: 500px; overflow-y: auto">
-                            <table class="table align-middle"
-                                   style="text-align: center;">
+                            <table class="table align-middle">
                                 <thead>
                                 <tr>
                                     <th scope="col">요청 번호</th>
@@ -58,7 +57,7 @@
                             </table>
                         </div>
                         <div id="complete" class="tab-pane" style=" height: 500px; overflow-y: auto">
-                            <table class="table align-middle" style="text-align: center;">
+                            <table class="table align-middle">
                                 <thead>
                                 <tr>
                                     <th scope="col">요청 번호</th>
@@ -125,9 +124,9 @@
                                         itemQuantity.push(item.quantity)
                                     })
                                     if (tr.deliveredTime === null) {
-                                        str += "<tr><td>" + tr.id + "</td><td>" + tr.checkInDTO.roomDTO.name + "</td><td>" + formatDateToMmDdHhMm(tr.awaitingTime) + "</td><td>-</td><td><button class='btn btn-outline-success menuCheckBtn' data-itemname='" + itemNames + "' data-itemquantity='" + itemQuantity + "'  data-roomcareid='" + tr.id + "'>확인</button></td><td>처리중</td><td><button class='btn btn-outline-success changeStatusBtn' data-roomcareid='" + tr.id + "'>변경</button></td></tr>"
+                                        str += "<tr><td>" + tr.id + "</td><td>" + tr.checkInDTO.roomDTO.name + "</td><td>" + formatDateToMmDdHhMm(tr.awaitingTime) + "</td><td>-</td><td><button class='btn btn-outline-success menuCheckBtn' data-itemname='" + itemNames + "' data-itemquantity='" + itemQuantity + "'  data-roomcareid='" + tr.id + "'>확인</button></td><td>처리중</td><td><button class='btn btn-outline-primary changeStatusBtn' data-roomcareid='" + tr.id + "'>변경하기</button></td></tr>"
                                     } else {
-                                        str2 += "<tr><td>" + tr.id + "</td><td>" + tr.checkInDTO.roomDTO.name + "</td><td>" + formatDateToMmDdHhMm(tr.awaitingTime) + "</td><td>" + formatDateToMmDdHhMm(tr.deliveredTime) + "</td><td><button class='btn btn-outline-success menuCheckBtn' data-itemname='" + itemNames + "' data-itemquantity='" + itemQuantity + "'  data-roomcareid='" + tr.id + "'>확인</button></td><td>처리완료</td></tr>"
+                                        str2 += "<tr><td>" + tr.id + "</td><td>" + tr.checkInDTO.roomDTO.name + "</td><td>" + formatDateToMmDdHhMm(tr.awaitingTime) + "</td><td>" + formatDateToMmDdHhMm(tr.deliveredTime) + "</td><td><button class='btn btn-outline-dark menuCheckBtn' data-itemname='" + itemNames + "' data-itemquantity='" + itemQuantity + "'  data-roomcareid='" + tr.id + "'>확인</button></td><td>처리완료</td></tr>"
                                     }
                                 })
 

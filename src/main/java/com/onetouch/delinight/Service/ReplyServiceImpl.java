@@ -36,7 +36,6 @@ public class ReplyServiceImpl implements ReplyService{
         InquireEntity inquireEntity =
                 optionalInquireEntity.orElseThrow(EntityNotFoundException::new);
 
-        log.info("서비스에 들어온 dto : " + replyDTO);
 
         ReplyEntity replyEntity =
                 modelMapper.map(replyDTO,ReplyEntity.class);
@@ -47,14 +46,12 @@ public class ReplyServiceImpl implements ReplyService{
 
         ReplyEntity result = replyRepository.save(replyEntity);
 
-        log.info("저장후 :" + result);
 
         replyDTO =
                 modelMapper.map(result,ReplyDTO.class);
 
         replyDTO.setInquireDTO(modelMapper.map(result.getInquireEntity(), InquireDTO.class));
 
-        log.info("저장 후 데이터 변환 DTO" +replyDTO);
 
         return replyDTO;
     }
@@ -87,7 +84,6 @@ public class ReplyServiceImpl implements ReplyService{
                         }
                 ).collect(Collectors.toList());
 
-        log.info("값 : "+replyDTOList);
         return replyDTOList;
     }
 
