@@ -64,18 +64,11 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public void create(HotelDTO hotelDTO,String email) {
+    public void create(HotelDTO hotelDTO) {
         HotelEntity hotelEntity =
                 modelMapper.map(hotelDTO, HotelEntity.class);
         BranchEntity branchEntity =
-                branchRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-
-
-        MembersEntity membersEntity =
-                membersRepository.findByEmail(email);
-
-        hotelEntity.setMembersEntity(membersEntity);
-
+                branchRepository.findById(hotelDTO.getBranchId()).orElseThrow(EntityNotFoundException::new);
 
 
         hotelEntity.setBranchEntity(branchEntity);

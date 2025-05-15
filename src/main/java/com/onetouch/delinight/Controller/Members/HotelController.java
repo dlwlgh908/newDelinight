@@ -22,6 +22,7 @@ import com.onetouch.delinight.Service.MembersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -50,11 +51,12 @@ public class HotelController {
 
 
     @PostMapping("/create")
-    public String createProc(HotelDTO hotelDTO, String email, Principal principal) {
-        email = principal.getName();
-        hotelService.create(hotelDTO, email);
+    @ResponseBody
+    public ResponseEntity<String> createRest(HotelDTO hotelDTO, Principal principal) {
+        log.info(hotelDTO);
+        hotelService.create(hotelDTO);
 
-        return "members/hotel/create";
+        return ResponseEntity.ok("저장 완료");
     }
 
     @GetMapping("/list")
