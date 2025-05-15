@@ -68,33 +68,54 @@
                         </tbody>
                     </table>
 
-                    <div class="modal fade" id="hotelCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
+                    <div class="modal fade" id="hotelCreate" tabindex="-1" aria-labelledby="hotelCreateLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">새 호텔 등록하기</h1>
+                                    <h5 class="modal-title" id="hotelCreateLabel">새 호텔 등록하기</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body"><label>
-                                    소속 지사 <select class="form-select">
-                                        <option selected>지사 선택</option>
-                                        <option th:each="branch : ${branchList}" th:value="${branch.id}">[[${branch.name}]]</option>
-                                    </select>
-                                </label>
-                                    <br>
-                                    <label>호텔 명 : <input type="text" class="form-label branchName"></label></br>
-                                    <label>호텔 소개 : <input type="text" class="form-label branchContent"></label>
-                                    <input type="hidden" class="centerId" th:value="${centerId}">
-                                    <input type="file" class="">
 
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label class="form-label">소속 지사</label>
+                                            <select class="form-select branchId">
+                                                <option selected disabled>지사 선택</option>
+                                                <option th:each="branch : ${branchList}" th:value="${branch.id}">[[${branch.name}]]</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">호텔 명</label>
+                                            <input type="text" class="form-control hotelName" placeholder="호텔 이름을 입력하세요">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">호텔 소개</label>
+                                            <input type="text" class="form-control hotelContent" placeholder="간단한 소개를 입력하세요">
+                                        </div>
+
+                                        <input type="hidden" class="centerId" th:value="${centerId}">
+
+                                        <div class="mb-3">
+                                            <label class="form-label" for="formFileLg">호텔 배너 이미지</label>
+                                            <input name="image" class="form-control imgInput" id="formFileLg" type="file">
+                                            <div class="form-text">호텔 배너 이미지를 넣어주세요.</div>
+                                        </div>
+                                        <div class="hiddenImgNum"></div>
+
+                                    </form>
                                 </div>
+
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary createBranch">저장</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                    <button type="button" class="btn btn-primary saveBtn" data-bs-dismiss="modal">저장</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
 
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -119,7 +140,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-gray" data-bs-dismiss="modal">취소</button>
-                                    <button type="button" class="btn btn-primary">저장</button>
+                                    <button type="button" class="btn btn-primary ">저장</button>
                                 </div>
                             </div>
                         </div>
@@ -157,9 +178,40 @@
         </div>
 
     </main>
+    <script type="text/javascript" src="/js/imgscript.js"></script>
+
 
     <!--스크립트 시작 -->
     <script>
+
+
+        $(function () {
+            $(".saveBtn").on("click", function () {
+                let hiddenImgNum = $(".imgNum").val()
+
+                let hotelName = $(".hotelName").val()
+                let hotelContent = $(".hotelContent").val()
+                let branchId = $(".branchId").val()
+                $.ajax({
+
+                    url:"/members/hotel/create",
+                    type:"post",
+                    data:{
+                        name: hotelName,
+                        content : hotelContent,
+                        branchId : branchId,
+                        imgNum : hiddenImgNum
+                    },
+                    success : function (msg) {
+                        window.location.reload()
+                    },
+                    error : function () {
+                        alert("오류 발생")
+                    }
+
+                })
+            })
+        })
         $(document).on("click", ".modiMembers2", function () {
             let memberId = $(this).data("memberid")
             let hotelId = $(".resultSpace").data("hotelid")
