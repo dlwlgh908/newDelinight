@@ -33,7 +33,7 @@
                     </ol>
 
                     <div class="d-flex justify-content-end mb-3">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hotelCreate">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#storeCreate">
                             새 가맹점 +
                         </button>
                     </div>
@@ -74,11 +74,12 @@
                         </tbody>
                     </table>
 
-                    <div class="modal fade" id="hotelCreate" tabindex="-1" aria-labelledby="hotelCreateLabel" aria-hidden="true">
+                    <!-- 가맹점 추가 Modal -->
+                    <div class="modal fade" id="storeCreate" tabindex="-1" aria-labelledby="storeCreateLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="hotelCreateLabel">새 가맹점 등록하기</h5>
+                                    <h5 class="modal-title" id="storeCreateLabel">새 가맹점 등록하기</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
@@ -86,12 +87,12 @@
                                     <form>
                                         <div class="mb-3">
                                             <label class="form-label">가맹점명</label>
-                                            <input type="text" class="form-control hotelName" placeholder="가맹점 이름을 입력하세요">
+                                            <input type="text" class="form-control storeName" placeholder="가맹점 이름을 입력하세요">
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label">가맹점 소개</label>
-                                            <textarea type="text" class="form-control hotelContent" placeholder="간단한 소개를 입력하세요"></textarea>
+                                            <textarea type="text" class="form-control storeContent" placeholder="간단한 소개를 입력하세요"></textarea>
                                         </div>
 
                                         <div class="mb-3">
@@ -112,7 +113,7 @@
                         </div>
                     </div>
 
-                    <!-- 정보수정 Modal -->
+                    <!-- 가맹점 정보수정 Modal -->
                     <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -174,6 +175,34 @@
 
     <!--스크립트 시작 -->
     <script>
+
+        $(function () {
+            $(".saveBtn").on("click", function () {
+                let hiddenImgNum = $(".imgNum").val()
+
+                let storeName = $(".storeName").val()
+                let storeContent = $(".storeContent").val()
+                let hotelId = $(".hotelId").val()
+                $.ajax({
+
+                    url:"/members/store/create",
+                    type:"post",
+                    data:{
+                        name: storeName,
+                        content : storeContent,
+                        hotelId : hotelId,
+                        imgNum : hiddenImgNum
+                    },
+                    success : function (msg) {
+                        window.location.reload()
+                    },
+                    error : function () {
+                        alert("오류 발생")
+                    }
+
+                })
+            })
+        })
 
         $(document).on("click", ".modiStoreBtn", function () {
             let targetModal = $("#exampleModal2");
