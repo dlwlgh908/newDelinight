@@ -10,10 +10,7 @@ package com.onetouch.delinight.Service;
 import com.onetouch.delinight.DTO.BranchDTO;
 import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
-import com.onetouch.delinight.Entity.BranchEntity;
-import com.onetouch.delinight.Entity.HotelEntity;
-import com.onetouch.delinight.Entity.ImageEntity;
-import com.onetouch.delinight.Entity.MembersEntity;
+import com.onetouch.delinight.Entity.*;
 import com.onetouch.delinight.Repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +35,7 @@ public class HotelServiceImpl implements HotelService {
     private final MembersRepository membersRepository;
     private final InquireRepository inquireRepository;
     private final ImageRepository imageRepository;
+    private final BrandRepository brandRepository;
 
     @Override
     public int assignCheck(String email) {
@@ -70,8 +68,13 @@ public class HotelServiceImpl implements HotelService {
         BranchEntity branchEntity =
                 branchRepository.findById(hotelDTO.getBranchId()).orElseThrow(EntityNotFoundException::new);
 
+        BrandEntity brandEntity =
+            brandRepository.findById(hotelDTO.getBrandId()).orElseThrow(EntityNotFoundException::new);
+
 
         hotelEntity.setBranchEntity(branchEntity);
+        hotelEntity.setBrandEntity(brandEntity);
+
         HotelEntity hotelEntity1 = hotelRepository.save(hotelEntity);
         Long imgNum = hotelDTO.getImgNum(); //imgNum이 null인지 확인하였으나 null값이라 오류
         if (imgNum == null) {
@@ -93,9 +96,14 @@ public class HotelServiceImpl implements HotelService {
                 modelMapper.map(hotelDTO, HotelEntity.class);
         HotelEntity hotel =
                 hotelRepository.findById(hotelEntity.getId()).orElseThrow(EntityNotFoundException::new);
+        BrandEntity brandEntity =
+                brandRepository.findById(hotelDTO.getBrandId()).orElseThrow(EntityNotFoundException::new);
 
         hotel.setName(hotelEntity.getName());
         hotel.setContent(hotelEntity.getContent());
+        hotel.setBrandEntity(brandEntity);
+
+
         if (hotelDTO.getImgNum() != null) {
             ImageEntity imageEntity = imageRepository.findById(hotelDTO.getImgNum()).get();
             imageRepository.deleteByHotelEntity_Id(hotelEntity.getId());
@@ -142,6 +150,8 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public void del(Long id) {
+        imageRepository.deleteByHotelEntity_Id(id);
+
         hotelRepository.deleteById(id);
     }
 

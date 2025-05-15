@@ -87,6 +87,14 @@
                                         </div>
 
                                         <div class="mb-3">
+                                            <label class="form-label">브랜드</label>
+                                            <select class="form-select brandId">
+                                                <option selected disabled>브랜드 선택</option>
+                                                <option th:each="brand : ${brandList}" th:value="${brand.id}">[[${brand.name}]]</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
                                             <label class="form-label">호텔 명</label>
                                             <input type="text" class="form-control hotelName" placeholder="호텔 이름을 입력하세요">
                                         </div>
@@ -192,6 +200,9 @@
                 let hotelName = $(".hotelName").val()
                 let hotelContent = $(".hotelContent").val()
                 let branchId = $(".branchId").val()
+                let brandId = $(".brandId").val();
+
+
                 $.ajax({
 
                     url:"/members/hotel/create",
@@ -200,6 +211,7 @@
                         name: hotelName,
                         content : hotelContent,
                         branchId : branchId,
+                        brandId : brandId,
                         imgNum : hiddenImgNum
                     },
                     success : function (msg) {
@@ -378,8 +390,9 @@
             })
             $(document).on("click", "#delBtn", function () {
 
-                alert(123)
                 let id = this.getAttribute("value");
+
+                alert(id)
 
                 Swal.fire({
                     title: '삭제하시겠습니까?',
@@ -398,7 +411,7 @@
 
                         $.ajax({
                             url : "/hotel/rest/del",
-                            type: "delete",
+                            type: "post",
                             data: {id : id},
                             success: function () {
                                 Swal.fire(

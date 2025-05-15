@@ -17,7 +17,8 @@ public interface BrandService {
 
     public List<BrandDTO> list();
 
-    public List<BrandDTO> listB();
+    public BrandDTO read(Long id);
+
 
     public void del(Long num);
 

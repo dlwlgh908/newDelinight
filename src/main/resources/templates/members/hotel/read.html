@@ -23,19 +23,30 @@
                         <a href="#" class="breadcrumb-item active no-click">호텔 정보</a>
                     </ol>
 
+
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label form-label">브랜드</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control-plaintext" readonly th:value="${hotel.brandDTO.name}">
+                        </div>
+                    </div>
+
+
                     <div class="row mb-2">
                         <label class="col-sm-2 col-form-label form-label">호텔명</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control-plaintext" id="staticMembersName" th:value="${hotel.name}">
+                            <input type="text" class="form-control-plaintext" id="staticMembersName" readonly th:value="${hotel.name}">
                         </div>
                     </div>
+
 
                     <div class="row mb-2">
                         <label class="col-sm-2 col-form-label form-label">설명</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control-plaintext" th:value="${hotel.content}">
+                            <input type="text" class="form-control-plaintext" readonly th:value="${hotel.content}">
                         </div>
                     </div>
+
 
 
                     <div class="row mt-5">

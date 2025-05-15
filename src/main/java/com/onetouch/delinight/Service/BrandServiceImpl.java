@@ -10,6 +10,8 @@ package com.onetouch.delinight.Service;
 import com.onetouch.delinight.DTO.BrandDTO;
 import com.onetouch.delinight.Entity.BrandEntity;
 import com.onetouch.delinight.Repository.BrandRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -26,6 +28,17 @@ import java.util.stream.Collectors;
 public class BrandServiceImpl implements BrandService{
     private final BrandRepository brandRepository;
     private final ModelMapper modelMapper;
+
+
+    @Override
+    public BrandDTO read(Long id) {
+
+        BrandEntity brandEntity =
+                brandRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        BrandDTO brandDTO =
+            modelMapper.map(brandEntity, BrandDTO.class);
+        return brandDTO;
+    }
 
     @Override
     public void create(BrandDTO brandDTO) {
@@ -48,12 +61,7 @@ public class BrandServiceImpl implements BrandService{
         return brandDTOList;
     }
 
-    @Override
-    public List<BrandDTO> listB() {
 
-
-        return null;
-    }
 
     @Override
     public void del(Long num) {

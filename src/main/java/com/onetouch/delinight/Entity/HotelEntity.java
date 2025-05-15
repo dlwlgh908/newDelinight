@@ -43,12 +43,20 @@ public class HotelEntity {
     @ToString.Exclude
     private MembersEntity membersEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id")
+    private BrandEntity brandEntity;
+
     @OneToMany(mappedBy = "hotelEntity", fetch = FetchType.LAZY)
     private List<StoreEntity> stores = new ArrayList<>();
 
-
     public HotelEntity setMembersEntity(MembersEntity membersEntity) {
         this.membersEntity = membersEntity;
+        return this;
+    }
+
+    public HotelEntity setBrandEntity(BrandEntity brandEntity) {
+        this.brandEntity = brandEntity;
         return this;
     }
 

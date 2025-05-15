@@ -20,4 +20,6 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
 
 
 
+
+
 }

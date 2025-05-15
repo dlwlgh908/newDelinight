@@ -46,7 +46,7 @@ public class HotelRestController {
 
     }
 
-    @DeleteMapping("/del")
+    @PostMapping("/del")
     public void del(Long id){
         hotelService.del(id);
     }
