@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -88,7 +89,7 @@ public class CheckInController {
 //
 //    }
 @GetMapping("/list")
-public String listA(Model model, @RequestParam(value = "checkinstatus", required = false) String checkinstatus) {
+public String listA(Model model, @RequestParam(value = "checkinstatus", required = false) String checkinstatus, Principal principal) {
 
 
     List<CheckInDTO> checkInDTOList;
@@ -96,9 +97,9 @@ public String listA(Model model, @RequestParam(value = "checkinstatus", required
     if (checkinstatus != null && !checkinstatus.isEmpty()) {
         CheckInStatus checkInStatus = CheckInStatus.valueOf(checkinstatus.toUpperCase());
 
-        checkInDTOList = checkInService.getListCheckinByStatus(checkInStatus);
+        checkInDTOList = checkInService.getListCheckinByStatus(checkInStatus, principal.getName());
     } else {
-        checkInDTOList = checkInService.listCheckInWithPrice(); // ✅ 가격 포함된 리스트 가져오기
+        checkInDTOList = checkInService.listCheckInWithPrice(principal.getName()); // ✅ 가격 포함된 리스트 가져오기
     }
 
 

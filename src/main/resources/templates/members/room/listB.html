@@ -115,6 +115,9 @@
 
     <script th:inline="javascript">
         $(function () {
+            let roomList = [[${roomDTOList}]]
+            let hotelId = roomList[0].hotelDTO.id
+            let hotelDTO = {id:hotelId}
             $(document).on("click",".room_registerbtn", function () {
                 let name = $("#name").val()
                 let content = $("#content").val()
@@ -125,7 +128,8 @@
                 }
                 let roomDTO = {
                     name: name,
-                    content: content
+                    content: content,
+                    hotelDTO : hotelDTO
                 }
 
                 $.ajax({

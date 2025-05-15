@@ -52,13 +52,10 @@ public class RoomServiceImpl implements RoomService{
 
 
         HotelEntity hotelEntity =
-                hotelRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
-        UsersEntity usersEntity =
-                usersRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+                hotelRepository.findById(roomDTO.getHotelDTO().getId()).orElseThrow(EntityNotFoundException::new);
 
 
         roomEntity.setHotelEntity(hotelEntity);
-        roomEntity.setUsersEntity(usersEntity);
 
 
         checkInService.create(roomRepository.save(roomEntity));

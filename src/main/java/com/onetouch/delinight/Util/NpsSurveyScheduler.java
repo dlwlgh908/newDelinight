@@ -25,7 +25,7 @@ public class NpsSurveyScheduler {
     private final StoreService storeService;
 
     // 매일 오전 9시에 실행 될 스케줄러
-    @Scheduled(cron = "0 0 9 * * ?")
+    @Scheduled(cron = "0 0 20 * * ?")
     public void sendNpsSurvey(){
         log.info("스케줄러 동작시작");
         // 어제 체크아웃한 고객들 찾기
@@ -54,7 +54,7 @@ public class NpsSurveyScheduler {
 
     }
 
-    @Scheduled(cron = "00 00 08 * * ?")
+    @Scheduled(cron = "10 23 * * * ?")
     public void sendDailyPerformance(){
 
         log.info("스케쥴러 작동 ");

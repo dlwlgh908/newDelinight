@@ -20,8 +20,8 @@ public interface CheckInRepository extends JpaRepository<CheckInEntity, Long> {
 
     public CheckInEntity findByRoomEntity_Id(Long id);
 
-    @Query("select c from CheckInEntity c where  c.checkInStatus = :checkinstatus")
-    List<CheckInEntity> selectCheckByStatus(CheckInStatus checkinstatus);
+    List<CheckInEntity> findByCheckInStatusAndRoomEntity_HotelEntity_MembersEntity_Email(CheckInStatus checkinstatus, String email);
+    List<CheckInEntity> findByRoomEntity_HotelEntity_MembersEntity_Email(String email);
 
     public CheckInEntity findByGuestEntity_Phone(String phone);
 

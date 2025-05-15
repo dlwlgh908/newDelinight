@@ -2,6 +2,8 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.Constant.Status;
+import com.onetouch.delinight.DTO.HotelDTO;
+import com.onetouch.delinight.DTO.RoomDTO;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Entity.RoomEntity;
 import com.onetouch.delinight.Repository.CenterRepository;
@@ -31,6 +33,9 @@ class RoomServiceTest {
     CenterRepository centerRepository;
     @Autowired
     HotelRepository hotelRepository;
+    @Autowired
+    RoomService roomService;
+
 
 
     @Test
@@ -38,17 +43,18 @@ class RoomServiceTest {
     public void roomInsert(){
 
 
-        Long hotelId = 3L;
+        Long hotelId = 10L;
         String roomName = "10";
         String content = "1bed, 1room";
 
         for(int i=2; i<10; i++){
-            RoomEntity roomEntity = new RoomEntity();
-            roomEntity.setHotelEntity(hotelRepository.findById(hotelId).get());
-            roomEntity.setName(roomName+i+"호");
-            roomEntity.setContent(content);
-
-            roomRepository.save(roomEntity);
+            RoomDTO roomDTO = new RoomDTO();
+            HotelDTO hotelDTO = new HotelDTO();
+            hotelDTO.setId(hotelId);
+            roomDTO.setContent(content);
+            roomDTO.setName(roomName+i+"호");
+            roomDTO.setHotelDTO(hotelDTO);
+            roomService.create(roomDTO);
         }
 
 

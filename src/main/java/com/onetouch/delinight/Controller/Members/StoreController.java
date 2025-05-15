@@ -7,6 +7,7 @@
  *********************************************************************/
 package com.onetouch.delinight.Controller.Members;
 
+import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
@@ -53,10 +54,11 @@ public class StoreController {
     }
 
     @GetMapping("/list")
-    public String listView(Model model) {
+    public String listView(Model model, Principal principal) {
 
+        MembersDTO membersDTO = membersService.findByEmail(principal.getName());
         List<StoreDTO> storeDTOList =
-            storeService.list();
+            storeService.listMembers(membersDTO);
         model.addAttribute("storeDTOList", storeDTOList);
 
         return "members/store/listA";

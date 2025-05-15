@@ -49,19 +49,19 @@ class MembersServiceImplTest {
     @Commit
     public void createTest(){
 
-       Long centerId = 3L;
-       String CenterName = "조선";
-       String CeneteEmail = "3-";
+       Long hotelId = 11L;
+       String hotelName = "잠실점";
+       String hotelEmail = "11-";
 
        for(int i=1; i<10; i++){
            MembersEntity membersEntity = new MembersEntity();
-           membersEntity.setEmail("hotel"+CeneteEmail+i+"@test.com");
-           membersEntity.setName(CenterName+i);
+           membersEntity.setEmail("store"+hotelEmail+i+"@test.com");
+           membersEntity.setName(hotelName+i);
            membersEntity.setPassword(passwordEncoder.encode("akqjqtk12!"));
-           membersEntity.setPhone("0101112113"+i);
-           membersEntity.setRole(Role.ADMIN);
-           membersEntity.setStatus(Status.WAIT);
-           membersEntity.setCenterEntity(centerRepository.findById(centerId).get());
+           membersEntity.setPhone("0101113122"+i);
+           membersEntity.setRole(Role.STOREADMIN);
+           membersEntity.setStatus(Status.VALID);
+           membersEntity.setHotelEntity(hotelRepository.findById(hotelId).get());
            membersRepository.save(membersEntity);
        }
 
@@ -81,7 +81,7 @@ class MembersServiceImplTest {
     @Test
     @Commit
     public void EncodingTest(){
-        MembersEntity membersEntity = membersRepository.findById(27L).get();
+        MembersEntity membersEntity = membersRepository.findById(137L).get();
         membersEntity.setPassword(passwordEncoder.encode("akqjqtk12!"));
         membersRepository.save(membersEntity);
     }

@@ -93,7 +93,7 @@ public class OrdersServiceImpl implements OrdersService {
                     checkInDTO.getRoomDTO().setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(),HotelDTO.class));
                     ordersDTO.setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class));
                     ordersDTO.setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(
-                            ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class)
+                            ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class))
                     ).toList());
                     ordersDTO.setCheckInDTO(checkInDTO);
                     return ordersDTO;
@@ -119,7 +119,7 @@ public class OrdersServiceImpl implements OrdersService {
                     checkInDTO.getRoomDTO().setHotelDTO(modelMapper.map(data.getCheckInEntity().getRoomEntity().getHotelEntity(),HotelDTO.class));
                     ordersDTO.setStoreDTO(modelMapper.map(data.getStoreEntity(), StoreDTO.class));
                     ordersDTO.setOrdersItemDTOList(data.getOrdersItemEntities().stream().map(
-                            ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class)
+                            ordersItemEntity -> modelMapper.map(ordersItemEntity, OrdersItemDTO.class).setMenuDTO(modelMapper.map(ordersItemEntity.getMenuEntity(), MenuDTO.class))
                     ).toList());
                     ordersDTO.setCheckInDTO(checkInDTO);
                     return ordersDTO;

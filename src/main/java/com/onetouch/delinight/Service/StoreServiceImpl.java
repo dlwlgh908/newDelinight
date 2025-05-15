@@ -149,8 +149,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<StoreDTO> list() {
-        List<StoreEntity> storeEntityList = storeRepository.findAll();
+    public List<StoreDTO> listMembers(MembersDTO membersDTO1) {
+        List<StoreEntity> storeEntityList = storeRepository.findByHotelEntity_MembersEntity_Id(membersDTO1.getId());
 
         List<StoreDTO> storeDTOList = storeEntityList.stream()
                 .map(storeEntity -> {

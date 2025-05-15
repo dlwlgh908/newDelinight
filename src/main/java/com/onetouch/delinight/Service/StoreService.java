@@ -8,6 +8,7 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.HotelDTO;
+import com.onetouch.delinight.DTO.MembersDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public interface StoreService {
 
     public Integer awaitingCountCheck(Long storeId);
 
-    public List<StoreDTO> list();
+    public List<StoreDTO> listMembers(MembersDTO membersDTO);
 
     public List<StoreDTO> list(String email);
 

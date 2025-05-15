@@ -116,12 +116,14 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
 
 
+
             Context context = new Context();
-            context.setVariable("email", mailDTO.getEmail());
+            context.setVariable("email", "dlwlgh908@naver.com");
             context.setVariable("name", mailDTO.getName());
             context.setVariable("date", mailDTO.getDate());
             context.setVariable("aiResponse",mailDTO.getAiResponse());
             context.setVariable("targetName",mailDTO.getTargetName());
+            log.info(mailDTO);
             helper.addAttachment(mailDTO.getDate().toString()+"_일일매출현황.xlsx",new ByteArrayResource(paymentService.extractDailyExcel(membersDTO.getId(), membersDTO.getRole())));
             context.setVariable("aiResponse", openAIService.analyzeSales(paymentService.makePrompt(membersDTO.getId(), membersDTO.getRole())));
 
@@ -138,6 +140,7 @@ public class EmailService {
             log.error("이메일 전송 중 오류 발생 - email: {}, name: {}", mailDTO.getEmail(), mailDTO.getName(), e);
             throw new RuntimeException("이메일 전송 중 오류 발생", e); // 원래 예외를 함께 던짐
         } catch (IOException e) {
+            log.info(e.getMessage());
             throw new RuntimeException(e);
         }
 

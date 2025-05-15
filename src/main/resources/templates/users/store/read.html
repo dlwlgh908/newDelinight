@@ -61,18 +61,38 @@
                 data: {"menuNum": selectedMenu},
                 success: function (result) {
                     if (result === "1") {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: menuName,
-                            text: '이미 담겨있는 제품입니다.',
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "warning",
+                            title: menuName+" 이미 담겨있는 음식입니다."
                         });
 
                     } else {
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: menuName,
-                            text: '장바구니에 담겼습니다.',
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: menuName+"장바구니에 담겼습니다."
                         });
                     }
                 }

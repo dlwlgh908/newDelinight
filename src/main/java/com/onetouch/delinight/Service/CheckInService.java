@@ -27,7 +27,7 @@ public interface CheckInService {
 
     public UsersDTO  checkEmail(String email);
 
-    public List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus);
+    public List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus, String email);
 
     public CheckInDTO findCheckInByEmail(String email);
     public HotelEntity findHotelInByEmail(Long CheckInId);
@@ -35,7 +35,7 @@ public interface CheckInService {
 
     public void del(Long id);
 
-    public List<CheckInDTO> listCheckInWithPrice();
+    public List<CheckInDTO> listCheckInWithPrice(String email);
 
 
 

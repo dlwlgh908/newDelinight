@@ -200,7 +200,7 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
             List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
-            ClassPathResource templateFile = new ClassPathResource("templates/payment_data_store.xlsx");
+            ClassPathResource templateFile = new ClassPathResource("templates/payment_data_hotel.xlsx");
             try (InputStream inp = templateFile.getInputStream();
                  Workbook workbook = new XSSFWorkbook(inp);
                  ByteArrayOutputStream out = new ByteArrayOutputStream()) {

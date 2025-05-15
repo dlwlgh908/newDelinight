@@ -37,8 +37,8 @@ public class CheckInServiceImpl implements CheckInService{
 
 
     @Override
-    public List<CheckInDTO> listCheckInWithPrice() {
-        List<CheckInEntity> checkInEntities = checkInRepository.findAll();
+    public List<CheckInDTO> listCheckInWithPrice(String email) {
+        List<CheckInEntity> checkInEntities = checkInRepository.findByRoomEntity_HotelEntity_MembersEntity_Email(email);
         log.debug("🔍 [STEP 1] 전체 체크인 데이터 조회: {}", checkInEntities.size());
 
         return checkInEntities.stream().map(checkInEntity -> {
@@ -324,10 +324,11 @@ public class CheckInServiceImpl implements CheckInService{
     }
 
     @Override
-    public List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus) {
+    public List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus, String email) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("id"));
-        List<CheckInEntity> checkInEntityList = checkInRepository.selectCheckByStatus(checkInStatus);
+
+        List<CheckInEntity> checkInEntityList = checkInRepository.findByCheckInStatusAndRoomEntity_HotelEntity_MembersEntity_Email(checkInStatus, email);
 
         List<CheckInDTO> checkInDTOList =
                 checkInEntityList.stream().map(checkInEntity -> {
