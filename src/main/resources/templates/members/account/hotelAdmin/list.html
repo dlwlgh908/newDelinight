@@ -28,7 +28,7 @@
                                 <a class="nav-link" th:classappend="${status == null or status == ''} ? 'active'" aria-current="page" th:href="@{/members/account/hotelAdmin/list(status=null)}">전체</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" th:classappend="${status == 'WAIT'} ? 'active'" th:href="@{/members/account/hotelAdmin/list(status='WAIT')}">승인대기목록</a>
+                                <a class="nav-link" th:classappend="${status == 'WAIT'} ? 'active'" th:href="@{/members/account/hotelAdmin/list(status='WAIT')}">승인대기</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" th:classappend="${status == 'VALID'} ? 'active'"  th:href="@{/members/account/hotelAdmin/list(status='VALID')}">승인</a>
@@ -74,7 +74,7 @@
 
                                 <td th:if="${list.status.name() == 'WAIT'}" class="d-flex">
                                     <button class="btn btn-primary" th:value="${list.id}" id="approveBtn">승인</button>
-                                    <button class="btn btn-gray offset-0" th:value="${list.id}" id="DisapproveBtn">반려</button>
+                                    <button class="btn btn-danger offset-0" th:value="${list.id}" id="DisapproveBtn">반려</button>
                                 </td>
 
                                 <td th:if="${list.status.name() == 'VALID'}" class="text-primary" th:text="승인완료"></td>

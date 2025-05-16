@@ -20,56 +20,65 @@
                         <a href="#" class="breadcrumb-item active no-click">지사 관리</a>
                     </ol>
 
-                    <div class="d-flex justify-content-end mb-3">
+                    <div class="d-flex">
+                        <div class="w-50">
+                            <table class="table align-middle">
+                                <thead>
+                                <th>#</th>
+                                <th>지사명</th>
+                                <th>설명</th>
+                                <th>수정</th>
 
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            새 지사 +
-                        </button>
-                    </div>
+                                <div class="col offset-8">
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <label class="col-form-label form-label ms-2" id="exampleModalLabel">새 지사 등록</label>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <input type="text" class="form-control branchName" placeholder="지사명">
+                                                    </div>
+                                                    <div>
+                                                        <textarea type="text" class="form-control branchContent" placeholder="설명"></textarea>
+                                                    </div>
+                                                    <input type="hidden" class="centerId" th:value="${centerId}">
 
-                    <table class="table align-middle">
-                        <thead>
-                            <th>#</th>
-                            <th>이름</th>
-                            <th>설명</th>
-                            <th>수정</th>
-                        </thead>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary createBranch">저장</button>
+                                                    <button type="button" class="btn btn-gray" data-bs-dismiss="modal">취소</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </thead>
 
-                        <tbody>
-                        <th:block  th:each="list,stat:${branchDTOList}">
-                            <tr>
-                                <th scope="row offset-4" th:text="${list.id}" hidden="hidden"></th>
-                                <th scope="row" th:text="${stat.count}"></th>
-                                <td><a th:data-num="${list.id}">
-                                    [[${list.name}]]
-                                </a>
-                                </td>
-                                <td th:text="${list.content}"></td>
-                                <td><button class="btn btn-outline-danger" id="delBtn"  th:value="${list.id}"><i class="fa-solid fa-trash" style="color: #dc3545"></i></button></td>
-                            </tr>
-                        </th:block>
-                        </tbody>
+                                <tbody>
+                                <th:block  th:each="list,stat:${branchDTOList}">
+                                    <tr>
+                                        <th scope="row offset-4" th:text="${list.id}" hidden="hidden"></th>
+                                        <th scope="row" th:text="${stat.count}"></th>
+                                        <td><a th:data-num="${list.id}">
+                                            [[${list.name}]]
+                                        </a>
+                                        </td>
+                                        <td th:text="${list.content}"></td>
+                                        <td><button class="btn btn-outline-danger" id="delBtn"  th:value="${list.id}"><i class="fa-solid fa-trash" style="color: #dc3545"></i></button></td>
+                                    </tr>
+                                </th:block>
+                                </tbody>
+                            </table>
+                        </div>
 
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">새 지사 등록하기</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <label>지사 명 : <input type="text" class="form-label branchName"></label></br>
-                        <label>지사 소개 : <input type="text" class="form-label branchContent"></label>
-                        <input type="hidden" class="centerId" th:value="${centerId}">
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary createBranch">저장</button>
+                        <div class="w-50">
+                            <button type="button" class="btn btn-primary ms-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                새 지사 +
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
