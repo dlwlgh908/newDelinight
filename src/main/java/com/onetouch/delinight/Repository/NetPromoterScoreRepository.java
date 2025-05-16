@@ -10,6 +10,7 @@ public interface NetPromoterScoreRepository extends JpaRepository<NetPromoterSco
 
     List<NetPromoterScoreEntity> findAll();
 
+
     List<NetPromoterScoreEntity> findByHotelEntity_MembersEntity_EmailAndRegTimeBetween(String email, LocalDateTime startDate, LocalDateTime endDate);
     List<NetPromoterScoreEntity> findByStoreEntity_MembersEntity_EmailAndRegTimeBetween(String email, LocalDateTime startDate, LocalDateTime endDate);
     List<NetPromoterScoreEntity> findByHotelEntity_BranchEntity_CenterEntity_MembersEntity_EmailAndRegTimeBetween(String email, LocalDateTime startDate, LocalDateTime endDate);

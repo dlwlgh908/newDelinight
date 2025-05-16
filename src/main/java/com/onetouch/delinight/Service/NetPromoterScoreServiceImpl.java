@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -31,37 +32,12 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
     private final NetPromoterScoreRepository netPromoterScoreRepository;
     private final CheckOutLogRepository checkOutLogRepository;
     private final OrdersRepository ordersRepository;
-    private final EmailService emailService;
     private final ModelMapper modelMapper;
     private final HotelRepository hotelRepository;
     private final StoreRepository storeRepository;
     private final MembersRepository membersRepository;
 
 
-    @Override
-    public void sendNpsTemporary(Long checkOutId) {
-        // 1. 사용자 검증
-        CheckOutLogEntity checkOut = checkOutLogRepository.findById(checkOutId).orElseThrow(EntityNotFoundException::new);
-
-        String email = checkOut.getUsersEntity().getEmail();
-        String name = checkOut.getUsersEntity().getName();
-
-        String surveyLink = "http://localhost:8080/users/nps/survey/" + checkOutId;
-
-        Map<String, Object> variables = Map.of(
-                "email", checkOut.getUsersEntity().getEmail(),
-                "name", checkOut.getUsersEntity().getName(),
-                "surveyLink", surveyLink
-        );
-
-        emailService.sendNpsEmail(
-                email,
-                name,
-                surveyLink,
-                checkOutId
-        );
-
-    }
 
     @Override
     public List<OrdersDTO> npsSelect(Long checkOutId) {
@@ -121,6 +97,74 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
         }
     }
 
+    @Override
+    public boolean npsOperationCheck(String email) {
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime startDate = today.withDayOfMonth(1).toLocalDate().atStartOfDay();
+
+        List<NetPromoterScoreEntity> netPromoterScoreEntityList = netPromoterScoreRepository.findByStoreEntity_MembersEntity_EmailAndRegTimeBetween(email, startDate, today);
+        if(netPromoterScoreEntityList.isEmpty()){
+            return false;
+        } else return true;
+    }
+
+    @Override
+    public List<Integer> dailyPerformanceScore(String email) {
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime startDate = today.withDayOfMonth(1).toLocalDate().atStartOfDay();
+
+        List<NetPromoterScoreEntity> netPromoterScoreEntityList = netPromoterScoreRepository.findByStoreEntity_MembersEntity_EmailAndRegTimeBetween(email, startDate, today);
+
+        if (netPromoterScoreEntityList.isEmpty()) {
+            return Arrays.asList(0, 0, 0, 0, 0, 0); // 값이 없으면 0으로 채움
+        }
+
+        int totalScoreSum = 0;
+        int q1Sum = 0;
+        int q2Sum = 0;
+        int q3Sum = 0;
+        int q4Sum = 0;
+        int q5Sum = 0;
+
+        for (NetPromoterScoreEntity entity : netPromoterScoreEntityList) {
+            totalScoreSum += entity.getTotalScore();
+            q1Sum += entity.getQuestionOne();
+            q2Sum += entity.getQuestionTwo();
+            q3Sum += entity.getQuestionThree();
+            q4Sum += entity.getQuestionFour();
+            q5Sum += entity.getQuestionFive();
+        }
+
+        int count = netPromoterScoreEntityList.size();
+        return Arrays.asList(
+                totalScoreSum / count,
+                q1Sum / count,
+                q2Sum / count,
+                q3Sum / count,
+                q4Sum / count,
+                q5Sum / count
+        );
+    }
+
+    @Override
+    public String  makePrompt(Long membersId) {
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime startDate = today.withDayOfMonth(1).toLocalDate().atStartOfDay();
+
+        String email = membersRepository.findById(membersId).get().getEmail();
+        List<NetPromoterScoreEntity> netPromoterScoreEntityList = netPromoterScoreRepository.findByStoreEntity_MembersEntity_EmailAndRegTimeBetween(email, startDate, today);
+        List<NetPromoterScoreDTO> netPromoterScoreDTOList =
+                netPromoterScoreEntityList.stream().map(netPromoterScoreEntity -> modelMapper.map(netPromoterScoreEntity, NetPromoterScoreDTO.class)).toList();
+
+        StringBuilder prompt =  new StringBuilder();
+        int count = 0;
+        for (NetPromoterScoreDTO netPromoterScoreDTO : netPromoterScoreDTOList){
+            count++;
+            prompt.append(count).append("번 만족도 평가의 1번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionOne()).append(" , 2번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionTwo()).append(", 3번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionThree()).append(", 4번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionFour()).append(", 5번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionFive()).append(", 총 평균 점수 : ").append(netPromoterScoreDTO.getTotalScore()).append(", 개별 코멘트 : ").append(netPromoterScoreDTO.getQuestionOne()).append(", ");
+        }
+
+        return prompt.toString();
+    }
 
     @Override
     public List<Integer> dashboard(MembersDTO membersDTO) {

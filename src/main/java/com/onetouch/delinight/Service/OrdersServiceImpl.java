@@ -38,6 +38,7 @@ public class OrdersServiceImpl implements OrdersService {
     private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
     private final CartService cartService;
+    private final CartRepository cartRepository;
     private final SseService sseService;
 
     @Override

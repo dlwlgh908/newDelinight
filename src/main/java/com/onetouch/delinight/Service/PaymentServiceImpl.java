@@ -14,6 +14,7 @@ import com.onetouch.delinight.Entity.OrdersEntity;
 import com.onetouch.delinight.Entity.PaymentEntity;
 import com.onetouch.delinight.Repository.CustomPaymentRepositoryImpl;
 import com.onetouch.delinight.Repository.MembersRepository;
+import com.onetouch.delinight.Repository.OrdersRepository;
 import com.onetouch.delinight.Repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -48,6 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final MembersRepository membersRepository;
     private final ModelMapper modelMapper;
+    private final OrdersRepository ordersRepository;
 
 
     @Override
@@ -143,11 +145,10 @@ public class PaymentServiceImpl implements PaymentService {
 
         LocalDate yesterday = LocalDate.now().minusDays(1);
         LocalDate startDate = yesterday.withDayOfMonth(1);
-        LocalDate endDate = yesterday;
 
 
         if (role.equals(Role.SUPERADMIN)) {
-            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, yesterday);
             List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
             List<ExcelDTO> processedExcelData = groupExcelDataBy(rawExcelData, Role.SUPERADMIN);
             ClassPathResource templateFile = new ClassPathResource("templates/payment_data_center.xlsx");
@@ -172,7 +173,8 @@ public class PaymentServiceImpl implements PaymentService {
 
             }
         } else if (role.equals(Role.ADMIN)) {
-            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, yesterday);
+            log.info(beforeProcessData);
             List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
             List<ExcelDTO> processedExcelData = groupExcelDataBy(rawExcelData, Role.ADMIN);
             ClassPathResource templateFile = new ClassPathResource("templates/payment_data_hotel.xlsx");
@@ -189,6 +191,7 @@ public class PaymentServiceImpl implements PaymentService {
                     rowOne.createCell(3).setCellValue(row.getQuantity());
                     rowOne.createCell(4).setCellValue(row.getTotalPrice());
                 }
+                log.info(beforeProcessData);
                 workbook.write(out);
                 byte[] excelFile = out.toByteArray();
                 return excelFile;
@@ -196,11 +199,10 @@ public class PaymentServiceImpl implements PaymentService {
 
             }
 
-
         } else {
-            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, endDate);
+            List<PaymentDTO> beforeProcessData = paymentByCriteria(PaidCheck.both, id, startDate, yesterday);
             List<ExcelDTO> rawExcelData = extractData(beforeProcessData);
-            ClassPathResource templateFile = new ClassPathResource("templates/payment_data_hotel.xlsx");
+            ClassPathResource templateFile = new ClassPathResource("templates/payment_data_store.xlsx");
             try (InputStream inp = templateFile.getInputStream();
                  Workbook workbook = new XSSFWorkbook(inp);
                  ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -261,7 +263,7 @@ public class PaymentServiceImpl implements PaymentService {
             for (ExcelDTO data : rawExcelData) {
                 prompt.append(data.getDate()).append("일 메뉴 : ").append(data.getMenuName()).append(", ").append(data.getQuantity()).append(" 개 판매, 개별 가격 : ").append(data.getUnitPrice()).append("원, 총합 판매액 : ").append(data.getTotalPrice()).append("원 ");
             }
-            prompt.append("입니다. 스토어의 이번달 룸서비스(음식 주문 서비스) 일자별 매출 데이터로 메뉴별 매출 트렌드, 일자별 매출 트렌드를 보고 분석하여 1. 주말, 평일 별 트렌드, 2. 개선사항 솔루션, 3. 매출 개선을 위해 신규 메뉴 추천(예: 최근 매운맛을 유독 좋아하는 젊은 세대들이 늘어남으로 매운 짬뽕(네이밍 : 119짬뽕)메뉴를 추가하여 고객 선택의 다양성을 이끌어내세요)을 근거와 함께 주세요. 해당 답변은 th:utext를 통해 메일 내 자동 삽입될 예정으로 <br>등 html 태그를 함께 답변 해주시고 utf-8로 인코딩될 예정으로 이모지도 삽입 가능합니다. gpt agent님 답변은 꼭 한글로 주세요. ");
+            prompt.append("입니다.");
         }
 
         return prompt.toString();
@@ -303,6 +305,26 @@ public class PaymentServiceImpl implements PaymentService {
         return processPayments(paymentDTOList); // 계산된 데이터 반환
     }
 
+
+    @Override
+    public String dailyPerformancePrice(String email) {
+        LocalDateTime yesterDay = LocalDate.now().minusDays(1).atStartOfDay();
+
+        List<OrdersEntity> ordersEntityList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndPendingTimeIsAfter(email, yesterDay);
+        if (ordersEntityList.isEmpty()) {
+            return "0";
+        }
+
+        double sum = 0;
+        for (OrdersEntity order : ordersEntityList) {
+            sum += order.getTotalPrice();  // totalPrice는 숫자형 필드라고 가정
+        }
+
+        double average = sum / ordersEntityList.size();
+        return String.format("%.0f", average);
+
+
+    }
 
     @Override
     public List<ExcelDTO> extractData(List<PaymentDTO> paymentDTOList) {

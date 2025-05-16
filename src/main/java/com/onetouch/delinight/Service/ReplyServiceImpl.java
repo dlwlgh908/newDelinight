@@ -26,6 +26,7 @@ public class ReplyServiceImpl implements ReplyService{
     private final ReplyRepository replyRepository;
     private final InquireRepository inquireRepository;
     private final ModelMapper modelMapper;
+    private final SseService sseService;
 
     @Override
     public ReplyDTO register(ReplyDTO replyDTO) {
@@ -52,6 +53,7 @@ public class ReplyServiceImpl implements ReplyService{
 
         replyDTO.setInquireDTO(modelMapper.map(result.getInquireEntity(), InquireDTO.class));
 
+        sseService.sendToUsers("U" + inquireEntity.getUsersEntity().getId(), "new-changeStatus", inquireEntity.getId() + "번 문의에 답변이 달렸습니다.");
 
         return replyDTO;
     }

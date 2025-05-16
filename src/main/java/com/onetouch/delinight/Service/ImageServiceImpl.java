@@ -128,9 +128,6 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void dummyImgDelete() {
-
-        //이미지를 업로드 하였으나 3시간 동안 해당 게시판의 글이 저장되지 않은 글 삭제(delete unsaved shipping image older than 3 hours)
-        imageRepository.deleteByRegTimeIsLessThanEqualAndMenuEntityIsNullAndHotelEntityIsNull(LocalDateTime.now().minusHours(3));
-
+        imageRepository.deleteByRegTimeIsLessThanEqualAndMenuEntityIsNullAndHotelEntityIsNullAndStoreEntityIsNullAndAndRoomCareMenuEntityIsNull(LocalDateTime.now().minusHours(3));
     }
 }

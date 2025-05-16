@@ -32,6 +32,7 @@ public interface PaymentService {
 
     List<ExcelDTO> extractData(List<PaymentDTO> paymentDTOList);
 
+    String dailyPerformancePrice(String email);
 
     List<ExcelDTO> groupExcelDataBy(List<ExcelDTO> data, Role role);
 

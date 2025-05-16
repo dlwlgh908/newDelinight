@@ -25,26 +25,19 @@ public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
     boolean existsByStoreEntity_MembersEntity_IdAndAndPendingTimeAfter(Long id, LocalDateTime time);
 
     List<OrdersEntity> findByCheckInEntity_Id(Long id);
-    void deleteByCheckInEntity_Id(Long id);
     Integer countByStoreEntityIdAndOrdersStatus(Long storeId, OrdersStatus status);
 
     List<OrdersEntity> findByCheckInEntity_UsersEntityEmail(String email);
     List<OrdersEntity> findByCheckInEntity_GuestEntityPhone(String phone);
     List<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndOrdersStatusNotAndOrdersStatusIsNot(String email, OrdersStatus ordersStatus, OrdersStatus ordersStatus2);
     List<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(String email, OrdersStatus ordersStatus);
+    List<OrdersEntity> findByStoreEntity_MembersEntity_EmailAndPendingTimeIsAfter(String email, LocalDateTime yesterDay);
 
     List<OrdersEntity> findByCheckOutLogEntity_Id(Long checkOutId);
 
-//    @Query("select sum(o.totalPrice) from OrdersEntity o where o.checkInEntity.id = :id")
-//    Long selectPriceByCheckinId(@Param("id") Long id);
-
-    @Query("select o from OrdersEntity o where o.checkInEntity.id = :id")
-    OrdersEntity selectCheckinId(Long id);
 
 
 
-    //사용자의 결제 이력을 가져오는 메서드 (체크인 정보에서 사용자 ID로 조회)
-    List<OrdersEntity> findByCheckInEntity_UsersEntity_Id(Long id);
 
 
 
