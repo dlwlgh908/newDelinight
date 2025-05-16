@@ -57,8 +57,13 @@ public class HotelServiceImpl implements HotelService {
     public void addMembers(Long memberId, Long hotelId) {
 
         HotelEntity hotelEntity = hotelRepository.findById(hotelId).get();
-        hotelEntity.setMembersEntity(membersRepository.findById(memberId).get());
+        MembersEntity membersEntity =
+            membersRepository.findById(memberId).get();
+        hotelEntity.setMembersEntity(membersEntity);
+        membersEntity.setHotelEntity(hotelEntity);
+
         hotelRepository.save(hotelEntity);
+        membersRepository.save(membersEntity);
     }
 
     @Override
@@ -91,16 +96,17 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public void update(HotelDTO hotelDTO) {
 
-
         HotelEntity hotelEntity =
-                modelMapper.map(hotelDTO, HotelEntity.class);
+            modelMapper.map(hotelDTO, HotelEntity.class);
+
         HotelEntity hotel =
                 hotelRepository.findById(hotelEntity.getId()).orElseThrow(EntityNotFoundException::new);
-        BrandEntity brandEntity =
-                brandRepository.findById(hotelDTO.getBrandId()).orElseThrow(EntityNotFoundException::new);
 
         hotel.setName(hotelEntity.getName());
         hotel.setContent(hotelEntity.getContent());
+
+        BrandEntity brandEntity =
+                brandRepository.findById(hotelDTO.getBrandId()).orElseThrow(EntityNotFoundException::new);
         hotel.setBrandEntity(brandEntity);
 
 
@@ -110,6 +116,7 @@ public class HotelServiceImpl implements HotelService {
             imageEntity.setHotelEntity(hotelEntity);
             imageRepository.save(imageEntity);
         }
+
         hotelRepository.save(hotel);
 
     }

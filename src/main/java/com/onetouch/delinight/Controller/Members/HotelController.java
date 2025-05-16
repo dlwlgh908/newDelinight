@@ -11,7 +11,6 @@ import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.HotelEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import com.onetouch.delinight.Repository.HotelRepository;
-import com.onetouch.delinight.Repository.MembersRepository;
 import com.onetouch.delinight.Service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -20,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -66,27 +66,10 @@ public class HotelController {
         model.addAttribute("hotelDTOList", hotelDTOList);
         model.addAttribute("branchList", branchList);
         model.addAttribute("brandList", brandList);
-        return "members/hotel/listA";
+        return "members/hotel/list";
     }
 
-    @GetMapping("/read2")
-    public String readView2(Principal principal, Model model) {
 
-
-        log.info("principal log !!" + principal.getName());
-        log.info("principal log !!" + principal.getName());
-        log.info("principal log !!" + principal.getName());
-
-
-        HotelEntity hotelEntity =
-                hotelRepository.findByMembersEntity_Email(principal.getName());
-
-        String imgUrl = imageService.readHotel(hotelEntity.getId());
-        model.addAttribute("imgUrl", imgUrl);
-        model.addAttribute("hotel", hotelEntity);
-
-        return "members/hotel/read2";
-    }
 @GetMapping("/read/{id}")
 public String readView( Model model, @PathVariable("id") Long id) {
 
@@ -109,7 +92,7 @@ public String readView( Model model, @PathVariable("id") Long id) {
     return "members/hotel/read";
 }
     
-    @GetMapping("/update2/{id}")
+    @GetMapping("/update/{id}")
     public String updateView2(Model model, @PathVariable("id") Long id) {
 
         log.info(id);
@@ -130,7 +113,7 @@ public String readView( Model model, @PathVariable("id") Long id) {
         model.addAttribute("hotel", hotelDTO);
         model.addAttribute("brandList", brandList);
 
-        return "members/hotel/update2";
+        return "members/hotel/update";
     }
 
 //    @GetMapping("/update")
@@ -148,15 +131,16 @@ public String readView( Model model, @PathVariable("id") Long id) {
 //    }
 
     @PostMapping("/update")
-    public String updateProc(HotelDTO hotelDTO) {
+    public String updateProc(@ModelAttribute HotelDTO hotelDTO, @RequestParam("image")MultipartFile image) {
 
-        log.info(hotelDTO);
+        log.info("DTO 들어옴?" + hotelDTO);
+        log.info("Image" + image.getOriginalFilename());
 
 
         hotelService.update(hotelDTO);
 
 
-        return "redirect:/members/hotel/read";
+        return "redirect:/members/hotel/list";
     }
 
     @GetMapping("/memberlist")

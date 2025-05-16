@@ -130,11 +130,23 @@ public class MembersServiceImpl implements MembersService{
 
     @Override
     public List<MembersDTO> findMembersListByCenterEmail(String email) {
-        Long id = centerService.findCenter(email);
-        List<MembersEntity> resultEntities = membersRepository.findByCenterEntity_Id(id);
-        List<MembersDTO> resultDTOS = resultEntities.stream().map(resultEntity->
-                modelMapper.map(resultEntity, MembersDTO.class)).toList();
-        return resultDTOS;
+//        Long id = centerService.findCenter(email);
+//        List<MembersEntity> resultEntities = membersRepository.findByCenterEntity_Id(id);
+//        List<MembersDTO> resultDTOS = resultEntities.stream()
+//                .map(resultEntity -> modelMapper.map(resultEntity, MembersDTO.class))
+//                .filter(dto -> dto.getHotelId() == null) // ✅ hotelId가 null인 멤버만 필터링
+//                .toList();
+//        log.info(resultDTOS);
+//        log.info(resultDTOS);
+//        return resultDTOS;
+        Long id =
+            centerService.findCenter(email);
+        List<MembersEntity> membersEntityList =
+            membersRepository.selectAdListByHotelIdIsNull(id);
+
+        List<MembersDTO> membersDTOList = membersEntityList.stream().map(entity -> modelMapper.map(entity, MembersDTO.class)).toList();
+
+        return membersDTOList;
     }
 
     @Override
