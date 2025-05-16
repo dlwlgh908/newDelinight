@@ -253,30 +253,30 @@
                         error: function () {}
                     });
                 });
-                //
-                // // 2. 사용자가 포인트를 입력해서 쓰는 경우
-                // if (usedPoint > 0) {
-                //     $.ajax({
-                //         url: "/api/user/point/use",
-                //         type: "post",
-                //         async: false, // 중요: 포인트 처리 후 결제 요청하도록 동기 처리
-                //         data: {
-                //             usersId: [[${usersId}]],
-                //             paymentId: paymentKey,
-                //             usedPoint: usedPoint
-                //         },
-                //         success: function () {
-                //             console.log("포인트 사용 완료");
-                //             requestPayment(); //포인트 사용 후 결제
-                //         },
-                //         error: function () {
-                //             alert("포인트 사용 오류");
-                //         }
-                //     });
-                // }else {
-                //     // 3. 결제 요청
-                //     requestPayment(); //포인트 사용 안 하면 바로 결제
-                // }
+
+                // 2. 사용자가 포인트를 입력해서 쓰는 경우
+                if (usedPoint > 0) {
+                    $.ajax({
+                        url: "/api/user/point/use",
+                        type: "post",
+                        async: false, // 중요: 포인트 처리 후 결제 요청하도록 동기 처리
+                        data: {
+                            usersId: [[${usersId}]],
+                            paymentId: paymentKey,
+                            usedPoint: usedPoint
+                        },
+                        success: function () {
+                            console.log("포인트 사용 완료");
+                            requestPayment(); //포인트 사용 후 결제
+                        },
+                        error: function () {
+                            alert("포인트 사용 오류");
+                        }
+                    });
+                }else {
+                    // 3. 결제 요청
+                    requestPayment(); //포인트 사용 안 하면 바로 결제
+                }
 
                 detectCloseModal(); //모달 감지는 항상
 
@@ -284,24 +284,24 @@
             }
 
 
-            // function payNow(){
-            //     $(".memos").each(function (memo) {
-            //             let memoObject = $(this)
-            //             let ordersId = memoObject.data("textareaid")
-            //             $.ajax({
-            //                 url: "/roomService/order/payNow",
-            //                 type: "post",
-            //                 data:{"ordersId":ordersId, "memo":memoObject.val()},
-            //                 success:function (){
-            //                 },
-            //                 error:function (){
-            //                 }
-            //             })
-            //         }
-            //     )
-            //
-            //     requestPayment()
-            // }
+            function payNow(){
+                $(".memos").each(function (memo) {
+                        let memoObject = $(this)
+                        let ordersId = memoObject.data("textareaid")
+                        $.ajax({
+                            url: "/roomService/order/payNow",
+                            type: "post",
+                            data:{"ordersId":ordersId, "memo":memoObject.val()},
+                            success:function (){
+                            },
+                            error:function (){
+                            }
+                        })
+                    }
+                )
+
+                requestPayment()
+            }
 
 
             function detectCloseModal() {
@@ -343,6 +343,9 @@
             }
 
         </script>
+
+
+
 
         <!--포인트-->
         <script>
