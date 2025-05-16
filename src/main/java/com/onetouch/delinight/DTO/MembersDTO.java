@@ -34,6 +34,9 @@ public class MembersDTO {
     private Role role;
     private Status status;
     private StoreDTO storeDTO;
+    private Long hotelId;
+
+    private boolean isAdminElseWhere;
 
 
     public MembersDTO(MembersEntity entity) {
@@ -50,6 +53,7 @@ public class MembersDTO {
         this.storeDTO = storeDTO;
         return this.storeDTO;
     }
+
 
 
 }

@@ -35,12 +35,9 @@ public class HotelRestController {
     @GetMapping("/membersList")
     public ResponseEntity<List<MembersDTO>> membersList(Principal principal){
         List<MembersDTO> membersDTOList = membersService.findMembersListByCenterEmail(principal.getName());
+
         log.info(membersDTOList);
 
-//        /*hotelId null인 멤버 필터링*/
-//        List<MembersDTO> filteredMembers = membersDTOList.stream()
-//                .filter(membersDTO -> membersDTO. == null)
-//                .collect(Collectors.toList());
 
         return ResponseEntity.ok(membersDTOList);
 
