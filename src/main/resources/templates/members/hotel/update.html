@@ -16,30 +16,47 @@
                 <div class="card-body">
                     <h3>호텔 정보 수정</h3>
                     <ol class="breadcrumb mb-5">
-                        <a href="/members/account/home" class="breadcrumb-item active">홈</a>
-                        <a href="/members/hotel/read" class="breadcrumb-item active">호텔 정보</a>
+                        <a href="/members/account/dashHub" class="breadcrumb-item active">홈</a>
+                        <a href="/members/hotel/read2" class="breadcrumb-item active">호텔 정보</a>
                     </ol>
 
-                    <form action="/members/hotel/update" method="post">
+                    <form action="/members/hotel/update" method="post" enctype="multipart/form-data">
 
                         <div class="d-flex">
                             <div class="w-50">
-                                <input hidden readonly name="id" th:value="${hotel.id}">
+                                <input hidden readonly name="id" class="hotelId" th:value="${hotel.id}">
                                 <div class="hiddenImgNum"></div>
                                 <input type="hidden" name="id" th:value="${hotel.id}">
+
+
+                                <div class="row mb-3">
+                                    <label class="form-label col-sm-3">브랜드</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-select brandID" name="brandId">
+                                            <!-- 현재 선택된 브랜드 -->
+                                            <optgroup label="현재 선택된 브랜드">
+                                                <option  selected th:value="${hotel.brandDTO.id}">[[${hotel.brandDTO.name}]]</option>
+                                            </optgroup>
+
+                                            <!-- 선택 가능한 브랜드 목록 -->
+                                            <optgroup label="브랜드 목록">
+                                                <option  th:each="brand : ${brandList}" th:value="${brand.id}">[[${brand.name}]]</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
 
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label form-label">호텔명</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="name" th:value="${hotel.name}">
+                                        <input type="text" class="form-control hotelName" name="name" th:value="${hotel.name}">
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label form-label">설명</label>
                                     <div class="col-sm-8">
-                                        <textarea type="text" class="form-control" name="content" th:value="${hotel.content}"></textarea>
-                                    </div>
+                                        <textarea name="content" class="form-control hotelContent" th:text="${hotel.content}"></textarea>                                    </div>
                                 </div>
 
                                 <div class="row mt-5">
@@ -61,8 +78,8 @@
                         </div>
 
                         <div class="mt-5 text-center">
-                            <button type="submit" class="btn btn-primary">저장</button>
-                            <a th:href="@{/members/hotel/read(id=${hotel.id})}" class="btn btn-gray">취소</a>
+                            <button type="submit" class="btn btn-primary saveBtn">저장</button>
+                            <a th:href="@{/members/hotel/read2}" class="btn btn-gray">취소</a>
                         </div>
                     </form>
                 </div>
@@ -75,6 +92,39 @@
     <script>
 
         $(function () {
+
+            // $(".saveBtn").on("click", function () {
+            //
+            //     let imgInput = $(".hiddenImgNum").val();
+            //     let hotelName = $(".hotelName").val();
+            //     let hotelContent = $(".hotelContent").val();
+            //     let brandId = $(".brandID").val();
+            //     let hotelId = $(".hotelId").val();
+            //
+            //     alert(brandId)
+            //     alert(hotelId)
+            //     alert(imgInput)
+            //     alert(hotelId)
+            //
+            //     $.ajax({
+            //         url: "/members/hotel/update",
+            //         type: "post",
+            //         data: {
+            //             name : hotelName,
+            //             content: hotelContent,
+            //             imgNum : imgInput,
+            //             brandId : brandId,
+            //             hotelId : hotelId
+            //
+            //         },
+            //         success: function (msg) {
+            //             alert("성공")
+            //         },
+            //         error: function () {
+            //             alert("오류 발생")
+            //         },
+            //     })
+            // });
 
 
             $(document).on("click", "#delBtn", function () {

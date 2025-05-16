@@ -8,6 +8,9 @@
 package com.onetouch.delinight.DTO;
 
 import lombok.*;
+import org.springframework.boot.actuate.autoconfigure.amqp.RabbitHealthContributorAutoConfiguration;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,6 +33,13 @@ public class StoreDTO {
     private HotelDTO hotelDTO;
 
     private MembersDTO membersDTO;
+
+    private List<MenuDTO> menuDTOList;
+
+    public StoreDTO setMenuDTOList(List<MenuDTO> menuDTOList){
+        this.menuDTOList = menuDTOList;
+        return this;
+    }
     public StoreDTO setHotelDTO(HotelDTO hotelDTO){
         this.hotelDTO = hotelDTO;
         return this;

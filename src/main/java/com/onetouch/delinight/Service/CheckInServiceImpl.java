@@ -250,9 +250,13 @@ public class CheckInServiceImpl implements CheckInService{
         CheckInEntity checkInEntity =
                 checkInRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         if(checkInEntity.getGuestEntity()!=null){
+            Long cartId = cartService.cartCheck(checkInEntity.getGuestEntity().getPhone());
+            cartService.clear(cartId);
             cartService.deleteCart(2,checkInEntity.getGuestEntity().getId());
         }
         else {
+            Long cartId = cartService.cartCheck(checkInEntity.getUsersEntity().getEmail());
+            cartService.clear(cartId);
             cartService.deleteCart(1,checkInEntity.getUsersEntity().getId());
         }
 

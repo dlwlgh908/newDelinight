@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface NetPromoterScoreService {
 
-    public void sendNpsTemporary(Long checkOutId);
 
     public List<OrdersDTO> npsSelect(Long checkOutId);
 
@@ -18,6 +17,9 @@ public interface NetPromoterScoreService {
 
     public List<Integer> dashboard(MembersDTO membersDTO);
 
+    public String makePrompt(Long membersId);
+    public List<Integer> dailyPerformanceScore(String email);
+    public boolean npsOperationCheck(String email);
 
 
 

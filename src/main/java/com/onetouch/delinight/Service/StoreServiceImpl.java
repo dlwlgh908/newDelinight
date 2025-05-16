@@ -8,8 +8,10 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.OrdersStatus;
+import com.onetouch.delinight.Constant.Role;
 import com.onetouch.delinight.DTO.HotelDTO;
 import com.onetouch.delinight.DTO.MembersDTO;
+import com.onetouch.delinight.DTO.MenuDTO;
 import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.*;
 import com.onetouch.delinight.Repository.*;
@@ -21,6 +23,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,7 +41,7 @@ public class StoreServiceImpl implements StoreService {
     private final OrdersRepository ordersRepository;
     private final ImageRepository imageRepository;
     private final CheckInRepository checkInRepository;
-
+    private final MenuRepository menuRepository;
 
     @Override
     public void addMembers(Long memberId, Long storeId) throws DataIntegrityViolationException {
@@ -143,7 +146,10 @@ public class StoreServiceImpl implements StoreService {
         }
         List<StoreEntity> storeEntityList = storeRepository.findByHotelEntity_Id(hotelId);
         List<StoreDTO> storeDTOList = storeEntityList.stream().map(data -> modelMapper.map(
-                data, StoreDTO.class).setImgUrl(imageRepository.findByStoreEntity_Id(data.getId()).get().getFullUrl())).toList();
+                data, StoreDTO.class)
+                .setMenuDTOList(
+                        menuRepository.findByStoreEntity_Id(data.getId()).stream().map(
+                                menuData -> modelMapper.map(menuData, MenuDTO.class)).toList()).setImgUrl(imageRepository.findByStoreEntity_Id(data.getId()).get().getFullUrl())).toList();
 
         return storeDTOList;
     }
@@ -208,12 +214,36 @@ public class StoreServiceImpl implements StoreService {
         }
     }
 
+
+    public boolean checkOperation(MembersDTO membersDTO) {
+        LocalDate yesterDay = LocalDate.now().minusDays(1);
+        if(membersDTO.getRole().equals(Role.SUPERADMIN)){
+            return ordersRepository.existsByStoreEntity_HotelEntity_BranchEntity_CenterEntity_MembersEntity_IdAndAndPendingTimeAfter(membersDTO.getId(), yesterDay.atTime(0,0));
+        }
+        else if(membersDTO.getRole().equals(Role.ADMIN)){
+            return ordersRepository.existsByStoreEntity_HotelEntity_MembersEntity_IdAndAndPendingTimeAfter(membersDTO.getId(), yesterDay.atTime(0,0));
+
+        }
+        else {
+            return ordersRepository.existsByStoreEntity_MembersEntity_IdAndAndPendingTimeAfter(membersDTO.getId(), yesterDay.atTime(0,0));
+
+        }
+    }
+
     @Override
-    public List<StoreDTO> findAll() {
-        List<StoreEntity> storeEntityList = storeRepository.findAll();
-        List<StoreDTO> storeDTOList = storeEntityList.stream().map(storeEntity -> modelMapper.map(storeEntity, StoreDTO.class).setMemberDTO(modelMapper.map(storeEntity.getMembersEntity(), MembersDTO.class))).toList();
+    public List<StoreDTO> findOperationStore() {
+        List<StoreDTO> storeDTOList =  storeRepository.findAll().stream()
+                .filter(storeEntity ->
+                        checkOperation(
+                                modelMapper.map(storeEntity.getMembersEntity(), MembersDTO.class)
+                        )
+                )
+                .map(storeEntity -> modelMapper.map(storeEntity, StoreDTO.class).setMemberDTO(modelMapper.map(storeEntity.getMembersEntity(), MembersDTO.class)))
+                .toList();
+        log.info(storeDTOList);
         return storeDTOList;
     }
+
 
     @Override
     public List<StoreDTO> storeList(String email) {
@@ -221,7 +251,7 @@ public class StoreServiceImpl implements StoreService {
             storeRepository.selectallByHotelAdmin(email);
         List<StoreDTO> storeDTOList =
                 storeEntityList.stream().toList().stream().map(
-                        storeEntity -> modelMapper.map(storeEntity, StoreDTO.class)
+                        storeEntity -> modelMapper.map(storeEntity, StoreDTO.class).setMemberDTO(modelMapper.map(storeEntity.getMembersEntity(), MembersDTO.class))
                 ).collect(Collectors.toList());
 
         return storeDTOList;
