@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,12 @@ public interface MembersRepository extends JpaRepository<MembersEntity, Long> {
     List<MembersEntity> findByStatusIs(Status status);
     Integer countByCenterEntity_IdAndStatus(Long id, Status status);
     List<MembersEntity> findByCenterEntity_Id(Long id);
+
+    @Query("select m from MembersEntity m where m.centerEntity.id = :id and m.role = 'ADMIN' and m.status = 'VALID' and m.hotelEntity.id is null")
+    List<MembersEntity> selectAdListByHotelIdIsNull(Long id);
+
+
+
 
     List<MembersEntity> findByHotelEntity_Id(Long id);
 
@@ -57,7 +64,8 @@ public interface MembersRepository extends JpaRepository<MembersEntity, Long> {
     @Query("select m from MembersEntity m where m.email = :email")
     Optional<MembersEntity> findByEmail2(String email);
 
-
+    @Query(value = "SELECT EXISTS (SELECT 1 FROM members WHERE id = :id AND hotel_id = :hotelId AND is_admin = TRUE)", nativeQuery = true)
+    boolean isMemberAdmin(@Param("id") Long id, @Param("hotelId") Long hotelId);
 
 
 

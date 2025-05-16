@@ -6,6 +6,7 @@ import com.onetouch.delinight.DTO.StoreDTO;
 import com.onetouch.delinight.Entity.CheckOutLogEntity;
 import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.CheckOutLogRepository;
+import com.onetouch.delinight.Service.ImageService;
 import com.onetouch.delinight.Service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +24,7 @@ public class NpsSurveyScheduler {
     private final CheckOutLogRepository checkOutLogRepository;
     private final EmailService emailService;
     private final StoreService storeService;
+    private final ImageService imageService;
 
     // 매일 오전 9시에 실행 될 스케줄러
     @Scheduled(cron = "0 0 20 * * ?")
@@ -47,20 +49,28 @@ public class NpsSurveyScheduler {
                     String surveyLink = "http://localhost:8080/users/nps/survey/" + checkOutId;
 
                     emailService.sendNpsEmail(email, name, surveyLink, checkOutId);
-                }else{
+                }
+                else
+                {
                 }
 
             }
 
     }
 
-    @Scheduled(cron = "10 23 * * * ?")
+    @Scheduled(cron = "0 0 01 * * ?")
+    public void deleteOrphanImg(){
+        imageService.dummyImgDelete();
+    }
+
+    @Scheduled(cron = "10 27 * * * ?")
     public void sendDailyPerformance(){
 
         log.info("스케쥴러 작동 ");
-        List<StoreDTO> storeDTOList = storeService.findAll();
+        List<StoreDTO> storeDTOList = storeService.findOperationStore();
         for(StoreDTO storeDTO : storeDTOList){
             if(storeDTO.getMembersDTO()!=null){
+                log.info("이게 널이라?");
                 MembersDTO membersDTO = storeDTO.getMembersDTO();
                 PerformanceMailDTO mailDTO = new PerformanceMailDTO();
                 mailDTO.setDate(LocalDate.now());

@@ -148,6 +148,7 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public String clear(Long cartNum) {
+        log.info(cartNum);
         cartItemRepository.deleteByCartEntity_Id(cartNum);
         return "카트 비우기 성공";
     }

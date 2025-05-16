@@ -56,15 +56,15 @@ public class CartRestController {
 
     @PostMapping("/clear")
     public ResponseEntity<String> clearCart(Principal principal) {
-        Long cartId = 1L;
-        cartService.clear(cartId);
+        Long id = cartService.cartCheck(principal.getName());
+        cartService.clear(id);
         return ResponseEntity.ok("비우기 성공");
     }
 
 
     @PostMapping("/cartToOrder")
     public String  cartToOrder(Principal principal) {
-        Long cartId = 0L;
+        Long cartId;
         CartEntity cartEntity = cartRepository.findByUsersEntity_Email(principal.getName());
         CartEntity cartEntity1 = cartRepository.findByGuestEntity_Phone(principal.getName());
         if(cartEntity!=null){

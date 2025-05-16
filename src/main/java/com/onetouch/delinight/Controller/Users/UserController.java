@@ -13,6 +13,7 @@ import com.onetouch.delinight.DTO.UsersDTO;
 import com.onetouch.delinight.Entity.UsersEntity;
 import com.onetouch.delinight.Repository.UsersRepository;
 import com.onetouch.delinight.Service.MenuService;
+import com.onetouch.delinight.Service.OpenAIService;
 import com.onetouch.delinight.Service.StoreService;
 import com.onetouch.delinight.Service.UsersService;
 import jakarta.validation.Valid;
@@ -21,9 +22,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
@@ -39,10 +38,19 @@ public class UserController {
         private final UsersRepository usersRepository;
         private final StoreService storeService;
         private final MenuService menuService;
+        private final OpenAIService openAIService;
 
         @GetMapping("/mobile")
         public String mobileGET(){
                 return "/users/mobile";
+        }
+
+        @PostMapping("/chatGPT/recommend/menu")
+        @ResponseBody
+        public String recommendMenu(@RequestParam("prompt") String prompt){
+
+                String result = openAIService.makeRecommendPrompt(prompt);
+                return result;
         }
 
 
