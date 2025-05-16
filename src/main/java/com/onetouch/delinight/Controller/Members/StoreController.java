@@ -61,7 +61,7 @@ public class StoreController {
             storeService.listMembers(membersDTO);
         model.addAttribute("storeDTOList", storeDTOList);
 
-        return "members/store/listA";
+        return "members/store/list";
     }
 
     @GetMapping("/read")
