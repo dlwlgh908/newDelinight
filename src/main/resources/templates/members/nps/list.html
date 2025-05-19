@@ -15,7 +15,7 @@
             <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
                     <h3>데이터 테이블</h3>
-                    <ol class="breadcrumb mb-5">
+                    <ol class="breadcrumb mb-4">
                         <a href="/members/account/dashHub" class="breadcrumb-item active">홈</a>
                         <a href="#" class="breadcrumb-item active no-click">고객만족도 평가</a>
                     </ol>
@@ -73,7 +73,7 @@
 
 
                     <!-- 네비게이션 -->
-                    <ul class="nav nav-pills mb-4">
+                    <ul th:if="${role.name() != 'STOREADMIN'}" class="nav nav-pills mb-4">
                         <li class="nav-item">
                             <a class="nav-link active" data-tabname="hotelTab" href="#" id="hotelTab">호텔</a>
                         </li>
@@ -82,30 +82,11 @@
                         </li>
                     </ul>
 
-
                     <div style="overflow-y: auto; height: 450px">
-                    <table id="npsHotelTable" class="table align-middle table-hover hotelTitle">
-                        <thead>
-                        <th style="width: 5%;">#</th>
-                        <th style="width: 16%;">호텔명</th>
-                        <th style="width: 3%;">1</th>
-                        <th style="width: 3%;">2</th>
-                        <th style="width: 3%;">3</th>
-                        <th style="width: 3%;">4</th>
-                        <th style="width: 7%;">5</th>
-                        <th style="width: 10%;">평균</th>
-                        <th>기타문의</th>
-                        </thead>
-
-                        <tbody>
-                        <!-- AJAX 데이터 삽입 -->
-                        </tbody>
-                    </table>
-
-                    <table id="npsStoreTable" class="table align-middle table-hover" style="display: none">
-                        <thead>
+                        <table th:if="${role.name() != 'STOREADMIN'}" id="npsHotelTable" class="table align-middle table-hover hotelTitle">
+                            <thead>
                             <th style="width: 5%;">#</th>
-                            <th style="width: 16%;">가맹점명</th>
+                            <th style="width: 16%;">호텔명</th>
                             <th style="width: 3%;">1</th>
                             <th style="width: 3%;">2</th>
                             <th style="width: 3%;">3</th>
@@ -113,12 +94,30 @@
                             <th style="width: 7%;">5</th>
                             <th style="width: 10%;">평균</th>
                             <th>기타문의</th>
-                        </thead>
+                            </thead>
 
-                        <tbody>
-                        <!-- AJAX 데이터 삽입 -->
-                        </tbody>
-                    </table>
+                            <tbody>
+                            <!-- AJAX 데이터 삽입 -->
+                            </tbody>
+                        </table>
+
+                        <table id="npsStoreTable" class="table align-middle table-hover" style="display: none">
+                            <thead>
+                                <th style="width: 5%;">#</th>
+                                <th style="width: 16%;">가맹점명</th>
+                                <th style="width: 3%;">1</th>
+                                <th style="width: 3%;">2</th>
+                                <th style="width: 3%;">3</th>
+                                <th style="width: 3%;">4</th>
+                                <th style="width: 7%;">5</th>
+                                <th style="width: 10%;">평균</th>
+                                <th>기타문의</th>
+                            </thead>
+
+                            <tbody>
+                            <!-- AJAX 데이터 삽입 -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
