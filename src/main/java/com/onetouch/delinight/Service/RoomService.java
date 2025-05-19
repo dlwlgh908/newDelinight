@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface RoomService {
 
-    public RoomDTO create(RoomDTO roomDTO);
+    public void create(RoomDTO roomDTO, String email);
 
     public void update(RoomDTO roomDTO);
 

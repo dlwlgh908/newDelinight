@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/room/rest")
@@ -17,22 +19,20 @@ public class RoomRestController {
     private final RoomService roomService;
 
     @PostMapping("/register")
-    private ResponseEntity register(RoomDTO roomDTO) {
+    private ResponseEntity<String> register(RoomDTO roomDTO, Principal principal) {
         log.info("값이 들어오나요? : " + roomDTO);
         log.info("값이 들어오나요? : " + roomDTO);
         log.info("값이 들어오나요? : " + roomDTO);
 
+        String email = principal.getName();
 
         if (roomDTO == null) {
             return new ResponseEntity<String>("저장 실패", HttpStatus.BAD_REQUEST);
         } else {
-            roomDTO = roomService.create(roomDTO);
-            log.info(roomDTO.getId());
-            log.info(roomDTO.getId());
-            log.info(roomDTO.getId());
+            roomService.create(roomDTO,email);
 
 
-            return new ResponseEntity<String>(roomDTO.getId() + "번글이 저장되었습니다.", HttpStatus.OK);
+            return new ResponseEntity<String>(HttpStatus.OK);
 
         }
 

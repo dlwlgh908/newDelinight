@@ -44,15 +44,15 @@ public class RoomServiceImpl implements RoomService{
     private final CheckInRepository checkInRepository;
 
     @Override
-    public RoomDTO create(RoomDTO roomDTO) {
+    public void create(RoomDTO roomDTO,String email) {
 
         RoomEntity roomEntity =
             modelMapper.map(roomDTO, RoomEntity.class);
 
 
-
+        /*roomDTO에는 hotelEntity가 없잖아 수정해야함*/
         HotelEntity hotelEntity =
-                hotelRepository.findById(roomDTO.getHotelDTO().getId()).orElseThrow(EntityNotFoundException::new);
+                hotelRepository.findByMembersEntity_Email(email);
 
 
         roomEntity.setHotelEntity(hotelEntity);
@@ -60,7 +60,6 @@ public class RoomServiceImpl implements RoomService{
 
         checkInService.create(roomRepository.save(roomEntity));
 
-        return roomDTO;
     }
 
     @Override

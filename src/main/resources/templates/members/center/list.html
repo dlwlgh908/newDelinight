@@ -83,7 +83,6 @@
             });
             $(document).on("click", "#delBtn", function () {
 
-                alert(123)
                 let id = this.getAttribute("value");
 
                 Swal.fire({
@@ -102,7 +101,7 @@
                     if (result.isConfirmed) {
 
                         $.ajax({
-                            url : "/branch/rest/del",
+                            url : "/members/center/del",
                             type: "delete",
                             data: {id : id},
                             success: function () {

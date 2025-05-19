@@ -15,6 +15,8 @@ import com.onetouch.delinight.Service.CenterService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -91,7 +93,7 @@ public class CenterController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateView(Model model, @PathVariable("id") Long id){
+    public String updateView(Model model, @PathVariable("id") Long id) {
         log.info(id);
 
 
@@ -104,12 +106,22 @@ public class CenterController {
     }
 
     @PostMapping("/update")
-    public String updateProc(@ModelAttribute CenterDTO centerDTO){
+    public String updateProc(@ModelAttribute CenterDTO centerDTO) {
 
         log.info("update post 페이지" + centerDTO);
 
         centerService.update(centerDTO);
 
         return "redirect:/members/center/read";
+    }
+
+    @DeleteMapping("/del")
+    public ResponseEntity<String> del(@RequestParam Long id) {
+        if (centerRepository.existsById(id)) {
+            centerRepository.deleteById(id);
+            return ResponseEntity.ok("삭제 성공");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 ID가 존재하지않습니다.");
+        }
     }
 }
