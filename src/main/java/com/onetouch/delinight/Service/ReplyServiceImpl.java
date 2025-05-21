@@ -53,7 +53,12 @@ public class ReplyServiceImpl implements ReplyService{
 
         replyDTO.setInquireDTO(modelMapper.map(result.getInquireEntity(), InquireDTO.class));
 
-        sseService.sendToUsers("U" + inquireEntity.getUsersEntity().getId(), "new-changeStatus", inquireEntity.getId() + "번 문의에 답변이 달렸습니다.");
+        if(inquireEntity.getCheckInEntity() != null){
+            sseService.sendToUsers("U" + inquireEntity.getCheckInEntity().getUsersEntity().getId(), "new-changeStatus", inquireEntity.getId() + "번 문의에 답변이 달렸습니다.");
+        }
+        else if(inquireEntity.getCheckOutLogEntity() != null){
+            sseService.sendToUsers("U" + inquireEntity.getCheckOutLogEntity().getUsersEntity().getId(), "new-changeStatus", inquireEntity.getId() + "번 문의에 답변이 달렸습니다.");
+        }
 
         return replyDTO;
     }

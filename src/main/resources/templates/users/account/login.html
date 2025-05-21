@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/mobile.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>Mobile</title>
     <style>
         .error {
@@ -45,6 +47,7 @@
             <input type="password" id="password" name="password" placeholder="비밀번호" required>
             <div id="passwordError" class="error"></div>
         </div>
+
 
         <div>
             <button type="button" class="login-btn loginBtn" onclick="handleLogin()">LOGIN</button>
@@ -89,7 +92,7 @@
 
         var currentUrl = window.location.href
 
-        if (currentUrl === "http://localhost:8080/users/login?sep=1"){
+        if (currentUrl === "http://wooriproject.iptime.org:9003/users/login?sep=1"){
             $("#login-userTabBtn").removeClass("login-btn-active")
             $("#login-userTabBtn").addClass("login-btn")
             $("#login-guestTabBtn").addClass("login-btn-active")
@@ -169,6 +172,28 @@
             document.getElementById("userForm").submit();
         }
     }
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get("error");
+
+        if (error === "notCheckedIn") {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "warning",
+                html: "<p style='margin-bottom: 5px'>현재 체크인 되지 않았습니다.</p><p style='margin-bottom: 5px'>프론트에 회원을 등록해 주세요.</p>"
+            });
+        }
+    });
 
     // 비회원 유효성 검사
     function handleGuestLogin() {

@@ -59,6 +59,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public List<OrdersDTO> dashboard(String email) {
         List<OrdersEntity> processEntityList = ordersRepository.findByStoreEntity_MembersEntity_EmailAndOrdersStatusIs(email, OrdersStatus.PENDING);
+        log.info("확인중 "+processEntityList);
         if(!processEntityList.isEmpty()) {
             List<OrdersDTO> processDTOList = processEntityList.stream().map(data -> {
                 OrdersDTO ordersDTO = modelMapper.map(data, OrdersDTO.class);

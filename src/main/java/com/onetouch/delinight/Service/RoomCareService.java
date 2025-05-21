@@ -15,13 +15,13 @@ import java.util.List;
 
 public interface RoomCareService {
 
-    public void orders(List<RoomCareItemDTO> roomCareItemDTOList, String email);
-    public List<RoomCareDTO> showList(Long membersId);
-    public List<RoomCareDTO> list(Long checkInId);
-    public List<RoomCareDTO> oldList(Long usersId);
-    public void changeStatus(Long id);
-
-    public RoomCareDTO read(Long id);
+    void orders(List<RoomCareItemDTO> roomCareItemDTOList, String email);
+    List<RoomCareDTO> showList(Long membersId);
+    List<RoomCareDTO> list(Long checkInId);
+    List<RoomCareDTO> oldList(Long usersId);
+    void changeStatus(Long id);
+    void checkInToCheckOut(Long checkInId, Long checkOutId);
+    RoomCareDTO read(Long id);
 
 
 }

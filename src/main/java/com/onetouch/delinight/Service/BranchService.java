@@ -15,13 +15,13 @@ import java.util.List;
 
 public interface BranchService {
 
-    public void create(BranchDTO branchDTO);
+    void create(BranchDTO branchDTO);
 
-    public void update(BranchDTO branchDTO);
+    void update(BranchDTO branchDTO);
 
-    public List<BranchDTO> list(String email);
+    List<BranchDTO> list(String email);
 
-    public void del(Long id);
+    void del(Long id);
 
 
 

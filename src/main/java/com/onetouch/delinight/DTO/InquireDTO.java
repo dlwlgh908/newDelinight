@@ -39,11 +39,16 @@ public class InquireDTO {
 
 
     private CheckInDTO checkInDTO;
+    private CheckOutLogDTO checkOutLogDTO;
     private HotelDTO hotelDTO;
     private UsersDTO usersDTO;
 
     public InquireDTO setCheckInDTO(CheckInDTO checkInDTO){
         this.checkInDTO =checkInDTO;
+        return this;
+    }
+    public InquireDTO setCheckOutLogDTO(CheckOutLogDTO checkOutLogDTO){
+        this.checkOutLogDTO =checkOutLogDTO;
         return this;
     }
 

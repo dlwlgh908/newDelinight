@@ -38,19 +38,18 @@ public class RoomServiceImpl implements RoomService{
     private final RoomRepository roomRepository;
     private final ModelMapper modelMapper;
     private final HotelRepository hotelRepository;
-    private final UsersRepository usersRepository;
     private final CheckInService checkInService;
     private final HotelService hotelService;
     private final CheckInRepository checkInRepository;
 
     @Override
-    public void create(RoomDTO roomDTO,String email) {
+    public void create(RoomDTO roomDTO, String email) {
+
 
         RoomEntity roomEntity =
-            modelMapper.map(roomDTO, RoomEntity.class);
+                modelMapper.map(roomDTO, RoomEntity.class);
 
 
-        /*roomDTO에는 hotelEntity가 없잖아 수정해야함*/
         HotelEntity hotelEntity =
                 hotelRepository.findByMembersEntity_Email(email);
 

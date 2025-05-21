@@ -20,11 +20,9 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.security.Principal;
 import java.util.List;
@@ -50,7 +48,6 @@ public class AccountController {
     @GetMapping("/dashboard")
     @ResponseBody
     public ResponseEntity<List<MembersDTO>> dashboard(Principal principal){
-        log.info("김밥천");
         MembersDTO membersDTO = membersService.findByEmail(principal.getName());
         List<MembersDTO> result = membersService.findPendingMembersListByCenterMembers(membersDTO);
         return ResponseEntity.ok(result);
@@ -81,7 +78,7 @@ public class AccountController {
             model.addAttribute("parentId", id);
         }
 
-        return "/members/account/common/requestForm";
+        return "members/account/common/requestForm";
     }
 
     @PostMapping("/accountRequest")
@@ -91,7 +88,8 @@ public class AccountController {
 
         if (roleStr.equals("super")) {
             membersDTO.setRole(Role.SUPERADMIN);
-            membersService.create(membersDTO);
+            Long membersId = membersService.create(membersDTO);
+            centerService.settingAdmin(membersId, membersDTO.getParentId());
         } else if (roleStr.equals("hotel")) {
             membersDTO.setRole(Role.ADMIN);
             membersService.create(membersDTO);
@@ -145,6 +143,7 @@ public class AccountController {
     @GetMapping("/accountHub")
     public String accountHub(Principal principal, Model model) {
         Role role = membersService.findOnlyRoleByEmail(principal.getName());
+        log.info("여기니????");
         model.addAttribute("role", role);
 
         //시스템 어드민
@@ -196,23 +195,23 @@ public class AccountController {
 
     @GetMapping("/superAdHome")
     public String superAdHome() {
-        return "/members/account/common/superAdHome";
+        return "members/account/common/superAdHome";
     }
 
     @GetMapping("/hotelAdHome")
     public String hotelAdHome() {
-        return "/members/account/common/hotelAdHome";
+        return "members/account/common/hotelAdHome";
     }
 
     @GetMapping("/storeAdHome")
     public String storeAdHome() {
-        return "/members/account/common/storeAdHome";
+        return "members/account/common/storeAdHome";
     }
 
     @GetMapping("/mypage")
     public String adminMyPage(Principal principal, Model model) {
 
-        return "/members/account/common/mypage";
+        return "members/account/common/mypage";
     }
 
     @GetMapping("/update")
@@ -220,7 +219,7 @@ public class AccountController {
     public String adminUpdate(Principal principal, Model model){
         MembersEntity members = membersRepository.findByEmail(principal.getName());
         model.addAttribute("member", members);
-        return "/members/account/common/update";
+        return "members/account/common/update";
     }
 
     @PostMapping("/update")
@@ -382,19 +381,19 @@ public class AccountController {
 
         if(membersRepository.findAll().isEmpty()){
             model.addAttribute("reset", "on");
-        };
+        }
         if ("bad_credentials".equals(error)) {
             model.addAttribute("passwordError", "비밀번호가 틀립니다.");
         } else if ("unknown".equals(error)) {
             model.addAttribute("emailError", "이메일이 틀립니다.");
         }
 
-        return "/members/account/common/login";
+        return "members/account/common/login";
     }
 
     @GetMapping("/logout-success")
     public String logout() {
-        return "/members/account/common/logout";
+        return "members/account/common/logout";
     }
 
 }

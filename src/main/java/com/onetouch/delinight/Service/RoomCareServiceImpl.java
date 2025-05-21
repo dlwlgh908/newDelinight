@@ -9,13 +9,8 @@ package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.Constant.RoomCareStatus;
 import com.onetouch.delinight.DTO.*;
-import com.onetouch.delinight.Entity.CheckInEntity;
-import com.onetouch.delinight.Entity.RoomCareEntity;
-import com.onetouch.delinight.Entity.RoomCareItemEntity;
-import com.onetouch.delinight.Repository.ImageRepository;
-import com.onetouch.delinight.Repository.RoomCareItemRepository;
-import com.onetouch.delinight.Repository.RoomCareMenuRepository;
-import com.onetouch.delinight.Repository.RoomCareRepository;
+import com.onetouch.delinight.Entity.*;
+import com.onetouch.delinight.Repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,24 +20,32 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 @Log4j2
 public class RoomCareServiceImpl implements RoomCareService {
+    private final CheckInRepository checkInRepository;
 
     private final RoomCareRepository roomCareRepository;
     private final RoomCareItemRepository roomCareItemRepository;
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
-    private final CheckInService checkInService;
     private final RoomCareMenuRepository roomCareMenuRepository;
+    private final CheckOutLogRepository checkOutLogRepository;
 
 
     @Override
     public void orders(List<RoomCareItemDTO> roomCareItemDTOList, String email) {
-        CheckInDTO checkInDTO = checkInService.findCheckInByEmail(email);
+        CheckInEntity checkInEntity;
+        if(checkInRepository.findByUsersEntity_Email(email)!=null){
+            checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+        }
+        else{
+            checkInEntity = checkInRepository.findByGuestEntity_Phone(email);
+        }
         List<RoomCareItemEntity> roomCareItemEntities = new ArrayList<>();
         for (RoomCareItemDTO roomCareItemDTO : roomCareItemDTOList) {
             RoomCareItemEntity roomCareItemEntity = new RoomCareItemEntity();
@@ -54,10 +57,10 @@ public class RoomCareServiceImpl implements RoomCareService {
 
         RoomCareEntity roomCareEntity = new RoomCareEntity();
         roomCareEntity.setRoomCareItemEntities(roomCareItemEntities);
-        roomCareEntity.setCheckInEntity(modelMapper.map(checkInDTO, CheckInEntity.class));
+        roomCareEntity.setCheckInEntity(checkInEntity);
         roomCareEntity.setRoomCareStatus(RoomCareStatus.AWAITING);
         roomCareEntity.setAwaitingTime(LocalDateTime.now());
-        roomCareEntity.setHotelEntity(checkInService.findHotelInByEmail(checkInDTO.getId()));
+        roomCareEntity.setHotelEntity(checkInEntity.getRoomEntity().getHotelEntity());
 
         for (RoomCareItemEntity roomCareItemEntity : roomCareEntity.getRoomCareItemEntities()) {
             roomCareItemEntity.setRoomCareEntity(roomCareEntity);
@@ -67,6 +70,23 @@ public class RoomCareServiceImpl implements RoomCareService {
 
     }
 
+
+    @Override
+    public void checkInToCheckOut(Long checkInId, Long checkOutId) {
+        List<RoomCareEntity> roomCareEntities = roomCareRepository.findByCheckInEntity_Id(checkInId);
+        if (roomCareEntities == null) {
+            return;
+        }
+        roomCareEntities.forEach(roomCareEntity -> {
+            roomCareEntity.setCheckInEntity(null);
+
+            Optional<CheckOutLogEntity> optionalCheckOutLogEntity = checkOutLogRepository.findById(checkOutId);
+            CheckOutLogEntity checkOutLogEntity = optionalCheckOutLogEntity.get();
+            roomCareEntity.setCheckOutLogEntity(checkOutLogEntity);
+            roomCareRepository.save(roomCareEntity);
+        });
+
+    }
     @Override
     public void changeStatus(Long id) {
         log.info(id);

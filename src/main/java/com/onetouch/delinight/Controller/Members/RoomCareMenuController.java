@@ -28,6 +28,6 @@ public class RoomCareMenuController {
         model.addAttribute("list", list);
         model.addAttribute("hotelId", hotelId);
 
-        return "/members/roomCare/menu/list";
+        return "members/roomCare/menu/list";
     }
 }

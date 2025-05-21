@@ -17,9 +17,9 @@ import java.util.Optional;
 public interface UsersRepository extends JpaRepository<UsersEntity, Long> {
 
     @Query("select u from UsersEntity u where u.email = :email")
-    public UsersEntity selectEmail(String email); // Email 찾기
+    UsersEntity selectEmail(String email); // Email 찾기
 
-    public boolean existsByEmail(String email); // 회원가입 여부확인
+    boolean existsByEmail(String email); // 회원가입 여부확인
 
 
     void deleteByEmail(String email);
@@ -27,5 +27,5 @@ public interface UsersRepository extends JpaRepository<UsersEntity, Long> {
     // 로그인한 사용자를 username 으로 찾는 메서드
     Optional<UsersEntity> findByName(String name);
 
-    public UsersEntity findByEmail(String email);
+    UsersEntity findByEmail(String email);
 }

@@ -43,6 +43,10 @@ public class CheckOutLogDTO {
     private RoomDTO roomDTO;
 
     private CheckInStatus checkInStatus;
+    public CheckOutLogDTO setRoomDTO(RoomDTO roomDTO){
+        this.roomDTO = roomDTO;
+        return this;
+    }
 
     public CheckOutLogDTO setUsersDTO(UsersDTO usersDTO){
         this.usersDTO = usersDTO;

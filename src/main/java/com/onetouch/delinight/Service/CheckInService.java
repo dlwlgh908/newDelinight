@@ -14,28 +14,28 @@ import java.util.List;
 public interface CheckInService {
 
     //    public void create(CheckInDTO checkInDTO, String email);
-    public void create(RoomEntity roomEntity);
+    void create(RoomEntity roomEntity);
 
 
-    public List<CheckInDTO> list();
+    List<CheckInDTO> list();
 
-    public List<CheckInDTO> list2();
+    List<CheckInDTO> list2();
 
-    public void checkin(CheckInDTO checkInDTO);
+    void checkin(CheckInDTO checkInDTO);
 
-    public void checkout(Long id);
+    void checkout(Long id);
 
-    public UsersDTO  checkEmail(String email);
+    UsersDTO  checkEmail(String email);
 
-    public List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus, String email);
+    List<CheckInDTO> getListCheckinByStatus(CheckInStatus checkInStatus, String email);
 
-    public CheckInDTO findCheckInByEmail(String email);
-    public HotelEntity findHotelInByEmail(Long CheckInId);
+    CheckInDTO findCheckInByEmail(String email);
+    HotelEntity findHotelInByEmail(Long CheckInId);
 
 
-    public void del(Long id);
+    void del(Long id);
 
-    public List<CheckInDTO> listCheckInWithPrice(String email);
+    List<CheckInDTO> listCheckInWithPrice(String email);
 
 
 

@@ -44,9 +44,10 @@ public class RoomCareEntity extends BaseEntity {
     private LocalDateTime awaitingTime; // 요청시간
     private LocalDateTime deliveredTime; // 완료시간
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "log_id")
     private CheckOutLogEntity checkOutLogEntity; // 체크아웃 정보
+
 
     @Enumerated(EnumType.STRING)
     RoomCareStatus roomCareStatus; // 요청완료 상태

@@ -44,6 +44,11 @@ public class InquireEntity extends BaseTimeEntity {
     private CheckInEntity checkInEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "log_id")
+    private CheckOutLogEntity checkOutLogEntity;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")
     private HotelEntity hotelEntity;
 

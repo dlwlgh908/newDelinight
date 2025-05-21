@@ -12,17 +12,17 @@ import com.onetouch.delinight.Entity.UsersEntity;
 
 public interface UsersService {
 
-    public void singUpUser(UsersDTO usersDTO);
+    void singUpUser(UsersDTO usersDTO);
 
-    public boolean passwordChange(UsersDTO usersDTO);
+    boolean passwordChange(UsersDTO usersDTO);
 
-    public String sendTemporaryPassword(UsersDTO usersDTO);
+    String sendTemporaryPassword(UsersDTO usersDTO);
 
-    public void userUpdate(String email , UsersDTO usersDTO);
+    void userUpdate(String email, UsersDTO usersDTO);
 
-    public void userDelete(String email);
+    void userDelete(String email);
 
-    public UsersDTO findUsersByEmail(String email);
+    UsersDTO findUsersByEmail(String email);
 
 
 

@@ -24,13 +24,17 @@
                     <!--네비게이션-->
                     <ul class="nav nav-pills mb-4">
                         <li class="nav-item">
-                            <a class="nav-link" th:classappend="${checkinstatus == null or checkinstatus == ''} ? 'active'" aria-current="page" th:href="@{/members/checkin/list(checkinstatus=null)}">전체 방 목록</a>
+                            <a class="nav-link"
+                               th:classappend="${checkinstatus == null or checkinstatus == ''} ? 'active'"
+                               aria-current="page" th:href="@{/members/checkin/list(checkinstatus=null)}">전체 방 목록</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:classappend="${checkinstatus == 'VACANCY'} ? 'active'" th:href="@{/members/checkin/list(checkinstatus='VACANCY')}">빈 방</a>
+                            <a class="nav-link" th:classappend="${checkinstatus == 'VACANCY'} ? 'active'"
+                               th:href="@{/members/checkin/list(checkinstatus='VACANCY')}">빈 방</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:classappend="${checkinstatus == 'CHECKIN'} ? 'active'"  th:href="@{/members/checkin/list(checkinstatus='CHECKIN')}">투숙중인 방</a>
+                            <a class="nav-link" th:classappend="${checkinstatus == 'CHECKIN'} ? 'active'"
+                               th:href="@{/members/checkin/list(checkinstatus='CHECKIN')}">투숙중인 방</a>
                         </li>
                     </ul>
 
@@ -38,16 +42,22 @@
                         <div class="d-flex align-items-center me-4">
                             <label class="form-label" style="width: 150px;">예약 번호</label>
                             <input type="text" id="reservationNum" class="form-control me-2">
-                            <button class="btn btn-primary" id="reservBtn"><i class="fas fa-magnifying-glass"></i></button>
+                            <button class="btn btn-primary" id="reservBtn"><i class="fas fa-magnifying-glass"></i>
+                            </button>
+                            <button class="btn btn-outline-primary" style="margin-left:10px ; width: 300px" data-bs-toggle="modal" data-bs-target="#reservList"
+                                    id="reservCheck">예약 리스트 확인
+                            </button>
                         </div>
                         <div class="d-flex align-items-center me-4">
                             <label class="form-label" style="width: 150px;">회원 조회</label>
                             <input type="email" id="emailcheck" class="form-control me-2">
-                            <button class="btn btn-primary" id="checkIdBtn"><i class="fas fa-magnifying-glass"></i></button>
+                            <button class="btn btn-primary" id="checkIdBtn" ><i class="fas fa-magnifying-glass"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <div id="result" hidden="hidden" class="border rounded p-4 bg-gradient mb-3" style="width: 300px; position: absolute; top: 120px; right: 400px; font-size: 0.8rem">
+                    <div id="result" hidden="hidden" class="border rounded p-4 bg-gradient mb-3"
+                         style="width: 300px; position: absolute; top: 120px; right: 20px; font-size: 0.8rem">
                         <p class="mb-1">userId : <span id="id"></span></p>
                         <p class="mb-1">이름 : <span id="name"></span></p>
                         <p class="mb-1">이메일 : <span id="email"></span></p>
@@ -71,9 +81,10 @@
                         </thead>
 
                         <tbody id="checkinTable">
-                        <th:block  th:each="list, stat:${checkInDTOList}">
+                        <th:block th:each="list, stat:${checkInDTOList}">
                             <tr>
-                                <th scope="row offset-4" th:text="${list.id}" th:value="${list.id}" class="checkinId" hidden="hidden" ></th>
+                                <th scope="row offset-4" th:text="${list.id}" th:value="${list.id}" class="checkinId"
+                                    hidden="hidden"></th>
                                 <th scope="row" th:text="${stat.count}"></th>
 
                                 <td>
@@ -84,7 +95,7 @@
                                         <span th:text="${list.checkinDate}"></span>
                                     </th:block>
                                     <th:block th:if="${list.checkinDate == null}">
-                                        <input  name="checkinDate" class="checkinDate" type="date">
+                                        <input name="checkinDate" class="checkinDate" type="date">
                                     </th:block>
                                 </td>
 
@@ -112,20 +123,18 @@
                                 <td>
                                     <th:block th:if="${list.guestDTO == null and list.usersDTO == null}">
                                         <input class="email" placeholder="이메일">
-                                        <input class="userId" hidden="hidden" >
+                                        <input class="userId" hidden="hidden">
                                     </th:block>
                                     <th:block th:if="${list.guestDTO != null}">
                                         <span th:text="${list.guestDTO.email}"></span>
-                                        <input class="userId" hidden="hidden" >
+                                        <input class="userId" hidden="hidden">
                                     </th:block>
                                     <th:block th:if="${list.usersDTO != null}">
                                         <span th:text="${list.usersDTO.email}"></span>
-                                        <input class="userId" hidden="hidden" >
+                                        <input class="userId" hidden="hidden">
                                     </th:block>
 
                                 </td>
-
-
 
 
                                 <td>
@@ -136,12 +145,12 @@
                                         <span th:if="${list.getUsersDTO() == null}" class="password" id="password">Vacancy</span>
 
                                     </th:block>
-<!--                                    유저면-->
+                                    <!--                                    유저면-->
                                     <th:block th:if="${list.getPassword != null and list.usersDTO != null}">
                                         <span th:text="${list.getPassword}"></span>
                                         <span><i class="fa-solid fa-user-check text-success"></i></span>
                                     </th:block>
-<!--                                    게스트면-->
+                                    <!--                                    게스트면-->
                                     <th:block th:if="${list.getPassword != null and list.guestDTO != null}">
                                         <span th:text="${list.getPassword}"></span>
 
@@ -159,28 +168,28 @@
                                 </td>
                                 <td>
                                     <th:block th:if="${list.checkInStatus.name() == 'CHECKIN'}">
-                                        <button class="btn btn-danger" id="checkoutBtn" th:value="${list.id}">체크아웃</button>
+                                        <button class="btn btn-danger" id="checkoutBtn" th:value="${list.id}">체크아웃
+                                        </button>
                                     </th:block>
                                     <th:block th:if="${list.checkInStatus.name() == 'VACANCY'}">
-                                        <button class="btn btn-success" id="checkinBtn" th:value="${list.id}">체크인</button>
+                                        <button class="btn btn-success" id="checkinBtn" th:value="${list.id}">체크인
+                                        </button>
                                     </th:block>
                                 </td>
 
-                                <td class="trContainer" style="display: none" >
-                                    <button th:data-checkinid="${list.id}" class="plusBtn btn btn-outline-success" style="display: inline;"><i class="fa-solid fa-user-plus"></i></button>
-                                    <button th:data-checkinid="${list.id}" class="minusBtn btn btn-outline-danger" style="display: none"><i class="fa-solid fa-user-minus"></i></button>
+                                <td class="trContainer" style="display: none">
+                                    <button th:data-checkinid="${list.id}" class="plusBtn btn btn-outline-success"
+                                            style="display: inline;"><i class="fa-solid fa-user-plus"></i></button>
+                                    <button th:data-checkinid="${list.id}" class="minusBtn btn btn-outline-danger"
+                                            style="display: none"><i class="fa-solid fa-user-minus"></i></button>
 
                                 </td>
-
 
 
                             </tr>
 
 
                         </th:block>
-
-
-
 
 
                         </tbody>
@@ -190,6 +199,92 @@
             </div>
 
 
+        </div>
+        <div class="modal fade" id="reservList" tabindex="-1" aria-labelledby="reservList" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">예약 리스트</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="font-size: 14px">
+                        <table class="table table-striped">
+
+                            <thead>
+                            <th>
+                                룸 넘버
+                            </th>
+                            <th>
+                                예약 번호
+                            </th>
+
+                            <th>
+                                체크인 날짜
+                            </th>
+                            <th>
+                                체크아웃 날짜
+                            </th>
+                            <th>
+                                요청
+                            </th>
+                            <th>
+                                체크인하기
+                            </th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>3</td>
+                                <td>3/250520250523/7253</td>
+                                <td>05-20</td>
+                                <td>05-21</td>
+                                <td>고층 / 2bed </td>
+                                <td><button class="checkin btn btn-outline-primary">적용</td>
+                            </tr><tr>
+                                <td>4</td>
+                                <td>4/250520250523/3242</td>
+                                <td>05-20</td>
+                                <td>05-21</td>
+                                <td>저층 / 1bed </td>
+
+                                <td><button class="checkin btn btn-outline-primary">적용</td>
+
+                            </tr><tr>
+                                <td>5</td>
+                                <td>5/250520250523/1435</td>
+                                <td>05-20</td>
+                                <td>05-21</td>
+                                <td>저층 / 1bed</td>
+
+                                <td><button class="checkin btn btn-outline-primary">적용</button></td>
+
+                            </tr><tr>
+                                <td>6</td>
+                                <td>15/250520250523/5324</td>
+                                <td>05-20</td>
+                                <td>05-21</td>
+                                <td>고층 / 2be</td>
+
+                                <td><button class="checkin btn btn-outline-primary">적용</button></td>
+
+                            </tr><tr>
+                                <td>9</td>
+                                <td>15/250520250523/3321</td>
+                                <td>05-20</td>
+                                <td>05-21</td>
+                                <td>고층 / 1bed</td>
+
+                                <td><button class="checkin btn btn-outline-primary">적용</button></td>
+
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -265,9 +360,6 @@
         }
 
 
-
-
-
         $(function () {
             $(document).on("click", "#checkinBtn", function () {
                 let id = this.getAttribute("value");
@@ -282,18 +374,17 @@
                     return;
                 }
 
-
                 $.ajax({
-                    url : "/checkin/rest/register",
+                    url: "/checkin/rest/register",
                     type: "post",
-                    contentType : "application/json",
-                    data : JSON.stringify({
-                        id : id,
-                        checkinDate : checkinDate,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        id: id,
+                        checkinDate: checkinDate,
                         checkoutDate: checkoutDate,
-                        phone : phone,
-                        email : email,
-                        userId : userId
+                        phone: phone,
+                        email: email,
+                        userId: userId
 
                     }),
                     success: function (data) {
@@ -306,12 +397,21 @@
         });
 
         $(function () {
+
+            $(".checkin").on("click",function () {
+                const $tr = $(this).closest('tr');        // 버튼이 속한 tr 찾기
+                const reservNum = $tr.find('td').eq(1).text();
+                $("#reservationNum").val(reservNum)
+
+                $("#reservList").modal('hide');
+
+            })
             $(document).on("click", "#checkoutBtn", function () {
                 let id = $(this).val();
 
 
                 $.ajax({
-                    url : "/checkin/rest/out?id=" + id,
+                    url: "/checkin/rest/out?id=" + id,
                     type: "post",
 
                     success: function (data) {
@@ -325,20 +425,20 @@
 
         $(function () {
 
-            $(document).on("click", ".plusBtn",function () {
+            $(document).on("click", ".plusBtn", function () {
                 let id = $(this).data("checkinid")
                 let phone = $("#phone").text();
                 let email = $("#email").text();
                 let userId = $("#id").text();
 
 
-                updateRow2(id, phone, email,userId);
+                updateRow2(id, phone, email, userId);
                 $(".plusBtn").hide();
                 $(".minusBtn").show();
 
 
             })
-            $(document).on("click", ".minusBtn",function () {
+            $(document).on("click", ".minusBtn", function () {
                 let id = $(this).data("checkinid")
                 let phone = $("#phone").text();
                 let email = $("#email").text();
@@ -361,8 +461,6 @@
                     type: "post",
                     data: {"emailcheck": emailcheck},
                     success: function (usersDTO) {
-
-
 
 
                         $("#name").text(usersDTO.name);
@@ -405,8 +503,6 @@
         });
 
 
-
-
         $(function () {
 
 
@@ -419,14 +515,14 @@
                 $.ajax({
                     url: "/checkin/rest/reservation",
                     type: "post",
-                    data : {"reservNum" :reservNum },
+                    data: {"reservNum": reservNum},
                     success: function (response) {
                         let roomid = response.roomid;
                         let checkinDate = formatDate(response.checkinDate);
                         let checkoutDate = formatDate(response.checkoutDate);
                         let password = response.password;
 
-                        updateRow(roomid, checkinDate, checkoutDate,password)
+                        updateRow(roomid, checkinDate, checkoutDate, password)
 
                     },
                 })

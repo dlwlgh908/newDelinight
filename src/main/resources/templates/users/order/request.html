@@ -228,16 +228,13 @@
             }
 
             function payNow(){
-                //사용자가 입력한 포인트 값 가져오기(업다면 0을로 처리)
-                const usedPoint = parseInt($("#usedPoint").val()) || 0;
+
 
                 // 전체 결제 금액을 Thymeleaf로부터 가져와 JS 변수로 생성
                 const totalPrice = parseInt([[${totalPrice}]]);
 
                 // TossPayments 결제 금액을 포인트를 차감한 최종 금액으로 설정
-                const amount = totalPrice - usedPoint;
 
-                console.log("usedPoint",usedPoint);
                 console.log("totalPrice: ", totalPrice);
                 console.log("amount: ", amount);  // amount가 0으로 찍히는지 확인
 
@@ -249,7 +246,11 @@
                         url: "/roomService/order/payNow",
                         type: "post",
                         data: {"ordersId": ordersId, "memo": memoObject.val()},
-                        success: function () {},
+                        success: function () {
+                             requestPayment();
+
+
+                        },
                         error: function () {}
                     });
                 });

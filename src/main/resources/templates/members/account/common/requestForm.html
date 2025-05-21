@@ -31,7 +31,7 @@
                 <input th:if="${role.equals('본사 관리자')}" type="hidden" name="roleStr" value="super">
                 <input th:if="${role.equals('호텔 관리자')}" type="hidden" name="roleStr" value="hotel">
                 <input th:if="${role.equals('가맹점 관리자')}" type="hidden" name="roleStr" value="store">
-                <input th:if="${role.equals('호텔 관리자')}" type="hidden" name="parentId" th:value="${parentId}">
+                <input th:if="${role.equals('호텔 관리자')}" type="hidden" name="centerId" th:value="${parentId}">
                 <input th:if="${role.equals('본사 관리자')}" type="hidden" name="parentId" th:value="${parentId}">
                 <input th:if="${role.equals('가맹점 관리자')}" type="hidden" name="parentId" th:value="${parentId}">
 

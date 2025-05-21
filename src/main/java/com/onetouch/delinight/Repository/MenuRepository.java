@@ -18,18 +18,18 @@ import java.util.List;
 
 public interface MenuRepository extends JpaRepository<MenuEntity, Long> {
 
-    public List<MenuEntity> findByStoreEntity_HotelEntity_Id(Long hotelId);
+    List<MenuEntity> findByStoreEntity_HotelEntity_Id(Long hotelId);
 
-    public Page<MenuEntity> findByStoreEntity_Id(Long email, Pageable pageable);
+    Page<MenuEntity> findByStoreEntity_Id(Long email, Pageable pageable);
 
 //    public List<MenuEntity> findByMembersEntity_Email(String email);
 
     @Query("select m from MembersEntity m where m.email = :email")
-    public MenuEntity selectEmail(String email);
+    MenuEntity selectEmail(String email);
 
-    public List<MenuEntity> findByStoreEntity_Id(Long storeId);
+    List<MenuEntity> findByStoreEntity_Id(Long storeId);
     @Query("select m from MenuEntity m where m.storeEntity.id =:id")
-    public MenuEntity select2(Long id);
+    MenuEntity select2(Long id);
 
 
 

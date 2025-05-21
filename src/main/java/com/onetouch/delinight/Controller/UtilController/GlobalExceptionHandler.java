@@ -25,6 +25,9 @@ public class GlobalExceptionHandler {
         } else if (ex.getMessage().equals("유저 로그인 필요")) {
             response.sendRedirect("/users/login");
         }
+        else if (ex.getMessage().equals("체크인 없는 사람")) {
+            response.sendRedirect("/users/login?error=notCheckedIn");
+        }
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public ModelAndView handleBadRequest(IllegalArgumentException e) {

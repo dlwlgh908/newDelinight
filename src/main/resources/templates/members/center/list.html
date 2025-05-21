@@ -62,7 +62,7 @@
     <script>
         $(function (){
             $(".copyBtn").on("click", function () {
-                let fullLink = "http://localhost:8080/members/account/accountRequest?role=super&id="+$(this).data("centerid") ;
+                let fullLink = "http://wooriproject.iptime.org:9003/members/account/accountRequest?role=super&id="+$(this).data("centerid") ;
                 let tempInput = $("<input>");
                 $("body").append(tempInput);
                 tempInput.val(fullLink).select();

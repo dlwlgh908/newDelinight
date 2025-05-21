@@ -13,13 +13,13 @@ import java.util.List;
 
 public interface RoomService {
 
-    public void create(RoomDTO roomDTO, String email);
+    void create(RoomDTO roomDTO, String email);
 
-    public void update(RoomDTO roomDTO);
+    void update(RoomDTO roomDTO);
 
-    public List<RoomDTO> list(String email);
+    List<RoomDTO> list(String email);
 
-    public void del(Long id);
+    void del(Long id);
 
 
 

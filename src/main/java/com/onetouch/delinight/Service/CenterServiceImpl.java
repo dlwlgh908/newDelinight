@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +37,14 @@ public class CenterServiceImpl implements CenterService{
     private final MembersRepository membersRepository;
 
 
+    @Override
+    public void settingAdmin(Long membersId, Long centerId) {
+        Optional<CenterEntity> centerEntityOptional = centerRepository.findById(centerId);
+        MembersEntity members = membersRepository.findById(membersId).get();
+        CenterEntity center = centerEntityOptional.get();
+        center.setMembersEntity(members);
+        centerRepository.save(center);
+    }
 
     @Override
     public void create(CenterDTO centerDTO, String email) {
@@ -83,7 +92,6 @@ public class CenterServiceImpl implements CenterService{
 
     @Override
     public Long findCenter(String email) {
-
         CenterEntity centerEntity = centerRepository.findByMembersEntity_Email(email);
 
         return centerEntity.getId();

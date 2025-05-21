@@ -37,6 +37,7 @@ public class MembersDTO {
     private Long hotelId;
 
     private boolean isAdminElseWhere;
+    private Long centerId;
 
 
     public MembersDTO(MembersEntity entity) {

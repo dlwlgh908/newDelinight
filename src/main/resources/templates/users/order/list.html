@@ -64,8 +64,10 @@
 <div>
     <div class="container-fluid px-3 flex-grow-1 d-flex flex-column" layout:fragment="content">
     <div class="orderList">
+        <div th:if="${ordersDTOList.isEmpty()}" class="text-center" style="align-content:center; height: 200px; border: 1px solid black; border-radius: 5px;"><p>요청한 주문이 없습니다.</p></div>
 
-            <div class="row itemWrap" th:each="ordersDTO : ${ordersDTOList}" th:data-ordersid="${ordersDTO.id}">
+
+        <div class="row itemWrap" th:each="ordersDTO : ${ordersDTOList}" th:data-ordersid="${ordersDTO.id}">
                 <p class="row mb-2">
                 <p style="display: flex; justify-content: space-between">
                     <span>주문 번호([[${ordersDTO.id}]])</span>

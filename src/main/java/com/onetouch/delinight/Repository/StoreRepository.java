@@ -15,15 +15,15 @@ import java.util.List;
 
 public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
 
-    public StoreEntity findByMembersEntity_Email(String email);
-    public List<StoreEntity> findByHotelEntity_MembersEntity_Id(Long id);
+    StoreEntity findByMembersEntity_Email(String email);
+    List<StoreEntity> findByHotelEntity_MembersEntity_Id(Long id);
 
-    public boolean existsByMembersEntity_Email(String email);
+    boolean existsByMembersEntity_Email(String email);
 
-    public List<StoreEntity> findByHotelEntity_Id(Long hotelId);
+    List<StoreEntity> findByHotelEntity_Id(Long hotelId);
 
     @Query("select s from StoreEntity s where s.hotelEntity.membersEntity.email = :email")
-    public List<StoreEntity> selectallByHotelAdmin(String email);
+    List<StoreEntity> selectallByHotelAdmin(String email);
 
 
 

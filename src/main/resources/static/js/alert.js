@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
 
     const eventSource = new EventSource("/sse/connect");
@@ -11,7 +10,7 @@ $(document).ready(function () {
         console.error("SSE 연결 실패", e);
     };
 
-    eventSource.addEventListener("new-order",function (e) {
+    eventSource.addEventListener("new-order", function (e) {
         const parsedMap = JSON.parse(e.data);
         const ordersInfo = parsedMap.data;
         const alertCount = parsedMap.alertCount;
@@ -20,27 +19,27 @@ $(document).ready(function () {
 
     })
 
-    eventSource.addEventListener("new-inquire",function (e) {
+    eventSource.addEventListener("new-inquire", function (e) {
         const parsedMap = JSON.parse(e.data);
         const inquireInfo = parsedMap.data;
         const alertCount = parsedMap.alertCount;
         newInquire(inquireInfo, alertCount)
     })
 
-    eventSource.addEventListener("new-changeStatus",function (e) {
+    eventSource.addEventListener("new-changeStatus", function (e) {
         const parsedMap = JSON.parse(e.data);
         const chageStatus = parsedMap.data;
         newChangeStatus(chageStatus)
     })
 
-    eventSource.addEventListener("new-changeInquire",function (e) {
+    eventSource.addEventListener("new-changeInquire", function (e) {
         const parsedMap = JSON.parse(e.data);
         const chageStatus = parsedMap.data;
         newChangeInquire(chageStatus)
     })
 
 
-    function newOrder(ordersInfo, alertCount){
+    function newOrder(ordersInfo, alertCount) {
         Swal.fire({
             icon: 'info',
             title: '주문이 들어왔습니다.',
@@ -49,7 +48,8 @@ $(document).ready(function () {
 
         $(".notification-badge").text(alertCount)
     }
-    function newInquire(inquireInfo, alertCount){
+
+    function newInquire(inquireInfo, alertCount) {
         Swal.fire({
             icon: 'info',
             title: '새로운 문의가 들어왔습니다.',
@@ -58,26 +58,8 @@ $(document).ready(function () {
 
         $(".notification-badge").text(alertCount)
     }
-    function newChangeStatus(changeStatus){
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
-            icon: "success",
-            title: changeStatus
-        });
 
-
-    }
-function newChangeStatus(changeStatus){
+    function newChangeStatus(changeStatus) {
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -106,7 +88,6 @@ function newChangeStatus(changeStatus){
     });
 
 
-
     $("#confirmStart").click(function () {
 
         Swal.fire({
@@ -127,7 +108,6 @@ function newChangeStatus(changeStatus){
                     '승인이 완료되었습니다.',
                     '화끈하시네요~!',
                     'success'
-
                 )
             }
         })
@@ -137,7 +117,7 @@ function newChangeStatus(changeStatus){
     $("#promptStart").click(function () {
 
         (async () => {
-            const { value: getName } = await Swal.fire({
+            const {value: getName} = await Swal.fire({
                 title: '당신의 이름을 입력하세요.',
                 text: '그냥 예시일 뿐이니 정보유출 같은건 없습니다.',
                 input: 'text',

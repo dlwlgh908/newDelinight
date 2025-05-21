@@ -4,6 +4,7 @@ import com.onetouch.delinight.Constant.CheckInStatus;
 import com.onetouch.delinight.DTO.*;
 import com.onetouch.delinight.Entity.*;
 import com.onetouch.delinight.Repository.*;
+import com.onetouch.delinight.Util.EmailService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +27,17 @@ public class CheckInServiceImpl implements CheckInService{
 
     private final CheckInRepository checkInRepository;
     private  final OrdersService ordersService;
-    private final RoomRepository roomRepository;
     private final UsersRepository usersRepository;
     private final ModelMapper modelMapper;
     private final GuestRepository guestRepository;
     private final CheckOutLogRepository checkOutLogRepository;
     private final PasswordEncoder passwordEncoder;
     private final CartService cartService;
+    private final InquireService inquireService;
+    private final RoomCareService roomCareService;
+    private final StoreRepository storeRepository;
+    private final EmailService emailService;
+
 
 
 
@@ -191,9 +196,7 @@ public class CheckInServiceImpl implements CheckInService{
                 modelMapper.map(checkInDTO, CheckInEntity.class);
 
 
-
-
-        if(checkInDTO.getUserId()==null) {
+        if (checkInDTO.getUserId() == null) {
             int certNum = (int) (Math.random() * 8999) + 1000;
             checkInDTO.setPassword(String.valueOf(certNum));
         }
@@ -217,7 +220,7 @@ public class CheckInServiceImpl implements CheckInService{
 
             check.setGuestEntity(guestEntity);
 
-            String reservationNum = check.getRoomEntity().getId()+"/"+check.getCheckinDate()+"/";
+            String reservationNum = check.getRoomEntity().getId() + "/" + check.getCheckinDate() + "/";
             guestEntity.setReservationNum(reservationNum);
             checkInRepository.save(check);
             guestRepository.save(guestEntity);
@@ -228,6 +231,15 @@ public class CheckInServiceImpl implements CheckInService{
             UsersEntity usersEntity =
                     usersRepository.findById(checkInDTO.getUserId()).orElseThrow(EntityNotFoundException::new);
             check.setUsersEntity(usersEntity);
+
+            List<StoreEntity> storeEntityList = storeRepository.findByHotelEntity_Id(check.getRoomEntity().getHotelEntity().getId());
+            List<String> storeNames = new ArrayList<>();
+            for (StoreEntity store : storeEntityList) {
+                storeNames.add(store.getName());
+            }
+            String hotelName = check.getRoomEntity().getHotelEntity().getName();
+
+            emailService.sendCheckInEmail(check, usersEntity.getEmail(), storeNames, hotelName, usersEntity.getName());
 
             //회원이면 핸드폰 번호 뒤 4자리로 비밀번호 설정
             String phone = usersEntity.getPhone();
@@ -241,11 +253,10 @@ public class CheckInServiceImpl implements CheckInService{
             checkInRepository.save(check);
 
         }
-
-
     }
 
-    @Override
+
+        @Override
     public void checkout(Long id) {
         CheckInEntity checkInEntity =
                 checkInRepository.findById(id).orElseThrow(EntityNotFoundException::new);
@@ -284,6 +295,9 @@ public class CheckInServiceImpl implements CheckInService{
 
         checkInRepository.save(checkInEntity);
         ordersService.checkInToCheckOut(checkInEntity.getId(), checkOutLogEntity.getId());
+        roomCareService.checkInToCheckOut(checkInEntity.getId(), checkOutLogEntity.getId());
+        inquireService.checkInToCheckOut(checkInEntity.getId(), checkOutLogEntity.getId());
+
 
 
     }

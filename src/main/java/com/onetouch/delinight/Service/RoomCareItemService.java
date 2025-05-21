@@ -13,11 +13,11 @@ import java.util.List;
 public interface RoomCareItemService {
 
     //등록
-    public void create(RoomCareItemDTO roomCareItemDTO, String email);
+    void create(RoomCareItemDTO roomCareItemDTO, String email);
     //수정
-    public void update(RoomCareItemDTO roomCareItemDTO, String email);
+    void update(RoomCareItemDTO roomCareItemDTO, String email);
     //목록
-    public List<RoomCareItemDTO> list();
+    List<RoomCareItemDTO> list();
     //삭제
-    public void del(Long roomCareItemId, String email);
+    void del(Long roomCareItemId, String email);
 }

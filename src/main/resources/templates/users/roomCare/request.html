@@ -21,7 +21,6 @@
 <div class="container-fluid px-3 flex-grow-1 d-flex flex-column" layout:fragment="content">
 
 
-
     <div class="imgScrollBox">
         <img style="width: 100%; height: 150px;" th:src="${hotelDTO.getImgUrl()}">
     </div>
@@ -71,7 +70,7 @@
 
         })
 
-        function requestSubmit(){
+        function requestSubmit() {
             const cartItems = [];
 
             $(".miniCart .cartRow").each(function () {
@@ -85,12 +84,20 @@
             });
 
             if (cartItems.length === 0) {
-                Swal.fire({
-                    icon: "warning",
-                    title: "요청하신 서비스가 없습니다.",
-                    text: "서비스를 원하실 경우 서비스를 담아주세요.",
-                    timer: 2000,
-                    showConfirmButton: false
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    title: "장바구니에 담긴 서비스가 없습니다.",
+                    icon: "warning"
                 });
                 return;
             }
@@ -104,7 +111,7 @@
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(cartItems),
                 success: function (res) {
-                    window.location.href="/users/roomCare/list"
+                    window.location.href = "/users/roomCare/list"
                 },
                 error: function (err) {
                     showToast("요청 중 오류가 발생했습니다.");
@@ -120,13 +127,23 @@
             let quantity = parseInt($qtySpan.text().trim());
 
             if (quantity <= 1) {
-                Swal.fire({
-                    icon: "info",
-                    title: "최소 수량은 1입니다",
-                    text: "수량을 줄이려면 장바구니 제거 버튼을 눌러주세요.",
-                    timer: 2000,
-                    showConfirmButton: false
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
                 });
+                Toast.fire({
+                    icon: "warning",
+                    title: "최소 수량은 1개 입니다."
+                });
+
+
                 return;
             }
 
@@ -158,15 +175,38 @@
             })
 
             if (addedMenu) {
-                Swal.fire({
-                    icon: "warning",
-                    title: "이미 추가된 메뉴입니다",
-                    html: "<p style='margin-bottom: 3px'>"+itemName +"은(는)</p><p>이미 장바구니에 있어요.</p>",
-                    timer: 1500,
-                    showConfirmButton: false
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
                 });
+                Toast.fire({
+                    html: itemName + "은(는) 이미 추가된 메뉴 입니다."
+                });
+
+
                 return
             }
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                html: itemName + "이(가) 장바구니에 추가되었습니다."
+            });
             if (itemName.length > 6) {
                 itemName = itemName.substring(0, 7) + '...';
             }
@@ -176,14 +216,24 @@
         })
         $(document).on("click", ".cartItemDelete", function () {
             const $row = $(this).closest(".cartRow");
-                    $row.remove();
-                    Swal.fire({
-                        title: "취소 완료!",
-                        icon: "success",
-                        timer: 1000,
-                        showConfirmButton: false
-                    });
-                })
+            $row.remove();
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                html: "선택하신 요청이 삭제 되었습니다."
+            });
+
+        })
 
 
     </script>

@@ -12,10 +12,10 @@ import java.util.Optional;
 
 public interface CartItemRepository extends JpaRepository<CartItemEntity, Long> {
 
-    public Optional<CartItemEntity> findByCartEntity_IdAndMenuEntity_Id(Long cartEntityNum, Long menuEntityNum);
-    public List<CartItemEntity> findByCartEntity_Id(Long CartEntityId);
+    Optional<CartItemEntity> findByCartEntity_IdAndMenuEntity_Id(Long cartEntityNum, Long menuEntityNum);
+    List<CartItemEntity> findByCartEntity_Id(Long CartEntityId);
 
-    public void deleteByCartEntity_Id(Long cartNum);
+    void deleteByCartEntity_Id(Long cartNum);
 
 
 }

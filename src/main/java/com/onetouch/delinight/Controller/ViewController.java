@@ -43,7 +43,7 @@ public class ViewController {
     @GetMapping("/")
     public String index() {
 
-        return "/pages/index";
+        return "redirect:/members/account/login";
     }
     //
     //@GetMapping("/register")

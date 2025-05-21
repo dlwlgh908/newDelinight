@@ -106,7 +106,7 @@ public class UsersInquireController {
     public String read(@RequestParam Long id, Model model, Principal principal, RedirectAttributes redirectAttributes){
         InquireDTO inquireDTO = inquireService.read(id);
         model.addAttribute("inquireDTO", inquireDTO);
-        return "/users/inquire/read";
+        return "users/inquire/read";
     }
     //수정get
     @GetMapping("/update/{id}")
@@ -114,7 +114,7 @@ public class UsersInquireController {
         log.info("수정" +id);
         InquireDTO inquireDTO = inquireService.read(id);
         model.addAttribute("inquireDTO", inquireDTO);
-        return "/users/inquire/update";
+        return "users/inquire/update";
     }
     //수정post
     @PostMapping("/update")

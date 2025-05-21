@@ -62,7 +62,8 @@ public class MembersServiceImpl implements MembersService{
             return membersDTO;
         }
         else {
-            MembersDTO membersDTO = new MembersDTO().builder().email("ghost").build();
+            new MembersDTO();
+            MembersDTO membersDTO = MembersDTO.builder().email("ghost").build();
             return membersDTO;
         }
 
@@ -159,7 +160,7 @@ public class MembersServiceImpl implements MembersService{
     }
 
     @Override
-    public void create(MembersDTO membersDTO) {
+    public Long create(MembersDTO membersDTO) {
 
         MembersEntity membersEntity =
                 modelMapper.map(membersDTO, MembersEntity.class);
@@ -179,7 +180,8 @@ public class MembersServiceImpl implements MembersService{
             Optional<HotelEntity> optionalHotelEntity = hotelRepository.findById(membersDTO.getParentId());
             optionalHotelEntity.ifPresent(membersEntity::setHotelEntity);
         }
-        membersRepository.save(membersEntity);
+        MembersEntity members = membersRepository.save(membersEntity);
+        return members.getId();
 
 
     }
@@ -351,8 +353,7 @@ public class MembersServiceImpl implements MembersService{
             return Map.of(Role.ADMIN, id);
         }
 
-        Long id = centerService.findCenter(email);
-        return Map.of(Role.SUPERADMIN, id);
+        return null;
     }
 
 

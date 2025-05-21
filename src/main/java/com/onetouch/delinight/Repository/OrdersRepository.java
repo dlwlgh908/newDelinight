@@ -39,7 +39,8 @@ public interface OrdersRepository extends JpaRepository<OrdersEntity, Long> {
 
 
 
-
+    List<OrdersEntity> findByPendingTimeBetween(LocalDateTime yd, LocalDateTime to);
+    List<OrdersEntity> findByPaymentEntity_Id(Long id);
 
 
 

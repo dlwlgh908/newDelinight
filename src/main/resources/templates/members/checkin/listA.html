@@ -152,7 +152,6 @@
 <script th:inline="javascript">
 
     $(document).on("click", "#addCheckinBtn", function () {
-        alert("user 추가 버튼 클릭")
 
     });
 
@@ -236,11 +235,6 @@
             let userId = $(this).closest("tr").find(".userId").val();
 
 
-            alert(id)
-            alert(checkinDate)
-            alert(checkoutDate)
-            alert(phone)
-            alert(email)
             $.ajax({
                 url : "/checkin/rest/register",
                 type: "post",
@@ -255,7 +249,6 @@
 
                 }),
                 success: function (data) {
-                    alert("성공");
                     console.log(data)
                     location.reload()
                 },
@@ -268,14 +261,11 @@
             let id = $(this).val();
 
 
-            alert(id)
             $.ajax({
                 url : "/checkin/rest/out?id=" + id,
                 type: "post",
 
                 success: function (data) {
-                    alert("성공");
-                    console.log(data)
                     location.reload()
                 },
             })
@@ -290,10 +280,6 @@
             let email = $("#email").text();
             let userId = $("#id").text();
 
-            alert(id)
-            alert(email)
-            alert(phone)
-            alert(userId);
 
             updateRow2(id, phone, email,userId);
             $(".plusBtn").hide();
@@ -305,9 +291,6 @@
             let phone = $("#phone").text();
             let email = $("#email").text();
 
-            alert(id)
-            alert(email)
-            alert(phone)
 
             updateRow3(id, phone, email);
 
@@ -319,14 +302,12 @@
         $(document).on("click", "#checkIdBtn", function () {
             let emailcheck = $("#emailcheck").val();
 
-            alert(emailcheck);
 
             $.ajax({
                 url: "/checkin/rest/checkemail",
                 type: "post",
                 data: {"emailcheck": emailcheck},
                 success: function (usersDTO) {
-                    alert("성공")
 
                     $("#name").text(usersDTO.name);
                     $("#email").text(usersDTO.email);
@@ -372,21 +353,16 @@
             let reservNum = $("#reservationNum").val();
             let id = $(".checkinId").val();
 
-            alert(reservNum);
 
             $.ajax({
                 url: "/checkin/rest/reservation",
                 type: "post",
                 data : {"reservNum" :reservNum },
                 success: function (response) {
-                    alert("성공")
                     let roomid = response.roomid;
                     let checkinDate = formatDate(response.checkinDate);
                     let checkoutDate = formatDate(response.checkoutDate);
                     let certid = response.certid;
-                    alert("certid : "+certid);
-                    alert(roomid);
-                    alert(id);
 
                     updateRow(roomid, checkinDate, checkoutDate,certid)
 

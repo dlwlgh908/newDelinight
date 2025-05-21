@@ -99,7 +99,7 @@ public String listA(Model model, @RequestParam(value = "checkinstatus", required
 
         checkInDTOList = checkInService.getListCheckinByStatus(checkInStatus, principal.getName());
     } else {
-        checkInDTOList = checkInService.listCheckInWithPrice(principal.getName()); // ✅ 가격 포함된 리스트 가져오기
+        checkInDTOList = checkInService.listCheckInWithPrice(principal.getName());
     }
 
 

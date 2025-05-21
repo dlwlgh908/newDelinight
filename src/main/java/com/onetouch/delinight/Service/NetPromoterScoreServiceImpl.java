@@ -103,9 +103,7 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
         LocalDateTime startDate = today.withDayOfMonth(1).toLocalDate().atStartOfDay();
 
         List<NetPromoterScoreEntity> netPromoterScoreEntityList = netPromoterScoreRepository.findByStoreEntity_MembersEntity_EmailAndRegTimeBetween(email, startDate, today);
-        if(netPromoterScoreEntityList.isEmpty()){
-            return false;
-        } else return true;
+        return !netPromoterScoreEntityList.isEmpty();
     }
 
     @Override
@@ -160,7 +158,14 @@ public class NetPromoterScoreServiceImpl implements NetPromoterScoreService {
         int count = 0;
         for (NetPromoterScoreDTO netPromoterScoreDTO : netPromoterScoreDTOList){
             count++;
-            prompt.append(count).append("번 만족도 평가의 1번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionOne()).append(" , 2번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionTwo()).append(", 3번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionThree()).append(", 4번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionFour()).append(", 5번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionFive()).append(", 총 평균 점수 : ").append(netPromoterScoreDTO.getTotalScore()).append(", 개별 코멘트 : ").append(netPromoterScoreDTO.getQuestionOne()).append(", ");
+            if(netPromoterScoreDTO.getEtcQuestion()!=null){
+                prompt.append(count).append("번 만족도 평가의 1번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionOne()).append(" , 2번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionTwo()).append(", 3번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionThree()).append(", 4번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionFour()).append(", 5번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionFive()).append(", 총 평균 점수 : ").append(netPromoterScoreDTO.getTotalScore()).append(", 개별 코멘트 : ").append(netPromoterScoreDTO.getEtcQuestion()).append(", ");
+
+            }
+            else {
+                prompt.append(count).append("번 만족도 평가의 1번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionOne()).append(" , 2번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionTwo()).append(", 3번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionThree()).append(", 4번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionFour()).append(", 5번 문항 점수 : ").append(netPromoterScoreDTO.getQuestionFive()).append(", 총 평균 점수 : ").append(netPromoterScoreDTO.getTotalScore()).append(", ");
+
+            }
         }
 
         return prompt.toString();

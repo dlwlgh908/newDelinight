@@ -33,7 +33,7 @@ public class RoomCareItemController {
     @GetMapping("/create")
     public String createView(){
 
-        return "/members/roomCareItem/create";
+        return "members/roomCareItem/create";
     }
 
     @PostMapping("/create")
@@ -52,7 +52,7 @@ public class RoomCareItemController {
                 roomCareItemService.list();
         model.addAttribute("roomCareItemDTOList", roomCareItemDTOList);
 
-        return "/members/roomCareItem/list";
+        return "members/roomCareItem/list";
     }
 
 

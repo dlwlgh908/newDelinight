@@ -12,6 +12,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     public String handleError(HttpServletRequest request) {
         Integer statusCode = (Integer) request.getAttribute("jakarta.servlet.error.status_code");
 
+
         if (statusCode == 400) {
             return "error/400";
         } else if (statusCode == 401) {

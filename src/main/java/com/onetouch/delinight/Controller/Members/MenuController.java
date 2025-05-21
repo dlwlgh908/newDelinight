@@ -37,11 +37,11 @@ public class MenuController {
         boolean storeImgExistence = imageService.ExistStoreImgByEmail(principal.getName());
         if(storeImgExistence) {
             model.addAttribute("menuDTO", new MenuDTO());
-            return "/members/menu/create";
+            return "members/menu/create";
         }
         else {
             model.addAttribute("sep", "store");
-            return "/members/account/common/imgRedirect";
+            return "members/account/common/imgRedirect";
         }
     }
 
@@ -76,7 +76,7 @@ public class MenuController {
             log.info("선택된 메뉴 :: ", selectedMenu);
         }
 
-        return "/members/menu/list";
+        return "members/menu/list";
     }
 
     @GetMapping("/update/{id}")
@@ -87,7 +87,7 @@ public class MenuController {
         log.info(menuDTO.getId());
         String imgUrl = imageService.read(id);
         model.addAttribute("imgUrl",imgUrl);
-        return "/members/menu/update";
+        return "members/menu/update";
 
     }
     @PostMapping("/update")

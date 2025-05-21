@@ -8,14 +8,8 @@
 package com.onetouch.delinight.Service;
 
 import com.onetouch.delinight.DTO.*;
-import com.onetouch.delinight.Entity.CheckInEntity;
-import com.onetouch.delinight.Entity.HotelEntity;
-import com.onetouch.delinight.Entity.InquireEntity;
-import com.onetouch.delinight.Entity.UsersEntity;
-import com.onetouch.delinight.Repository.CheckInRepository;
-import com.onetouch.delinight.Repository.HotelRepository;
-import com.onetouch.delinight.Repository.InquireRepository;
-import com.onetouch.delinight.Repository.UsersRepository;
+import com.onetouch.delinight.Entity.*;
+import com.onetouch.delinight.Repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -46,16 +40,39 @@ public class InquireServiceImpl implements InquireService {
     private final CheckInRepository checkInRepository;
     private final HotelRepository hotelRepository;
     private final UsersRepository usersRepository;
-    private final CheckInService checkInService;
     private final SseService sseService;
+    private final CheckOutLogRepository checkOutLogRepository;
 
+
+
+    @Override
+    public void checkInToCheckOut(Long checkInId, Long checkOutId) {
+        List<InquireEntity> inquireEntities = inquireRepository.findByCheckInEntity_Id(checkInId);
+        if (inquireEntities == null) {
+            return;
+        }
+        inquireEntities.forEach(inquireEntity -> {
+            inquireEntity.setCheckInEntity(null);
+
+            Optional<CheckOutLogEntity> optionalCheckOutLogEntity = checkOutLogRepository.findById(checkOutId);
+            CheckOutLogEntity checkOutLogEntity = optionalCheckOutLogEntity.get();
+            inquireEntity.setCheckOutLogEntity(checkOutLogEntity);
+            inquireRepository.save(inquireEntity);
+        });
+
+    }
     @Override
     public InquireDTO register(InquireDTO inquireDTO, String email) {
         InquireEntity inquireEntity = modelMapper.map(inquireDTO, InquireEntity.class);
         //체크인 id을 찾아와서
 
-        CheckInDTO checkInDTO = checkInService.findCheckInByEmail(email);
-        CheckInEntity checkInEntity = checkInRepository.findById(checkInDTO.getId()).get();
+        CheckInEntity checkInEntity;
+        if(checkInRepository.findByUsersEntity_Email(email)!=null){
+         checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+        }
+        else {
+            checkInEntity = checkInRepository.findByGuestEntity_Phone(email);
+        }
 
         //체크인에서 호텔 정보 추출
         HotelEntity hotelEntity = checkInEntity.getRoomEntity().getHotelEntity();
@@ -90,24 +107,42 @@ public class InquireServiceImpl implements InquireService {
     public Page<InquireDTO> inquireList(Pageable pageable,String email) {
 
         log.info("히히"+email);
-        UsersEntity usersEntity = checkInRepository.findByUsersEntity_Email(email).getUsersEntity();
-        log.info("히히 엔티티" + usersEntity);
-        //이메일로 체크인 정보를 찾는다
-        if (usersEntity == null){
-            // null이면 Qna가 없다는 뜻이니 빈 페이지 반환 (에러 안 나게!)
+        Page<InquireEntity> pageList;
 
-            return Page.empty();
+        if(checkInRepository.findByUsersEntity_Email(email)!=null){
+
+
+            UsersEntity usersEntity = checkInRepository.findByUsersEntity_Email(email).getUsersEntity();
+            log.info("히히 엔티티" + usersEntity);
+            //이메일로 체크인 정보를 찾는다
+
+            //최신순으로 정렬
+            Pageable sortedPageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(Sort.Direction.DESC, "regTime"));
+
+
+            pageList = inquireRepository.findByCheckInEntity_UsersEntity_Id(usersEntity.getId(),sortedPageable);
+            //방금 찾은 체크인 기록의 id로 문의글을 찾고, 한페이지씩 잘라서 가져와
+
+        }
+            else {
+
+            GuestEntity guestEntity = checkInRepository.findByGuestEntity_Phone(email).getGuestEntity();
+
+            Pageable sortedPageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(Sort.Direction.DESC, "regTime"));
+
+
+            pageList = inquireRepository.findByCheckInEntity_GuestEntity_Id(guestEntity.getId(),sortedPageable);
+            //방금 찾은 체크인 기록의 id로 문의글을 찾고, 한페이지씩 잘라서 가져와
+
+
         }
 
-        //최신순으로 정렬
-        Pageable sortedPageable = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                Sort.by(Sort.Direction.DESC, "regTime"));
-
-
-        Page<InquireEntity> pageList = inquireRepository.findByCheckInEntity_UsersEntity_Id(usersEntity.getId(),sortedPageable);
-        //방금 찾은 체크인 기록의 id로 문의글을 찾고, 한페이지씩 잘라서 가져와
 
         return pageList.map(data -> modelMapper.map(data, InquireDTO.class));
 
@@ -132,8 +167,16 @@ public class InquireServiceImpl implements InquireService {
     public InquireDTO read(Long id) {
         Optional<InquireEntity>optionalInquireEntity = inquireRepository.findById(id);
         InquireEntity inquireEntity = optionalInquireEntity.get();
-        InquireDTO inquireDTO = modelMapper.map(inquireEntity, InquireDTO.class);
-        return inquireDTO;
+        InquireDTO inquireDTO;
+        if(inquireEntity.getCheckInEntity() !=null){
+            inquireDTO = modelMapper.map(inquireEntity, InquireDTO.class).setCheckInDTO(modelMapper.map(inquireEntity.getCheckInEntity(), CheckInDTO.class).setRoomDTO(modelMapper.map(inquireEntity.getCheckInEntity().getRoomEntity(), RoomDTO.class)));
+        }
+        else
+        {
+            inquireDTO = modelMapper.map(inquireEntity, InquireDTO.class).setCheckOutLogDTO(modelMapper.map(inquireEntity.getCheckOutLogEntity(), CheckOutLogDTO.class).setRoomDTO(modelMapper.map(inquireEntity.getCheckOutLogEntity().getRoomEntity(), RoomDTO.class)));
+
+        }
+                return inquireDTO;
     }
 
     @Override

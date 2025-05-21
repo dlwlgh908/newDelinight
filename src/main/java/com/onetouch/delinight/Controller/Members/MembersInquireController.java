@@ -55,7 +55,7 @@ public class MembersInquireController {
         log.info(inquireDTOList);
         model.addAttribute("inquireDTOList", inquireDTOList);
 
-        return "/members/inquire/list";
+        return "members/inquire/list";
 
     }
 
@@ -74,7 +74,7 @@ public class MembersInquireController {
 
         log.info(inquireDTO);
         log.info(inquireDTO);
-        return "/members/inquire/read";
+        return "members/inquire/read";
     }
 
     @GetMapping("/dashboard")

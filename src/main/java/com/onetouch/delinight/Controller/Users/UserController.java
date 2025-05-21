@@ -42,7 +42,7 @@ public class UserController {
 
         @GetMapping("/mobile")
         public String mobileGET(){
-                return "/users/mobile";
+                return "users/mobile";
         }
 
         @PostMapping("/chatGPT/recommend/menu")
@@ -73,7 +73,7 @@ public class UserController {
 
 
 
-                return "/users/home";
+                return "users/home";
         }
 
         @GetMapping("/store/read")
@@ -83,12 +83,12 @@ public class UserController {
                 StoreDTO storeDTO = storeService.read(storeId);
                 model.addAttribute("menuDTOList", menuDTOList);
                 model.addAttribute("storeDTO", storeDTO);
-                return "/users/store/read";
+                return "users/store/read";
         }
 
         @GetMapping("/signUp")
         public String singUp() {
-                return "/users/account/signUp";
+                return "users/account/signUp";
         }
 
         @PostMapping("/signUp")
@@ -103,10 +103,10 @@ public class UserController {
                         usersService.singUpUser(usersDTO);
                 }catch (Exception e) {
                         model.addAttribute("errorMessage" , "회원가입 처리 중 오류가 발생했습니다.");
-                        return "/users/account/signUp";
+                        return "users/account/signUp";
                 }
 
-                return "/users/account/login";
+                return "users/account/login";
         }
 
         @GetMapping("/login")
@@ -114,7 +114,7 @@ public class UserController {
 
                 model.addAttribute("sep", sep);
 
-                return "/users/account/login";
+                return "users/account/login";
         }
 
 
@@ -122,7 +122,7 @@ public class UserController {
         @GetMapping("/passwordChange")
         public String passwordChangeGET() {
                 log.info("passwordChange");
-                return "/users/account/passwordChange";
+                return "users/account/passwordChange";
         }
 
         @PostMapping("/passwordChange")
@@ -143,7 +143,7 @@ public class UserController {
         // 임시 비번발급
         @GetMapping("/sendPassword")
         public String sendPasswordGET() {
-                return "/users/account/sendPassword";
+                return "users/account/sendPassword";
         }
 
         @PostMapping("/sendPassword")
@@ -205,13 +205,13 @@ public class UserController {
 
         @GetMapping("/userCheck")
         public String userCheckGET() {
-                return "/users/userCheck";
+                return "users/userCheck";
         }
 
         // 사용자 주문 View Mapping →→→→→→→→ RestFullController
         @GetMapping("welcome")
         public String WelcomeUserGET() {
-                return "/users/account/welcome";
+                return "users/account/welcome";
         }
 
 

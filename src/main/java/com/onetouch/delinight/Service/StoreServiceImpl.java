@@ -132,26 +132,34 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public List<StoreDTO> list(String email) {
-        CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
-        CheckInEntity checkInEntity1 = checkInRepository.findByGuestEntity_Phone(email);
-        Long hotelId= 0L;
-        if (checkInEntity != null) {
+        try {
+            CheckInEntity checkInEntity = checkInRepository.findByUsersEntity_Email(email);
+            CheckInEntity checkInEntity1 = checkInRepository.findByGuestEntity_Phone(email);
+            Long hotelId= 0L;
+            if (checkInEntity != null) {
 
-            hotelId = checkInEntity.getRoomEntity().getHotelEntity().getId();
+                hotelId = checkInEntity.getRoomEntity().getHotelEntity().getId();
 
-        } else {
-            hotelId = checkInEntity1.getRoomEntity().getHotelEntity().getId();
+            } else {
+                hotelId = checkInEntity1.getRoomEntity().getHotelEntity().getId();
 
 
+            }
+            List<StoreEntity> storeEntityList = storeRepository.findByHotelEntity_Id(hotelId);
+            log.info(storeEntityList);
+            List<StoreDTO> storeDTOList = storeEntityList.stream().map(data -> modelMapper.map(
+                            data, StoreDTO.class)
+                    .setMenuDTOList(
+                            menuRepository.findByStoreEntity_Id(data.getId()).stream().map(
+                                    menuData -> modelMapper.map(menuData, MenuDTO.class)).toList()).setImgUrl(
+                                            imageRepository.findByStoreEntity_Id(data.getId()).get().getFullUrl())).toList();
+
+            return storeDTOList;
         }
-        List<StoreEntity> storeEntityList = storeRepository.findByHotelEntity_Id(hotelId);
-        List<StoreDTO> storeDTOList = storeEntityList.stream().map(data -> modelMapper.map(
-                data, StoreDTO.class)
-                .setMenuDTOList(
-                        menuRepository.findByStoreEntity_Id(data.getId()).stream().map(
-                                menuData -> modelMapper.map(menuData, MenuDTO.class)).toList()).setImgUrl(imageRepository.findByStoreEntity_Id(data.getId()).get().getFullUrl())).toList();
+        catch (NullPointerException e){
+            throw new RuntimeException("체크인 없는 사람");
+        }
 
-        return storeDTOList;
     }
 
     @Override

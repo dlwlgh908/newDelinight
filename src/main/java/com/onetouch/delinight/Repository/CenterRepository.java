@@ -11,10 +11,12 @@ import com.onetouch.delinight.Entity.CenterEntity;
 import com.onetouch.delinight.Entity.MembersEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface CenterRepository extends JpaRepository<CenterEntity, Long> {
 
-    public boolean existsByMembersEntity_Email(String email);
-    public CenterEntity findByMembersEntity_Email(String email);
+    boolean existsByMembersEntity_Email(String email);
+    CenterEntity findByMembersEntity_Email(String email);
 
 
 }

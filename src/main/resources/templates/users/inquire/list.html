@@ -21,7 +21,7 @@
 
 
     <div style="display: flex; justify-content: flex-end; align-items: center; height: 40px;">
-        <a href="/users/inquire/register" class="btn" style="justify-content:center; display: flex; align-items: center; height: 40px; font-size:0.8em; background-color: black; color: white; border: 1px solid black; border-radius: 0; margin-bottom: 0px">
+        <a href="/users/inquire/register" class="btn " style="justify-content:center; display: flex; align-items: center; height: 40px; font-size:0.8em; background-color: black; color: white; border: 1px solid black; border-radius: 0; margin-bottom: 0px">
             문의하러가기 &nbsp<i class="bi bi-chat-left-dots"></i>
         </a>
     </div>
@@ -29,6 +29,7 @@
     <table class="table table-striped">
 
         <div class="list-group">
+            <div th:if="${inquireDTOList.isEmpty()}" class="text-center" style="align-content:center; height: 200px; border: 1px solid black; border-radius: 5px;"><p>요청한 문의사항이 없습니다.</p></div>
             <th:block th:each="inquireDTO : ${inquireDTOList}">
                 <a th:href="@{/users/inquire/read(id=${inquireDTO.id})}" class="list-group-item list-group-item-action mb-2">
                     <div><strong>[[${inquireDTO.title}]]</strong></div>

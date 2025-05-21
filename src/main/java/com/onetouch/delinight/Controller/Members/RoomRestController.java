@@ -19,10 +19,8 @@ public class RoomRestController {
     private final RoomService roomService;
 
     @PostMapping("/register")
-    private ResponseEntity<String> register(RoomDTO roomDTO, Principal principal) {
-        log.info("값이 들어오나요? : " + roomDTO);
-        log.info("값이 들어오나요? : " + roomDTO);
-        log.info("값이 들어오나요? : " + roomDTO);
+    private ResponseEntity register(RoomDTO roomDTO, Principal principal) {
+
 
         String email = principal.getName();
 

@@ -49,7 +49,7 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public Integer unansweredCheck(Long hotelId) {
-        Integer id = inquireRepository.countByCheckInEntity_RoomEntity_HotelEntity_Id(hotelId);
+        Integer id = inquireRepository.countByCheckInEntity_RoomEntity_HotelEntity_IdAndResponseTimeIsNull(hotelId);
         return id;
     }
 

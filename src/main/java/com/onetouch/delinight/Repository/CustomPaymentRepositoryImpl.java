@@ -44,7 +44,6 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
 
         JPAQuery<PaymentEntity> query = new JPAQuery<>(entityManager);
 
-        log.info("기준에 맞는 결제 조회 쿼리 시작 - isPaid: {}",paidCheck);
 
         // 1. from 절 설정
         query.from(paymentEntity)
@@ -52,23 +51,20 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
                 .join(ordersEntity.ordersItemEntities, ordersItemEntity)
                 .join(ordersItemEntity.menuEntity, menuEntity)
                 .fetchJoin();
-       log.info("from과 join 절이 설정된 쿼리 빌드 완료.");
 
         // 2. 멤버 ID 필터링 추가
         if (memberId != null) {
             Role role = membersRepository.findById(memberId).get().getRole();
-            log.info(role);
+
             if(role.equals(Role.STOREADMIN)){
                 query.join(ordersEntity.storeEntity, storeEntity)                                // PaymentEntity에 있는 membersEntity와 join
                         .where(storeEntity.membersEntity.id.eq(memberId));                       // 멤버 ID로 필터링
             }
             else if(role.equals(Role.ADMIN)){
-                log.info("이퀄스?");
                 query.join(ordersEntity.storeEntity.hotelEntity, hotelEntity).where(hotelEntity.membersEntity.id.eq(memberId));
             }
 
             else if(role.equals(Role.SUPERADMIN)){
-                log.info("이퀄스?2");
 
                 query.join(ordersEntity.storeEntity, storeEntity)
                         .join(storeEntity.hotelEntity, hotelEntity)
@@ -98,14 +94,12 @@ public class CustomPaymentRepositoryImpl implements CustomPaymentRepository {
             LocalDateTime endDate1 = endDate.atTime(LocalTime.MIDNIGHT);
 
             builder.and(paymentEntity.regTime.between(startDate1, endDate1));
-            log.info("날짜 범위로 필터링: {} ~ {}", startDate1, endDate1);
         }
 
         query.where(builder);
 
         // 5. 쿼리 실행
         List<PaymentEntity> paymentEntities = query.fetch();
-        log.info("here?");
 
         // 6. PaymentEntity → PaymentDTO 변환
         List<PaymentDTO> paymentDTOList = paymentEntities.stream().map(payment -> {

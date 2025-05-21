@@ -18,22 +18,22 @@ import java.util.List;
 
 public interface OrdersService {
 
-    public OrdersDTO readOne(Long ordersId);
-    public List<OrdersDTO> processList(String email);
-    public List<OrdersDTO> dashboard(String email);
-    public List<OrdersDTO> completeList(String email);
-    public StoreDTO findStoreByADMINEmail(String email);
+    OrdersDTO readOne(Long ordersId);
+    List<OrdersDTO> processList(String email);
+    List<OrdersDTO> dashboard(String email);
+    List<OrdersDTO> completeList(String email);
+    StoreDTO findStoreByADMINEmail(String email);
 
-    public void checkInToCheckOut(Long checkInId, Long checkOutId);
+    void checkInToCheckOut(Long checkInId, Long checkOutId);
 
-    public List<OrdersDTO> read(Long paymentNum);
+    List<OrdersDTO> read(Long paymentNum);
 
-    public void changePayLater(Long ordersId, String memo, String email);
-    public void changePayNow(Long ordersId, String memo, String email);
+    void changePayLater(Long ordersId, String memo, String email);
+    void changePayNow(Long ordersId, String memo, String email);
 
-    public void changeStatus(Long ordersId, String ordersStatus);
-    public OrdersStatus checkStatus(String ordersStatus);
+    void changeStatus(Long ordersId, String ordersStatus);
+    OrdersStatus checkStatus(String ordersStatus);
 
-    public List<OrdersDTO> ordersListByEmail(String email);
+    List<OrdersDTO> ordersListByEmail(String email);
 
 }

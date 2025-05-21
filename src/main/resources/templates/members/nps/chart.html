@@ -8,6 +8,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     <title>고객만족도 평가</title>
+    <style>
+        .odd {
+            width: 70px;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -35,44 +41,63 @@
                     <div id="centerManagerView" style="display: none;"></div>
                     <div id="hotelManagerView" style="display: none;"></div>
                     <div id="storeManagerView" style="display: none;"></div>
-
-                    <div class="d-flex flex-wrap align-items-end gap-3 mb-5">
-                        <div>
-                            <label for="startDate" class="form-label">시작일</label>
+                    <div class="d-flex align-items-end gap-3 mb-5 flex-nowrap overflow-auto justify-content-between w-100">
+                        <!-- 왼쪽: 날짜 + 버튼들 -->
+                        <div class="d-flex align-items-end gap-3 flex-wrap">
+                            <!-- 시작일 -->
                             <div>
+                                <label for="startDate" class="form-label">시작일</label>
                                 <input type="date" id="startDate" class="form-control" style="min-width: 180px">
                             </div>
+
+                            <!-- 종료일 -->
+                            <div>
+                                <label for="endDate" class="form-label">종료일</label>
+                                <input type="date" id="endDate" class="form-control" style="min-width: 180px">
+                            </div>
+
+                            <!-- 검색 버튼 -->
+                            <div>
+                                <label class="form-label" style="visibility: hidden">검색</label>
+                                <button id="selectBtn" class="btn btn-primary"><i class="fas fa-magnifying-glass"></i></button>
+                            </div>
+
+                            <!-- 기타 버튼들 -->
+                            <button id="hotelChart" class="btn btn-outline-dark flex-shrink-0">호텔</button>
+                            <button id="storeChart" class="btn btn-outline-success flex-shrink-0">가맹점 총합</button>
+                            <button id="compareStoreChart" class="btn btn-outline-success flex-shrink-0">가맹점 별 비교</button>
+                            <button id="hotelQuestion" class="btn btn-outline-dark flex-shrink-0">질문 문항 확인</button>
+                            <button id="storeQuestion" class="btn btn-outline-dark flex-shrink-0">질문 문항 확인</button>
                         </div>
 
-                        <div>
-                            <label for="endDate" class="form-label">종료일</label>
-                            <input type="date" id="endDate" class="form-control" style="min-width: 180px">
+                        <!-- 오른쪽: 테이블 -->
+                        <div style="min-width: 400px; overflow-x: auto; margin-top: -10px" class="ms-auto tableDiv">
+                            <table class="mb-0" style="border-collapse: collapse; width: 100%; ">
+                                <tr class="text-start" style="font-weight: bold; color: #555555; font-size: 16px">
+                                    <td class="odd" style="border: none;">총 점</td>
+                                    <td class="odd" style="border: none;">1번</td>
+                                    <td class="odd" style="border: none;">2번</td>
+                                    <td class="odd" style="border: none;">3번</td>
+                                    <td class="odd" style="border: none;">4번</td>
+                                    <td class="odd" style="border: none;">5번</td>
+                                </tr>
+                                <tr class="text-end">
+                                    <td class="even" id="totalScore" style="border: none;">95점</td>
+                                    <td class="even" id="firstScore" style="border: none;">95점</td>
+                                    <td class="even" id="secondScore" style="border: none;">95점</td>
+                                    <td class="even" id="thirdScore" style="border: none;">95점</td>
+                                    <td class="even" id="fourthScore" style="border: none;">95점</td>
+                                    <td class="even" id="fifthScore" style="border: none;">95점</td>
+                                </tr>
+                            </table>
                         </div>
-
-                        <div>
-                            <label class="form-label" style="visibility: hidden">검색</label>
-                            <button id="selectBtn" class="btn btn-primary"><i class="fas fa-magnifying-glass"></i></button>
-                        </div>
-
-
-                        <div class="d-flex flex-wrap gap-2 ms-auto">
-                            <button id="hotelChart" class="btn btn-outline-dark">호텔</button>
-                            <button id="storeChart" class="btn btn-outline-success">가맹점 총합</button>
-                            <button id="compareStoreChart" class="btn btn-outline-success">가맹점 별 비교</button>
-                            <button id="eachStoreChart" class="btn btn-outline-success">개별 가맹점</button>
-                            <button id="hotelQuestion" class="btn btn-outline-dark">질문 문항 확인</button>
-                            <button id="storeQuestion" class="btn btn-outline-dark">질문 문항 확인</button>
-                        </div>
-
                     </div>
-
-
                     <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
-                        <div style="width: 600px; height: 500px;" id="pieChartDiv">
-                            <canvas id="pieChart" width="300" height="300"></canvas>
+                        <div style="width: 500px; height: 500px;" id="pieChartDiv">
+                            <canvas id="pieChart" width="500" height="500"></canvas>
                         </div>
-                        <div style="width: 600px; height: 500px;" id="barChartDiv">
-                            <canvas id="barChart" width="300" height="300"></canvas>
+                        <div style="width: 500px; height: 500px;" id="barChartDiv">
+                            <canvas id="barChart" width="500" height="500"></canvas>
                         </div>
                         <div style="width: 1000px; height: 500px;" id="compareChartDiv">
                             <canvas id="compareChart" width="1000Px" height="500px"></canvas>
@@ -151,11 +176,15 @@
             $('#chartAll').on('click', () => {
                 console.log('전체 차트 버튼 클릭')
                 switchTab('all')
+                $(".tableDiv").show();
+
             })
 
             $('#hotelChart').on('click', () => {
                 console.log('호텔 차트 버튼 클릭')
                 switchTab('hotelChart')
+                $(".tableDiv").show();
+
             })
             $('#hotelQuestion').on('click', () => {
                 Swal.fire({
@@ -176,14 +205,15 @@
             $('#storeChart').on('click', () => {
                 console.log('스토어 차트 버튼 클릭')
                 switchTab('storeChart')
+                $(".tableDiv").show();
+
             })
 
             $('#compareStoreChart').on('click', () => {
                 console.log('스토어 별 차트 버튼 클릭')
                 switchTab('compareStoreChart')
-            })
-            $('#eachStoreChart').on('click', () => {
-                alert("5/19 최종 발표 시 구현 예정")
+                $(".tableDiv").hide();
+
             })
 
             // 차트 유형 변경 시 데이터 재요청
@@ -235,6 +265,12 @@
                     scoreSum[key] = count === 0 ? 0 : Number((scoreSum[key] / count).toFixed(1))
                 })
 
+                $("#firstScore").text(parseInt(scoreSum['1번 문항'])+"점")
+                $("#secondScore").text(parseInt(scoreSum['2번 문항'])+"점")
+                $("#thirdScore").text(parseInt(scoreSum['3번 문항'])+"점")
+                $("#fourthScore").text(parseInt(scoreSum['4번 문항'])+"점")
+                $("#fifthScore").text(parseInt(scoreSum['5번 문항'])+"점")
+                $("#totalScore").text(parseInt((scoreSum['1번 문항']+scoreSum['2번 문항']+scoreSum['3번 문항']+scoreSum['4번 문항']+scoreSum['5번 문항'])/5)+"점")
                 return scoreSum
             }
 

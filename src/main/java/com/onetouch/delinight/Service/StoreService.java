@@ -15,28 +15,28 @@ import java.util.List;
 
 public interface StoreService {
 
-    public void addMembers(Long memberId, Long storeId) throws Exception;
+    void addMembers(Long memberId, Long storeId) throws Exception;
 
-    public void modiMembers(Long memberId, Long storeId);
+    void modiMembers(Long memberId, Long storeId);
 
-    public int assignCheck(String email);
-    public Long findStoreByEmail(String email);
-    public void create(StoreDTO storeDTO);
+    int assignCheck(String email);
+    Long findStoreByEmail(String email);
+    void create(StoreDTO storeDTO);
 
-    public Integer awaitingCountCheck(Long storeId);
+    Integer awaitingCountCheck(Long storeId);
 
-    public List<StoreDTO> listMembers(MembersDTO membersDTO);
+    List<StoreDTO> listMembers(MembersDTO membersDTO);
 
-    public List<StoreDTO> list(String email);
+    List<StoreDTO> list(String email);
 
-    public void del(Long id);
-    public StoreDTO read(Long id);
+    void del(Long id);
+    StoreDTO read(Long id);
 
-    public void update(StoreDTO storeDTO);
+    void update(StoreDTO storeDTO);
 
-    public List<StoreDTO> storeList(String email);
+    List<StoreDTO> storeList(String email);
 
-    public List<StoreDTO> findOperationStore();
+    List<StoreDTO> findOperationStore();
 
 
 

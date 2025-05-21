@@ -35,8 +35,8 @@
                         <div class="d-flex">
                             <div class="w-50">
                                 <div class="row mb-4">
-                                    <label class="col-sm-2 col-form-label form-label">문의유형</label>
-                                    <div class="col-sm-6">
+                                    <label class="col-sm-3 col-form-label form-label">문의유형</label>
+                                    <div class="col-sm-3">
                                         <button th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).ROOMSERVICE}" class="btn btn-gray" disabled>
                                             룸서비스
                                         </button>
@@ -48,6 +48,17 @@
                                         <button th:if="${inquireDTO.inquireType == T(com.onetouch.delinight.Constant.InquireType).OTHERINQUIRIES}" class="btn btn-gray" disabled>
                                             기타문의
                                         </button>
+
+                                    </div>
+                                    <label class="col-sm-3 col-form-label form-label">방 호수</label>
+                                    <div class="col-sm-3" >
+                                        <div th:if="${inquireDTO.checkInDTO}" style="padding-top: 10px">
+                                            [[${inquireDTO.checkInDTO.roomDTO.name}]]
+                                        </div>
+                                        <div th:if="${inquireDTO.checkOutLogDTO}">
+                                            [[${inquireDTO.checkOutLogDTO.roomDTO.name}]]
+
+                                        </div>
                                     </div>
                                 </div>
 
@@ -61,7 +72,7 @@
                                 <div class="row mb-2">
                                     <label class="col-sm-2 col-form-label form-label">문의내용</label>
                                     <div class="col-sm-9">
-                                        <div class="form-control-plaintext v-center-text" readonly>[[${inquireDTO.content}]]</div>
+                                        <div style="height: 270px" class="form-control-plaintext v-center-text" readonly>[[${inquireDTO.content}]]</div>
                                     </div>
                                 </div>
                             </div>
@@ -70,7 +81,7 @@
                                 <div class="row mb-2">
                                     <label class="col-sm-2 col-form-label form-label">답변내용</label>
                                     <div class="col-sm-9">
-                                        <textarea th:if="${replyDTO.replyText == null}" name="replyText" class="form-control replyText" oninput="autoResize(this)" placeholder="작성하기"></textarea>
+                                        <textarea style="height: 400px" th:if="${replyDTO.replyText == null}" name="replyText" class="form-control replyText" oninput="autoResize(this)" placeholder="작성하기"></textarea>
                                         <div th:if="${replyDTO.replyText != null}" class="form-control-plaintext v-center-text">[[${replyDTO.replyText}]]</div>
                                     </div>
                                 </div>
@@ -115,7 +126,6 @@
                 const inquireId = [[${inquireDTO.id}]]; //서버에 넘겨주는 InquireId
 
                 if (!replyTextVal) {
-                    alert("댓글 내용을 입력해주세요.")
                     return;
                 }
 
@@ -129,9 +139,7 @@
                     type: "post",
                     data: $.param(insertD),//객체를 replyText=내용&inquireId=숫자 이런 식의 문자열로 바꿈
                     success: function (response) {
-                        // alert(response); //예) "3번글이 저장되었습니다.
-                        $(".replyText").val(""); //입력창 초기화
-                        select();//댓글 목록 다시 불러오기
+                        window.location.reload()
 
                     },
                     error: function (xhr) {

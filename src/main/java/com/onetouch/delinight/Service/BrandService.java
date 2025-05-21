@@ -13,14 +13,14 @@ import java.util.List;
 
 public interface BrandService {
 
-    public void create(BrandDTO brandDTO);
+    void create(BrandDTO brandDTO);
 
-    public List<BrandDTO> list();
+    List<BrandDTO> list();
 
-    public BrandDTO read(Long id);
+    BrandDTO read(Long id);
 
 
-    public void del(Long num);
+    void del(Long num);
 
 
 }

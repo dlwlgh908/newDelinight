@@ -49,7 +49,7 @@ public class UserRoomCareController {
             model.addAttribute("oldRoomCareDatas", oldRoomCareDatas);
         }
 
-        return "/users/roomCare/list";
+        return "users/roomCare/list";
     }
 
     @PostMapping("/rest/request")
@@ -84,7 +84,7 @@ public class UserRoomCareController {
         log.info(roomCareMenuDTOList);
 
 
-        return "/users/roomCare/request";
+        return "users/roomCare/request";
     }
 
 

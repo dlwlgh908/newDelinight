@@ -45,7 +45,7 @@ public class GlobalModelAttribute {
 
                     if (memberDetails.getMembersEntity().getRole() == Role.STOREADMIN) {
 
-                        int checking = storeService.assignCheck(((MemberDetails) principal).getUsername());
+                        int checking = storeService.assignCheck(memberDetails.getUsername());
                         if (checking == 1) {
                             return;
                         }
@@ -53,17 +53,20 @@ public class GlobalModelAttribute {
                         Long storeId = storeService.findStoreByEmail(memberDetails.getUsername());
                         model.addAttribute("storeId", storeId);
 
-                        log.info(memberDetails);
                         Integer alertCount = storeService.awaitingCountCheck(storeService.findStoreByEmail(memberDetails.getUsername()));
                         model.addAttribute("alertCount", alertCount);
                         // 스토어 어드민일때
                     } else if (memberDetails.getMembersEntity().getRole() == Role.ADMIN) {
-                        int checking = hotelService.assignCheck(((MemberDetails) principal).getUsername());
+
+                        int checking = hotelService.assignCheck(memberDetails.getUsername());
                         if (checking == 1) {
                             return;
+
                         }
+                        Long hotelId = hotelService.findHotelByEmail(memberDetails.getUsername());
                         Integer alertCount = hotelService.unansweredCheck(hotelService.findHotelByEmail(memberDetails.getUsername()));
                         model.addAttribute("alertCount", alertCount);
+                        model.addAttribute("hotelId", hotelId);
                         // 호텔 어드민일때(수정 해야함)
                     } else if (memberDetails.getMembersEntity().getRole() == Role.SYSTEMADMIN) {
 
@@ -73,9 +76,12 @@ public class GlobalModelAttribute {
                     }
 
                     else {
-                        Integer alertCount = membersService.countOfRequestAccount(memberDetails.getUsername());
+                        if(membersService.assignCheck(memberDetails.getUsername(), 1)){
+                            Integer alertCount = membersService.countOfRequestAccount(memberDetails.getUsername());
 
-                        model.addAttribute("alertCount", alertCount);
+                            model.addAttribute("alertCount", alertCount);
+                        }
+
                         // 아무것도 아닐때(0으로 리턴)
                     }
                     model.addAttribute("member", memberDetails.getMembersEntity());

@@ -24,19 +24,19 @@ import java.util.Optional;
 public interface MenuService {
 
     //등록
-    public void register(MenuDTO menuDTO, String email);
+    void register(MenuDTO menuDTO, String email);
     //상세보기
-    public MenuDTO read(Long id);
+    MenuDTO read(Long id);
     //목록
-    public Page<MenuDTO> menuList(Pageable pageable, String email);
+    Page<MenuDTO> menuList(Pageable pageable, String email);
 
-    public List<MenuDTO> menuList(Long storeId);
+    List<MenuDTO> menuList(Long storeId);
     //수정
-    public MenuDTO update(MenuDTO menuDTO);
+    MenuDTO update(MenuDTO menuDTO);
     //삭제
-    public void delete(Long id);
+    void delete(Long id);
 
-    public List<MenuDTO> menuListByHotel(Long hotelNum);
+    List<MenuDTO> menuListByHotel(Long hotelNum);
 
 
 

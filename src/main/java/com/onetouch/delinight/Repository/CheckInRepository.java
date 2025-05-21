@@ -18,14 +18,14 @@ import java.util.List;
 
 public interface CheckInRepository extends JpaRepository<CheckInEntity, Long> {
 
-    public CheckInEntity findByRoomEntity_Id(Long id);
+    CheckInEntity findByRoomEntity_Id(Long id);
 
     List<CheckInEntity> findByCheckInStatusAndRoomEntity_HotelEntity_MembersEntity_Email(CheckInStatus checkinstatus, String email);
     List<CheckInEntity> findByRoomEntity_HotelEntity_MembersEntity_Email(String email);
 
-    public CheckInEntity findByGuestEntity_Phone(String phone);
+    CheckInEntity findByGuestEntity_Phone(String phone);
 
-    public CheckInEntity findByUsersEntity_Email(String email);
+    CheckInEntity findByUsersEntity_Email(String email);
 
     @Query("select c from CheckInEntity c where c.roomEntity.id = :id")
     CheckInEntity selectRoom(Long id);

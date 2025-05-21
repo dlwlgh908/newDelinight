@@ -16,17 +16,18 @@ import java.util.List;
 
 public interface CenterService {
 
-    public void create(CenterDTO centerDTO, String email);
+    void settingAdmin(Long membersId, Long centerId);
+    void create(CenterDTO centerDTO, String email);
 
-    public void update(CenterDTO centerDTO);
+    void update(CenterDTO centerDTO);
 
-    public List<CenterDTO> list();
+    List<CenterDTO> list();
 
-    public MembersDTO checkEmail(String email);
+    MembersDTO checkEmail(String email);
 
-    public CenterDTO read(String email);
+    CenterDTO read(String email);
 
-    public Long findCenter(String email);
+    Long findCenter(String email);
 
 
 

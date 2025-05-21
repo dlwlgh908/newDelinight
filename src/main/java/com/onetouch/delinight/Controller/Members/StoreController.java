@@ -108,7 +108,7 @@ public class StoreController {
         }
         if(hasError) {
             model.addAttribute("store", storeDTO);
-            return "/members/store/update";
+            return "members/store/update";
         }
 
         storeService.update(storeDTO);

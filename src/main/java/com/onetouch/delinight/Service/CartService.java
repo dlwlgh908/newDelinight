@@ -16,20 +16,20 @@ import java.util.List;
 
 public interface CartService {
 
-    public Long cartCheck(String email);
+    Long cartCheck(String email);
 
-    public List<CartItemDTO> list(Long cartNum);
-    public void makeCart(int sep, Long id);
-    public void deleteCart(int sep, Long cartNum);
+    List<CartItemDTO> list(Long cartNum);
+    void makeCart(int sep, Long id);
+    void deleteCart(int sep, Long cartNum);
 
-    public Integer add(Long cartNum, Long menuNum);
-    public String clear(Long cartNum);
+    Integer add(Long cartNum, Long menuNum);
+    String clear(Long cartNum);
 
-    public void remove(Long cartItemNum);
+    void remove(Long cartItemNum);
 
-    public Long cartToOrder(Long cartNum);
-    public String plusQuantity(Long cartItemNum);
-    public String minusQuantity(Long cartItemNum);
+    Long cartToOrder(Long cartNum);
+    String plusQuantity(Long cartItemNum);
+    String minusQuantity(Long cartItemNum);
 
 
 }

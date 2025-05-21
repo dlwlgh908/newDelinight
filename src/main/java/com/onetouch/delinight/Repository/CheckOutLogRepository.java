@@ -14,6 +14,8 @@ public interface CheckOutLogRepository extends JpaRepository<CheckOutLogEntity, 
         List<CheckOutLogEntity> findByCheckoutDate(@Param("date") LocalDate checkoutDate);
 
 
+        List<CheckOutLogEntity> findByRoomEntity_HotelEntity_IdAndUsersEntityIsNotNull(Long hotelId);
+
 
 
 }

@@ -27,7 +27,7 @@ public class NpsSurveyScheduler {
     private final ImageService imageService;
 
     // 매일 오전 9시에 실행 될 스케줄러
-    @Scheduled(cron = "0 0 20 * * ?")
+    @Scheduled(cron = "0 0 7 * * ?")
     public void sendNpsSurvey(){
         log.info("스케줄러 동작시작");
         // 어제 체크아웃한 고객들 찾기
@@ -46,7 +46,7 @@ public class NpsSurveyScheduler {
                     Long checkOutId = checkOutAddEmail.getId();
 
 
-                    String surveyLink = "http://localhost:8080/users/nps/survey/" + checkOutId;
+                    String surveyLink = "http://wooriproject.iptime.org:9003/users/nps/survey/" + checkOutId;
 
                     emailService.sendNpsEmail(email, name, surveyLink, checkOutId);
                 }
@@ -58,12 +58,12 @@ public class NpsSurveyScheduler {
 
     }
 
-    @Scheduled(cron = "0 0 01 * * ?")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void deleteOrphanImg(){
         imageService.dummyImgDelete();
     }
 
-    @Scheduled(cron = "10 27 * * * ?")
+    @Scheduled(cron = "0 0 8  * * ?")
     public void sendDailyPerformance(){
 
         log.info("스케쥴러 작동 ");

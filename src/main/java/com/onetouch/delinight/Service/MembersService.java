@@ -18,38 +18,38 @@ import java.util.Map;
 
 public interface MembersService {
 
-    public void makeSysA();
+    void makeSysA();
 
-    public List<MembersDTO> findPendingMembersListByCenterMembers(MembersDTO membersDTO);
-    public boolean checkOperation(MembersDTO membersDTO);
-    public List<MembersDTO> findMembersListByCenterEmail(String email);
+    List<MembersDTO> findPendingMembersListByCenterMembers(MembersDTO membersDTO);
+    boolean checkOperation(MembersDTO membersDTO);
+    List<MembersDTO> findMembersListByCenterEmail(String email);
 
-    public List<MembersDTO> findMembersListByHotelEmail(String email);
+    List<MembersDTO> findMembersListByHotelEmail(String email);
 
-    public boolean assignCheck(String email, int sep);
-    public void create(MembersDTO membersDTO);
-    public void update(MembersDTO membersDTO, String newPhone, String newPassword);
+    boolean assignCheck(String email, int sep);
+    Long create(MembersDTO membersDTO);
+    void update(MembersDTO membersDTO, String newPhone, String newPassword);
 
-    public Page<MembersEntity> getList(int page);
-    public Page<MembersEntity> getListHotel(int page, String email);
-    public Page<MembersEntity> getListStore(int page, String email);
-    public Page<MembersEntity> getListBystatus(Status status, int page);
+    Page<MembersEntity> getList(int page);
+    Page<MembersEntity> getListHotel(int page, String email);
+    Page<MembersEntity> getListStore(int page, String email);
+    Page<MembersEntity> getListBystatus(Status status, int page);
 
-    public List<MembersDTO> findAll();
+    List<MembersDTO> findAll();
 
     //    public List<MembersDTO> findSuper();
 
     Page<MembersEntity> findAccount(Status status, int page, String email, String sep);
 
 
-    public Integer countOfRequestAccount(String email);
+    Integer countOfRequestAccount(String email);
 
-    public MembersDTO approve(Long id);
-    public MembersDTO Disapprove(Long id);
+    MembersDTO approve(Long id);
+    MembersDTO Disapprove(Long id);
 
-    public Map<Role, Long> findRoleByEmail(String email);
-    public Role findOnlyRoleByEmail(String email);
+    Map<Role, Long> findRoleByEmail(String email);
+    Role findOnlyRoleByEmail(String email);
 
-    public MembersDTO findByEmail(String email);
+    MembersDTO findByEmail(String email);
 
 }

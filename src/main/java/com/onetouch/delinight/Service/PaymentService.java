@@ -19,13 +19,13 @@ import java.util.List;
 
 public interface PaymentService {
 
-    public byte[] extractDailyExcel(Long id, Role role) throws IOException;
-    public byte[] extractMonthlyExcel(Long id, Role role) throws IOException;
-    public String makePrompt(Long id, Role role);
+    byte[] extractDailyExcel(Long id, Role role) throws IOException;
+    byte[] extractMonthlyExcel(Long id, Role role) throws IOException;
+    String makePrompt(Long id, Role role);
 
-    public List<OrdersDTO> readOrders(Long paymentId);
+    List<OrdersDTO> readOrders(Long paymentId);
 
-    public List<PaymentDTO> paymentByCriteria(PaidCheck paidCheck, Long memberId, LocalDate startDate, LocalDate endDate);
+    List<PaymentDTO> paymentByCriteria(PaidCheck paidCheck, Long memberId, LocalDate startDate, LocalDate endDate);
 
     // 계산 메소드
     List<PaymentDTO> processPayments(List<PaymentDTO> paymentDTOList);

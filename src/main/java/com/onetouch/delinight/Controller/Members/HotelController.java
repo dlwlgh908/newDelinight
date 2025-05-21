@@ -70,13 +70,11 @@ public class HotelController {
     }
 
 
-@GetMapping("/read/{id}")
-public String readView( Model model, @PathVariable("id") Long id) {
-
-
+@GetMapping("/read/{hotelId}")
+public String readView( Model model, @PathVariable("hotelId") Long hotelId) {
 
     HotelDTO hotelDTO =
-        hotelService.findHotelDTOById(id);
+        hotelService.findHotelDTOById(hotelId);
 
 
     BrandDTO brandDTO =
@@ -164,5 +162,6 @@ public String readView( Model model, @PathVariable("id") Long id) {
 
         return "members/hotel/memberlist";
     }
+
 
 }

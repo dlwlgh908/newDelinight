@@ -20,19 +20,20 @@ import java.util.List;
 
 public interface InquireService{
     //문의사항 등록
-    public InquireDTO register(InquireDTO inquireDTO,String email);
-    public List<InquireDTO> findUnprocessedInquire(MembersDTO membersDTO);
+    InquireDTO register(InquireDTO inquireDTO, String email);
+    List<InquireDTO> findUnprocessedInquire(MembersDTO membersDTO);
     //목록
-    public Page<InquireDTO> inquireList(Pageable pageable,Long hotelId);
-    public Page<InquireDTO> inquireList(Pageable pageable,String email);
+    Page<InquireDTO> inquireList(Pageable pageable, Long hotelId);
+    Page<InquireDTO> inquireList(Pageable pageable, String email);
 
+    void checkInToCheckOut(Long checkInId, Long checkOutId);
 
 
     //상세보기
-    public InquireDTO read(Long id);
+    InquireDTO read(Long id);
     //수정
-    public InquireDTO update(InquireDTO inquireDTO);
+    InquireDTO update(InquireDTO inquireDTO);
     //삭제
-    public void delete(Long id);
+    void delete(Long id);
 
 }

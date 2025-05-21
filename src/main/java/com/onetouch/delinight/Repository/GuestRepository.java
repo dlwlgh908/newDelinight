@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface GuestRepository extends JpaRepository<GuestEntity, Long> {
 
 
-    public Optional<GuestEntity> findByPhone(String phone);
+    Optional<GuestEntity> findByPhone(String phone);
 
 }

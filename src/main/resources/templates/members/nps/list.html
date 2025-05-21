@@ -15,7 +15,7 @@
             <div class="card custom-shadow mb-4 mt-5">
                 <div class="card-body">
                     <h3>데이터 테이블</h3>
-                    <ol class="breadcrumb mb-4">
+                    <ol class="breadcrumb mb-5">
                         <a href="/members/account/dashHub" class="breadcrumb-item active">홈</a>
                         <a href="#" class="breadcrumb-item active no-click">고객만족도 평가</a>
                     </ol>
@@ -73,8 +73,8 @@
 
 
                     <!-- 네비게이션 -->
-                    <ul th:if="${role.name() != 'STOREADMIN'}" class="nav nav-pills mb-4">
-                        <li class="nav-item">
+                    <ul class="nav nav-pills mb-4 hotelTabForHide">
+                        <li class="nav-item ">
                             <a class="nav-link active" data-tabname="hotelTab" href="#" id="hotelTab">호텔</a>
                         </li>
                         <li class="nav-item">
@@ -82,11 +82,30 @@
                         </li>
                     </ul>
 
+
                     <div style="overflow-y: auto; height: 450px">
-                        <table th:if="${role.name() != 'STOREADMIN'}" id="npsHotelTable" class="table align-middle table-hover hotelTitle">
-                            <thead>
+                    <table id="npsHotelTable" class="table align-middle table-hover hotelTitle">
+                        <thead>
+                        <th style="width: 5%;">#</th>
+                        <th style="width: 16%;">호텔명</th>
+                        <th style="width: 3%;">1</th>
+                        <th style="width: 3%;">2</th>
+                        <th style="width: 3%;">3</th>
+                        <th style="width: 3%;">4</th>
+                        <th style="width: 7%;">5</th>
+                        <th style="width: 10%;">평균</th>
+                        <th>기타문의</th>
+                        </thead>
+
+                        <tbody>
+                        <!-- AJAX 데이터 삽입 -->
+                        </tbody>
+                    </table>
+
+                    <table id="npsStoreTable" class="table align-middle table-hover" style="display: none">
+                        <thead>
                             <th style="width: 5%;">#</th>
-                            <th style="width: 16%;">호텔명</th>
+                            <th style="width: 16%;">가맹점명</th>
                             <th style="width: 3%;">1</th>
                             <th style="width: 3%;">2</th>
                             <th style="width: 3%;">3</th>
@@ -94,30 +113,12 @@
                             <th style="width: 7%;">5</th>
                             <th style="width: 10%;">평균</th>
                             <th>기타문의</th>
-                            </thead>
+                        </thead>
 
-                            <tbody>
-                            <!-- AJAX 데이터 삽입 -->
-                            </tbody>
-                        </table>
-
-                        <table id="npsStoreTable" class="table align-middle table-hover" style="display: none">
-                            <thead>
-                                <th style="width: 5%;">#</th>
-                                <th style="width: 16%;">가맹점명</th>
-                                <th style="width: 3%;">1</th>
-                                <th style="width: 3%;">2</th>
-                                <th style="width: 3%;">3</th>
-                                <th style="width: 3%;">4</th>
-                                <th style="width: 7%;">5</th>
-                                <th style="width: 10%;">평균</th>
-                                <th>기타문의</th>
-                            </thead>
-
-                            <tbody>
-                            <!-- AJAX 데이터 삽입 -->
-                            </tbody>
-                        </table>
+                        <tbody>
+                        <!-- AJAX 데이터 삽입 -->
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>
@@ -129,14 +130,46 @@
                     <p id="modalContent"></p>
                 </div>
             </div>
-        </div>
+        </div >
 
 
     </main>
 
-    <script th:inline="javascript">
+    <script th:inline="javascript" >
 
         $(document).ready(function () {
+            let currentRole = [[${role.name()}]]
+            if(currentRole==="STOREADMIN"){
+
+            }else
+            {
+                $(".npsStoreTable").hide()
+            }
+
+
+            $('#hotelSelect').on('change', function () {
+                const selectedHotel = $(this).val()
+                console.log(`[필터] 호텔 선택: ${selectedHotel || '전체'}`)
+                const filteredHotelData = selectedHotel ? hotelData.filter(nps => nps.hotelName === selectedHotel) : hotelData
+                renderTable('#npsHotelTable', filteredHotelData)
+
+                const filteredStores = selectedHotel ? [...new Set(storeData.filter(nps => nps.hotelName === selectedHotel).map(nps => nps.storeName))] : [...new Set(storeData.map(nps => nps.storeName))]
+
+                updateStoreSelectBox(filteredStores)
+            })
+            $('#storeSelect').on('change', function () {
+                const selectedHotel = $('#hotelSelect').val()
+                const selectedStore = $(this).val()
+                console.log(`[필터] 가맹점 선택: ${selectedStore || '전체'}, 호텔: ${selectedHotel || '전체'}`)
+
+                const filteredStoreData = storeData.filter(nps => {
+                    const hotelMatch = selectedHotel ? nps.hotelName === selectedHotel : true
+                    const storeMatch = selectedStore ? nps.storeName === selectedStore : true
+                    return hotelMatch && storeMatch
+                })
+
+                renderTable('#npsStoreTable', filteredStoreData)
+            })
 
             // 필터 조회 버튼
             $('#filterButton').on('click', function () {
@@ -179,16 +212,6 @@
 
 
             // 호텔 셀렉트박스 선택 시
-            $('#hotelSelect').on('change', function () {
-                const selectedHotel = $(this).val()
-                console.log(`[필터] 호텔 선택: ${selectedHotel || '전체'}`)
-                const filteredHotelData = selectedHotel ? hotelData.filter(nps => nps.hotelName === selectedHotel) : hotelData
-                renderTable('#npsHotelTable', filteredHotelData)
-
-                const filteredStores = selectedHotel ? [...new Set(storeData.filter(nps => nps.hotelName === selectedHotel).map(nps => nps.storeName))] : [...new Set(storeData.map(nps => nps.storeName))]
-
-                updateStoreSelectBox(filteredStores)
-            })
 
             function previousMonth() {
                 currentMonth = currentMonth - 1
@@ -218,19 +241,7 @@
             }
 
             // 가맹점 셀렉트박스 선택 시
-            $('#storeSelect').on('change', function () {
-                const selectedHotel = $('#hotelSelect').val()
-                const selectedStore = $(this).val()
-                console.log(`[필터] 가맹점 선택: ${selectedStore || '전체'}, 호텔: ${selectedHotel || '전체'}`)
 
-                const filteredStoreData = storeData.filter(nps => {
-                    const hotelMatch = selectedHotel ? nps.hotelName === selectedHotel : true
-                    const storeMatch = selectedStore ? nps.storeName === selectedStore : true
-                    return hotelMatch && storeMatch
-                })
-
-                renderTable('#npsStoreTable', filteredStoreData)
-            })
 
             // 유틸리티 / 기능 함수
             function formatDate(date) {
@@ -250,7 +261,7 @@
                     $('#storeTab').addClass('active')
                 } else {
                     $('#npsHotelTable').show()
-                    $('#npsStoreTable').show()
+                    $('#npsStoreTable').hide()
                     $('#allTab').addClass('active')
                 }
             }
@@ -266,7 +277,7 @@
                     loadNpsData($('#startDate').val(), $('#endDate').val(), 'hotel')
                 } else if (role === 'STOREADMIN') {
                     $('#storeManagerView').show()
-                    $('.storeSelectWrap, .hotelSelectWrap, .hotelTitle').hide()
+                    $('.storeSelectWrap, .hotelSelectWrap, .hotelTitle, .hotelTabForHide').hide()
                     loadNpsData($('#startDate').val(), $('#endDate').val(), 'store')
                 } else {
                     console.warn('알 수 없는 역할:', role)
@@ -318,18 +329,14 @@
 
             function renderTables() {
                 if (hotelData.length > 0) {
-                    $('#npsHotelTable').show()
                     renderTable('#npsHotelTable', hotelData)
                 } else {
-                    $('#npsHotelTable').hide()
                     renderTable('#npsHotelTable', hotelData)
                 }
 
                 if (storeData.length > 0) {
-                    $('#npsStoreTable').show()
                     renderTable('#npsStoreTable', storeData)
                 } else {
-                    $('#npsStoreTable').hide()
                     renderTable('#npsStoreTable', storeData)
                 }
             }

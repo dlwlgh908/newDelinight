@@ -14,23 +14,23 @@ import java.util.List;
 
 public interface HotelService {
 
-    public int assignCheck(String email);
-    public Integer unansweredCheck(Long id);
-    public void addMembers(Long memberId, Long hotelId);
-    public void create(HotelDTO hotelDTO);
+    int assignCheck(String email);
+    Integer unansweredCheck(Long id);
+    void addMembers(Long memberId, Long hotelId);
+    void create(HotelDTO hotelDTO);
 
-    public void update(HotelDTO hotelDTO);
+    void update(HotelDTO hotelDTO);
 
-    public List<HotelDTO> list(MembersDTO membersDTO);
+    List<HotelDTO> list(MembersDTO membersDTO);
 
-    public HotelDTO findHotelDTOById(Long id);
-    public Long findHotelByEmail(String email);
+    HotelDTO findHotelDTOById(Long id);
+    Long findHotelByEmail(String email);
 
 
 
-    public void del(Long id);
+    void del(Long id);
 
-    public void modify(Long memberId, Long hotelId);
+    void modify(Long memberId, Long hotelId);
 
 
 

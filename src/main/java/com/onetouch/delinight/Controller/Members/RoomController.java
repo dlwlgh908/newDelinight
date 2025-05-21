@@ -38,7 +38,7 @@ public class RoomController {
             return "members/room/listB";
         } else {
             model.addAttribute("sep", "hotel");
-            return "/members/account/common/imgRedirect";
+            return "members/account/common/imgRedirect";
         }
     }
 

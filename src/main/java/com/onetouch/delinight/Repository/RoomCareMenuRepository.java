@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface RoomCareMenuRepository extends JpaRepository<RoomCareMenuEntity, Long> {
 
-    public List<RoomCareMenuEntity> findByHotelEntity_IdAndAbleCheck(Long id, AbleCheck ableCheck);
+    List<RoomCareMenuEntity> findByHotelEntity_IdAndAbleCheck(Long id, AbleCheck ableCheck);
 }

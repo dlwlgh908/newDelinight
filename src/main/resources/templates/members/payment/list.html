@@ -315,21 +315,49 @@
 
                 // 차트 업데이트 함수
                 function updateChart(chartType) {
-                    console.log(`차트 업데이트: ${chartType}`)
-                    let chartData = getChartData(chartType)
+                    const ctx = document.getElementById('dynamicChart').getContext('2d');
+                    const chartData = getChartData(chartType);
 
-                    // 차트 인스턴스가 있을 때 업데이트
+                    const chartTypeMap = {
+                        payment: 'line',   // 날짜별은 선형 차트
+                        menu: 'bar',
+                        store: 'bar',
+                        hotel: 'bar'
+                    };
+
+                    const type = chartTypeMap[chartType] || 'bar';  // 기본은 bar
+
                     if (chartInstance) {
-                        chartInstance.data.labels = chartData.labels
-                        chartInstance.data.datasets[0].data = chartData.data
-
-                        const yScale = chartInstance.options.scales.y;
-                        yScale.beginAtZero = true;
-                        yScale.min = 0;
-                        yScale.ticks.stepSize = 10000;
-                        chartInstance.update()
-                        console.log('차트 업데이트 완료');
+                        chartInstance.destroy();  // 기존 차트 제거
                     }
+
+                    chartInstance = new Chart(ctx, {
+                        type: type,
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [{
+                                label: '금액',
+                                data: chartData.data,
+                                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 2,
+                                fill: type === 'line'  // 선형일 경우에만 fill
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: true
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
                 }
 
                 // 차트 생성 함수
@@ -343,7 +371,7 @@
                     }
 
                     chartInstance = new Chart(ctx, {
-                        type: 'bar',
+                        type: 'line',
                         data: {
                             labels: chartData.labels,
                             datasets: [{
