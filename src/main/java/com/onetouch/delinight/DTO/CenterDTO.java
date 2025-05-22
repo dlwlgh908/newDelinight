@@ -28,7 +28,6 @@ public class CenterDTO {
     @Size(min = 3, max = 100, message = "3~100자 이내로 작성")
     private String content;
 
-
     private MembersDTO membersDTO;
     private Long membersId;
 

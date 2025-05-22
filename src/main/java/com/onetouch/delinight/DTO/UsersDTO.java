@@ -7,7 +7,6 @@
  *********************************************************************/
 package com.onetouch.delinight.DTO;
 
-import jakarta.persistence.Column;
 import lombok.*;
 
 @Getter
@@ -34,4 +33,5 @@ public class UsersDTO {
 
     private String address;
 
+    private String city;
 }
